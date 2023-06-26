@@ -1,0 +1,24 @@
+Package: ggswim
+Type: Package
+Title: Create Swimmer Plots with ggplot2
+Version: 0.1.0
+Authors@R: c(
+    person("Richard", "Hanna", , "richardshanna91@gmail.com", role = c("aut", "cre")),
+    person("Stephan", "Kadauke", , "kadaukes@chop.edu", role = "aut"),
+    person("Ezra", "Porter", , "ezrajporter@gmail.com", role = "aut")
+  )
+Description: Create swimmer plots using the ggplot2 framework.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    checkmate,
+    cli,
+    ggplot2,
+    rlang,
+    tibble
+RoxygenNote: 7.2.3
+Roxygen: list(markdown = TRUE)
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

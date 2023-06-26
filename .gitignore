@@ -1,0 +1,14 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Renviron
+docs
+.DS_Store
+inst/doc
+/doc/
+/dev/
+/Meta/
+vignettes/*.html
+vignettes/*.pdf
+README.html
