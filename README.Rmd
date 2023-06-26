@@ -34,11 +34,11 @@ devtools::install_github("CHOP-CGTInformatics/ggswim")
 
 Below is a simple example for how to set up your "swim table" to pass along to `ggswim()`:
 
-```{r load_package, eval=FALSE}
+```{r load_package, eval=TRUE}
 library(ggswim)
 ```
 
-```{r swim table setup, eval=FALSE}
+```{r swim table setup, eval=TRUE}
 df <- tibble::tribble(
   ~subject_id, ~years, ~indicator_1, ~indicator_2, ~status,
   1, 2000, 1, 1, "unknown",
@@ -67,6 +67,6 @@ df_swim$data
 
 And then plot:
 
-```{r ggswim, eval=FALSE}
+```{r ggswim, eval=TRUE}
 df_swim |> 
   ggswim(title = "Swimmer Plot", xlab = "Years", ylab = "Record ID")

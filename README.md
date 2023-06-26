@@ -55,6 +55,21 @@ df_swim <- df |>
   )
 
 df_swim$data
+#> # A tibble: 11 × 8
+#>    subject_id years indicator_1 indicator_2 status   indicator_2_timepoint
+#>    <fct>      <dbl>       <dbl>       <dbl> <chr>                    <dbl>
+#>  1 1           2000           1           1 unknown                   2000
+#>  2 1           2001           0           0 unknown                     NA
+#>  3 1           2002           1           0 positive                    NA
+#>  4 1           2003           0           1 negative                  2003
+#>  5 2           2000           0           0 positive                    NA
+#>  6 2           2001           0           0 negative                    NA
+#>  7 2           2002           0           1 negative                  2002
+#>  8 3           2000           0           1 negative                  2000
+#>  9 4           2000           0           0 negative                    NA
+#> 10 4           2001           1           0 positive                    NA
+#> 11 4           2002           0           1 positive                  2002
+#> # ℹ 2 more variables: indicator_1_timepoint <dbl>, max_time <dbl>
 ```
 
 And then plot:
@@ -62,4 +77,8 @@ And then plot:
 ``` r
 df_swim |> 
   ggswim(title = "Swimmer Plot", xlab = "Years", ylab = "Record ID")
+#> Warning: Removed 8 rows containing missing values (`geom_point()`).
+#> Warning: Removed 6 rows containing missing values (`geom_point()`).
 ```
+
+<img src="man/figures/README-ggswim-1.png" width="100%" />
