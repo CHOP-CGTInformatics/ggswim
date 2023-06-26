@@ -37,16 +37,19 @@ ggswim <- function(x,
 
   if (!is.null(class_status)) {
     gg <- gg +
-      geom_line(aes(x = !!time_var, y = !!subject_var, col = !!class_status, group = !!subject_var),
-                size=1.8)
+      geom_line(aes(x = !!time_var,
+                    y = !!subject_var,
+                    col = !!class_status,
+                    group = !!subject_var),
+                size = 1.8)
   }
 
   # TODO: Possibly look into how to let apply_geom_points accept `+`s, currently
   # it cannot and only receives `|>` objects. However, this changes the `gg`
   # class type.
   gg <- apply_geom_points(gg, markers = markers, subject_var = subject_var) +
-    labs(x = xlab, y= ylab, title = title) +
-    scale_x_continuous(expand=c(0,0)) # remove extra white space
+    labs(x = xlab, y = ylab, title = title) +
+    scale_x_continuous(expand = c(0, 0)) # remove extra white space
 
   gg
 

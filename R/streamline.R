@@ -105,7 +105,7 @@ streamline <- function(df,
 #'
 #' @keywords internal
 
-add_columns <- function(df, columns){
+add_columns <- function(df, columns) {
   within(df, {
     for (col in columns) {
       assign(col, NA)  # Assign values to new column
