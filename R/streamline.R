@@ -22,6 +22,8 @@
 #'
 #' @importFrom rlang enquo get_expr
 #' @importFrom stats reorder
+#'
+#' @export
 
 streamline <- function(df,
                        subject_var,

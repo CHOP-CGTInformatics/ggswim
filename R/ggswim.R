@@ -15,6 +15,8 @@
 #' labs guides theme guide_legend scale_color_manual element_text element_blank
 #' element_rect
 #' @importFrom cli cli_abort
+#'
+#' @export
 
 ggswim <- function(x,
                    title = NULL,
