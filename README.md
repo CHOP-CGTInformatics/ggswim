@@ -48,10 +48,10 @@ df <- tibble::tribble(
 
 df_swim <- df |> 
   streamline(
-    subject_var = subject_id,
-    time_var = years,
+    id = subject_id,
+    time = years,
     markers = c(indicator_1, indicator_2),
-    class_status = status
+    lanes = status
   )
 
 df_swim$data

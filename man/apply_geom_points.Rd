@@ -4,7 +4,7 @@
 \alias{apply_geom_points}
 \title{apply an arbitrary number of \code{geom_point()}'s to a ggplot}
 \usage{
-apply_geom_points(plot, markers, subject_var)
+apply_geom_points(plot, markers, id)
 }
 \arguments{
 \item{plot}{a ggplot2 object}
@@ -12,7 +12,7 @@ apply_geom_points(plot, markers, subject_var)
 \item{markers}{a vector of columns that will comprise point markers on the
 swimmer plot}
 
-\item{subject_var}{the y-axis variable of a swimmer plot, typically a unique
+\item{id}{the y-axis variable of a swimmer plot, typically a unique
 subject or record identification column}
 }
 \value{

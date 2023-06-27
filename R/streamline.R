@@ -9,14 +9,18 @@
 #' a time column, and any number of binary indicator columns.
 #'
 #' @param df a dataframe prepared for use with `streamline()`
-#' @param subject_var the y-axis variable of a swimmer plot, typically a unique
+#' @param id the y-axis variable of a swimmer plot, typically a unique
 #' subject or record identification column
-#' @param time_var the the x-axis variable of the swimmer plot, typically a
+#' @param time the the x-axis variable of the swimmer plot, typically a
 #' function of time
-#' @param markers a vector of columns that will comprise point markers on the
-#' swimmer plot
-#' @param class_status Columns that indicate line changes, i.e. color changes
-#' for individual swim lanes. Optional, default `NULL`.
+#' @param events the column that will supply definitions for the `reference_event`,
+#' `markers`, and `lanes`
+#' @param reference_event a character string found in `events` that establishes
+#' the time-zero reference point for the x-axis
+#' @param markers A character vector that will comprise point markers on the
+#' swimmer plot. Optional, default `NULL`
+#' @param lanes Columns that indicate line changes, i.e. color changes
+#' for individual swim lanes.
 #'
 #' @returns a swim_tbl object
 #'
@@ -26,52 +30,50 @@
 #' @export
 
 streamline <- function(df,
-                       subject_var,
-                       time_var,
-                       markers,
-                       class_status = NULL) {
+                       id,
+                       time,
+                       events,
+                       reference_event,
+                       markers = NULL,
+                       lanes) {
   # Capture variables as expressions, allowing for piping in API ---------------
-  subject_var <- enquo(subject_var) |>
-    get_expr()
-  time_var <- enquo(time_var) |>
-    get_expr()
-  markers <- enquo(markers) |>
-    get_expr()
-  class_status <- enquo(class_status) |>
-    get_expr()
+  variables <- c("id", "time", "events", "reference_event")
+
+  for (variable in variables) {
+    assign(variable, eval(parse(text = paste0("enquo(", variable, ") |> get_expr()"))))
+  }
+
+  # markers <- paste0(markers[-1]) # [-1] due to vector of type `sym` includes "c()"
+  # lanes <- paste0(lanes[-1]) # [-1] due to vector of type `sym` includes "c()"
 
   # Check inputs ---------------------------------------------------------------
   # TODO: Add checks for other args. To access "name" args, use df[[*]]
   # TBD on how best to access "call" args (i.e. `markers`)
   check_arg_is_dataframe(df)
 
-  # Expand columns to assign day of marker occurrence --------------------------
-  time_vec <- paste0(markers[-1], "_timepoint") # [-1] due to vector of type `sym` includes "c()"
-
-  # Add named columns with empty rows to dataframe
-  df <- df |>
-    add_columns(time_vec)
-
-  # Conditionally update values in time_vec with time of occurrence if value in original col != 0
-  for (df_rows in seq_len(nrow(df))) {
-    for (marker in as.character(markers[-1])) { # [-1] due to vector of type `sym` includes "c()"
-      if (df[df_rows, marker] != 0) {
-        df[df_rows, paste0(marker, "_timepoint")] <- df[df_rows, time_var]
-      }
-    }
-  }
-
   # Group subject vars and assign max time -------------------------------------
   # Replicate dplyr::group_by() using base R
-  # lapply/split separates into list elements per `subject_var`
-  # Then, max_time is created with the max of the split `time_var` column
-  grouped <- lapply(split(df, df[[subject_var]]), function(group_df) {
+  # lapply/split separates into list elements per `id`
+  grouped <- lapply(split(df, df[[id]]), lanes, FUN = function(group_df, lanes = lanes) {
     # Perform operations on each group
-    # i.e., calculate the max of 'time_var' column
-    max_value <- max(group_df[time_var], na.rm = TRUE)
+    # i.e., calculate the max/min of 'time' column
+    min_value <- min(group_df[time], na.rm = TRUE)
+    max_value <- max(group_df[time], na.rm = TRUE)
 
     # Create a new column in the group_df with the max value
+    group_df$min_time <- min_value
     group_df$max_time <- max_value
+
+    # Create lane column
+    group_df$lane_col <- group_df$event
+    group_df$lane_col[!group_df$lane_col %in% lanes] <- NA
+
+    group_df <- group_df |>
+      tidyr::fill(lane_col, .direction = "down") # Fill down first, then up
+
+    # Create marker column
+    group_df$marker_col <- group_df$event
+    group_df$marker_col[group_df$marker_col %in% lanes] <- NA
 
     # Return the modified group_df
     group_df
@@ -79,39 +81,20 @@ streamline <- function(df,
 
   # Combine the results back into a single data frame --------------------------
   result <- do.call(rbind, grouped)
-  # Convert `subject_var` to factor
-  result[[subject_var]] <- reorder(
-    factor(result[[subject_var]]), result$max_time
+  # Convert `id` to factor
+  result[[id]] <- reorder(
+    factor(result[[id]]), result$max_time
   )
 
   # Capture all vars of interest in a list and return as a swim_tbl object -----
   out <- list(data = result,
-              markers = time_vec,
-              subject_var = subject_var,
-              time_var = time_var,
-              class_status = class_status)
+              id = id,
+              time = time,
+              markers = markers,
+              reference_event = reference_event,
+              lanes = lanes)
 
   as_swim_tbl(out)
-}
-
-#' @title Add empty columns based on supplied day_vector
-#'
-#' @description
-#' Add empty columns to a dataframe based on supplied day_vector
-#'
-#' @param df a dataframe
-#'
-#' @returns a dataframe
-#'
-#' @keywords internal
-
-add_columns <- function(df, columns) {
-  within(df, {
-    for (col in columns) {
-      assign(col, NA)  # Assign values to new column
-    }
-    col <- NULL
-  })
 }
 
 #' @title

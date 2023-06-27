@@ -13,7 +13,7 @@
 #'
 #' @importFrom ggplot2 ggplot aes geom_line geom_point theme_bw scale_x_continuous
 #' labs guides theme guide_legend scale_color_manual element_text element_blank
-#' element_rect
+#' element_rect geom_text
 #' @importFrom cli cli_abort
 #'
 #' @export
@@ -26,30 +26,24 @@ ggswim <- function(x,
   # check inputs ---------------------------------------------------------------
   check_arg_is_swim_tbl(x)
 
+  # assign common vars ---------------------------------------------------------
   df <- x$data
   markers <- x$markers
-  subject_var <- x$subject_var
-  time_var <- x$time_var
-  class_status <- x$class_status
+  id <- x$id
+  time <- x$time
+  lanes <- x$lanes
 
+  # Define initial gg object and apply lines colored by lanes ------------------
   gg <- df |>
-    ggplot()
-
-  if (!is.null(class_status)) {
-    gg <- gg +
-      geom_line(aes(x = !!time_var,
-                    y = !!subject_var,
-                    col = !!class_status,
-                    group = !!subject_var),
-                size = 1.8)
-  }
-
-  # TODO: Possibly look into how to let apply_geom_points accept `+`s, currently
-  # it cannot and only receives `|>` objects. However, this changes the `gg`
-  # class type.
-  gg <- apply_geom_points(gg, markers = markers, subject_var = subject_var) +
-    labs(x = xlab, y = ylab, title = title) +
-    scale_x_continuous(expand = c(0, 0)) # remove extra white space
+    ggplot(aes(x = !!time, y = !!id, group = !!id)) +
+    geom_line(aes(col = x$data$lane_col),
+              linewidth = 1.8) +
+    geom_text(aes(label = markers[marker_col],
+                  col = marker_col),
+              family = "Arial Unicode MS",
+              size = 10, show.legend = TRUE) +
+    ggplot2::theme_minimal() +
+    labs(x = xlab, y = ylab, title = title)
 
   gg
 
@@ -67,14 +61,14 @@ ggswim <- function(x,
 #' @param plot a ggplot2 object
 #' @param markers a vector of columns that will comprise point markers on the
 #' swimmer plot
-#' @param subject_var the y-axis variable of a swimmer plot, typically a unique
+#' @param id the y-axis variable of a swimmer plot, typically a unique
 #' subject or record identification column
 #'
 #' @importFrom ggplot2 layer
 #'
 #' @keywords internal
 
-apply_geom_points <- function(plot, markers, subject_var) {
+apply_geom_points <- function(plot, markers, id) {
   # Determine the number of geom_point commands based on the length of markers
   num_geoms <- length(markers)
 
@@ -84,7 +78,7 @@ apply_geom_points <- function(plot, markers, subject_var) {
           stat = "identity",
           position = "identity",
           mapping = aes(x = !!rlang::sym(markers[[i]]),
-                        y = paste0(!!subject_var),
+                        y = paste0(!!id),
                         col = paste(markers[[i]])))
   })
 

@@ -4,22 +4,28 @@
 \alias{streamline}
 \title{Streamline data for ggswim plotting}
 \usage{
-streamline(df, subject_var, time_var, markers, class_status = NULL)
+streamline(df, id, time, events, reference_event, markers = NULL, lanes)
 }
 \arguments{
 \item{df}{a dataframe prepared for use with \code{streamline()}}
 
-\item{subject_var}{the y-axis variable of a swimmer plot, typically a unique
+\item{id}{the y-axis variable of a swimmer plot, typically a unique
 subject or record identification column}
 
-\item{time_var}{the the x-axis variable of the swimmer plot, typically a
+\item{time}{the the x-axis variable of the swimmer plot, typically a
 function of time}
 
-\item{markers}{a vector of columns that will comprise point markers on the
-swimmer plot}
+\item{events}{the column that will supply definitions for the \code{reference_event},
+\code{markers}, and \code{lanes}}
 
-\item{class_status}{Columns that indicate line changes, i.e. color changes
-for individual swim lanes. Optional, default \code{NULL}.}
+\item{reference_event}{a character string found in \code{events} that establishes
+the time-zero reference point for the x-axis}
+
+\item{markers}{A character vector that will comprise point markers on the
+swimmer plot. Optional, default \code{NULL}}
+
+\item{lanes}{Columns that indicate line changes, i.e. color changes
+for individual swim lanes.}
 }
 \value{
 a swim_tbl object
