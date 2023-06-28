@@ -26,6 +26,7 @@
 #'
 #' @importFrom rlang enquo get_expr
 #' @importFrom stats reorder
+#' @importFrom tidyr fill
 #'
 #' @export
 
@@ -36,13 +37,6 @@ streamline <- function(df,
                        reference_event,
                        markers = NULL,
                        lanes) {
-  # Capture variables as expressions, allowing for piping in API ---------------
-  # variables <- c("id", "time", "events", "reference_event")
-  #
-  # for (variable in variables) {
-  #   assign(variable, eval(parse(text = paste0("enquo(", variable, ") |> get_expr()"))))
-  # }
-
   # Convert lanes to ordered factor
   lanes <- factor(lanes, ordered = TRUE)
 
@@ -69,7 +63,8 @@ streamline <- function(df,
     group_df$lane_col[!group_df$lane_col %in% lanes] <- NA
 
     group_df <- group_df |>
-      tidyr::fill(lane_col, .direction = "down") # Fill down first, then up
+      # Fill down first, then up
+      fill(lane_col, .direction = "down") # nolint: object_usage_linter
 
     # Create marker column
     group_df$marker_col <- group_df$event

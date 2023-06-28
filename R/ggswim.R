@@ -60,7 +60,6 @@ ggswim <- function(df,
                          lanes = lanes)
 
   # check inputs ---------------------------------------------------------------
-  # check_arg_is_swim_tbl(df)
 
   # assign common vars ---------------------------------------------------------
   df <- swim_tbl$data
@@ -81,7 +80,7 @@ ggswim <- function(df,
 
   # Conditionally apply lane colors
   # Needs to be done *before* application of markers
-  if (!is.null(lane_colors)){
+  if (!is.null(lane_colors)) {
     gg <- gg +
       scale_color_manual(values = lane_colors)
   }
@@ -89,8 +88,8 @@ ggswim <- function(df,
   gg <- gg +
       geom_label(
       aes(
-        label = markers[marker_col],
-        col = marker_col
+        label = markers[marker_col], # nolint: object_usage_linter
+        col = marker_col # nolint: object_usage_linter
       ),
       label.size = NA, fill = NA) +
     theme_minimal() +
