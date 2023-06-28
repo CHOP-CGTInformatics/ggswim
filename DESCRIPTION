@@ -16,7 +16,8 @@ Imports:
     cli,
     ggplot2,
     rlang,
-    tibble
+    tibble,
+    tidyr
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Suggests: 
