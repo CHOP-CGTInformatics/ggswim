@@ -8,10 +8,10 @@
 #' Requirements for a dataset include an identifiable primary key column,
 #' a time column, and any number of binary indicator columns.
 #'
-#' @param df a dataframe prepared for use with `streamline()`
+#' @param df a dataframe prepared for use with `ggswim()`
 #' @param id the y-axis variable of a swimmer plot, typically a unique
 #' subject or record identification column
-#' @param time the the x-axis variable of the swimmer plot, typically a
+#' @param time the x-axis variable of the swimmer plot, typically a
 #' function of time
 #' @param events the column that will supply definitions for the `reference_event`,
 #' `markers`, and `lanes`
@@ -37,14 +37,14 @@ streamline <- function(df,
                        markers = NULL,
                        lanes) {
   # Capture variables as expressions, allowing for piping in API ---------------
-  variables <- c("id", "time", "events", "reference_event")
+  # variables <- c("id", "time", "events", "reference_event")
+  #
+  # for (variable in variables) {
+  #   assign(variable, eval(parse(text = paste0("enquo(", variable, ") |> get_expr()"))))
+  # }
 
-  for (variable in variables) {
-    assign(variable, eval(parse(text = paste0("enquo(", variable, ") |> get_expr()"))))
-  }
-
-  # markers <- paste0(markers[-1]) # [-1] due to vector of type `sym` includes "c()"
-  # lanes <- paste0(lanes[-1]) # [-1] due to vector of type `sym` includes "c()"
+  # Convert lanes to ordered factor
+  lanes <- factor(lanes, ordered = TRUE)
 
   # Check inputs ---------------------------------------------------------------
   # TODO: Add checks for other args. To access "name" args, use df[[*]]

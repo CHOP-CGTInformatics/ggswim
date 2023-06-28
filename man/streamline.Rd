@@ -7,12 +7,12 @@
 streamline(df, id, time, events, reference_event, markers = NULL, lanes)
 }
 \arguments{
-\item{df}{a dataframe prepared for use with \code{streamline()}}
+\item{df}{a dataframe prepared for use with \code{ggswim()}}
 
 \item{id}{the y-axis variable of a swimmer plot, typically a unique
 subject or record identification column}
 
-\item{time}{the the x-axis variable of the swimmer plot, typically a
+\item{time}{the x-axis variable of the swimmer plot, typically a
 function of time}
 
 \item{events}{the column that will supply definitions for the \code{reference_event},

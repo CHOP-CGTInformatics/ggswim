@@ -4,18 +4,49 @@
 \alias{ggswim}
 \title{Plot swimmer data}
 \usage{
-ggswim(x, title = NULL, xlab = NULL, ylab = NULL, ...)
+ggswim(
+  df,
+  id,
+  time,
+  events,
+  reference_event,
+  markers,
+  lanes,
+  lane_colors = NULL,
+  title = NULL,
+  xlab = NULL,
+  ylab = NULL
+)
 }
 \arguments{
-\item{x}{A data object of type \code{swim_tbl} as supplied by \code{streamline()}}
+\item{df}{a dataframe prepared for use with \code{ggswim()}}
+
+\item{id}{the y-axis variable of a swimmer plot, typically a unique
+subject or record identification column}
+
+\item{time}{the x-axis variable of the swimmer plot, typically a
+function of time}
+
+\item{events}{the column that will supply definitions for the \code{reference_event},
+\code{markers}, and \code{lanes}}
+
+\item{reference_event}{a character string found in \code{events} that establishes
+the time-zero reference point for the x-axis}
+
+\item{markers}{A character vector that will comprise point markers on the
+swimmer plot. Optional, default \code{NULL}}
+
+\item{lanes}{Columns that indicate line changes, i.e. color changes
+for individual swim lanes.}
+
+\item{lane_colors}{a vector of character strings to assign to the \code{lanes},
+written in the same order. Optional, if left \code{NULL}, default colors applied}
 
 \item{title}{the plot title}
 
 \item{xlab}{the x-axis label}
 
 \item{ylab}{the y-axis label}
-
-\item{...}{arguments passed to ...}
 }
 \value{
 a ggplot2 figure
