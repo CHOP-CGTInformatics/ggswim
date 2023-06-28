@@ -73,53 +73,81 @@
 </h2>
 <p>Below is a simple example for how to set up your “swim table” to pass along to <code><a href="reference/ggswim.html">ggswim()</a></code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ggswim</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
-<span>  <span class="op">~</span><span class="va">subject_id</span>, <span class="op">~</span><span class="va">years</span>, <span class="op">~</span><span class="va">indicator_1</span>, <span class="op">~</span><span class="va">indicator_2</span>, <span class="op">~</span><span class="va">status</span>,</span>
-<span>  <span class="fl">1</span>, <span class="fl">2000</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="st">"unknown"</span>,</span>
-<span>  <span class="fl">1</span>, <span class="fl">2001</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="st">"unknown"</span>,</span>
-<span>  <span class="fl">1</span>, <span class="fl">2002</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="st">"positive"</span>,</span>
-<span>  <span class="fl">1</span>, <span class="fl">2003</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="st">"negative"</span>,</span>
-<span>  <span class="fl">2</span>, <span class="fl">2000</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="st">"positive"</span>,</span>
-<span>  <span class="fl">2</span>, <span class="fl">2001</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="st">"negative"</span>,</span>
-<span>  <span class="fl">2</span>, <span class="fl">2002</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="st">"negative"</span>,</span>
-<span>  <span class="fl">3</span>, <span class="fl">2000</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="st">"negative"</span>,</span>
-<span>  <span class="fl">4</span>, <span class="fl">2000</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="st">"negative"</span>,</span>
-<span>  <span class="fl">4</span>, <span class="fl">2001</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="st">"positive"</span>,</span>
-<span>  <span class="fl">4</span>, <span class="fl">2002</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="st">"positive"</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ggswim</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span>  <span class="op">~</span><span class="va">subject_id</span>, <span class="op">~</span><span class="va">time</span>, <span class="op">~</span><span class="va">event</span>,</span>
+<span>  <span class="fl">1</span>, <span class="fl">0</span>, <span class="st">"Infusion"</span>,</span>
+<span>  <span class="fl">1</span>, <span class="fl">2</span>, <span class="st">"CRS Grade 1"</span>,</span>
+<span>  <span class="fl">1</span>, <span class="fl">3</span>, <span class="st">"CRS Grade 2"</span>,</span>
+<span>  <span class="fl">1</span>, <span class="fl">4</span>, <span class="st">"CRS Grade 1"</span>,</span>
+<span>  <span class="fl">1</span>, <span class="fl">5</span>, <span class="st">"No CRS"</span>,</span>
+<span>  <span class="fl">1</span>, <span class="fl">6</span>, <span class="st">"Last Follow Up"</span>,</span>
+<span>  <span class="fl">2</span>, <span class="fl">0</span>, <span class="st">"Infusion"</span>,</span>
+<span>  <span class="fl">2</span>, <span class="fl">1</span>, <span class="st">"CRS Grade 1"</span>,</span>
+<span>  <span class="fl">2</span>, <span class="fl">4</span>, <span class="st">"CRS Grade 2"</span>,</span>
+<span>  <span class="fl">2</span>, <span class="fl">7</span>, <span class="st">"CRS Grade 1"</span>,</span>
+<span>  <span class="fl">2</span>, <span class="fl">8</span>, <span class="st">"No CRS"</span>,</span>
+<span>  <span class="fl">2</span>, <span class="fl">9</span>, <span class="st">"Last Follow Up"</span>,</span>
+<span>  <span class="fl">3</span>, <span class="fl">0</span>, <span class="st">"Infusion"</span>,</span>
+<span>  <span class="fl">3</span>, <span class="fl">1</span>, <span class="st">"CRS Grade 1"</span>,</span>
+<span>  <span class="fl">3</span>, <span class="fl">2</span>, <span class="st">"CRS Grade 2"</span>,</span>
+<span>  <span class="fl">3</span>, <span class="fl">3</span>, <span class="st">"CRS Grade 4"</span>,</span>
+<span>  <span class="fl">3</span>, <span class="fl">7</span>, <span class="st">"CRS Grade 5"</span>,</span>
+<span>  <span class="fl">3</span>, <span class="fl">10</span>, <span class="st">"Death"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">df_swim</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="reference/streamline.html">streamline</a></span><span class="op">(</span></span>
-<span>    id <span class="op">=</span> <span class="va">subject_id</span>,</span>
-<span>    time <span class="op">=</span> <span class="va">years</span>,</span>
-<span>    markers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">indicator_1</span>, <span class="va">indicator_2</span><span class="op">)</span>,</span>
-<span>    lanes <span class="op">=</span> <span class="va">status</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="va">df</span></span>
+<span><span class="co">#&gt; # A tibble: 18 × 3</span></span>
+<span><span class="co">#&gt;    subject_id  time event         </span></span>
+<span><span class="co">#&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;         </span></span>
+<span><span class="co">#&gt;  1          1     0 Infusion      </span></span>
+<span><span class="co">#&gt;  2          1     2 CRS Grade 1   </span></span>
+<span><span class="co">#&gt;  3          1     3 CRS Grade 2   </span></span>
+<span><span class="co">#&gt;  4          1     4 CRS Grade 1   </span></span>
+<span><span class="co">#&gt;  5          1     5 No CRS        </span></span>
+<span><span class="co">#&gt;  6          1     6 Last Follow Up</span></span>
+<span><span class="co">#&gt;  7          2     0 Infusion      </span></span>
+<span><span class="co">#&gt;  8          2     1 CRS Grade 1   </span></span>
+<span><span class="co">#&gt;  9          2     4 CRS Grade 2   </span></span>
+<span><span class="co">#&gt; 10          2     7 CRS Grade 1   </span></span>
+<span><span class="co">#&gt; 11          2     8 No CRS        </span></span>
+<span><span class="co">#&gt; 12          2     9 Last Follow Up</span></span>
+<span><span class="co">#&gt; 13          3     0 Infusion      </span></span>
+<span><span class="co">#&gt; 14          3     1 CRS Grade 1   </span></span>
+<span><span class="co">#&gt; 15          3     2 CRS Grade 2   </span></span>
+<span><span class="co">#&gt; 16          3     3 CRS Grade 4   </span></span>
+<span><span class="co">#&gt; 17          3     7 CRS Grade 5   </span></span>
+<span><span class="co">#&gt; 18          3    10 Death</span></span></code></pre></div>
+<p>We’ll also pre-define some arguments of interest and the plot accordingly:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lanes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CRS Grade 1"</span>, </span>
+<span>           <span class="st">"CRS Grade 2"</span>, </span>
+<span>           <span class="st">"CRS Grade 3"</span>, </span>
+<span>           <span class="st">"CRS Grade 4"</span>, </span>
+<span>           <span class="st">"CRS Grade 5"</span>, </span>
+<span>           <span class="st">"No CRS"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">df_swim</span><span class="op">$</span><span class="va">data</span></span>
-<span><span class="co">#&gt; # A tibble: 11 × 8</span></span>
-<span><span class="co">#&gt;    subject_id years indicator_1 indicator_2 status   indicator_2_timepoint</span></span>
-<span><span class="co">#&gt;    &lt;fct&gt;      &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;                    &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 1           2000           1           1 unknown                   2000</span></span>
-<span><span class="co">#&gt;  2 1           2001           0           0 unknown                     NA</span></span>
-<span><span class="co">#&gt;  3 1           2002           1           0 positive                    NA</span></span>
-<span><span class="co">#&gt;  4 1           2003           0           1 negative                  2003</span></span>
-<span><span class="co">#&gt;  5 2           2000           0           0 positive                    NA</span></span>
-<span><span class="co">#&gt;  6 2           2001           0           0 negative                    NA</span></span>
-<span><span class="co">#&gt;  7 2           2002           0           1 negative                  2002</span></span>
-<span><span class="co">#&gt;  8 3           2000           0           1 negative                  2000</span></span>
-<span><span class="co">#&gt;  9 4           2000           0           0 negative                    NA</span></span>
-<span><span class="co">#&gt; 10 4           2001           1           0 positive                    NA</span></span>
-<span><span class="co">#&gt; 11 4           2002           0           1 positive                  2002</span></span>
-<span><span class="co">#&gt; # ℹ 2 more variables: indicator_1_timepoint &lt;dbl&gt;, max_time &lt;dbl&gt;</span></span></code></pre></div>
-<p>And then plot:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">df_swim</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="reference/ggswim.html">ggswim</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Swimmer Plot"</span>, xlab <span class="op">=</span> <span class="st">"Years"</span>, ylab <span class="op">=</span> <span class="st">"Record ID"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Removed 8 rows containing missing values (`geom_point()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 6 rows containing missing values (`geom_point()`).</span></span></code></pre></div>
+<span><span class="va">lane_colors</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"green"</span>, <span class="st">"yellow"</span>, <span class="st">"orange"</span>, <span class="st">"red"</span>, <span class="st">"black"</span>, <span class="st">"gray"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">markers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Last Follow Up"</span> <span class="op">=</span> <span class="st">"👤"</span>, </span>
+<span>  <span class="st">"Death"</span> <span class="op">=</span> <span class="st">"❌"</span>,  </span>
+<span>  <span class="st">"Infusion"</span> <span class="op">=</span> <span class="st">"🏥"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">df</span> <span class="op">|&gt;</span> </span>
+<span><span class="fu"><a href="reference/ggswim.html">ggswim</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">subject_id</span>,</span>
+<span>       time <span class="op">=</span> <span class="va">time</span>,</span>
+<span>       events <span class="op">=</span> <span class="va">event</span>,</span>
+<span>       reference_event <span class="op">=</span> <span class="st">"Infusion"</span>,</span>
+<span>       markers <span class="op">=</span> <span class="va">markers</span>,</span>
+<span>       lanes <span class="op">=</span> <span class="va">lanes</span>,</span>
+<span>       lane_colors <span class="op">=</span> <span class="va">lane_colors</span>,</span>
+<span>       title <span class="op">=</span> <span class="st">"My Swim Plot"</span>,</span>
+<span>       xlab <span class="op">=</span> <span class="st">"Time"</span>,</span>
+<span>       ylab <span class="op">=</span> <span class="st">"Subject ID"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Removed 12 rows containing missing values (`geom_label()`).</span></span></code></pre></div>
 <p><img src="reference/figures/README-ggswim-1.png" width="100%"></p>
 </div>
 </div>

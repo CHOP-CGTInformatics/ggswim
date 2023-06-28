@@ -44,13 +44,60 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ggswim</span><span class="op">(</span><span class="va">x</span>, title <span class="op">=</span> <span class="cn">NULL</span>, xlab <span class="op">=</span> <span class="cn">NULL</span>, ylab <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ggswim</span><span class="op">(</span></span>
+<span>  <span class="va">df</span>,</span>
+<span>  <span class="va">id</span>,</span>
+<span>  <span class="va">time</span>,</span>
+<span>  <span class="va">events</span>,</span>
+<span>  <span class="va">reference_event</span>,</span>
+<span>  <span class="va">markers</span>,</span>
+<span>  <span class="va">lanes</span>,</span>
+<span>  lane_colors <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  xlab <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ylab <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>x</dt>
-<dd><p>A data object of type <code>swim_tbl</code> as supplied by <code><a href="streamline.html">streamline()</a></code></p></dd>
+    <dl><dt>df</dt>
+<dd><p>a dataframe prepared for use with <code>ggswim()</code></p></dd>
+
+
+<dt>id</dt>
+<dd><p>the y-axis variable of a swimmer plot, typically a unique
+subject or record identification column</p></dd>
+
+
+<dt>time</dt>
+<dd><p>the x-axis variable of the swimmer plot, typically a
+function of time</p></dd>
+
+
+<dt>events</dt>
+<dd><p>the column that will supply definitions for the <code>reference_event</code>,
+<code>markers</code>, and <code>lanes</code></p></dd>
+
+
+<dt>reference_event</dt>
+<dd><p>a character string found in <code>events</code> that establishes
+the time-zero reference point for the x-axis</p></dd>
+
+
+<dt>markers</dt>
+<dd><p>A character vector that will comprise point markers on the
+swimmer plot. Optional, default <code>NULL</code></p></dd>
+
+
+<dt>lanes</dt>
+<dd><p>Columns that indicate line changes, i.e. color changes
+for individual swim lanes.</p></dd>
+
+
+<dt>lane_colors</dt>
+<dd><p>a vector of character strings to assign to the <code>lanes</code>,
+written in the same order. Optional, if left <code>NULL</code>, default colors applied</p></dd>
 
 
 <dt>title</dt>
@@ -63,10 +110,6 @@
 
 <dt>ylab</dt>
 <dd><p>the y-axis label</p></dd>
-
-
-<dt>...</dt>
-<dd><p>arguments passed to ...</p></dd>
 
 </dl></div>
     <div id="value">
