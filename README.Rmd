@@ -9,7 +9,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "100%",
+  dev='ragg_png'
 )
 ```
 
@@ -34,39 +35,61 @@ devtools::install_github("CHOP-CGTInformatics/ggswim")
 
 Below is a simple example for how to set up your "swim table" to pass along to `ggswim()`:
 
-```{r load_package, eval=TRUE}
+```{r load_package and data, eval=TRUE}
 library(ggswim)
-```
 
-```{r swim table setup, eval=TRUE}
 df <- tibble::tribble(
-  ~subject_id, ~years, ~indicator_1, ~indicator_2, ~status,
-  1, 2000, 1, 1, "unknown",
-  1, 2001, 0, 0, "unknown",
-  1, 2002, 1, 0, "positive",
-  1, 2003, 0, 1, "negative",
-  2, 2000, 0, 0, "positive",
-  2, 2001, 0, 0, "negative",
-  2, 2002, 0, 1, "negative",
-  3, 2000, 0, 1, "negative",
-  4, 2000, 0, 0, "negative",
-  4, 2001, 1, 0, "positive",
-  4, 2002, 0, 1, "positive"
+  ~subject_id, ~time, ~event,
+  1, 0, "Infusion",
+  1, 2, "CRS Grade 1",
+  1, 3, "CRS Grade 2",
+  1, 4, "CRS Grade 1",
+  1, 5, "No CRS",
+  1, 6, "Last Follow Up",
+  2, 0, "Infusion",
+  2, 1, "CRS Grade 1",
+  2, 4, "CRS Grade 2",
+  2, 7, "CRS Grade 1",
+  2, 8, "No CRS",
+  2, 9, "Last Follow Up",
+  3, 0, "Infusion",
+  3, 1, "CRS Grade 1",
+  3, 2, "CRS Grade 2",
+  3, 3, "CRS Grade 4",
+  3, 7, "CRS Grade 5",
+  3, 10, "Death"
 )
 
-df_swim <- df |> 
-  streamline(
-    id = subject_id,
-    time = years,
-    markers = c(indicator_1, indicator_2),
-    lanes = status
-  )
-
-df_swim$data
+df
 ```
 
-And then plot:
+We'll also pre-define some arguments of interest and the plot accordingly:
 
 ```{r ggswim, eval=TRUE}
-df_swim |> 
-  ggswim(title = "Swimmer Plot", xlab = "Years", ylab = "Record ID")
+lanes <- c("CRS Grade 1", 
+           "CRS Grade 2", 
+           "CRS Grade 3", 
+           "CRS Grade 4", 
+           "CRS Grade 5", 
+           "No CRS")
+
+lane_colors = c("green", "yellow", "orange", "red", "black", "gray")
+
+markers <- list(
+  "Last Follow Up" = "👤", 
+  "Death" = "❌",  
+  "Infusion" = "🏥"
+)
+
+df |> 
+ggswim(id = subject_id,
+       time = time,
+       events = event,
+       reference_event = "Infusion",
+       markers = markers,
+       lanes = lanes,
+       lane_colors = lane_colors,
+       title = "My Swim Plot",
+       xlab = "Time",
+       ylab = "Subject ID")
+```

@@ -28,57 +28,84 @@ along to `ggswim()`:
 
 ``` r
 library(ggswim)
-```
 
-``` r
 df <- tibble::tribble(
-  ~subject_id, ~years, ~indicator_1, ~indicator_2, ~status,
-  1, 2000, 1, 1, "unknown",
-  1, 2001, 0, 0, "unknown",
-  1, 2002, 1, 0, "positive",
-  1, 2003, 0, 1, "negative",
-  2, 2000, 0, 0, "positive",
-  2, 2001, 0, 0, "negative",
-  2, 2002, 0, 1, "negative",
-  3, 2000, 0, 1, "negative",
-  4, 2000, 0, 0, "negative",
-  4, 2001, 1, 0, "positive",
-  4, 2002, 0, 1, "positive"
+  ~subject_id, ~time, ~event,
+  1, 0, "Infusion",
+  1, 2, "CRS Grade 1",
+  1, 3, "CRS Grade 2",
+  1, 4, "CRS Grade 1",
+  1, 5, "No CRS",
+  1, 6, "Last Follow Up",
+  2, 0, "Infusion",
+  2, 1, "CRS Grade 1",
+  2, 4, "CRS Grade 2",
+  2, 7, "CRS Grade 1",
+  2, 8, "No CRS",
+  2, 9, "Last Follow Up",
+  3, 0, "Infusion",
+  3, 1, "CRS Grade 1",
+  3, 2, "CRS Grade 2",
+  3, 3, "CRS Grade 4",
+  3, 7, "CRS Grade 5",
+  3, 10, "Death"
 )
 
-df_swim <- df |> 
-  streamline(
-    id = subject_id,
-    time = years,
-    markers = c(indicator_1, indicator_2),
-    lanes = status
-  )
-
-df_swim$data
-#> # A tibble: 11 × 8
-#>    subject_id years indicator_1 indicator_2 status   indicator_2_timepoint
-#>    <fct>      <dbl>       <dbl>       <dbl> <chr>                    <dbl>
-#>  1 1           2000           1           1 unknown                   2000
-#>  2 1           2001           0           0 unknown                     NA
-#>  3 1           2002           1           0 positive                    NA
-#>  4 1           2003           0           1 negative                  2003
-#>  5 2           2000           0           0 positive                    NA
-#>  6 2           2001           0           0 negative                    NA
-#>  7 2           2002           0           1 negative                  2002
-#>  8 3           2000           0           1 negative                  2000
-#>  9 4           2000           0           0 negative                    NA
-#> 10 4           2001           1           0 positive                    NA
-#> 11 4           2002           0           1 positive                  2002
-#> # ℹ 2 more variables: indicator_1_timepoint <dbl>, max_time <dbl>
+df
+#> # A tibble: 18 × 3
+#>    subject_id  time event         
+#>         <dbl> <dbl> <chr>         
+#>  1          1     0 Infusion      
+#>  2          1     2 CRS Grade 1   
+#>  3          1     3 CRS Grade 2   
+#>  4          1     4 CRS Grade 1   
+#>  5          1     5 No CRS        
+#>  6          1     6 Last Follow Up
+#>  7          2     0 Infusion      
+#>  8          2     1 CRS Grade 1   
+#>  9          2     4 CRS Grade 2   
+#> 10          2     7 CRS Grade 1   
+#> 11          2     8 No CRS        
+#> 12          2     9 Last Follow Up
+#> 13          3     0 Infusion      
+#> 14          3     1 CRS Grade 1   
+#> 15          3     2 CRS Grade 2   
+#> 16          3     3 CRS Grade 4   
+#> 17          3     7 CRS Grade 5   
+#> 18          3    10 Death
 ```
 
-And then plot:
+We’ll also pre-define some arguments of interest and the plot
+accordingly:
 
 ``` r
-df_swim |> 
-  ggswim(title = "Swimmer Plot", xlab = "Years", ylab = "Record ID")
-#> Warning: Removed 8 rows containing missing values (`geom_point()`).
-#> Warning: Removed 6 rows containing missing values (`geom_point()`).
+lanes <- c("CRS Grade 1", 
+           "CRS Grade 2", 
+           "CRS Grade 3", 
+           "CRS Grade 4", 
+           "CRS Grade 5", 
+           "No CRS")
+
+lane_colors = c("green", "yellow", "orange", "red", "black", "gray")
+
+markers <- list(
+  "Last Follow Up" = "👤", 
+  "Death" = "❌",  
+  "Infusion" = "🏥"
+)
+
+df |> 
+ggswim(id = subject_id,
+       time = time,
+       events = event,
+       reference_event = "Infusion",
+       markers = markers,
+       lanes = lanes,
+       lane_colors = lane_colors,
+       title = "My Swim Plot",
+       xlab = "Time",
+       ylab = "Subject ID")
+#> Warning: Removed 12 rows containing missing values (`geom_label()`).
 ```
 
 <img src="man/figures/README-ggswim-1.png" width="100%" />
