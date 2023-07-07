@@ -52,6 +52,27 @@ df <- tibble::tribble(
 )
 
 df
+#> # A tibble: 18 × 3
+#>    subject_id  time event         
+#>         <dbl> <dbl> <chr>         
+#>  1          1     0 Infusion      
+#>  2          1     2 CRS Grade 1   
+#>  3          1     3 CRS Grade 2   
+#>  4          1     4 CRS Grade 1   
+#>  5          1     5 No CRS        
+#>  6          1     6 Last Follow Up
+#>  7          2     0 Infusion      
+#>  8          2     1 CRS Grade 1   
+#>  9          2     4 CRS Grade 2   
+#> 10          2     7 CRS Grade 1   
+#> 11          2     8 No CRS        
+#> 12          2     9 Last Follow Up
+#> 13          3     0 Infusion      
+#> 14          3     1 CRS Grade 1   
+#> 15          3     2 CRS Grade 2   
+#> 16          3     3 CRS Grade 4   
+#> 17          3     7 CRS Grade 5   
+#> 18          3    10 Death
 ```
 
 We’ll also pre-define some arguments of interest and the plot
@@ -85,4 +106,7 @@ ggswim(id = subject_id,
        title = "My Swim Plot",
        xlab = "Time",
        ylab = "Subject ID")
+#> Warning: Removed 12 rows containing missing values (`geom_label()`).
 ```
+
+<img src="man/figures/README-ggswim-1.png" width="100%" />
