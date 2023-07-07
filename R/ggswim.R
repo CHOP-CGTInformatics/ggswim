@@ -12,6 +12,8 @@
 #' `markers`, and `lanes`
 #' @param reference_event a character string found in `events` that establishes
 #' the time-zero reference point for the x-axis
+#' @param emoji_or_shape One of "emoji" or "shape", determines whether to use
+#' `geom_label()` or `geom_point()`
 #' @param markers A character vector that will comprise point markers on the
 #' swimmer plot. Optional, default `NULL`
 #' @param lanes Columns that indicate line changes, i.e. color changes
@@ -26,7 +28,7 @@
 #'
 #' @importFrom ggplot2 ggplot aes geom_line geom_point theme_bw scale_x_continuous
 #' labs guides theme guide_legend scale_color_manual element_text element_blank
-#' element_rect geom_label theme_minimal
+#' element_rect geom_label theme_minimal ggplot_build
 #' @importFrom cli cli_abort
 #'
 #' @export
@@ -36,6 +38,7 @@ ggswim <- function(df,
                    time,
                    events,
                    reference_event,
+                   emoji_or_shape,
                    markers,
                    lanes,
                    lane_colors = NULL,
@@ -46,6 +49,7 @@ ggswim <- function(df,
   # Streamline the dataframe ---------------------------------------------------
   # Capture variables as expressions, allowing for piping in API ---------------
   variables <- c("id", "time", "events", "reference_event")
+
 
   for (variable in variables) {
     assign(variable, eval(parse(text = paste0("enquo(", variable, ") |> get_expr()"))))
@@ -58,7 +62,6 @@ ggswim <- function(df,
                          reference_event = reference_event,
                          markers = markers,
                          lanes = lanes)
-
   # check inputs ---------------------------------------------------------------
 
   # assign common vars ---------------------------------------------------------
@@ -70,7 +73,9 @@ ggswim <- function(df,
   if (!is.null(lane_colors)) {
     names(lane_colors) <- lanes
   }
-
+  lanes_length <- length(lanes[lanes %in% df$event])
+  markers_length <- length(markers)
+  # marker_levels <- factor(names(markers), ordered = T)
 
   # Define initial gg object and apply lines colored by lanes ------------------
   gg <- df |>
@@ -80,24 +85,73 @@ ggswim <- function(df,
 
   # Conditionally apply lane colors
   # Needs to be done *before* application of markers
-  if (!is.null(lane_colors)) {
+  # if (!is.null(lane_colors)) {
+  #   gg <- gg +
+  #     scale_color_manual(values = lane_colors, name = "Legend")
+  # }
+
+  if (emoji_or_shape == "emoji") {
+
     gg <- gg +
-      scale_color_manual(values = lane_colors)
+      geom_label(
+        aes(
+          label = markers[marker_col], # nolint: object_usage_linter
+          col = marker_col # nolint: object_usage_linter
+        ),
+        label.size = NA, fill = NA)
+
+    # Label reorganization and identification
+    # First, get labels as they appear in the ggplot object
+    gg_obj <- ggplot2::ggplot_build(gg)
+    legend_label_order <- gg_obj$plot$scales$scales[[1]]$get_labels()
+
+    # Next, define the override for `guides()` later
+    # Combine lanes and markers
+    label_override <- c(
+      lanes, markers
+    )
+
+    # Reorganize and subset for only what appears in the data set
+    names(label_override)[1:length(lanes)] <- as.character(lanes)
+    label_override[1:length(lanes)] <- ""
+    label_override <- label_override[names(label_override) %in% df$event]
+    # Reorder based on legend_label_order
+    label_override <- label_override[match(legend_label_order, names(label_override))]
+
+     gg <- gg +
+      guides(
+        color = guide_legend(
+          override.aes = list(
+            shape = c(rep(NA, lanes_length), unlist(markers)),
+            stroke = c(rep(1, lanes_length), rep(1.5, markers_length)),
+            label = label_override
+          )
+        )
+      )
   }
 
-  gg <- gg +
-      geom_label(
-      aes(
-        label = markers[marker_col], # nolint: object_usage_linter
-        col = marker_col # nolint: object_usage_linter
-      ),
-      label.size = NA, fill = NA) +
+  if (emoji_or_shape == "shape") {
+    # TODO: Fix ordering for shapes
+    gg <- gg +
+      geom_point(aes(
+        shape = markers[marker_col], # nolint: object_usage_linter
+        col = marker_col, # nolint: object_usage_linter
+      ), size = 3, stroke = 1.5) +
+      guides(color = guide_legend(
+        override.aes = list(
+          shape = c(rep(NA, lanes_length), unlist(markers)),
+          stroke = c(rep(1, lanes_length), rep(1.5, markers_length)),
+          linetype = c(rep(1, lanes_length), rep(NA, markers_length))
+        ) # modify the color legend to include shapes
+      )
+      )
+  }
+
+  gg +
     theme_minimal() +
     labs(x = xlab, y = ylab, title = title)
 
-  gg
-
-  # TODO: Automate theme, legend/guide, labs, scale
+  # TODO: Address label legend out of order, colors not taken into account, legend name, change overrides to function
 }
 
 

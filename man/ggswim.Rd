@@ -10,6 +10,7 @@ ggswim(
   time,
   events,
   reference_event,
+  emoji_or_shape,
   markers,
   lanes,
   lane_colors = NULL,
@@ -32,6 +33,9 @@ function of time}
 
 \item{reference_event}{a character string found in \code{events} that establishes
 the time-zero reference point for the x-axis}
+
+\item{emoji_or_shape}{One of "emoji" or "shape", determines whether to use
+\code{geom_label()} or \code{geom_point()}}
 
 \item{markers}{A character vector that will comprise point markers on the
 swimmer plot. Optional, default \code{NULL}}

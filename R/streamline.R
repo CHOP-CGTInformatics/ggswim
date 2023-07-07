@@ -82,12 +82,17 @@ streamline <- function(df,
   )
 
   # Capture all vars of interest in a list and return as a swim_tbl object -----
+  # Create marker levels, combine with lanes levels for later ggswim legend support
+  marker_levels <- factor(names(markers), levels = names(markers), ordered = TRUE)
+
   out <- list(data = result,
               id = id,
               time = time,
               markers = markers,
               reference_event = reference_event,
-              lanes = lanes)
+              lanes = lanes,
+              event_levels = factor(result$event, levels = c(levels(lanes), levels(marker_levels)), ordered = TRUE)
+  )
 
   as_swim_tbl(out)
 }
