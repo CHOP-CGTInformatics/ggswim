@@ -50,6 +50,7 @@
 <span>  <span class="va">time</span>,</span>
 <span>  <span class="va">events</span>,</span>
 <span>  <span class="va">reference_event</span>,</span>
+<span>  <span class="va">emoji_or_shape</span>,</span>
 <span>  <span class="va">markers</span>,</span>
 <span>  <span class="va">lanes</span>,</span>
 <span>  lane_colors <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -83,6 +84,11 @@ function of time</p></dd>
 <dt>reference_event</dt>
 <dd><p>a character string found in <code>events</code> that establishes
 the time-zero reference point for the x-axis</p></dd>
+
+
+<dt>emoji_or_shape</dt>
+<dd><p>One of "emoji" or "shape", determines whether to use
+<code>geom_label()</code> or <code>geom_point()</code></p></dd>
 
 
 <dt>markers</dt>
