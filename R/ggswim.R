@@ -143,7 +143,7 @@ ggswim <- function(df,
   }
 
   # Process and assign line colors from `lane_colors` for `scale_color_manual`
-  assigned_line_colors <- get_assigned_line_colors(gg, lane_colors)
+  assigned_line_colors <- get_assigned_line_colors(gg, lanes, lane_colors)
 
   gg +
     theme_minimal() +
@@ -255,12 +255,14 @@ get_guide_values <- function(gg, emoji_or_shape, lanes, markers) {
 #' @returns a vector
 #'
 #' @param gg a `ggplot` object
+#' @param lanes Columns that indicate line changes, i.e. color changes
+#' for individual swim lanes.
 #' @param lane_colors a vector of character strings to assign to the `lanes`,
 #' written in the same order. Optional, if left `NULL`, default colors applied
 #'
 #' @keywords internal
 
-get_assigned_line_colors <- function(gg, lane_colors) {
+get_assigned_line_colors <- function(gg, lanes, lane_colors) {
 
   # Label reorganization and identification
   # First, get labels as they appear in the ggplot object

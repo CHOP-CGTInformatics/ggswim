@@ -4,10 +4,13 @@
 \alias{get_assigned_line_colors}
 \title{Reshape lane_colors}
 \usage{
-get_assigned_line_colors(gg, lane_colors)
+get_assigned_line_colors(gg, lanes, lane_colors)
 }
 \arguments{
 \item{gg}{a \code{ggplot} object}
+
+\item{lanes}{Columns that indicate line changes, i.e. color changes
+for individual swim lanes.}
 
 \item{lane_colors}{a vector of character strings to assign to the \code{lanes},
 written in the same order. Optional, if left \code{NULL}, default colors applied}
