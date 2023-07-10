@@ -16,7 +16,8 @@ ggswim(
   lane_colors = NULL,
   title = NULL,
   xlab = NULL,
-  ylab = NULL
+  ylab = NULL,
+  legend_title = NULL
 )
 }
 \arguments{
@@ -51,10 +52,23 @@ written in the same order. Optional, if left \code{NULL}, default colors applied
 \item{xlab}{the x-axis label}
 
 \item{ylab}{the y-axis label}
+
+\item{legend_title}{the title of the legend}
 }
 \value{
 a ggplot2 figure
 }
 \description{
 Plot swimmer data.
+}
+\details{
+Lengths of objects supplied to the following parameters
+must be equal to how many exist in the \code{df} supplied:
+\itemize{
+\item \code{markers}
+\item \code{lane_colors}
+}
+
+Note: \code{lane_colors} must have the same number of elements as \code{lanes}, even if
+not all \code{lanes} are present in \code{df}.
 }
