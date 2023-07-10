@@ -56,7 +56,8 @@
 <span>  lane_colors <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  xlab <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  ylab <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  ylab <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  legend_title <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -117,12 +118,24 @@ written in the same order. Optional, if left <code>NULL</code>, default colors a
 <dt>ylab</dt>
 <dd><p>the y-axis label</p></dd>
 
+
+<dt>legend_title</dt>
+<dd><p>the title of the legend</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     
 
 <p>a ggplot2 figure</p>
+    </div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>Lengths of objects supplied to the following parameters
+must be equal to how many exist in the <code>df</code> supplied:</p><ul><li><p><code>markers</code></p></li>
+<li><p><code>lane_colors</code></p></li>
+</ul><p>Note: <code>lane_colors</code> must have the same number of elements as <code>lanes</code>, even if
+not all <code>lanes</code> are present in <code>df</code>.</p>
     </div>
 
   </div>
