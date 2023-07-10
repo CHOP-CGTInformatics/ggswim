@@ -101,9 +101,12 @@ ggswim <- function(df,
         ),
         label.size = NA, fill = NA, na.rm = TRUE)
 
-    guide_values <- get_guide_values(gg = gg, lanes = lanes, markers = markers)
+    guide_values <- get_guide_values(gg = gg,
+                                     emoji_or_shape = emoji_or_shape,
+                                     lanes = lanes,
+                                     markers = markers)
 
-     gg <- gg +
+    gg <- gg +
       guides(
         color = guide_legend(
           override.aes = list(
@@ -120,9 +123,12 @@ ggswim <- function(df,
       geom_point(aes(
         shape = markers[marker_col], # nolint: object_usage_linter
         col = marker_col, # nolint: object_usage_linter
-      ), size = 3, stroke = 1.5)
+      ), size = 3, stroke = 1.5, na.rm = TRUE)
 
-    guide_values <- get_guide_values(gg = gg, lanes = lanes, markers = markers)
+    guide_values <- get_guide_values(gg = gg,
+                                     emoji_or_shape = emoji_or_shape,
+                                     lanes = lanes,
+                                     markers = markers)
 
     # TODO: Fix ordering for shapes
     gg <- gg +
@@ -231,9 +237,11 @@ get_guide_values <- function(gg, emoji_or_shape, lanes, markers) {
 
   out$linetype_override <- ifelse(out$label_override == "", 1, 0) # 0 for blank, 1 for solid
   out$stroke_override <- ifelse(out$label_override == "", 1, 2) # values dictate stroke thickness
-  out$shape_override <- out$label_override
-  out$shape_override <- ifelse(out$shape_override == "", 32, as.integer(out$label_override)) # 32 for blank
 
+  if (emoji_or_shape == "shape") {
+    out$shape_override <- out$label_override
+    out$shape_override <- ifelse(out$shape_override == "", 32, as.integer(out$label_override)) # 32 for blank
+  }
   out
 }
 
@@ -254,20 +262,20 @@ get_guide_values <- function(gg, emoji_or_shape, lanes, markers) {
 
 get_assigned_line_colors <- function(gg, lane_colors) {
 
-# Label reorganization and identification
-# First, get labels as they appear in the ggplot object
-gg_obj <- ggplot_build(gg)
-legend_label_order <- gg_obj$plot$scales$scales[[1]]$get_labels()
+  # Label reorganization and identification
+  # First, get labels as they appear in the ggplot object
+  gg_obj <- ggplot_build(gg)
+  legend_label_order <- gg_obj$plot$scales$scales[[1]]$get_labels()
 
-# get only values that appear in the data
-lines_to_keep <- unique(df$event[df$event %in% lanes])
-colors <- lane_colors[match(lines_to_keep, names(lane_colors))]
+  # get only values that appear in the data
+  lines_to_keep <- unique(df$event[df$event %in% lanes])
+  colors <- lane_colors[match(lines_to_keep, names(lane_colors))]
 
-# Combine the the `colors` and `legend_label_order` vectors and fill in missing
-# values with NA
-combined_vector <- rep(NA, length(legend_label_order))
-names(combined_vector) <- legend_label_order
-combined_vector[names(colors)] <- colors
+  # Combine the the `colors` and `legend_label_order` vectors and fill in missing
+  # values with NA
+  combined_vector <- rep(NA, length(legend_label_order))
+  names(combined_vector) <- legend_label_order
+  combined_vector[names(colors)] <- colors
 
-combined_vector
+  combined_vector
 }

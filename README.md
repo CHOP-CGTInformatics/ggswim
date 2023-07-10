@@ -86,7 +86,7 @@ lanes <- c("CRS Grade 1",
            "CRS Grade 5", 
            "No CRS")
 
-lane_colors = c("green", "yellow", "orange", "red", "black", "gray")
+lane_colors = c("yellow", "orange", "pink", "red", "black", "gray")
 
 markers <- list(
   "Last Follow Up" = "👤", 
@@ -94,19 +94,19 @@ markers <- list(
   "Infusion" = "🏥"
 )
 
-df |> 
-ggswim(id = subject_id,
-       time = time,
-       events = event,
-       reference_event = "Infusion",
-       emoji_or_shape = "emoji",
-       markers = markers,
-       lanes = lanes,
-       lane_colors = lane_colors,
-       title = "My Swim Plot",
-       xlab = "Time",
-       ylab = "Subject ID")
-#> Warning: Removed 12 rows containing missing values (`geom_label()`).
+df |>
+  ggswim(id = subject_id,
+         time = time,
+         events = event,
+         reference_event = "Infusion",
+         emoji_or_shape = "emoji",
+         markers = markers,
+         lanes = lanes,
+         lane_colors = lane_colors,
+         title = "My Swim Plot",
+         xlab = "Time",
+         ylab = "Subject ID",
+         legend_title = "My Legend Title")
 ```
 
 <img src="man/figures/README-ggswim-1.png" width="100%" />
