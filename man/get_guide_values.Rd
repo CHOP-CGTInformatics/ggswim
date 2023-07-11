@@ -4,9 +4,11 @@
 \alias{get_guide_values}
 \title{Create guide values for legend}
 \usage{
-get_guide_values(gg, emoji_or_shape, lanes, markers)
+get_guide_values(df, gg, emoji_or_shape, lanes, markers)
 }
 \arguments{
+\item{df}{a dataframe prepared for use with \code{ggswim()}}
+
 \item{gg}{A \code{ggplot} object}
 
 \item{emoji_or_shape}{One of "emoji" or "shape", determines whether to use

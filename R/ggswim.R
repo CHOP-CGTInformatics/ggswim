@@ -101,7 +101,8 @@ ggswim <- function(df,
         ),
         label.size = NA, fill = NA, na.rm = TRUE)
 
-    guide_values <- get_guide_values(gg = gg,
+    guide_values <- get_guide_values(df = df,
+                                     gg = gg,
                                      emoji_or_shape = emoji_or_shape,
                                      lanes = lanes,
                                      markers = markers)
@@ -125,7 +126,8 @@ ggswim <- function(df,
         col = marker_col, # nolint: object_usage_linter
       ), size = 3, stroke = 1.5, na.rm = TRUE)
 
-    guide_values <- get_guide_values(gg = gg,
+    guide_values <- get_guide_values(df = df,
+                                     gg = gg,
                                      emoji_or_shape = emoji_or_shape,
                                      lanes = lanes,
                                      markers = markers)
@@ -198,6 +200,7 @@ apply_geom_points <- function(plot, markers, id) {
 #' Programmatically assign and retrieve line and shape/label values to supply to
 #' `ggplot2::guide()`.
 #'
+#' @param df a dataframe prepared for use with `ggswim()`
 #' @param gg A `ggplot` object
 #' @param emoji_or_shape One of "emoji" or "shape", determines whether to use
 #' `geom_label()` or `geom_point()`
@@ -212,7 +215,7 @@ apply_geom_points <- function(plot, markers, id) {
 #'
 #' @keywords internal
 
-get_guide_values <- function(gg, emoji_or_shape, lanes, markers) {
+get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers) {
 
   out <- list()
 
