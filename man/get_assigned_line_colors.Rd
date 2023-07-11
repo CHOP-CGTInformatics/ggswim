@@ -4,9 +4,11 @@
 \alias{get_assigned_line_colors}
 \title{Reshape lane_colors}
 \usage{
-get_assigned_line_colors(gg, lanes, lane_colors)
+get_assigned_line_colors(df, gg, lanes, lane_colors)
 }
 \arguments{
+\item{df}{a dataframe prepared for use with \code{ggswim()}}
+
 \item{gg}{a \code{ggplot} object}
 
 \item{lanes}{Columns that indicate line changes, i.e. color changes
