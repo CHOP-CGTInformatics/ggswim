@@ -1,0 +1,60 @@
+#' @title Apply updated ggplot legend order
+#'
+#' @description
+#' This helper function takes the updated legend order from `get_gg_legend_order`
+#' and applies directly to the labels of a ggplot object's legend.
+#'
+#' @param gg A `ggplot` object
+#' @param markers a named list defining marker events on a `lane` in either
+#' numeric shape or emoji form
+#' @param lanes A list of character strings that line segments for `id`. Colors
+#' are also supplied here by setting list elements equal to hex or named colors.
+#' In the absence of colors, default `ggplot2` colors will be supplied.
+#'
+#' @returns a ggplot object
+#'
+#' @keywords internal
+
+apply_updated_legend_order <- function(gg, lanes, markers) {
+  gg_obj <- ggplot_build(gg)
+  gg_obj$plot$scales$scales[[1]]$labels <- update_gg_legend_order(gg, lanes, markers)
+
+  gg <- gg_obj$plot
+  gg
+}
+
+#' @title Get ggplot legend order
+#'
+#' @description
+#' Helper function to retrieve the existing legend order for a ggplot object
+#'
+#' @param gg a ggplot object
+#' @param markers a named list defining marker events on a `lane` in either
+#' numeric shape or emoji form
+#' @param lanes A list of character strings that line segments for `id`. Colors
+#' are also supplied here by setting list elements equal to hex or named colors.
+#' In the absence of colors, default `ggplot2` colors will be supplied.
+#'
+#' @returns a character vector
+#'
+#' @importFrom ggplot2 ggplot_build
+#'
+#' @keywords internal
+
+update_gg_legend_order <- function(gg, lanes, markers) {
+  # Make "ggplot_built" object
+  gg_obj <- ggplot_build(gg)
+
+  # Grab existing labels in default order
+  existing_legend_labels <- gg_obj$plot$scales$scales[[1]]$get_labels()
+
+  # Get all desired legend labels in order of lanes > markers
+  legend_label_order <- c(as.vector(lanes), names(markers))
+  # Subset for only those that appear in `existing_legend_labels`
+  legend_label_order <- existing_legend_labels[match(legend_label_order, existing_legend_labels)]
+  # In instances where not all appear, remove NAs
+  legend_label_order <- legend_label_order[!is.na(legend_label_order)]
+
+  # return
+  legend_label_order
+}
