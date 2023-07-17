@@ -15,7 +15,7 @@
 #'
 #' @keywords internal
 
-apply_updated_legend_order <- function(gg, lanes, markers){
+apply_updated_legend_order <- function(gg, lanes, markers) {
   gg_obj <- ggplot_build(gg)
   gg_obj$plot$scales$scales[[1]]$labels <- update_gg_legend_order(gg, lanes, markers)
 
@@ -41,7 +41,7 @@ apply_updated_legend_order <- function(gg, lanes, markers){
 #'
 #' @keywords internal
 
-update_gg_legend_order <- function(gg, lanes, markers){
+update_gg_legend_order <- function(gg, lanes, markers) {
   # Make "ggplot_built" object
   gg_obj <- ggplot_build(gg)
 

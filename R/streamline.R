@@ -38,7 +38,7 @@ streamline <- function(df,
                        markers = NULL,
                        lanes) {
   # Convert lanes to ordered factor
-  if (is.null(names(lanes))){
+  if (is.null(names(lanes))) {
     lanes <- factor(unlist(lanes), levels = unlist(lanes), ordered = TRUE)
     lane_colors <- NULL
   } else {

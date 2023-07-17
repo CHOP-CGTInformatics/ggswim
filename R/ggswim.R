@@ -182,7 +182,6 @@ get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers) {
 
   # Label reorganization and identification
   # First, get labels as they appear in the ggplot object
-  gg_obj <- ggplot_build(gg)
   legend_label_order <- update_gg_legend_order(gg, lanes, markers)
 
   # Next, define the override for `guides()` later
