@@ -3,6 +3,11 @@
 
 # ggswim
 
+<p align="center">
+
+<img src="man/figures/ggswim.png" alt="ggswim hex logo" width="150" align="right"/>
+
+</p>
 <!-- badges: start -->
 
 [![Lifecycle:

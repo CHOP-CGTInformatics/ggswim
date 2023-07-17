@@ -16,6 +16,12 @@ knitr::opts_chunk$set(
 
 # ggswim
 
+<p align="center">
+
+<img src="man/figures/ggswim.png" alt="ggswim hex logo" width="150" align="right"/>
+
+</p>
+
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/CHOP-CGTInformatics/ggswim/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CHOP-CGTInformatics/ggswim/actions/workflows/R-CMD-check.yaml)
