@@ -19,7 +19,7 @@
     <loc>/pull_request_template.html</loc>
   </url>
   <url>
-    <loc>/reference/apply_geom_points.html</loc>
+    <loc>/reference/apply_updated_legend_order.html</loc>
   </url>
   <url>
     <loc>/reference/as_swim_tbl.html</loc>
@@ -37,6 +37,9 @@
     <loc>/reference/get_guide_values.html</loc>
   </url>
   <url>
+    <loc>/reference/get_lane_colors.html</loc>
+  </url>
+  <url>
     <loc>/reference/ggswim.html</loc>
   </url>
   <url>
@@ -44,5 +47,8 @@
   </url>
   <url>
     <loc>/reference/streamline.html</loc>
+  </url>
+  <url>
+    <loc>/reference/update_gg_legend_order.html</loc>
   </url>
 </urlset>

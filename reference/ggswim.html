@@ -53,10 +53,6 @@
 <span>  <span class="va">emoji_or_shape</span>,</span>
 <span>  <span class="va">markers</span>,</span>
 <span>  <span class="va">lanes</span>,</span>
-<span>  lane_colors <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  xlab <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  ylab <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  legend_title <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -84,7 +80,8 @@ function of time</p></dd>
 
 <dt>reference_event</dt>
 <dd><p>a character string found in <code>events</code> that establishes
-the time-zero reference point for the x-axis</p></dd>
+the time-zero reference point for the x-axis for use when <code>time</code> is given in
+a date/date-time format rather than in an integer/numeric format</p></dd>
 
 
 <dt>emoji_or_shape</dt>
@@ -93,30 +90,14 @@ the time-zero reference point for the x-axis</p></dd>
 
 
 <dt>markers</dt>
-<dd><p>A character vector that will comprise point markers on the
-swimmer plot. Optional, default <code>NULL</code></p></dd>
+<dd><p>a named list defining marker events on a <code>lane</code> in either
+numeric shape or emoji form</p></dd>
 
 
 <dt>lanes</dt>
-<dd><p>Columns that indicate line changes, i.e. color changes
-for individual swim lanes.</p></dd>
-
-
-<dt>lane_colors</dt>
-<dd><p>a vector of character strings to assign to the <code>lanes</code>,
-written in the same order. Optional, if left <code>NULL</code>, default colors applied</p></dd>
-
-
-<dt>title</dt>
-<dd><p>the plot title</p></dd>
-
-
-<dt>xlab</dt>
-<dd><p>the x-axis label</p></dd>
-
-
-<dt>ylab</dt>
-<dd><p>the y-axis label</p></dd>
+<dd><p>a list of character strings that line segments for <code>id</code>. Colors
+are also supplied here by setting list elements equal to hex or named colors.
+In the absence of colors, default <code>ggplot2</code> colors will be supplied.</p></dd>
 
 
 <dt>legend_title</dt>
