@@ -16,6 +16,7 @@ Imports:
     cli,
     ggplot2,
     rlang,
+    scales,
     tibble,
     tidyr
 RoxygenNote: 7.2.3
