@@ -20,7 +20,8 @@
 #' @param events the column that will supply definitions for the `reference_event`,
 #' `markers`, and `lanes`
 #' @param reference_event a character string found in `events` that establishes
-#' the time-zero reference point for the x-axis
+#' the time-zero reference point for the x-axis for use when `time` is given in
+#' a date/date-time format rather than in an integer/numeric format
 #' @param emoji_or_shape One of "emoji" or "shape", determines whether to use
 #' `geom_label()` or `geom_point()`
 #' @param markers a named list defining marker events on a `lane` in either
@@ -28,17 +29,13 @@
 #' @param lanes a list of character strings that line segments for `id`. Colors
 #' are also supplied here by setting list elements equal to hex or named colors.
 #' In the absence of colors, default `ggplot2` colors will be supplied.
-#' @param title the plot title
-#' @param xlab the x-axis label
-#' @param ylab the y-axis label
 #' @param legend_title the title of the legend
 #'
 #' @returns a ggplot2 figure
 #'
-#' @importFrom ggplot2 ggplot aes geom_line geom_point theme_bw scale_x_continuous
-#' labs guides theme guide_legend scale_color_manual element_text element_blank
-#' element_rect geom_label theme_minimal ggplot_build
-#' @importFrom cli cli_abort
+#' @importFrom ggplot2 ggplot aes geom_line geom_point theme_bw
+#' guides theme guide_legend scale_color_manual
+#' geom_label theme_minimal ggplot_build
 #'
 #' @export
 
@@ -50,16 +47,13 @@ ggswim <- function(df,
                    emoji_or_shape,
                    markers,
                    lanes,
-                   title = NULL,
-                   xlab = NULL,
-                   ylab = NULL,
                    legend_title = NULL) {
 
   # Streamline the dataframe ---------------------------------------------------
   # Capture variables as expressions, allowing for piping in API ---------------
   variables <- c("id", "time", "events", "reference_event")
 
-
+  # Parse variables to be passed to streamline()
   for (variable in variables) {
     assign(variable, eval(parse(text = paste0("enquo(", variable, ") |> get_expr()"))))
   }
@@ -82,12 +76,14 @@ ggswim <- function(df,
   lane_colors <- get_lane_colors(lanes = swim_tbl$lanes,
                                  lane_colors = swim_tbl$lane_colors)
 
-  # Define initial gg object and apply lines colored by lanes ------------------
+  # Define initial gg object and apply lines colored by lanes spec -------------
   gg <- df |>
     ggplot(aes(x = !!time, y = !!id, group = !!id)) +
     geom_line(aes(col = swim_tbl$data$lane_col),
               linewidth = 1.8)
 
+  # Emoji Marker Handling ------------------------------------------------------
+  # If markers supplied as emojis, apply geom_label()
   if (emoji_or_shape == "emoji") {
 
     gg <- gg +
@@ -97,14 +93,30 @@ ggswim <- function(df,
           col = marker_col # nolint: object_usage_linter
         ),
         label.size = NA, fill = NA, na.rm = TRUE)
+  }
 
-    guide_values <- get_guide_values(df = df,
-                                     gg = gg,
-                                     emoji_or_shape = emoji_or_shape,
-                                     lanes = lanes,
-                                     markers = markers)
+  # Shape Marker Handling ------------------------------------------------------
+  # If markers supplied as shape numerics, apply geom_point()
+  if (emoji_or_shape == "shape") {
 
     gg <- gg +
+      geom_point(aes(
+        shape = markers[marker_col], # nolint: object_usage_linter
+        col = marker_col, # nolint: object_usage_linter
+      ), size = 3, stroke = 1.5, na.rm = TRUE)
+  }
+
+  # Update Legend Guide and Order ----------------------------------------------
+  gg <- apply_updated_legend_order(gg, lanes, markers)
+
+  guide_values <- get_guide_values(df = df,
+                                   gg = gg,
+                                   emoji_or_shape = emoji_or_shape,
+                                   lanes = lanes,
+                                   markers = markers)
+
+  gg <- gg +
+    if (emoji_or_shape == "emoji") {
       guides(
         color = guide_legend(
           override.aes = list(
@@ -113,89 +125,40 @@ ggswim <- function(df,
           )
         )
       )
-  }
-
-  if (emoji_or_shape == "shape") {
-
-    gg <- gg +
-      geom_point(aes(
-        shape = markers[marker_col], # nolint: object_usage_linter
-        col = marker_col, # nolint: object_usage_linter
-      ), size = 3, stroke = 1.5, na.rm = TRUE)
-
-    guide_values <- get_guide_values(df = df,
-                                     gg = gg,
-                                     emoji_or_shape = emoji_or_shape,
-                                     lanes = lanes,
-                                     markers = markers)
-
-    # TODO: Fix ordering for shapes
-    gg <- gg +
-      guides(color = guide_legend(
-        override.aes = list(
-          shape = guide_values$shape_override,
-          stroke = guide_values$stroke_override,
-          linetype = guide_values$linetype_override
+    } else {
+      guides(
+        color = guide_legend(
+          override.aes = list(
+            shape = guide_values$shape_override,
+            stroke = guide_values$stroke_override,
+            linetype = guide_values$linetype_override
+          )
         )
       )
-      )
-  }
+    }
+
 
   # Process and assign line colors from `lane_colors` for `scale_color_manual`
   assigned_line_colors <- get_assigned_line_colors(df, gg, lanes, lane_colors)
 
-  gg +
-    theme_minimal() +
-    labs(x = xlab, y = ylab, title = title) +
-    scale_color_manual(values = assigned_line_colors, name = legend_title)
+  gg <- gg +
+    theme_minimal()
 
-  # TODO: Address label legend out of order, colors not taken into account, legend name, change overrides to function
-}
+  # Supress message related to existing color scale replacement
+  suppressMessages(gg <- gg +
+                     scale_color_manual(values = assigned_line_colors,
+                                        breaks = names(assigned_line_colors),
+                                        name = legend_title)
+  )
 
-
-#' @title apply an arbitrary number of `geom_point()`'s to a ggplot
-#'
-#' @description This function applies any number of necessary `geom_point()`
-#' objects to a `ggplot2` chain as declared in `markers`.
-#'
-#' @return a ggplot object
-#'
-#' @param plot a ggplot2 object
-#' @param markers a named list defining marker events on a `lane` in either
-#' numeric shape or emoji form
-#' @param id the y-axis variable of a swimmer plot, typically a unique
-#' subject or record identification column
-#'
-#' @importFrom ggplot2 layer
-#'
-#' @keywords internal
-
-apply_geom_points <- function(plot, markers, id) {
-  # Determine the number of geom_point commands based on the length of markers
-  num_geoms <- length(markers)
-
-  # Create a list of geom_point layers
-  layers <- lapply(seq_len(num_geoms), function(i) {
-    layer(data = NULL, geom = "point",
-          stat = "identity",
-          position = "identity",
-          mapping = aes(x = !!rlang::sym(markers[[i]]),
-                        y = paste0(!!id),
-                        col = paste(markers[[i]])))
-  })
-
-  # Add all layers to the existing plot using Reduce and the + operator
-  plot <- Reduce(`+`, layers, init = plot)
-
-  # Return the final plot with all layers applied
-  return(plot)
+  gg
 }
 
 #' @title Create guide values for legend
 #'
 #' @description
-#' Programmatically assign and retrieve line and shape/label values to supply to
-#' `ggplot2::guide()`.
+#' Programmatically assign and retrieve all necessary override values to supply
+#' to `ggplot2::guide()`.
 #'
 #' @param df a dataframe prepared for use with `ggswim()`
 #' @param gg A `ggplot` object
@@ -207,7 +170,7 @@ apply_geom_points <- function(plot, markers, id) {
 #' are also supplied here by setting list elements equal to hex or named colors.
 #' In the absence of colors, default `ggplot2` colors will be supplied.
 #'
-#' @returns a variable
+#' @returns a list
 #'
 #' @importFrom ggplot2 ggplot_build
 #'
@@ -220,7 +183,7 @@ get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers) {
   # Label reorganization and identification
   # First, get labels as they appear in the ggplot object
   gg_obj <- ggplot_build(gg)
-  legend_label_order <- gg_obj$plot$scales$scales[[1]]$get_labels()
+  legend_label_order <- update_gg_legend_order(gg, lanes, markers)
 
   # Next, define the override for `guides()` later
   # Combine lanes and markers
@@ -251,9 +214,11 @@ get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers) {
 #' @description
 #' In order to assign the correct colors to `ggplot2::scale_color_manual()`,
 #' it is necessary to account for the order of the legend output in combination
-#' with the assigned `markers`.
+#' with the assigned `markers`. This way, only lanes that are present get
+#' assigned the appropriate colors, in the order of the legend, and markers are
+#' assigned `NA`.
 #'
-#' @returns a vector
+#' @returns a named vector
 #'
 #' @param df a dataframe prepared for use with `ggswim()`
 #' @param gg a `ggplot` object

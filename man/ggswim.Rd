@@ -13,9 +13,6 @@ ggswim(
   emoji_or_shape,
   markers,
   lanes,
-  title = NULL,
-  xlab = NULL,
-  ylab = NULL,
   legend_title = NULL
 )
 }
@@ -32,7 +29,8 @@ function of time}
 \code{markers}, and \code{lanes}}
 
 \item{reference_event}{a character string found in \code{events} that establishes
-the time-zero reference point for the x-axis}
+the time-zero reference point for the x-axis for use when \code{time} is given in
+a date/date-time format rather than in an integer/numeric format}
 
 \item{emoji_or_shape}{One of "emoji" or "shape", determines whether to use
 \code{geom_label()} or \code{geom_point()}}
@@ -43,12 +41,6 @@ numeric shape or emoji form}
 \item{lanes}{a list of character strings that line segments for \code{id}. Colors
 are also supplied here by setting list elements equal to hex or named colors.
 In the absence of colors, default \code{ggplot2} colors will be supplied.}
-
-\item{title}{the plot title}
-
-\item{xlab}{the x-axis label}
-
-\item{ylab}{the y-axis label}
 
 \item{legend_title}{the title of the legend}
 }

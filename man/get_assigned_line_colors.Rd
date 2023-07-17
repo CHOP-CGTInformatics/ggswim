@@ -19,11 +19,13 @@ In the absence of colors, default \code{ggplot2} colors will be supplied.}
 user-defined colors to \code{lanes}}
 }
 \value{
-a vector
+a named vector
 }
 \description{
 In order to assign the correct colors to \code{ggplot2::scale_color_manual()},
 it is necessary to account for the order of the legend output in combination
-with the assigned \code{markers}.
+with the assigned \code{markers}. This way, only lanes that are present get
+assigned the appropriate colors, in the order of the legend, and markers are
+assigned \code{NA}.
 }
 \keyword{internal}
