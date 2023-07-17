@@ -11,11 +11,12 @@ get_assigned_line_colors(df, gg, lanes, lane_colors)
 
 \item{gg}{a \code{ggplot} object}
 
-\item{lanes}{Columns that indicate line changes, i.e. color changes
-for individual swim lanes.}
+\item{lanes}{a list of character strings that line segments for \code{id}. Colors
+are also supplied here by setting list elements equal to hex or named colors.
+In the absence of colors, default \code{ggplot2} colors will be supplied.}
 
-\item{lane_colors}{a vector of character strings to assign to the \code{lanes},
-written in the same order. Optional, if left \code{NULL}, default colors applied}
+\item{lane_colors}{a character vector defined in the \code{swim_tbl} that assigns
+user-defined colors to \code{lanes}}
 }
 \value{
 a vector

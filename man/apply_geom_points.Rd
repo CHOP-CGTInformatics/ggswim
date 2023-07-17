@@ -9,8 +9,8 @@ apply_geom_points(plot, markers, id)
 \arguments{
 \item{plot}{a ggplot2 object}
 
-\item{markers}{a vector of columns that will comprise point markers on the
-swimmer plot}
+\item{markers}{a named list defining marker events on a \code{lane} in either
+numeric shape or emoji form}
 
 \item{id}{the y-axis variable of a swimmer plot, typically a unique
 subject or record identification column}

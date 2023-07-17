@@ -23,12 +23,11 @@
 #' the time-zero reference point for the x-axis
 #' @param emoji_or_shape One of "emoji" or "shape", determines whether to use
 #' `geom_label()` or `geom_point()`
-#' @param markers A character vector that will comprise point markers on the
-#' swimmer plot. Optional, default `NULL`
-#' @param lanes Columns that indicate line changes, i.e. color changes
-#' for individual swim lanes.
-#' @param lane_colors a vector of character strings to assign to the `lanes`,
-#' written in the same order. Optional, if left `NULL`, default colors applied
+#' @param markers a named list defining marker events on a `lane` in either
+#' numeric shape or emoji form
+#' @param lanes a list of character strings that line segments for `id`. Colors
+#' are also supplied here by setting list elements equal to hex or named colors.
+#' In the absence of colors, default `ggplot2` colors will be supplied.
 #' @param title the plot title
 #' @param xlab the x-axis label
 #' @param ylab the y-axis label
@@ -51,7 +50,6 @@ ggswim <- function(df,
                    emoji_or_shape,
                    markers,
                    lanes,
-                   lane_colors = NULL,
                    title = NULL,
                    xlab = NULL,
                    ylab = NULL,
@@ -81,9 +79,15 @@ ggswim <- function(df,
   id <- swim_tbl$id
   time <- swim_tbl$time
   lanes <- swim_tbl$lanes
-  if (!is.null(lane_colors)) {
-    names(lane_colors) <- lanes
-  }
+  lane_colors <- get_lane_colors(lanes = swim_tbl$lanes,
+                                 lane_colors = swim_tbl$lane_colors)
+  # lane_colors <- swim_tbl$lane_colors
+  # if (!is.null(lane_colors)) {
+  #   names(lane_colors) <- lanes
+  # } else {
+  #   lane_colors <- hue_pal()(length(lanes))
+  #   names(lane_colors) <- lanes
+  # }
 
   # Define initial gg object and apply lines colored by lanes ------------------
   gg <- df |>
@@ -164,8 +168,8 @@ ggswim <- function(df,
 #' @return a ggplot object
 #'
 #' @param plot a ggplot2 object
-#' @param markers a vector of columns that will comprise point markers on the
-#' swimmer plot
+#' @param markers a named list defining marker events on a `lane` in either
+#' numeric shape or emoji form
 #' @param id the y-axis variable of a swimmer plot, typically a unique
 #' subject or record identification column
 #'
@@ -204,10 +208,11 @@ apply_geom_points <- function(plot, markers, id) {
 #' @param gg A `ggplot` object
 #' @param emoji_or_shape One of "emoji" or "shape", determines whether to use
 #' `geom_label()` or `geom_point()`
-#' @param markers A character vector that will comprise point markers on the
-#' swimmer plot. Optional, default `NULL`
-#' @param lanes Columns that indicate line changes, i.e. color changes
-#' for individual swim lanes.
+#' @param markers a named list defining marker events on a `lane` in either
+#' numeric shape or emoji form
+#' @param lanes A list of character strings that line segments for `id`. Colors
+#' are also supplied here by setting list elements equal to hex or named colors.
+#' In the absence of colors, default `ggplot2` colors will be supplied.
 #'
 #' @returns a variable
 #'
@@ -259,10 +264,11 @@ get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers) {
 #'
 #' @param df a dataframe prepared for use with `ggswim()`
 #' @param gg a `ggplot` object
-#' @param lanes Columns that indicate line changes, i.e. color changes
-#' for individual swim lanes.
-#' @param lane_colors a vector of character strings to assign to the `lanes`,
-#' written in the same order. Optional, if left `NULL`, default colors applied
+#' @param lanes a list of character strings that line segments for `id`. Colors
+#' are also supplied here by setting list elements equal to hex or named colors.
+#' In the absence of colors, default `ggplot2` colors will be supplied.
+#' @param lane_colors a character vector defined in the `swim_tbl` that assigns
+#' user-defined colors to `lanes`
 #'
 #' @keywords internal
 
@@ -284,4 +290,32 @@ get_assigned_line_colors <- function(df, gg, lanes, lane_colors) {
   combined_vector[names(colors)] <- colors
 
   combined_vector
+}
+
+#' @title Get lane colors
+#'
+#' @description
+#' This internal function detects whether or not lane colors are supplied in a
+#' `swim_tbl` and returns them with the appropriate `lanes` names. If no colors
+#' are given (i.e. `NULL`), default ggplot2 colors are supplied via the `scales`
+#' package.
+#'
+#' @param lanes A list of character strings that line segments for `id`. Colors
+#' are also supplied here by setting list elements equal to hex or named colors.
+#' In the absence of colors, default `ggplot2` colors will be supplied.
+#' #' @param lane_colors a character vector defined in the `swim_tbl` that assigns
+#' user-defined colors to `lanes`
+#'
+#' @returns A named vector
+#'
+#' @importFrom scales hue_pal
+
+get_lane_colors <- function(lanes, lane_colors) {
+  lane_colors <- lane_colors
+  if (is.null(lane_colors)) {
+    lane_colors <- hue_pal()(length(lanes))
+    names(lane_colors) <- lanes
+  }
+  names(lane_colors) <- lanes
+  lane_colors
 }

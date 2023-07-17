@@ -14,11 +14,12 @@ get_guide_values(df, gg, emoji_or_shape, lanes, markers)
 \item{emoji_or_shape}{One of "emoji" or "shape", determines whether to use
 \code{geom_label()} or \code{geom_point()}}
 
-\item{lanes}{Columns that indicate line changes, i.e. color changes
-for individual swim lanes.}
+\item{lanes}{A list of character strings that line segments for \code{id}. Colors
+are also supplied here by setting list elements equal to hex or named colors.
+In the absence of colors, default \code{ggplot2} colors will be supplied.}
 
-\item{markers}{A character vector that will comprise point markers on the
-swimmer plot. Optional, default \code{NULL}}
+\item{markers}{a named list defining marker events on a \code{lane} in either
+numeric shape or emoji form}
 }
 \value{
 a variable

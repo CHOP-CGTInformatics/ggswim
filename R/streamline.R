@@ -38,7 +38,13 @@ streamline <- function(df,
                        markers = NULL,
                        lanes) {
   # Convert lanes to ordered factor
-  lanes <- factor(lanes, ordered = TRUE)
+  if (is.null(names(lanes))){
+    lanes <- factor(unlist(lanes), levels = unlist(lanes), ordered = TRUE)
+    lane_colors <- NULL
+  } else {
+    lane_colors <- unlist(lanes)
+    lanes <- factor(names(lanes), levels = names(lanes), ordered = TRUE)
+  }
 
   # Check inputs ---------------------------------------------------------------
   # TODO: Add checks for other args. To access "name" args, use df[[*]]
@@ -91,6 +97,7 @@ streamline <- function(df,
               markers = markers,
               reference_event = reference_event,
               lanes = lanes,
+              lane_colors = lane_colors,
               event_levels = factor(result$event, levels = c(levels(lanes), levels(marker_levels)), ordered = TRUE)
   )
 
