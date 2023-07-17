@@ -66,7 +66,7 @@ streamline <- function(df,
 
     # Create lane column
     group_df$lane_col <- group_df$event
-    group_df$lane_col[!group_df$lane_col %in% lanes] <- NA
+    group_df$lane_col[!group_df$lane_col %in% lanes] <- as.character(lanes[[1]]) # Default is to make empty data the first named lane
 
     group_df <- group_df |>
       # Fill down first, then up

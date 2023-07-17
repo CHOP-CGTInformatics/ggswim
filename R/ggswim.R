@@ -81,13 +81,6 @@ ggswim <- function(df,
   lanes <- swim_tbl$lanes
   lane_colors <- get_lane_colors(lanes = swim_tbl$lanes,
                                  lane_colors = swim_tbl$lane_colors)
-  # lane_colors <- swim_tbl$lane_colors
-  # if (!is.null(lane_colors)) {
-  #   names(lane_colors) <- lanes
-  # } else {
-  #   lane_colors <- hue_pal()(length(lanes))
-  #   names(lane_colors) <- lanes
-  # }
 
   # Define initial gg object and apply lines colored by lanes ------------------
   gg <- df |>
