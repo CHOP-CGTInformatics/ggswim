@@ -11,8 +11,8 @@ get_assigned_line_colors(df, gg, lanes, lane_colors)
 
 \item{gg}{a \code{ggplot} object}
 
-\item{lanes}{a list of character strings that line segments for \code{id}. Colors
-are also supplied here by setting list elements equal to hex or named colors.
+\item{lanes}{a list of character strings that define the colored line segments
+for \code{id}. Colors are supplied by setting list elements equal to hex or named colors.
 In the absence of colors, default \code{ggplot2} colors will be supplied.}
 
 \item{lane_colors}{a character vector defined in the \code{swim_tbl} that assigns

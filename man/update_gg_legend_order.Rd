@@ -9,17 +9,27 @@ update_gg_legend_order(gg, lanes, markers)
 \arguments{
 \item{gg}{a ggplot object}
 
-\item{lanes}{A list of character strings that line segments for \code{id}. Colors
-are also supplied here by setting list elements equal to hex or named colors.
+\item{lanes}{a list of character strings that define the colored line segments
+for \code{id}. Colors are supplied by setting list elements equal to hex or named colors.
 In the absence of colors, default \code{ggplot2} colors will be supplied.}
 
 \item{markers}{a named list defining marker events on a \code{lane} in either
-numeric shape or emoji form}
+standard numeric ggplot 2 shapes, emoji, or unicode form (ex: "\U1F464").
+Shapes can be supplied as character strings or integers.}
 }
 \value{
 a character vector
 }
 \description{
 Helper function to retrieve the existing legend order for a ggplot object
+and return the order in the order of factor levels and split by \code{lanes} to
+\code{markers}
+}
+\details{
+Retrieving the existing legend order for a ggplot object involves accessing
+sub-elements of the object via \code{ggplot_build()}. In addition to returning
+the legend order, this function also returns only those that actually
+make it into the final plot, and not all associated markers defined in the
+data.
 }
 \keyword{internal}

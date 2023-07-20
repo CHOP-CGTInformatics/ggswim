@@ -14,8 +14,8 @@ get_guide_values(df, gg, emoji_or_shape, lanes, markers)
 \item{emoji_or_shape}{One of "emoji" or "shape", determines whether to use
 \code{geom_label()} or \code{geom_point()}}
 
-\item{lanes}{A list of character strings that line segments for \code{id}. Colors
-are also supplied here by setting list elements equal to hex or named colors.
+\item{lanes}{a list of character strings that define the colored line segments
+for \code{id}. Colors are supplied by setting list elements equal to hex or named colors.
 In the absence of colors, default \code{ggplot2} colors will be supplied.}
 
 \item{markers}{a named list defining marker events on a \code{lane} in either
@@ -25,7 +25,6 @@ numeric shape or emoji form}
 a list
 }
 \description{
-Programmatically assign and retrieve all necessary override values to supply
-to \code{ggplot2::guide()}.
+This function programmatically assigns override values for \code{guide()}.
 }
 \keyword{internal}

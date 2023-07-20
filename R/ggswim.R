@@ -20,9 +20,10 @@
 #' the time-zero reference point for the x-axis for use when `time` is given in
 #' a date/date-time format rather than in an integer/numeric format
 #' @param markers a named list defining marker events on a `lane` in either
-#' standard numeric ggplot 2 shapes, emoji, or unicode form (ex: "\U1F464")
-#' @param lanes a list of character strings that line segments for `id`. Colors
-#' are also supplied here by setting list elements equal to hex or named colors.
+#' standard numeric ggplot 2 shapes, emoji, or unicode form (ex: "\U1F464").
+#' Shapes can be supplied as character strings or integers.
+#' @param lanes a list of character strings that define the colored line segments
+#' for `id`. Colors are supplied by setting list elements equal to hex or named colors.
 #' In the absence of colors, default `ggplot2` colors will be supplied.
 #' @param legend_title the title of the legend
 #'
@@ -72,7 +73,7 @@ ggswim <- function(df,
 
   # Determine whether the markers supplied are shape designations or emojis
   # Unicode and pasted emojis register as character, shapes should always be
-  # numeric or numeric coercible
+  # numeric or numeric coercible. Suppress warning for NA coercions
   markers_numeric <- all(!is.na(suppressWarnings(as.numeric(unlist(markers)))))
 
   emoji_or_shape <- ifelse(
@@ -111,7 +112,7 @@ ggswim <- function(df,
   }
 
   # Update Legend Guide and Order ----------------------------------------------
-  gg <- apply_updated_legend_order(gg, lanes, markers)
+  gg <- apply_gg_legend_order(gg, lanes, markers)
 
   guide_values <- get_guide_values(df = df,
                                    gg = gg,
@@ -145,7 +146,7 @@ ggswim <- function(df,
   # Process and assign line colors from `lane_colors` for `scale_color_manual`
   assigned_line_colors <- get_assigned_line_colors(df, gg, lanes, lane_colors)
 
-  # Supress message related to existing color scale replacement
+  # Suppress message related to existing color scale replacement
   suppressMessages(gg <- gg +
                      scale_color_manual(values = assigned_line_colors,
                                         breaks = names(assigned_line_colors),
@@ -158,8 +159,7 @@ ggswim <- function(df,
 #' @title Create guide values for legend
 #'
 #' @description
-#' Programmatically assign and retrieve all necessary override values to supply
-#' to `ggplot2::guide()`.
+#' This function programmatically assigns override values for `guide()`.
 #'
 #' @param df a dataframe prepared for use with `ggswim()`
 #' @param gg A `ggplot` object
@@ -167,8 +167,8 @@ ggswim <- function(df,
 #' `geom_label()` or `geom_point()`
 #' @param markers a named list defining marker events on a `lane` in either
 #' numeric shape or emoji form
-#' @param lanes A list of character strings that line segments for `id`. Colors
-#' are also supplied here by setting list elements equal to hex or named colors.
+#' @param lanes a list of character strings that define the colored line segments
+#' for `id`. Colors are supplied by setting list elements equal to hex or named colors.
 #' In the absence of colors, default `ggplot2` colors will be supplied.
 #'
 #' @returns a list
@@ -192,11 +192,10 @@ get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers) {
   )
 
   # Reorganize and subset for only what appears in the data set
-  # This takes care of cases where not all lanes appear in the data
   names(out$label_override)[seq_along(lanes)] <- as.character(lanes)
   out$label_override[seq_along(lanes)] <- ""
   out$label_override <- out$label_override[names(out$label_override) %in% df$event]
-  # Reorder based on legend_label_order, otherwise assigments will be mismatched
+  # Reorder based on legend_label_order, otherwise assignments will be mismatched
   out$label_override <- out$label_override[match(legend_label_order, names(out$label_override))]
 
   out$linetype_override <- ifelse(out$label_override == "", 1, 0) # 0 for blank, 1 for solid
@@ -222,8 +221,8 @@ get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers) {
 #'
 #' @param df a dataframe prepared for use with `ggswim()`
 #' @param gg a `ggplot` object
-#' @param lanes a list of character strings that line segments for `id`. Colors
-#' are also supplied here by setting list elements equal to hex or named colors.
+#' @param lanes a list of character strings that define the colored line segments
+#' for `id`. Colors are supplied by setting list elements equal to hex or named colors.
 #' In the absence of colors, default `ggplot2` colors will be supplied.
 #' @param lane_colors a character vector defined in the `swim_tbl` that assigns
 #' user-defined colors to `lanes`
@@ -258,8 +257,8 @@ get_assigned_line_colors <- function(df, gg, lanes, lane_colors) {
 #' are given (i.e. `NULL`), default ggplot2 colors are supplied via the `scales`
 #' package.
 #'
-#' @param lanes A list of character strings that line segments for `id`. Colors
-#' are also supplied here by setting list elements equal to hex or named colors.
+#' @param lanes a list of character strings that define the colored line segments
+#' for `id`. Colors are supplied by setting list elements equal to hex or named colors.
 #' In the absence of colors, default `ggplot2` colors will be supplied.
 #' @param lane_colors a character vector defined in the `swim_tbl` that assigns
 #' user-defined colors to `lanes`
