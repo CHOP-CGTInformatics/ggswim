@@ -42,7 +42,7 @@ devtools::install_github("CHOP-CGTInformatics/ggswim")
 
 Below is a simple example for how to set up your "swim table" to pass along to `ggswim()`:
 
-```{r load_package and data, eval=TRUE}
+```{r load_package and data, eval=TRUE, results='hide'}
 library(ggswim)
 
 df <- tibble::tribble(
@@ -93,7 +93,6 @@ plot1 <- df |>
          time = time,
          events = event,
          reference_event = "Infusion",
-         emoji_or_shape = "emoji",
          markers = markers_emoji,
          lanes = lanes,
          legend_title = "My Legend Title") +
@@ -119,7 +118,6 @@ plot2 <- df |>
          time = time,
          events = event,
          reference_event = "Infusion",
-         emoji_or_shape = "shape",
          markers = markers_shape,
          lanes = unnamed_lanes,
          legend_title = "My Legend Title") +
