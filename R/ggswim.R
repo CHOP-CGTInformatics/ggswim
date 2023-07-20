@@ -69,8 +69,16 @@ ggswim <- function(df,
   lanes <- swim_tbl$lanes
   lane_colors <- get_lane_colors(lanes = swim_tbl$lanes,
                                  lane_colors = swim_tbl$lane_colors)
+
   # Determine whether the markers supplied are shape designations or emojis
-  emoji_or_shape <- ifelse(class(unlist(markers)) == "numeric", "shape", "emoji")
+  # Unicode and pasted emojis register as character, shapes should always be
+  # numeric or numeric coercible
+  markers_numeric <- all(!is.na(suppressWarnings(as.numeric(unlist(markers)))))
+
+  emoji_or_shape <- ifelse(
+    markers_numeric,
+    "shape",
+    "emoji")
 
   # Define initial gg object and apply lines colored by lanes spec -------------
   gg <- df |>
