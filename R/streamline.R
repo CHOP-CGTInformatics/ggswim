@@ -6,21 +6,24 @@
 #'
 #' @details
 #' Requirements for a dataset include an identifiable primary key column,
-#' a time column, and any number of binary indicator columns.
+#' an event/time column, and an event stream column indicating markers and lanes.
 #'
 #' @param df a dataframe prepared for use with `ggswim()`
 #' @param id the y-axis variable of a swimmer plot, typically a unique
 #' subject or record identification column
 #' @param time the x-axis variable of the swimmer plot, typically a
-#' function of time
-#' @param events the column that will supply definitions for the `reference_event`,
-#' `markers`, and `lanes`
+#' function of time given in date or numeric format
+#' @param events the column that will supply data for the `reference_event`,
+#' `markers`, and `lanes` arguments
 #' @param reference_event a character string found in `events` that establishes
-#' the time-zero reference point for the x-axis
-#' @param markers A character vector that will comprise point markers on the
-#' swimmer plot. Optional, default `NULL`
-#' @param lanes Columns that indicate line changes, i.e. color changes
-#' for individual swim lanes.
+#' the time-zero reference point for the x-axis for use when `time` is given in
+#' a date/date-time format rather than in an integer/numeric format
+#' @param markers a named list defining marker events on a `lane` in either
+#' standard numeric ggplot 2 shapes, emoji, or unicode form (ex: "\U1F464").
+#' Shapes can be supplied as character strings or integers.
+#' @param lanes a list of character strings that define the colored line segments
+#' for `id`. Colors are supplied by setting list elements equal to hex or named colors.
+#' In the absence of colors, default `ggplot2` colors will be supplied.
 #'
 #' @returns a swim_tbl object
 #'
