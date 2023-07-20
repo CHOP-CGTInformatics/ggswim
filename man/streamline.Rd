@@ -4,7 +4,16 @@
 \alias{streamline}
 \title{Streamline data for ggswim plotting}
 \usage{
-streamline(df, id, time, events, reference_event, markers = NULL, lanes)
+streamline(
+  df,
+  id,
+  time,
+  events,
+  reference_event,
+  markers = NULL,
+  groups = NULL,
+  lanes
+)
 }
 \arguments{
 \item{df}{a dataframe prepared for use with \code{ggswim()}}
@@ -13,19 +22,25 @@ streamline(df, id, time, events, reference_event, markers = NULL, lanes)
 subject or record identification column}
 
 \item{time}{the x-axis variable of the swimmer plot, typically a
-function of time}
+function of time given in date or numeric format}
 
-\item{events}{the column that will supply definitions for the \code{reference_event},
-\code{markers}, and \code{lanes}}
+\item{events}{the column that will supply data for the \code{reference_event},
+\code{markers}, and \code{lanes} arguments}
 
 \item{reference_event}{a character string found in \code{events} that establishes
-the time-zero reference point for the x-axis}
+the time-zero reference point for the x-axis for use when \code{time} is given in
+a date/date-time format rather than in an integer/numeric format}
 
-\item{markers}{A character vector that will comprise point markers on the
-swimmer plot. Optional, default \code{NULL}}
+\item{markers}{a named list defining marker events on a \code{lane} in either
+standard numeric ggplot 2 shapes, emoji, or unicode form (ex: "\U1F464").
+Shapes can be supplied as character strings or integers.}
 
-\item{lanes}{Columns that indicate line changes, i.e. color changes
-for individual swim lanes.}
+\item{groups}{additional specifier to indicate groups, optional. Example:
+treatment groups or cohorts in a study.}
+
+\item{lanes}{a list of character strings that define the colored line segments
+for \code{id}. Colors are supplied by setting list elements equal to hex or named colors.
+In the absence of colors, default \code{ggplot2} colors will be supplied.}
 }
 \value{
 a swim_tbl object
@@ -36,5 +51,5 @@ available.
 }
 \details{
 Requirements for a dataset include an identifiable primary key column,
-a time column, and any number of binary indicator columns.
+an event/time column, and an event stream column indicating markers and lanes.
 }

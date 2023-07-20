@@ -24,6 +24,8 @@
 #' @param lanes a list of character strings that define the colored line segments
 #' for `id`. Colors are supplied by setting list elements equal to hex or named colors.
 #' In the absence of colors, default `ggplot2` colors will be supplied.
+#' @param groups additional specifier to indicate groups, optional. Example:
+#' treatment groups or cohorts in a study.
 #'
 #' @returns a swim_tbl object
 #'
@@ -39,6 +41,7 @@ streamline <- function(df,
                        events,
                        reference_event,
                        markers = NULL,
+                       groups = NULL,
                        lanes) {
   # Convert lanes to ordered factor
   if (is.null(names(lanes))) {
@@ -102,6 +105,8 @@ streamline <- function(df,
               reference_event = reference_event,
               lanes = lanes,
               lane_colors = lane_colors,
+              group_col = groups,
+              group_vals = switch(!is.null(groups), unique(df[[groups]]), NULL),
               event_levels = factor(result$event, levels = c(levels(lanes), levels(marker_levels)), ordered = TRUE)
   )
 

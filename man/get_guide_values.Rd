@@ -4,7 +4,7 @@
 \alias{get_guide_values}
 \title{Create guide values for legend}
 \usage{
-get_guide_values(df, gg, emoji_or_shape, lanes, markers)
+get_guide_values(df, gg, emoji_or_shape, lanes, markers, groups = NULL)
 }
 \arguments{
 \item{df}{a dataframe prepared for use with \code{ggswim()}}
@@ -20,6 +20,9 @@ In the absence of colors, default \code{ggplot2} colors will be supplied.}
 
 \item{markers}{a named list defining marker events on a \code{lane} in either
 numeric shape or emoji form}
+
+\item{groups}{additional specifier to indicate groups, optional. Example:
+treatment groups or cohorts in a study.}
 }
 \value{
 a list

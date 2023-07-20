@@ -12,6 +12,7 @@ ggswim(
   reference_event,
   markers,
   lanes,
+  groups = NULL,
   legend_title = NULL
 )
 }
@@ -38,6 +39,9 @@ Shapes can be supplied as character strings or integers.}
 \item{lanes}{a list of character strings that define the colored line segments
 for \code{id}. Colors are supplied by setting list elements equal to hex or named colors.
 In the absence of colors, default \code{ggplot2} colors will be supplied.}
+
+\item{groups}{additional specifier to indicate groups, optional. Example:
+treatment groups or cohorts in a study.}
 
 \item{legend_title}{the title of the legend}
 }

@@ -19,6 +19,8 @@
 #' @param lanes a list of character strings that define the colored line segments
 #' for `id`. Colors are supplied by setting list elements equal to hex or named colors.
 #' In the absence of colors, default `ggplot2` colors will be supplied.
+#' @param groups additional specifier to indicate groups, optional. Example:
+#' treatment groups or cohorts in a study.
 #'
 #' @returns a character vector
 #'
@@ -26,22 +28,37 @@
 #'
 #' @keywords internal
 
-update_gg_legend_order <- function(gg, lanes, markers) {
+update_gg_legend_order <- function(gg, lanes, markers, groups = NULL) {
   # Make "ggplot_built" object
   gg_obj <- ggplot_build(gg)
 
   # Grab existing labels in default order
-  existing_legend_labels <- gg_obj$plot$scales$scales[[1]]$get_labels()
+  # existing_legend_labels <- gg_obj$plot$scales$scales[[1]]$get_labels()
 
+  # # Get all desired legend labels in order of lanes > markers
+  # legend_label_order <- c(as.vector(lanes), names(markers))
+  # # Subset for only those that appear in `existing_legend_labels`
+  # legend_label_order <- existing_legend_labels[match(legend_label_order, existing_legend_labels)]
+  # # In instances where not all appear, remove NAs
+  # legend_label_order <- legend_label_order[!is.na(legend_label_order)]
+
+  fill_legend_labels <- gg_obj$plot$scales$scales[[3]]$get_labels()
   # Get all desired legend labels in order of lanes > markers
-  legend_label_order <- c(as.vector(lanes), names(markers))
+  fill_label_order <- as.vector(lanes)
   # Subset for only those that appear in `existing_legend_labels`
-  legend_label_order <- existing_legend_labels[match(legend_label_order, existing_legend_labels)]
+  fill_label_order <- fill_legend_labels[match(fill_label_order, fill_legend_labels)]
   # In instances where not all appear, remove NAs
-  legend_label_order <- legend_label_order[!is.na(legend_label_order)]
+  fill_label_order <- fill_label_order[!is.na(fill_label_order)]
 
-  # return
-  legend_label_order
+  color_legend_labels <- gg_obj$plot$scales$scales[[4]]$get_labels()
+  # Get all desired legend labels in order of lanes > markers
+  color_label_order <- c(groups, names(markers))
+  # Subset for only those that appear in `existing_legend_labels`
+  color_label_order <- color_legend_labels[match(color_label_order, color_legend_labels)]
+  # In instances where not all appear, remove NAs
+  color_label_order <- color_label_order[!is.na(color_label_order)]
+
+  list(fill_label_order = fill_label_order, color_label_order = color_label_order)
 }
 
 #' @title Apply updated ggplot legend order
@@ -57,14 +74,21 @@ update_gg_legend_order <- function(gg, lanes, markers) {
 #' @param lanes a list of character strings that define the colored line segments
 #' for `id`. Colors are supplied by setting list elements equal to hex or named colors.
 #' In the absence of colors, default `ggplot2` colors will be supplied.
+#' @param groups additional specifier to indicate groups, optional. Example:
+#' treatment groups or cohorts in a study.
 #'
 #' @returns a ggplot object
 #'
 #' @keywords internal
 
-apply_gg_legend_order <- function(gg, lanes, markers) {
+apply_gg_legend_order <- function(gg, lanes, markers, groups = NULL) {
   gg_obj <- ggplot_build(gg)
-  gg_obj$plot$scales$scales[[1]]$labels <- update_gg_legend_order(gg, lanes, markers)
+
+  update_legend_order <- update_gg_legend_order(gg, lanes, markers, groups)
+  # gg_obj$plot$scales$scales[[1]]$labels <- update_gg_legend_order(gg, lanes, markers, groups)
+
+  gg_obj$plot$scales$scales[[3]]$get_labels() <- update_legend_order$fill_label_order
+  gg_obj$plot$scales$scales[[4]]$get_labels() <- update_legend_order$color_label_order
 
   gg <- gg_obj$plot
   gg

@@ -25,6 +25,8 @@
 #' @param lanes a list of character strings that define the colored line segments
 #' for `id`. Colors are supplied by setting list elements equal to hex or named colors.
 #' In the absence of colors, default `ggplot2` colors will be supplied.
+#' @param groups additional specifier to indicate groups, optional. Example:
+#' treatment groups or cohorts in a study.
 #' @param legend_title the title of the legend
 #'
 #' @returns a ggplot2 figure
@@ -42,11 +44,15 @@ ggswim <- function(df,
                    reference_event,
                    markers,
                    lanes,
+                   groups = NULL,
                    legend_title = NULL) {
 
   # Streamline the dataframe ---------------------------------------------------
   # Capture variables as expressions, allowing for piping in API ---------------
-  variables <- c("id", "time", "events", "reference_event")
+  variables <- c("id", "time", "events", "reference_event", "groups")
+  # if (!is.null(groups)) {
+  #   variables(c(variables, "groups"))
+  # }
 
   # Parse variables to be passed to streamline()
   for (variable in variables) {
@@ -59,6 +65,7 @@ ggswim <- function(df,
                          events = events,
                          reference_event = reference_event,
                          markers = markers,
+                         groups = groups,
                          lanes = lanes)
   # check inputs ---------------------------------------------------------------
 
@@ -68,6 +75,8 @@ ggswim <- function(df,
   id <- swim_tbl$id
   time <- swim_tbl$time
   lanes <- swim_tbl$lanes
+  group_col <- swim_tbl$group_col
+  group_vals <- swim_tbl$group_vals
   lane_colors <- get_lane_colors(lanes = swim_tbl$lanes,
                                  lane_colors = swim_tbl$lane_colors)
 
@@ -83,9 +92,10 @@ ggswim <- function(df,
 
   # Define initial gg object and apply lines colored by lanes spec -------------
   gg <- df |>
-    ggplot(aes(x = !!time, y = !!id, group = !!id)) +
-    geom_line(aes(col = swim_tbl$data$lane_col),
-              linewidth = 1.8)
+    ggplot(aes(x = !!time, y = !!id, group = !!id, fill = lane_col, color = !!groups)) +
+    ggplot2::geom_bar(stat = "identity", size = 1, width = .1)
+  # geom_line(aes(col = swim_tbl$data$lane_col),
+              # linewidth = 3)
 
   # Emoji Marker Handling ------------------------------------------------------
   # If markers supplied as emojis, apply geom_label()
@@ -112,13 +122,14 @@ ggswim <- function(df,
   }
 
   # Update Legend Guide and Order ----------------------------------------------
-  gg <- apply_gg_legend_order(gg, lanes, markers)
+  gg <- apply_gg_legend_order(gg, lanes, markers, groups = group_vals)
 
   guide_values <- get_guide_values(df = df,
                                    gg = gg,
                                    emoji_or_shape = emoji_or_shape,
                                    lanes = lanes,
-                                   markers = markers)
+                                   markers = markers,
+                                   groups = group_vals)
 
   gg <- gg +
     if (emoji_or_shape == "emoji") {
@@ -148,9 +159,12 @@ ggswim <- function(df,
 
   # Suppress message related to existing color scale replacement
   suppressMessages(gg <- gg +
-                     scale_color_manual(values = assigned_line_colors,
-                                        breaks = names(assigned_line_colors),
-                                        name = legend_title)
+                     ggplot2::scale_fill_manual(values = assigned_line_colors,
+                                       breaks = names(assigned_line_colors),
+                                       name = legend_title)
+                     # scale_color_manual(values = assigned_line_colors,
+                     #                    breaks = names(assigned_line_colors),
+                     #                    name = legend_title)
   )
 
   gg
@@ -170,6 +184,8 @@ ggswim <- function(df,
 #' @param lanes a list of character strings that define the colored line segments
 #' for `id`. Colors are supplied by setting list elements equal to hex or named colors.
 #' In the absence of colors, default `ggplot2` colors will be supplied.
+#' @param groups additional specifier to indicate groups, optional. Example:
+#' treatment groups or cohorts in a study.
 #'
 #' @returns a list
 #'
@@ -177,13 +193,13 @@ ggswim <- function(df,
 #'
 #' @keywords internal
 
-get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers) {
+get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers, groups = NULL) {
 
   out <- list()
 
   # Label reorganization and identification
   # First, get labels as they appear in the ggplot object
-  legend_label_order <- update_gg_legend_order(gg, lanes, markers)
+  legend_label_order <- update_gg_legend_order(gg, lanes, markers, groups)
 
   # Next, define the override for `guides()` later
   # Combine lanes and markers
