@@ -4,7 +4,16 @@
 \alias{get_guide_values}
 \title{Create guide values for legend}
 \usage{
-get_guide_values(df, gg, emoji_or_shape, lanes, markers, groups = NULL)
+get_guide_values(
+  df,
+  gg,
+  emoji_or_shape,
+  lanes,
+  markers,
+  groups,
+  events,
+  group_vals
+)
 }
 \arguments{
 \item{df}{a dataframe prepared for use with \code{ggswim()}}

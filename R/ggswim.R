@@ -95,7 +95,7 @@ ggswim <- function(df,
     ggplot(aes(x = !!time, y = !!id, group = !!id, fill = lane_col, color = !!groups)) +
     ggplot2::geom_bar(stat = "identity", size = 1, width = .1)
   # geom_line(aes(col = swim_tbl$data$lane_col),
-              # linewidth = 3)
+  # linewidth = 3)
 
   # Emoji Marker Handling ------------------------------------------------------
   # If markers supplied as emojis, apply geom_label()
@@ -129,29 +129,37 @@ ggswim <- function(df,
                                    emoji_or_shape = emoji_or_shape,
                                    lanes = lanes,
                                    markers = markers,
-                                   groups = group_vals)
+                                   groups = groups,
+                                   events = events,
+                                   group_vals = group_vals)
 
   gg <- gg +
-    if (emoji_or_shape == "emoji") {
+    # if (emoji_or_shape == "emoji") {
       guides(
         color = guide_legend(
           override.aes = list(
+            label = guide_values$label_override,
             linetype = guide_values$linetype_override,
-            label = guide_values$label_override
+            fill = rep(NA, length(guide_values$label_override))
           )
-        )
-      )
-    } else {
-      guides(
-        color = guide_legend(
+        ),
+        fill = guide_legend(
           override.aes = list(
-            shape = guide_values$shape_override,
-            stroke = guide_values$stroke_override,
-            linetype = guide_values$linetype_override
+            label = guide_values$fill_override
           )
         )
       )
-    }
+    # } else {
+    #   guides(
+    #     color = guide_legend(
+    #       override.aes = list(
+    #         shape = guide_values$shape_override,
+    #         stroke = guide_values$stroke_override,
+    #         linetype = guide_values$linetype_override
+    #       )
+    #     )
+    #   )
+    # }
 
 
   # Process and assign line colors from `lane_colors` for `scale_color_manual`
@@ -160,11 +168,11 @@ ggswim <- function(df,
   # Suppress message related to existing color scale replacement
   suppressMessages(gg <- gg +
                      ggplot2::scale_fill_manual(values = assigned_line_colors,
-                                       breaks = names(assigned_line_colors),
-                                       name = legend_title)
-                     # scale_color_manual(values = assigned_line_colors,
-                     #                    breaks = names(assigned_line_colors),
-                     #                    name = legend_title)
+                                                breaks = names(assigned_line_colors),
+                                                name = legend_title)
+                   # scale_color_manual(values = assigned_line_colors,
+                   #                    breaks = names(assigned_line_colors),
+                   #                    name = legend_title)
   )
 
   gg
@@ -193,26 +201,36 @@ ggswim <- function(df,
 #'
 #' @keywords internal
 
-get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers, groups = NULL) {
+get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers,
+                             groups,
+                             events,
+                             group_vals) {
 
   out <- list()
 
   # Label reorganization and identification
   # First, get labels as they appear in the ggplot object
-  legend_label_order <- update_gg_legend_order(gg, lanes, markers, groups)
+  legend_label_order <- update_gg_legend_order(gg, lanes, markers, group_vals)
 
-  # Next, define the override for `guides()` later
-  # Combine lanes and markers
-  out$label_override <- c(
-    lanes, markers
-  )
+  # TODO: Generalize this elswhere
+  # groups2 <- factor(groups, levels = groups, ordered = TRUE)
 
+  out$color_override <- unlist(c(group_vals, markers))
   # Reorganize and subset for only what appears in the data set
-  names(out$label_override)[seq_along(lanes)] <- as.character(lanes)
-  out$label_override[seq_along(lanes)] <- ""
-  out$label_override <- out$label_override[names(out$label_override) %in% df$event]
+  names(out$color_override)[seq_along(group_vals)] <- as.character(group_vals)
+  out$color_override[seq_along(group_vals)] <- ""
+  out$color_override <- out$color_override[names(out$color_override) %in% df[[events]] | names(out$color_override) %in% df[[groups]]]
   # Reorder based on legend_label_order, otherwise assignments will be mismatched
-  out$label_override <- out$label_override[match(legend_label_order, names(out$label_override))]
+  out$color_override <- out$color_override[match(legend_label_order$color_label_order, names(out$color_override))]
+  out$label_override <- out$color_override
+
+  out$fill_override <- as.character(lanes)
+  # Reorganize and subset for only what appears in the data set
+  names(out$fill_override) <- lanes
+  out$fill_override[seq_along(lanes)] <- ""
+  out$fill_override <- out$fill_override[names(out$fill_override) %in% df$event]
+  # Reorder based on legend_label_order, otherwise assignments will be mismatched
+  out$fill_override <- out$fill_override[match(legend_label_order$fill_label_order, names(out$fill_override))]
 
   out$linetype_override <- ifelse(out$label_override == "", 1, 0) # 0 for blank, 1 for solid
   out$stroke_override <- ifelse(out$label_override == "", 1, 2) # values dictate stroke thickness

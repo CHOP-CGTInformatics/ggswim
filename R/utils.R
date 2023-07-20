@@ -87,8 +87,8 @@ apply_gg_legend_order <- function(gg, lanes, markers, groups = NULL) {
   update_legend_order <- update_gg_legend_order(gg, lanes, markers, groups)
   # gg_obj$plot$scales$scales[[1]]$labels <- update_gg_legend_order(gg, lanes, markers, groups)
 
-  gg_obj$plot$scales$scales[[3]]$get_labels() <- update_legend_order$fill_label_order
-  gg_obj$plot$scales$scales[[4]]$get_labels() <- update_legend_order$color_label_order
+  gg_obj$plot$scales$scales[[3]]$labels <- update_legend_order$fill_label_order
+  gg_obj$plot$scales$scales[[4]]$labels <- update_legend_order$color_label_order
 
   gg <- gg_obj$plot
   gg
