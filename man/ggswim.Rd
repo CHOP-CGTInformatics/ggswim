@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggswim.R
 \name{ggswim}
 \alias{ggswim}
-\title{Plot swimmer data}
+\title{Plot individual level response trajectories}
 \usage{
 ggswim(
   df,
@@ -10,7 +10,6 @@ ggswim(
   time,
   events,
   reference_event,
-  emoji_or_shape,
   markers,
   lanes,
   legend_title = NULL
@@ -23,20 +22,17 @@ ggswim(
 subject or record identification column}
 
 \item{time}{the x-axis variable of the swimmer plot, typically a
-function of time}
+function of time given in date or numeric format}
 
-\item{events}{the column that will supply definitions for the \code{reference_event},
-\code{markers}, and \code{lanes}}
+\item{events}{the column that will supply data for the \code{reference_event},
+\code{markers}, and \code{lanes} arguments}
 
 \item{reference_event}{a character string found in \code{events} that establishes
 the time-zero reference point for the x-axis for use when \code{time} is given in
 a date/date-time format rather than in an integer/numeric format}
 
-\item{emoji_or_shape}{One of "emoji" or "shape", determines whether to use
-\code{geom_label()} or \code{geom_point()}}
-
 \item{markers}{a named list defining marker events on a \code{lane} in either
-numeric shape or emoji form}
+standard numeric ggplot 2 shapes, emoji, or unicode form (ex: "\U1F464")}
 
 \item{lanes}{a list of character strings that line segments for \code{id}. Colors
 are also supplied here by setting list elements equal to hex or named colors.
@@ -48,16 +44,11 @@ In the absence of colors, default \code{ggplot2} colors will be supplied.}
 a ggplot2 figure
 }
 \description{
-Plot swimmer data.
+Visualize individual record response trajectories over time using a swimmer plot.
 }
 \details{
-Lengths of objects supplied to the following parameters
-must be equal to how many exist in the \code{df} supplied:
-\itemize{
-\item \code{markers}
-\item \code{lane_colors}
-}
-
-Note: \code{lane_colors} must have the same number of elements as \code{lanes}, even if
-not all \code{lanes} are present in \code{df}.
+A swimmer plot is a data visualization used to display individual
+subject data over time. It shows events or outcomes as points along a
+horizontal line for each subject, allowing easy comparison and pattern
+identification.
 }

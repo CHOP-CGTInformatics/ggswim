@@ -1,31 +1,26 @@
-#' @title Plot swimmer data
+#' @title Plot individual level response trajectories
 #'
 #' @description
-#' Plot swimmer data.
+#' Visualize individual record response trajectories over time using a swimmer plot.
 #'
 #' @details
-#' Lengths of objects supplied to the following parameters
-#' must be equal to how many exist in the `df` supplied:
-#' - `markers`
-#' - `lane_colors`
-#'
-#' Note: `lane_colors` must have the same number of elements as `lanes`, even if
-#' not all `lanes` are present in `df`.
+#' A swimmer plot is a data visualization used to display individual
+#' subject data over time. It shows events or outcomes as points along a
+#' horizontal line for each subject, allowing easy comparison and pattern
+#' identification.
 #'
 #' @param df a dataframe prepared for use with `ggswim()`
 #' @param id the y-axis variable of a swimmer plot, typically a unique
 #' subject or record identification column
 #' @param time the x-axis variable of the swimmer plot, typically a
-#' function of time
-#' @param events the column that will supply definitions for the `reference_event`,
-#' `markers`, and `lanes`
+#' function of time given in date or numeric format
+#' @param events the column that will supply data for the `reference_event`,
+#' `markers`, and `lanes` arguments
 #' @param reference_event a character string found in `events` that establishes
 #' the time-zero reference point for the x-axis for use when `time` is given in
 #' a date/date-time format rather than in an integer/numeric format
-#' @param emoji_or_shape One of "emoji" or "shape", determines whether to use
-#' `geom_label()` or `geom_point()`
 #' @param markers a named list defining marker events on a `lane` in either
-#' numeric shape or emoji form
+#' standard numeric ggplot 2 shapes, emoji, or unicode form (ex: "\U1F464")
 #' @param lanes a list of character strings that line segments for `id`. Colors
 #' are also supplied here by setting list elements equal to hex or named colors.
 #' In the absence of colors, default `ggplot2` colors will be supplied.
@@ -33,9 +28,9 @@
 #'
 #' @returns a ggplot2 figure
 #'
-#' @importFrom ggplot2 ggplot aes geom_line geom_point theme_bw
+#' @importFrom ggplot2 ggplot aes geom_line geom_point
 #' guides theme guide_legend scale_color_manual
-#' geom_label theme_minimal ggplot_build
+#' geom_label ggplot_build
 #'
 #' @export
 
@@ -44,7 +39,6 @@ ggswim <- function(df,
                    time,
                    events,
                    reference_event,
-                   emoji_or_shape,
                    markers,
                    lanes,
                    legend_title = NULL) {
@@ -75,6 +69,8 @@ ggswim <- function(df,
   lanes <- swim_tbl$lanes
   lane_colors <- get_lane_colors(lanes = swim_tbl$lanes,
                                  lane_colors = swim_tbl$lane_colors)
+  # Determine whether the markers supplied are shape designations or emojis
+  emoji_or_shape <- ifelse(class(unlist(markers)) == "numeric", "shape", "emoji")
 
   # Define initial gg object and apply lines colored by lanes spec -------------
   gg <- df |>
@@ -140,9 +136,6 @@ ggswim <- function(df,
 
   # Process and assign line colors from `lane_colors` for `scale_color_manual`
   assigned_line_colors <- get_assigned_line_colors(df, gg, lanes, lane_colors)
-
-  gg <- gg +
-    theme_minimal()
 
   # Supress message related to existing color scale replacement
   suppressMessages(gg <- gg +
@@ -260,7 +253,7 @@ get_assigned_line_colors <- function(df, gg, lanes, lane_colors) {
 #' @param lanes A list of character strings that line segments for `id`. Colors
 #' are also supplied here by setting list elements equal to hex or named colors.
 #' In the absence of colors, default `ggplot2` colors will be supplied.
-#' #' @param lane_colors a character vector defined in the `swim_tbl` that assigns
+#' @param lane_colors a character vector defined in the `swim_tbl` that assigns
 #' user-defined colors to `lanes`
 #'
 #' @returns A named vector
