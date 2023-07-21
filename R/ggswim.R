@@ -30,13 +30,14 @@
 #' In the absence of colors, default `ggplot2` colors will be supplied.
 #' @param groups additional specifier to indicate groups, optional. Example:
 #' treatment groups or cohorts in a study.
-#' @param legend_title the title of the legend
+#' @param legend_title the titles of the legends, given as a vector of character
+#' strings
 #'
 #' @returns a ggplot2 figure
 #'
 #' @importFrom ggplot2 ggplot aes geom_bar geom_point
 #' guides theme guide_legend scale_color_manual scale_fill_manual
-#' geom_label ggplot_build
+#' geom_label ggplot_build labs
 #'
 #' @export
 
@@ -171,13 +172,15 @@ ggswim <- function(df,
   suppressMessages(gg <- gg +
                      scale_fill_manual(values = assigned_colors$fills,
                                        breaks = names(assigned_colors$fills),
-                                       name = legend_title))
+                                       name = legend_title[[1]]) +
+                     labs(colour = legend_title[[2]])
+  )
   if (emoji_or_shape == "shape") {
     suppressMessages(
       gg <- gg +
         scale_color_manual(values = assigned_colors$colors,
                            breaks = names(assigned_colors$colors),
-                           name = legend_title)
+                           name = legend_title[[1]])
     )
   }
 
