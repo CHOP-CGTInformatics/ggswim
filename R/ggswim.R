@@ -32,7 +32,7 @@
 #' @returns a ggplot2 figure
 #'
 #' @importFrom ggplot2 ggplot aes geom_line geom_point
-#' guides theme guide_legend scale_color_manual
+#' guides theme guide_legend scale_color_manual scale_fill_manual
 #' geom_label ggplot_build
 #'
 #' @export
@@ -164,14 +164,21 @@ ggswim <- function(df,
 
 
   # Process and assign line colors from `lane_colors` for `scale_color_manual`
-  assigned_line_colors <- get_assigned_line_colors(df, gg, lanes, lane_colors)
+  assigned_colors <- get_assigned_colors(df, gg, lanes, lane_colors, markers)
 
   # Suppress message related to existing color scale replacement
   suppressMessages(gg <- gg +
-                     ggplot2::scale_fill_manual(values = assigned_line_colors,
-                                                breaks = names(assigned_line_colors),
-                                                name = legend_title)
-  )
+                     scale_fill_manual(values = assigned_colors$fills,
+                                       breaks = names(assigned_colors$fills),
+                                       name = legend_title))
+  if (emoji_or_shape == "shape") {
+    suppressMessages(
+      gg <- gg +
+        scale_color_manual(values = assigned_colors$colors,
+                           breaks = names(assigned_colors$colors),
+                           name = legend_title)
+    )
+  }
 
   gg
 }
@@ -259,29 +266,29 @@ get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers,
 #' In the absence of colors, default `ggplot2` colors will be supplied.
 #' @param lane_colors a character vector defined in the `swim_tbl` that assigns
 #' user-defined colors to `lanes`
+#' @param markers a named list defining marker events on a `lane` in either
+#' standard numeric ggplot 2 shapes, emoji, or unicode form (ex: "\U1F464").
+#' Shapes can be supplied as character strings or integers.
 #'
 #' @keywords internal
 
-get_assigned_line_colors <- function(df, gg, lanes, lane_colors) {
+get_assigned_colors <- function(df, gg, lanes, lane_colors, markers) {
 
   # Label reorganization and identification
   # First, get labels as they appear in the ggplot object
   gg_build <- ggplot_build(gg)$plot$scales$scales
+  # Find the index positions where "colour" or "fill" is present
+  index_with_colour <- which(sapply(gg_build, function(x) "colour" %in% x$aesthetics))
   index_with_fill <- which(sapply(gg_build, function(x) "fill" %in% x$aesthetics))
 
+  color_legend_labels <- gg_build[[index_with_colour]]$get_labels()
   fill_legend_labels <- gg_build[[index_with_fill]]$get_labels()
 
   # get only values that appear in the data
-  lines_to_keep <- unique(df$event[df$event %in% lanes])
-  colors <- lane_colors[match(lines_to_keep, names(lane_colors))]
+  colors <- unlist(markers)[match(color_legend_labels, names(markers))]
+  fills <- lane_colors[match(fill_legend_labels, names(lane_colors))]
 
-  # Combine the the `colors` and `legend_label_order` vectors and fill in missing
-  # values with NA
-  combined_vector <- rep(NA, length(fill_legend_labels))
-  names(combined_vector) <- fill_legend_labels
-  combined_vector[names(colors)] <- colors
-
-  combined_vector
+  list(colors = colors, fills = fills)
 }
 
 #' @title Get lane colors
