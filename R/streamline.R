@@ -19,7 +19,7 @@
 #' the time-zero reference point for the x-axis for use when `time` is given in
 #' a date/date-time format rather than in an integer/numeric format
 #' @param markers a named list defining marker events on a `lane` in either
-#' standard numeric ggplot 2 shapes, emoji, or unicode form (ex: "\U1F464").
+#' standard numeric ggplot 2 shapes, emoji, or unicode form .
 #' Shapes can be supplied as character strings or integers.
 #' @param lanes a list of character strings that define the colored line segments
 #' for `id`. Colors are supplied by setting list elements equal to hex or named colors.
@@ -80,6 +80,9 @@ streamline <- function(df,
     group_df$marker_col <- group_df$event
     group_df$marker_col[group_df$marker_col %in% lanes] <- NA
 
+    # Create a time difference column to support geom_bar() in ggswim()
+    group_df$tdiff <- c(diff(group_df[[time]]), 0)
+
     # Return the modified group_df
     group_df
   })
@@ -95,14 +98,15 @@ streamline <- function(df,
   # Create marker levels, combine with lanes levels for later ggswim legend support
   marker_levels <- factor(names(markers), levels = names(markers), ordered = TRUE)
 
-  out <- list(data = result,
-              id = id,
-              time = time,
-              markers = markers,
-              reference_event = reference_event,
-              lanes = lanes,
-              lane_colors = lane_colors,
-              event_levels = factor(result$event, levels = c(levels(lanes), levels(marker_levels)), ordered = TRUE)
+  out <- list(
+    data = result,
+    id = id,
+    time = time,
+    markers = markers,
+    reference_event = reference_event,
+    lanes = lanes,
+    lane_colors = lane_colors,
+    event_levels = factor(result$event, levels = c(levels(lanes), levels(marker_levels)), ordered = TRUE)
   )
 
   as_swim_tbl(out)

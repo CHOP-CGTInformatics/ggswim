@@ -10,7 +10,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "man/figures/README-",
   out.width = "100%",
-  dev='ragg_png',
+  dev = "ragg_png",
   dpi = 400
 )
 ```
@@ -73,7 +73,7 @@ df
 We'll also pre-define some arguments of interest and the plot accordingly. To showcase the different ways you can supply `markers` and `lanes` to `ggswim()`, we'll show a few examples together:
 
 ```{r ggswim, eval=TRUE}
-lanes = list(
+lanes <- list(
   "No CRS" = "gray",
   "CRS Grade 1" = "yellow",
   "CRS Grade 2" = "orange",
@@ -89,13 +89,15 @@ markers_emoji <- list(
 )
 
 plot1 <- df |>
-  ggswim(id = subject_id,
-         time = time,
-         events = event,
-         reference_event = "Infusion",
-         markers = markers_emoji,
-         lanes = lanes,
-         legend_title = "My Legend Title") +
+  ggswim(
+    id = subject_id,
+    time = time,
+    events = event,
+    reference_event = "Infusion",
+    markers = markers_emoji,
+    lanes = lanes,
+    legend_title = c("My Lanes Legend", "My Markers Legend")
+  ) +
   ggplot2::labs(title = "My Swim Plot with Emojis", x = "Time", y = "Subject ID")
 
 markers_shape <- list(
@@ -104,7 +106,7 @@ markers_shape <- list(
   "Infusion" = 6
 )
 
-unnamed_lanes = list(
+unnamed_lanes <- list(
   "No CRS",
   "CRS Grade 1",
   "CRS Grade 2",
@@ -114,22 +116,30 @@ unnamed_lanes = list(
 )
 
 plot2 <- df |>
-  ggswim(id = subject_id,
-         time = time,
-         events = event,
-         reference_event = "Infusion",
-         markers = markers_shape,
-         lanes = unnamed_lanes,
-         legend_title = "My Legend Title") +
+  ggswim(
+    id = subject_id,
+    time = time,
+    events = event,
+    reference_event = "Infusion",
+    markers = markers_shape,
+    lanes = unnamed_lanes,
+    legend_title = c("My Lanes Legend", "My Markers Legend")
+  ) +
   ggplot2::labs(title = "My Swim Plot with Shapes", x = "Time", y = "Subject ID")
 ```
 
 The first plot (top) shows `markers` defined by emojis, with `lanes` assigned user-defined colors. The second plot (bottom) shows `markers` defined by [ggplot shapes](https://r-graphics.org/recipe-scatter-shapes#discussion-28) and `lanes` with no color designation. In this case, default ggplot colors are assigned.
 
-```{r grid plot}
-library(gridExtra)
+```{r plot1}
+plot1 +
+  ggplot2::labs(title = "My Swim Plot", x = "Time", y = "Subject ID") +
+  ggplot2::theme_minimal()
+```
 
-grid.arrange(plot1, plot2, ncol = 1)
+```{r plot2}
+plot2 +
+  ggplot2::labs(title = "My Swim Plot", x = "Time", y = "Subject ID") +
+  ggplot2::theme_minimal()
 ```
 
 One key thing to note is that lanes and markers are ordered as factors in the order they are received. Additionally, the first lane specifier is considered the default to be used in the absence of lane data in the event stream. Notice how "No CRS" is assigned at the beginning of the swim lanes even though it is not defined here in the original `df`.

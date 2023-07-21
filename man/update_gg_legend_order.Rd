@@ -14,7 +14,7 @@ for \code{id}. Colors are supplied by setting list elements equal to hex or name
 In the absence of colors, default \code{ggplot2} colors will be supplied.}
 
 \item{markers}{a named list defining marker events on a \code{lane} in either
-standard numeric ggplot 2 shapes, emoji, or unicode form (ex: "\U1F464").
+standard numeric ggplot 2 shapes, emoji, or unicode form .
 Shapes can be supplied as character strings or integers.}
 }
 \value{

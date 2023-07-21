@@ -64,7 +64,7 @@ accordingly. To showcase the different ways you can supply `markers` and
 `lanes` to `ggswim()`, we’ll show a few examples together:
 
 ``` r
-lanes = list(
+lanes <- list(
   "No CRS" = "gray",
   "CRS Grade 1" = "yellow",
   "CRS Grade 2" = "orange",
@@ -80,13 +80,15 @@ markers_emoji <- list(
 )
 
 plot1 <- df |>
-  ggswim(id = subject_id,
-         time = time,
-         events = event,
-         reference_event = "Infusion",
-         markers = markers_emoji,
-         lanes = lanes,
-         legend_title = "My Legend Title") +
+  ggswim(
+    id = subject_id,
+    time = time,
+    events = event,
+    reference_event = "Infusion",
+    markers = markers_emoji,
+    lanes = lanes,
+    legend_title = c("My Lanes Legend", "My Markers Legend")
+  ) +
   ggplot2::labs(title = "My Swim Plot with Emojis", x = "Time", y = "Subject ID")
 
 markers_shape <- list(
@@ -95,7 +97,7 @@ markers_shape <- list(
   "Infusion" = 6
 )
 
-unnamed_lanes = list(
+unnamed_lanes <- list(
   "No CRS",
   "CRS Grade 1",
   "CRS Grade 2",
@@ -105,13 +107,15 @@ unnamed_lanes = list(
 )
 
 plot2 <- df |>
-  ggswim(id = subject_id,
-         time = time,
-         events = event,
-         reference_event = "Infusion",
-         markers = markers_shape,
-         lanes = unnamed_lanes,
-         legend_title = "My Legend Title") +
+  ggswim(
+    id = subject_id,
+    time = time,
+    events = event,
+    reference_event = "Infusion",
+    markers = markers_shape,
+    lanes = unnamed_lanes,
+    legend_title = c("My Lanes Legend", "My Markers Legend")
+  ) +
   ggplot2::labs(title = "My Swim Plot with Shapes", x = "Time", y = "Subject ID")
 ```
 
@@ -123,12 +127,20 @@ shapes](https://r-graphics.org/recipe-scatter-shapes#discussion-28) and
 are assigned.
 
 ``` r
-library(gridExtra)
-
-grid.arrange(plot1, plot2, ncol = 1)
+plot1 +
+  ggplot2::labs(title = "My Swim Plot", x = "Time", y = "Subject ID") +
+  ggplot2::theme_minimal()
 ```
 
-<img src="man/figures/README-grid plot-1.png" width="100%" />
+<img src="man/figures/README-plot1-1.png" width="100%" />
+
+``` r
+plot2 +
+  ggplot2::labs(title = "My Swim Plot", x = "Time", y = "Subject ID") +
+  ggplot2::theme_minimal()
+```
+
+<img src="man/figures/README-plot2-1.png" width="100%" />
 
 One key thing to note is that lanes and markers are ordered as factors
 in the order they are received. Additionally, the first lane specifier
