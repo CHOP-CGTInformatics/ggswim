@@ -102,6 +102,7 @@ ggswim <- function(df,
     gg <- gg +
       geom_label(
         aes(
+          x = !!time,
           label = markers[marker_col], # nolint: object_usage_linter
           color = tidyr::fill(data = df, marker_col, .direction = "downup")$marker_col # nolint: object_usage_linter
         ),
@@ -114,6 +115,7 @@ ggswim <- function(df,
 
     gg <- gg +
       geom_point(aes(
+        x = !!time,
         shape = markers[marker_col], # nolint: object_usage_linter
         color = tidyr::fill(data = df, marker_col, .direction = "downup")$marker_col, # nolint: object_usage_linter
       ), size = 3, stroke = 1.5, na.rm = TRUE)

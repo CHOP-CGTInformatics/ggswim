@@ -84,7 +84,7 @@ streamline <- function(df,
     group_df$marker_col[group_df$marker_col %in% lanes] <- NA
 
     # Create a time difference column to support geom_bar() in ggswim()
-    group_df$tdiff <- c(0, diff(group_df[[time]]))
+    group_df$tdiff <- c(diff(group_df[[time]]), 0)
 
     # Return the modified group_df
     group_df
