@@ -39,15 +39,17 @@
 #'
 #' @export
 
-ggswim <- function(df,
-                   id,
-                   time,
-                   events,
-                   reference_event,
-                   markers,
-                   shape_colors = NULL,
-                   lanes,
-                   legend_title = NULL) {
+ggswim <- function(
+    df,
+    id,
+    time,
+    events,
+    reference_event,
+    markers,
+    shape_colors = NULL,
+    lanes,
+    legend_title = NULL
+) {
 
   # Streamline the dataframe ---------------------------------------------------
   # Capture variables as expressions, allowing for piping in API ---------------
@@ -84,7 +86,8 @@ ggswim <- function(df,
   emoji_or_shape <- ifelse(
     markers_numeric,
     "shape",
-    "emoji")
+    "emoji"
+  )
 
   # Define initial gg object and apply lines colored by lanes spec -------------
   gg <- df |>
@@ -97,11 +100,9 @@ ggswim <- function(df,
 
     gg <- gg +
       geom_label(
-        aes(
-          x = !!time,
-          label = markers[marker_col], # nolint: object_usage_linter
-          color = tidyr::fill(data = df, marker_col, .direction = "downup")$marker_col # nolint: object_usage_linter
-        ),
+        aes(x = !!time,
+            label = markers[marker_col], # nolint: object_usage_linter
+            color = tidyr::fill(data = df, marker_col, .direction = "downup")$marker_col), # nolint: object_usage_linter
         label.size = NA, fill = NA, na.rm = TRUE)
   }
 
@@ -165,8 +166,7 @@ ggswim <- function(df,
                      scale_fill_manual(values = assigned_colors$fills,
                                        breaks = names(assigned_colors$fills),
                                        name = legend_title[[1]]) +
-                     labs(colour = legend_title[[2]])
-  )
+                     labs(colour = legend_title[[2]]))
   if (emoji_or_shape == "shape") {
     suppressMessages(
       gg <- gg +
