@@ -94,7 +94,7 @@ ggswim <- function(df,
   # Define initial gg object and apply lines colored by lanes spec -------------
   gg <- df |>
     ggplot(aes(x = tdiff, y = !!id, group = !!id)) + # nolint: object_usage_linter
-    geom_bar(aes(color = !!groups, fill = lane_col), stat = "identity", size = 1, width = .1) # nolint: object_usage_linter
+    geom_bar(aes(color = !!groups, fill = lane_col), stat = "identity", size = 1, width = .05) # nolint: object_usage_linter
 
   # Emoji Marker Handling ------------------------------------------------------
   # If markers supplied as emojis, apply geom_label()
@@ -119,7 +119,7 @@ ggswim <- function(df,
         x = !!time,
         shape = markers[marker_col], # nolint: object_usage_linter
         color = tidyr::fill(data = df, marker_col, .direction = "downup")$marker_col, # nolint: object_usage_linter
-      ), size = 3, stroke = 1.5, na.rm = TRUE)
+      ), size = 5, stroke = 2, na.rm = TRUE)
   }
 
   # Update Legend Guide and Order ----------------------------------------------
