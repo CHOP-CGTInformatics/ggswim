@@ -4,16 +4,7 @@
 \alias{streamline}
 \title{Streamline data for ggswim plotting}
 \usage{
-streamline(
-  df,
-  id,
-  time,
-  events,
-  reference_event,
-  markers = NULL,
-  groups = NULL,
-  lanes
-)
+streamline(df, id, time, events, reference_event, markers = NULL, lanes)
 }
 \arguments{
 \item{df}{a dataframe prepared for use with \code{ggswim()}}
@@ -32,11 +23,8 @@ the time-zero reference point for the x-axis for use when \code{time} is given i
 a date/date-time format rather than in an integer/numeric format}
 
 \item{markers}{a named list defining marker events on a \code{lane} in either
-standard numeric ggplot 2 shapes, emoji, or unicode form (ex: "\U1F464").
+standard numeric ggplot 2 shapes, emoji, or unicode form .
 Shapes can be supplied as character strings or integers.}
-
-\item{groups}{additional specifier to indicate groups, optional. Example:
-treatment groups or cohorts in a study.}
 
 \item{lanes}{a list of character strings that define the colored line segments
 for \code{id}. Colors are supplied by setting list elements equal to hex or named colors.

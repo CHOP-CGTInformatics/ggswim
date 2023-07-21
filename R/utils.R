@@ -14,13 +14,11 @@
 #'
 #' @param gg a ggplot object
 #' @param markers a named list defining marker events on a `lane` in either
-#' standard numeric ggplot 2 shapes, emoji, or unicode form (ex: "\U1F464").
+#' standard numeric ggplot 2 shapes, emoji, or unicode form .
 #' Shapes can be supplied as character strings or integers.
 #' @param lanes a list of character strings that define the colored line segments
 #' for `id`. Colors are supplied by setting list elements equal to hex or named colors.
 #' In the absence of colors, default `ggplot2` colors will be supplied.
-#' @param groups additional specifier to indicate groups, optional. Example:
-#' treatment groups or cohorts in a study.
 #'
 #' @returns a character vector
 #'
@@ -28,7 +26,7 @@
 #'
 #' @keywords internal
 
-update_gg_legend_order <- function(gg, lanes, markers, groups = NULL) {
+update_gg_legend_order <- function(gg, lanes, markers) {
   gg_build <- ggplot_build(gg)$plot$scales$scales
 
   # Find the index positions where "colour" or "fill" is present
@@ -45,7 +43,7 @@ update_gg_legend_order <- function(gg, lanes, markers, groups = NULL) {
 
   color_legend_labels <- gg_build[[index_with_colour]]$get_labels()
   # Get all desired legend labels in order of lanes > markers
-  color_label_order <- c(groups, names(markers))
+  color_label_order <- names(markers)
   # Subset for only those that appear in `existing_legend_labels`
   color_label_order <- color_legend_labels[match(color_label_order, color_legend_labels)]
   # In instances where not all appear, remove NAs
@@ -65,22 +63,20 @@ update_gg_legend_order <- function(gg, lanes, markers, groups = NULL) {
 #'
 #' @param gg A `ggplot` object
 #' @param markers a named list defining marker events on a `lane` in either
-#' standard numeric ggplot 2 shapes, emoji, or unicode form (ex: "\U1F464").
+#' standard numeric ggplot 2 shapes, emoji, or unicode form .
 #' Shapes can be supplied as character strings or integers.
 #' @param lanes a list of character strings that define the colored line segments
 #' for `id`. Colors are supplied by setting list elements equal to hex or named colors.
 #' In the absence of colors, default `ggplot2` colors will be supplied.
-#' @param groups additional specifier to indicate groups, optional. Example:
-#' treatment groups or cohorts in a study.
 #'
 #' @returns a ggplot object
 #'
 #' @keywords internal
 
-apply_gg_legend_order <- function(gg, lanes, markers, groups = NULL) {
+apply_gg_legend_order <- function(gg, lanes, markers) {
   gg_obj <- ggplot_build(gg)
 
-  update_legend_order <- update_gg_legend_order(gg, lanes, markers, groups)
+  update_legend_order <- update_gg_legend_order(gg, lanes, markers)
 
   gg_obj$plot$scales$scales[[update_legend_order$index_with_fill]]$labels <- update_legend_order$fill_label_order
   gg_obj$plot$scales$scales[[update_legend_order$index_with_colour]]$labels <- update_legend_order$color_label_order

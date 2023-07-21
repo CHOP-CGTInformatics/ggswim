@@ -19,7 +19,7 @@ In the absence of colors, default \code{ggplot2} colors will be supplied.}
 user-defined colors to \code{lanes}}
 
 \item{markers}{a named list defining marker events on a \code{lane} in either
-standard numeric ggplot 2 shapes, emoji, or unicode form (ex: "\U1F464").
+standard numeric ggplot 2 shapes, emoji, or unicode form .
 Shapes can be supplied as character strings or integers.}
 
 \item{shape_colors}{If providing shapes for \code{markers}, provide vector

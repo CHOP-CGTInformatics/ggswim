@@ -20,7 +20,7 @@
 #' the time-zero reference point for the x-axis for use when `time` is given in
 #' a date/date-time format rather than in an integer/numeric format
 #' @param markers a named list defining marker events on a `lane` in either
-#' standard numeric ggplot 2 shapes, emoji, or unicode form (ex: "\U1F464").
+#' standard numeric ggplot 2 shapes, emoji, or unicode form .
 #' Shapes can be supplied as character strings or integers.
 #' @param shape_colors If providing shapes for `markers`, provide vector
 #' specification for the colors those shapes should be. Default `NULL` for
@@ -28,8 +28,6 @@
 #' @param lanes a list of character strings that define the colored line segments
 #' for `id`. Colors are supplied by setting list elements equal to hex or named colors.
 #' In the absence of colors, default `ggplot2` colors will be supplied.
-#' @param groups additional specifier to indicate groups, optional. Example:
-#' treatment groups or cohorts in a study.
 #' @param legend_title the titles of the legends, given as a vector of character
 #' strings
 #'
@@ -49,12 +47,11 @@ ggswim <- function(df,
                    markers,
                    shape_colors = NULL,
                    lanes,
-                   groups = NULL,
                    legend_title = NULL) {
 
   # Streamline the dataframe ---------------------------------------------------
   # Capture variables as expressions, allowing for piping in API ---------------
-  variables <- c("id", "time", "events", "reference_event", "groups")
+  variables <- c("id", "time", "events", "reference_event")
 
   # Parse variables to be passed to streamline()
   for (variable in variables) {
@@ -67,7 +64,6 @@ ggswim <- function(df,
                          events = events,
                          reference_event = reference_event,
                          markers = markers,
-                         groups = groups,
                          lanes = lanes)
   # check inputs ---------------------------------------------------------------
 
@@ -77,8 +73,6 @@ ggswim <- function(df,
   id <- swim_tbl$id
   time <- swim_tbl$time
   lanes <- swim_tbl$lanes
-  group_col <- swim_tbl$group_col # nolint: object_usage_linter
-  group_vals <- swim_tbl$group_vals
   lane_colors <- get_lane_colors(lanes = swim_tbl$lanes,
                                  lane_colors = swim_tbl$lane_colors)
 
@@ -95,7 +89,7 @@ ggswim <- function(df,
   # Define initial gg object and apply lines colored by lanes spec -------------
   gg <- df |>
     ggplot(aes(x = tdiff, y = !!id, group = !!id)) + # nolint: object_usage_linter
-    geom_bar(aes(color = !!groups, fill = lane_col), stat = "identity", size = 1, width = .05) # nolint: object_usage_linter
+    geom_bar(aes(fill = lane_col), stat = "identity", size = 1, width = .05) # nolint: object_usage_linter
 
   # Emoji Marker Handling ------------------------------------------------------
   # If markers supplied as emojis, apply geom_label()
@@ -124,16 +118,14 @@ ggswim <- function(df,
   }
 
   # Update Legend Guide and Order ----------------------------------------------
-  gg <- apply_gg_legend_order(gg, lanes, markers, groups = group_vals)
+  gg <- apply_gg_legend_order(gg, lanes, markers)
 
   guide_values <- get_guide_values(df = df,
                                    gg = gg,
                                    emoji_or_shape = emoji_or_shape,
                                    lanes = lanes,
                                    markers = markers,
-                                   groups = groups,
-                                   events = events,
-                                   group_vals = group_vals)
+                                   events = events)
 
   gg <- gg +
     if (emoji_or_shape == "emoji") {
@@ -201,8 +193,6 @@ ggswim <- function(df,
 #' @param lanes a list of character strings that define the colored line segments
 #' for `id`. Colors are supplied by setting list elements equal to hex or named colors.
 #' In the absence of colors, default `ggplot2` colors will be supplied.
-#' @param groups additional specifier to indicate groups, optional. Example:
-#' treatment groups or cohorts in a study.
 #'
 #' @returns a list
 #'
@@ -210,23 +200,17 @@ ggswim <- function(df,
 #'
 #' @keywords internal
 
-get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers,
-                             groups,
-                             events,
-                             group_vals) {
+get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers, events) {
 
   out <- list()
-  groups <- ifelse(is.null(groups), "", groups)
 
   # Label reorganization and identification
   # First, get labels as they appear in the ggplot object
-  legend_label_order <- update_gg_legend_order(gg, lanes, markers, group_vals)
+  legend_label_order <- update_gg_legend_order(gg, lanes, markers)
 
-  out$color_override <- unlist(c(group_vals, markers))
+  out$color_override <- unlist(markers)
   # Reorganize and subset for only what appears in the data set
-  names(out$color_override)[seq_along(group_vals)] <- as.character(group_vals)
-  out$color_override[seq_along(group_vals)] <- ""
-  out$color_override <- out$color_override[names(out$color_override) %in% df[[events]] | names(out$color_override) %in% df[[groups]]] # nolint: line_length_linter
+  out$color_override <- out$color_override[names(out$color_override) %in% df[[events]]]
   # Reorder based on legend_label_order, otherwise assignments will be mismatched
   out$color_override <- out$color_override[match(legend_label_order$color_label_order, names(out$color_override))]
   out$label_override <- out$color_override
@@ -268,7 +252,7 @@ get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers,
 #' @param lane_colors a character vector defined in the `swim_tbl` that assigns
 #' user-defined colors to `lanes`
 #' @param markers a named list defining marker events on a `lane` in either
-#' standard numeric ggplot 2 shapes, emoji, or unicode form (ex: "\U1F464").
+#' standard numeric ggplot 2 shapes, emoji, or unicode form .
 #' Shapes can be supplied as character strings or integers.
 #' @param shape_colors If providing shapes for `markers`, provide vector
 #' specification for the colors those shapes should be. Default `NULL` for
