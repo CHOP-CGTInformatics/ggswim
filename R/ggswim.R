@@ -48,9 +48,7 @@ ggswim <- function(
     markers,
     shape_colors = NULL,
     lanes,
-    legend_title = NULL
-) {
-
+    legend_title = NULL) {
   # Streamline the dataframe ---------------------------------------------------
   # Capture variables as expressions, allowing for piping in API ---------------
   variables <- c("id", "time", "events", "reference_event")
@@ -60,13 +58,15 @@ ggswim <- function(
     assign(variable, eval(parse(text = paste0("enquo(", variable, ") |> get_expr()"))))
   }
 
-  swim_tbl <- streamline(df = df,
-                         id = id,
-                         time = time,
-                         events = events,
-                         reference_event = reference_event,
-                         markers = markers,
-                         lanes = lanes)
+  swim_tbl <- streamline(
+    df = df,
+    id = id,
+    time = time,
+    events = events,
+    reference_event = reference_event,
+    markers = markers,
+    lanes = lanes
+  )
   # check inputs ---------------------------------------------------------------
 
   # assign common vars ---------------------------------------------------------
@@ -75,8 +75,10 @@ ggswim <- function(
   id <- swim_tbl$id
   time <- swim_tbl$time
   lanes <- swim_tbl$lanes
-  lane_colors <- get_lane_colors(lanes = swim_tbl$lanes,
-                                 lane_colors = swim_tbl$lane_colors)
+  lane_colors <- get_lane_colors(
+    lanes = swim_tbl$lanes,
+    lane_colors = swim_tbl$lane_colors
+  )
 
   # Determine whether the markers supplied are shape designations or emojis
   # Unicode and pasted emojis register as character, shapes should always be
@@ -97,19 +99,20 @@ ggswim <- function(
   # Emoji Marker Handling ------------------------------------------------------
   # If markers supplied as emojis, apply geom_label()
   if (emoji_or_shape == "emoji") {
-
     gg <- gg +
       geom_label(
-        aes(x = !!time,
-            label = markers[marker_col], # nolint: object_usage_linter
-            color = tidyr::fill(data = df, marker_col, .direction = "downup")$marker_col), # nolint: object_usage_linter
-        label.size = NA, fill = NA, na.rm = TRUE)
+        aes(
+          x = !!time,
+          label = markers[marker_col], # nolint: object_usage_linter
+          color = tidyr::fill(data = df, marker_col, .direction = "downup")$marker_col
+        ), # nolint: object_usage_linter
+        label.size = NA, fill = NA, na.rm = TRUE
+      )
   }
 
   # Shape Marker Handling ------------------------------------------------------
   # If markers supplied as shape numerics, apply geom_point()
   if (emoji_or_shape == "shape") {
-
     gg <- gg +
       geom_point(aes(
         x = !!time,
@@ -121,12 +124,14 @@ ggswim <- function(
   # Update Legend Guide and Order ----------------------------------------------
   gg <- apply_gg_legend_order(gg, lanes, markers)
 
-  guide_values <- get_guide_values(df = df,
-                                   gg = gg,
-                                   emoji_or_shape = emoji_or_shape,
-                                   lanes = lanes,
-                                   markers = markers,
-                                   events = events)
+  guide_values <- get_guide_values(
+    df = df,
+    gg = gg,
+    emoji_or_shape = emoji_or_shape,
+    lanes = lanes,
+    markers = markers,
+    events = events
+  )
 
   gg <- gg +
     if (emoji_or_shape == "emoji") {
@@ -163,16 +168,20 @@ ggswim <- function(
 
   # Suppress message related to existing color scale replacement
   suppressMessages(gg <- gg +
-                     scale_fill_manual(values = assigned_colors$fills,
-                                       breaks = names(assigned_colors$fills),
-                                       name = legend_title[[1]]) +
-                     labs(colour = legend_title[[2]]))
+    scale_fill_manual(
+      values = assigned_colors$fills,
+      breaks = names(assigned_colors$fills),
+      name = legend_title[[1]]
+    ) +
+    labs(colour = legend_title[[2]]))
   if (emoji_or_shape == "shape") {
     suppressMessages(
       gg <- gg +
-        scale_color_manual(values = assigned_colors$colors,
-                           breaks = names(assigned_colors$colors),
-                           name = legend_title[[1]])
+        scale_color_manual(
+          values = assigned_colors$colors,
+          breaks = names(assigned_colors$colors),
+          name = legend_title[[1]]
+        )
     )
   }
 
@@ -201,7 +210,6 @@ ggswim <- function(
 #' @keywords internal
 
 get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers, events) {
-
   out <- list()
 
   # Label reorganization and identification
@@ -263,7 +271,6 @@ get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers, events) {
 #' @keywords internal
 
 get_assigned_colors <- function(df, gg, lanes, lane_colors, markers, shape_colors) {
-
   # Label reorganization and identification
   # First, get labels as they appear in the ggplot object
   gg_build <- ggplot_build(gg)$plot$scales$scales

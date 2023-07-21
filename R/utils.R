@@ -49,10 +49,12 @@ update_gg_legend_order <- function(gg, lanes, markers) {
   # In instances where not all appear, remove NAs
   color_label_order <- color_label_order[!is.na(color_label_order)]
 
-  list(fill_label_order = fill_label_order,
-       color_label_order = color_label_order,
-       index_with_colour = index_with_colour,
-       index_with_fill = index_with_fill)
+  list(
+    fill_label_order = fill_label_order,
+    color_label_order = color_label_order,
+    index_with_colour = index_with_colour,
+    index_with_fill = index_with_fill
+  )
 }
 
 #' @title Apply updated ggplot legend order

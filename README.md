@@ -64,7 +64,7 @@ accordingly. To showcase the different ways you can supply `markers` and
 `lanes` to `ggswim()`, we’ll show a few examples together:
 
 ``` r
-lanes = list(
+lanes <- list(
   "No CRS" = "gray",
   "CRS Grade 1" = "yellow",
   "CRS Grade 2" = "orange",
@@ -80,13 +80,15 @@ markers_emoji <- list(
 )
 
 plot1 <- df |>
-  ggswim(id = subject_id,
-         time = time,
-         events = event,
-         reference_event = "Infusion",
-         markers = markers_emoji,
-         lanes = lanes,
-         legend_title = c("My Lanes Legend", "My Markers Legend")) +
+  ggswim(
+    id = subject_id,
+    time = time,
+    events = event,
+    reference_event = "Infusion",
+    markers = markers_emoji,
+    lanes = lanes,
+    legend_title = c("My Lanes Legend", "My Markers Legend")
+  ) +
   ggplot2::labs(title = "My Swim Plot with Emojis", x = "Time", y = "Subject ID")
 
 markers_shape <- list(
@@ -95,7 +97,7 @@ markers_shape <- list(
   "Infusion" = 6
 )
 
-unnamed_lanes = list(
+unnamed_lanes <- list(
   "No CRS",
   "CRS Grade 1",
   "CRS Grade 2",
@@ -105,13 +107,15 @@ unnamed_lanes = list(
 )
 
 plot2 <- df |>
-  ggswim(id = subject_id,
-         time = time,
-         events = event,
-         reference_event = "Infusion",
-         markers = markers_shape,
-         lanes = unnamed_lanes,
-         legend_title = c("My Lanes Legend", "My Markers Legend")) +
+  ggswim(
+    id = subject_id,
+    time = time,
+    events = event,
+    reference_event = "Infusion",
+    markers = markers_shape,
+    lanes = unnamed_lanes,
+    legend_title = c("My Lanes Legend", "My Markers Legend")
+  ) +
   ggplot2::labs(title = "My Swim Plot with Shapes", x = "Time", y = "Subject ID")
 ```
 
