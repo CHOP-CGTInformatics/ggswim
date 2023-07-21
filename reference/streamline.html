@@ -62,27 +62,30 @@ subject or record identification column</p></dd>
 
 <dt>time</dt>
 <dd><p>the x-axis variable of the swimmer plot, typically a
-function of time</p></dd>
+function of time given in date or numeric format</p></dd>
 
 
 <dt>events</dt>
-<dd><p>the column that will supply definitions for the <code>reference_event</code>,
-<code>markers</code>, and <code>lanes</code></p></dd>
+<dd><p>the column that will supply data for the <code>reference_event</code>,
+<code>markers</code>, and <code>lanes</code> arguments</p></dd>
 
 
 <dt>reference_event</dt>
 <dd><p>a character string found in <code>events</code> that establishes
-the time-zero reference point for the x-axis</p></dd>
+the time-zero reference point for the x-axis for use when <code>time</code> is given in
+a date/date-time format rather than in an integer/numeric format</p></dd>
 
 
 <dt>markers</dt>
-<dd><p>A character vector that will comprise point markers on the
-swimmer plot. Optional, default <code>NULL</code></p></dd>
+<dd><p>a named list defining marker events on a <code>lane</code> in either
+standard numeric ggplot 2 shapes, emoji, or unicode form .
+Shapes can be supplied as character strings or integers.</p></dd>
 
 
 <dt>lanes</dt>
-<dd><p>Columns that indicate line changes, i.e. color changes
-for individual swim lanes.</p></dd>
+<dd><p>a list of character strings that define the colored line segments
+for <code>id</code>. Colors are supplied by setting list elements equal to hex or named colors.
+In the absence of colors, default <code>ggplot2</code> colors will be supplied.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -94,7 +97,7 @@ for individual swim lanes.</p></dd>
     <div id="details">
     <h2>Details</h2>
     <p>Requirements for a dataset include an identifiable primary key column,
-a time column, and any number of binary indicator columns.</p>
+an event/time column, and an event stream column indicating markers and lanes.</p>
     </div>
 
   </div>

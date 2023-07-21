@@ -51,6 +51,7 @@
 <span>  <span class="va">events</span>,</span>
 <span>  <span class="va">reference_event</span>,</span>
 <span>  <span class="va">markers</span>,</span>
+<span>  shape_colors <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">lanes</span>,</span>
 <span>  legend_title <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -85,8 +86,14 @@ a date/date-time format rather than in an integer/numeric format</p></dd>
 
 <dt>markers</dt>
 <dd><p>a named list defining marker events on a <code>lane</code> in either
-standard numeric ggplot 2 shapes, emoji, or unicode form (ex: "464").
+standard numeric ggplot 2 shapes, emoji, or unicode form .
 Shapes can be supplied as character strings or integers.</p></dd>
+
+
+<dt>shape_colors</dt>
+<dd><p>If providing shapes for <code>markers</code>, provide vector
+specification for the colors those shapes should be. Default <code>NULL</code> for
+non-shapes, default <code>ggplot2</code> colors if shapes with no colors specified.</p></dd>
 
 
 <dt>lanes</dt>
@@ -96,7 +103,8 @@ In the absence of colors, default <code>ggplot2</code> colors will be supplied.<
 
 
 <dt>legend_title</dt>
-<dd><p>the title of the legend</p></dd>
+<dd><p>the titles of the legends, given as a vector of character
+strings</p></dd>
 
 </dl></div>
     <div id="value">
