@@ -92,10 +92,8 @@ ggswim <- function(df,
 
   # Define initial gg object and apply lines colored by lanes spec -------------
   gg <- df |>
-    ggplot(aes(x = !!time, y = !!id, group = !!id, fill = lane_col, color = !!groups)) +
-    ggplot2::geom_bar(stat = "identity", size = 1, width = .1)
-  # geom_line(aes(col = swim_tbl$data$lane_col),
-  # linewidth = 3)
+    ggplot(aes(x = tdiff, y = !!id, group = !!id)) +
+    ggplot2::geom_bar(aes(color = !!groups, fill = lane_col), stat = "identity", size = 1, width = .1)
 
   # Emoji Marker Handling ------------------------------------------------------
   # If markers supplied as emojis, apply geom_label()
@@ -105,7 +103,7 @@ ggswim <- function(df,
       geom_label(
         aes(
           label = markers[marker_col], # nolint: object_usage_linter
-          col = marker_col # nolint: object_usage_linter
+          color = tidyr::fill(data = df, marker_col, .direction = "downup")$marker_col # nolint: object_usage_linter
         ),
         label.size = NA, fill = NA, na.rm = TRUE)
   }
@@ -117,7 +115,7 @@ ggswim <- function(df,
     gg <- gg +
       geom_point(aes(
         shape = markers[marker_col], # nolint: object_usage_linter
-        col = marker_col, # nolint: object_usage_linter
+        color = tidyr::fill(data = df, marker_col, .direction = "downup")$marker_col, # nolint: object_usage_linter
       ), size = 3, stroke = 1.5, na.rm = TRUE)
   }
 
@@ -134,7 +132,7 @@ ggswim <- function(df,
                                    group_vals = group_vals)
 
   gg <- gg +
-    # if (emoji_or_shape == "emoji") {
+    if (emoji_or_shape == "emoji") {
       guides(
         color = guide_legend(
           override.aes = list(
@@ -149,17 +147,18 @@ ggswim <- function(df,
           )
         )
       )
-    # } else {
-    #   guides(
-    #     color = guide_legend(
-    #       override.aes = list(
-    #         shape = guide_values$shape_override,
-    #         stroke = guide_values$stroke_override,
-    #         linetype = guide_values$linetype_override
-    #       )
-    #     )
-    #   )
-    # }
+    } else {
+      guides(
+        color = guide_legend(
+          override.aes = list(
+            shape = guide_values$shape_override,
+            stroke = guide_values$stroke_override,
+            linetype = guide_values$linetype_override,
+            fill = rep(NA, length(guide_values$label_override))
+          )
+        )
+      )
+    }
 
 
   # Process and assign line colors from `lane_colors` for `scale_color_manual`
@@ -170,9 +169,6 @@ ggswim <- function(df,
                      ggplot2::scale_fill_manual(values = assigned_line_colors,
                                                 breaks = names(assigned_line_colors),
                                                 name = legend_title)
-                   # scale_color_manual(values = assigned_line_colors,
-                   #                    breaks = names(assigned_line_colors),
-                   #                    name = legend_title)
   )
 
   gg
@@ -207,6 +203,7 @@ get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers,
                              group_vals) {
 
   out <- list()
+  groups <- ifelse(is.null(groups), "", groups)
 
   # Label reorganization and identification
   # First, get labels as they appear in the ggplot object
@@ -228,7 +225,7 @@ get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers,
   # Reorganize and subset for only what appears in the data set
   names(out$fill_override) <- lanes
   out$fill_override[seq_along(lanes)] <- ""
-  out$fill_override <- out$fill_override[names(out$fill_override) %in% df$event]
+  out$fill_override <- out$fill_override[names(out$fill_override) %in% df[[events]]]
   # Reorder based on legend_label_order, otherwise assignments will be mismatched
   out$fill_override <- out$fill_override[match(legend_label_order$fill_label_order, names(out$fill_override))]
 
@@ -267,8 +264,10 @@ get_assigned_line_colors <- function(df, gg, lanes, lane_colors) {
 
   # Label reorganization and identification
   # First, get labels as they appear in the ggplot object
-  gg_obj <- ggplot_build(gg)
-  legend_label_order <- gg_obj$plot$scales$scales[[1]]$get_labels()
+  gg_build <- ggplot_build(gg)$plot$scales$scales
+  index_with_fill <- which(sapply(gg_build, function(x) "fill" %in% x$aesthetics))
+
+  fill_legend_labels <- gg_build[[index_with_fill]]$get_labels()
 
   # get only values that appear in the data
   lines_to_keep <- unique(df$event[df$event %in% lanes])
@@ -276,8 +275,8 @@ get_assigned_line_colors <- function(df, gg, lanes, lane_colors) {
 
   # Combine the the `colors` and `legend_label_order` vectors and fill in missing
   # values with NA
-  combined_vector <- rep(NA, length(legend_label_order))
-  names(combined_vector) <- legend_label_order
+  combined_vector <- rep(NA, length(fill_legend_labels))
+  names(combined_vector) <- fill_legend_labels
   combined_vector[names(colors)] <- colors
 
   combined_vector

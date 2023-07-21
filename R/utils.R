@@ -29,20 +29,13 @@
 #' @keywords internal
 
 update_gg_legend_order <- function(gg, lanes, markers, groups = NULL) {
-  # Make "ggplot_built" object
-  gg_obj <- ggplot_build(gg)
+  gg_build <- ggplot_build(gg)$plot$scales$scales
 
-  # Grab existing labels in default order
-  # existing_legend_labels <- gg_obj$plot$scales$scales[[1]]$get_labels()
+  # Find the index positions where "colour" or "fill" is present
+  index_with_colour <- which(sapply(gg_build, function(x) "colour" %in% x$aesthetics))
+  index_with_fill <- which(sapply(gg_build, function(x) "fill" %in% x$aesthetics))
 
-  # # Get all desired legend labels in order of lanes > markers
-  # legend_label_order <- c(as.vector(lanes), names(markers))
-  # # Subset for only those that appear in `existing_legend_labels`
-  # legend_label_order <- existing_legend_labels[match(legend_label_order, existing_legend_labels)]
-  # # In instances where not all appear, remove NAs
-  # legend_label_order <- legend_label_order[!is.na(legend_label_order)]
-
-  fill_legend_labels <- gg_obj$plot$scales$scales[[3]]$get_labels()
+  fill_legend_labels <- gg_build[[index_with_fill]]$get_labels()
   # Get all desired legend labels in order of lanes > markers
   fill_label_order <- as.vector(lanes)
   # Subset for only those that appear in `existing_legend_labels`
@@ -50,7 +43,7 @@ update_gg_legend_order <- function(gg, lanes, markers, groups = NULL) {
   # In instances where not all appear, remove NAs
   fill_label_order <- fill_label_order[!is.na(fill_label_order)]
 
-  color_legend_labels <- gg_obj$plot$scales$scales[[4]]$get_labels()
+  color_legend_labels <- gg_build[[index_with_colour]]$get_labels()
   # Get all desired legend labels in order of lanes > markers
   color_label_order <- c(groups, names(markers))
   # Subset for only those that appear in `existing_legend_labels`
@@ -58,7 +51,10 @@ update_gg_legend_order <- function(gg, lanes, markers, groups = NULL) {
   # In instances where not all appear, remove NAs
   color_label_order <- color_label_order[!is.na(color_label_order)]
 
-  list(fill_label_order = fill_label_order, color_label_order = color_label_order)
+  list(fill_label_order = fill_label_order,
+       color_label_order = color_label_order,
+       index_with_colour = index_with_colour,
+       index_with_fill = index_with_fill)
 }
 
 #' @title Apply updated ggplot legend order
@@ -85,10 +81,9 @@ apply_gg_legend_order <- function(gg, lanes, markers, groups = NULL) {
   gg_obj <- ggplot_build(gg)
 
   update_legend_order <- update_gg_legend_order(gg, lanes, markers, groups)
-  # gg_obj$plot$scales$scales[[1]]$labels <- update_gg_legend_order(gg, lanes, markers, groups)
 
-  gg_obj$plot$scales$scales[[3]]$labels <- update_legend_order$fill_label_order
-  gg_obj$plot$scales$scales[[4]]$labels <- update_legend_order$color_label_order
+  gg_obj$plot$scales$scales[[update_legend_order$index_with_fill]]$labels <- update_legend_order$fill_label_order
+  gg_obj$plot$scales$scales[[update_legend_order$index_with_colour]]$labels <- update_legend_order$color_label_order
 
   gg <- gg_obj$plot
   gg
