@@ -4,7 +4,7 @@
 \alias{get_assigned_colors}
 \title{Reshape lane_colors}
 \usage{
-get_assigned_colors(df, gg, lanes, lane_colors, markers)
+get_assigned_colors(df, gg, lanes, lane_colors, markers, shape_colors)
 }
 \arguments{
 \item{df}{a dataframe prepared for use with \code{ggswim()}}
@@ -21,6 +21,10 @@ user-defined colors to \code{lanes}}
 \item{markers}{a named list defining marker events on a \code{lane} in either
 standard numeric ggplot 2 shapes, emoji, or unicode form (ex: "\U1F464").
 Shapes can be supplied as character strings or integers.}
+
+\item{shape_colors}{If providing shapes for \code{markers}, provide vector
+specification for the colors those shapes should be. Default \code{NULL} for
+non-shapes, default \code{ggplot2} colors if shapes with no colors specified.}
 }
 \value{
 a named vector

@@ -11,6 +11,7 @@ ggswim(
   events,
   reference_event,
   markers,
+  shape_colors = NULL,
   lanes,
   groups = NULL,
   legend_title = NULL
@@ -35,6 +36,10 @@ a date/date-time format rather than in an integer/numeric format}
 \item{markers}{a named list defining marker events on a \code{lane} in either
 standard numeric ggplot 2 shapes, emoji, or unicode form (ex: "\U1F464").
 Shapes can be supplied as character strings or integers.}
+
+\item{shape_colors}{If providing shapes for \code{markers}, provide vector
+specification for the colors those shapes should be. Default \code{NULL} for
+non-shapes, default \code{ggplot2} colors if shapes with no colors specified.}
 
 \item{lanes}{a list of character strings that define the colored line segments
 for \code{id}. Colors are supplied by setting list elements equal to hex or named colors.

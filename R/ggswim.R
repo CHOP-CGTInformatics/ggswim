@@ -22,6 +22,9 @@
 #' @param markers a named list defining marker events on a `lane` in either
 #' standard numeric ggplot 2 shapes, emoji, or unicode form (ex: "\U1F464").
 #' Shapes can be supplied as character strings or integers.
+#' @param shape_colors If providing shapes for `markers`, provide vector
+#' specification for the colors those shapes should be. Default `NULL` for
+#' non-shapes, default `ggplot2` colors if shapes with no colors specified.
 #' @param lanes a list of character strings that define the colored line segments
 #' for `id`. Colors are supplied by setting list elements equal to hex or named colors.
 #' In the absence of colors, default `ggplot2` colors will be supplied.
@@ -31,7 +34,7 @@
 #'
 #' @returns a ggplot2 figure
 #'
-#' @importFrom ggplot2 ggplot aes geom_line geom_point
+#' @importFrom ggplot2 ggplot aes geom_bar geom_point
 #' guides theme guide_legend scale_color_manual scale_fill_manual
 #' geom_label ggplot_build
 #'
@@ -43,6 +46,7 @@ ggswim <- function(df,
                    events,
                    reference_event,
                    markers,
+                   shape_colors = NULL,
                    lanes,
                    groups = NULL,
                    legend_title = NULL) {
@@ -50,9 +54,6 @@ ggswim <- function(df,
   # Streamline the dataframe ---------------------------------------------------
   # Capture variables as expressions, allowing for piping in API ---------------
   variables <- c("id", "time", "events", "reference_event", "groups")
-  # if (!is.null(groups)) {
-  #   variables(c(variables, "groups"))
-  # }
 
   # Parse variables to be passed to streamline()
   for (variable in variables) {
@@ -75,7 +76,7 @@ ggswim <- function(df,
   id <- swim_tbl$id
   time <- swim_tbl$time
   lanes <- swim_tbl$lanes
-  group_col <- swim_tbl$group_col
+  group_col <- swim_tbl$group_col # nolint: object_usage_linter
   group_vals <- swim_tbl$group_vals
   lane_colors <- get_lane_colors(lanes = swim_tbl$lanes,
                                  lane_colors = swim_tbl$lane_colors)
@@ -92,8 +93,8 @@ ggswim <- function(df,
 
   # Define initial gg object and apply lines colored by lanes spec -------------
   gg <- df |>
-    ggplot(aes(x = tdiff, y = !!id, group = !!id)) +
-    ggplot2::geom_bar(aes(color = !!groups, fill = lane_col), stat = "identity", size = 1, width = .1)
+    ggplot(aes(x = tdiff, y = !!id, group = !!id)) + # nolint: object_usage_linter
+    geom_bar(aes(color = !!groups, fill = lane_col), stat = "identity", size = 1, width = .1) # nolint: object_usage_linter
 
   # Emoji Marker Handling ------------------------------------------------------
   # If markers supplied as emojis, apply geom_label()
@@ -164,7 +165,7 @@ ggswim <- function(df,
 
 
   # Process and assign line colors from `lane_colors` for `scale_color_manual`
-  assigned_colors <- get_assigned_colors(df, gg, lanes, lane_colors, markers)
+  assigned_colors <- get_assigned_colors(df, gg, lanes, lane_colors, markers, shape_colors)
 
   # Suppress message related to existing color scale replacement
   suppressMessages(gg <- gg +
@@ -218,14 +219,11 @@ get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers,
   # First, get labels as they appear in the ggplot object
   legend_label_order <- update_gg_legend_order(gg, lanes, markers, group_vals)
 
-  # TODO: Generalize this elswhere
-  # groups2 <- factor(groups, levels = groups, ordered = TRUE)
-
   out$color_override <- unlist(c(group_vals, markers))
   # Reorganize and subset for only what appears in the data set
   names(out$color_override)[seq_along(group_vals)] <- as.character(group_vals)
   out$color_override[seq_along(group_vals)] <- ""
-  out$color_override <- out$color_override[names(out$color_override) %in% df[[events]] | names(out$color_override) %in% df[[groups]]]
+  out$color_override <- out$color_override[names(out$color_override) %in% df[[events]] | names(out$color_override) %in% df[[groups]]] # nolint: line_length_linter
   # Reorder based on legend_label_order, otherwise assignments will be mismatched
   out$color_override <- out$color_override[match(legend_label_order$color_label_order, names(out$color_override))]
   out$label_override <- out$color_override
@@ -269,10 +267,15 @@ get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers,
 #' @param markers a named list defining marker events on a `lane` in either
 #' standard numeric ggplot 2 shapes, emoji, or unicode form (ex: "\U1F464").
 #' Shapes can be supplied as character strings or integers.
+#' @param shape_colors If providing shapes for `markers`, provide vector
+#' specification for the colors those shapes should be. Default `NULL` for
+#' non-shapes, default `ggplot2` colors if shapes with no colors specified.
+#'
+#' @importFrom scales hue_pal
 #'
 #' @keywords internal
 
-get_assigned_colors <- function(df, gg, lanes, lane_colors, markers) {
+get_assigned_colors <- function(df, gg, lanes, lane_colors, markers, shape_colors) {
 
   # Label reorganization and identification
   # First, get labels as they appear in the ggplot object
@@ -286,6 +289,18 @@ get_assigned_colors <- function(df, gg, lanes, lane_colors, markers) {
 
   # get only values that appear in the data
   colors <- unlist(markers)[match(color_legend_labels, names(markers))]
+
+  # If shape_colors provided, use them, else assign default ggplot color pallete
+  if (!is.null(shape_colors)) {
+    colors_names <- names(colors)
+    names(shape_colors) <- names(colors)
+    colors <- shape_colors
+  } else {
+    colors_names <- names(colors)
+    colors <- hue_pal()(length(colors))
+    names(colors) <- colors_names
+  }
+
   fills <- lane_colors[match(fill_legend_labels, names(lane_colors))]
 
   list(colors = colors, fills = fills)
