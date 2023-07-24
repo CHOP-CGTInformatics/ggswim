@@ -22,9 +22,6 @@
     <loc>/reference/apply_gg_legend_order.html</loc>
   </url>
   <url>
-    <loc>/reference/as_swim_tbl.html</loc>
-  </url>
-  <url>
     <loc>/reference/checkmate.html</loc>
   </url>
   <url>
@@ -44,6 +41,9 @@
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/is_numeric_coercible.html</loc>
   </url>
   <url>
     <loc>/reference/streamline.html</loc>
