@@ -36,6 +36,7 @@
 #' @importFrom ggplot2 ggplot aes geom_bar geom_point
 #' guides theme guide_legend scale_color_manual scale_fill_manual
 #' geom_label ggplot_build labs
+#' @importFrom tidyr fill
 #'
 #' @export
 
@@ -49,8 +50,7 @@ ggswim <- function(
     shape_colors = NULL,
     lanes,
     legend_title = NULL) {
-  # Streamline the dataframe ---------------------------------------------------
-  # Capture variables as expressions, allowing for piping in API ---------------
+  # Capture variables as expressions, allowing for piping in API
   variables <- c("id", "time", "events", "reference_event")
 
   # Parse variables to be passed to streamline()
@@ -58,6 +58,15 @@ ggswim <- function(
     assign(variable, eval(parse(text = paste0("enquo(", variable, ") |> get_expr()"))))
   }
 
+  # Check inputs ---------------------------------------------------------------
+  # TODO: Add checks for other args. To access "name" args, use df[[*]]
+  # TBD on how best to access "call" args (i.e. `markers`)
+  check_arg_is_dataframe(df)
+  check_arg_is_character(legend_title, null.ok = TRUE)
+  check_arg_is_list(lanes)
+  check_arg_is_list(markers)
+
+  # Streamline the dataframe ---------------------------------------------------
   swim_tbl <- streamline(
     df = df,
     id = id,
@@ -67,9 +76,8 @@ ggswim <- function(
     markers = markers,
     lanes = lanes
   )
-  # check inputs ---------------------------------------------------------------
 
-  # assign common vars ---------------------------------------------------------
+  # Assign common vars ---------------------------------------------------------
   df <- swim_tbl$data
   markers <- swim_tbl$markers
   id <- swim_tbl$id
@@ -83,7 +91,7 @@ ggswim <- function(
   # Determine whether the markers supplied are shape designations or emojis
   # Unicode and pasted emojis register as character, shapes should always be
   # numeric or numeric coercible. Suppress warning for NA coercions
-  markers_numeric <- all(!is.na(suppressWarnings(as.numeric(unlist(markers)))))
+  markers_numeric <- is_numeric_coercible(markers)
 
   emoji_or_shape <- ifelse(
     markers_numeric,
@@ -94,7 +102,7 @@ ggswim <- function(
   # Define initial gg object and apply lines colored by lanes spec -------------
   gg <- df |>
     ggplot(aes(x = tdiff, y = !!id, group = !!id)) + # nolint: object_usage_linter
-    geom_bar(aes(fill = lane_col), stat = "identity", size = 1, width = .05) # nolint: object_usage_linter
+    geom_bar(aes(fill = lane_column), stat = "identity", size = 1, width = .05) # nolint: object_usage_linter
 
   # Emoji Marker Handling ------------------------------------------------------
   # If markers supplied as emojis, apply geom_label()
@@ -103,8 +111,8 @@ ggswim <- function(
       geom_label(
         aes(
           x = !!time,
-          label = markers[marker_col], # nolint: object_usage_linter
-          color = tidyr::fill(data = df, marker_col, .direction = "downup")$marker_col
+          label = markers[marker_column], # nolint: object_usage_linter
+          color = fill(data = df, marker_column, .direction = "downup")$marker_column
         ), # nolint: object_usage_linter
         label.size = NA, fill = NA, na.rm = TRUE
       )
@@ -116,8 +124,8 @@ ggswim <- function(
     gg <- gg +
       geom_point(aes(
         x = !!time,
-        shape = markers[marker_col], # nolint: object_usage_linter
-        color = tidyr::fill(data = df, marker_col, .direction = "downup")$marker_col, # nolint: object_usage_linter
+        shape = markers[marker_column], # nolint: object_usage_linter
+        color = fill(data = df, marker_column, .direction = "downup")$marker_column, # nolint: object_usage_linter
       ), size = 5, stroke = 2, na.rm = TRUE)
   }
 
@@ -139,7 +147,6 @@ ggswim <- function(
         color = guide_legend(
           override.aes = list(
             label = guide_values$label_override,
-            linetype = guide_values$linetype_override,
             fill = rep(NA, length(guide_values$label_override))
           )
         ),
@@ -155,7 +162,6 @@ ggswim <- function(
           override.aes = list(
             shape = guide_values$shape_override,
             stroke = guide_values$stroke_override,
-            linetype = guide_values$linetype_override,
             fill = rep(NA, length(guide_values$label_override))
           )
         )
@@ -174,16 +180,6 @@ ggswim <- function(
       name = legend_title[[1]]
     ) +
     labs(colour = legend_title[[2]]))
-  if (emoji_or_shape == "shape") {
-    suppressMessages(
-      gg <- gg +
-        scale_color_manual(
-          values = assigned_colors$colors,
-          breaks = names(assigned_colors$colors),
-          name = legend_title[[1]]
-        )
-    )
-  }
 
   gg
 }
@@ -231,7 +227,6 @@ get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers, events) {
   # Reorder based on legend_label_order, otherwise assignments will be mismatched
   out$fill_override <- out$fill_override[match(legend_label_order$fill_label_order, names(out$fill_override))]
 
-  out$linetype_override <- ifelse(out$label_override == "", 1, 0) # 0 for blank, 1 for solid
   out$stroke_override <- ifelse(out$label_override == "", 1, 2) # values dictate stroke thickness
 
   if (emoji_or_shape == "shape") {

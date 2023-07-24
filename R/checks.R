@@ -45,41 +45,24 @@ wrap_checkmate <- function(f) {
 }
 
 #' @rdname checkmate
-#' @importFrom cli cli_abort
-#' @importFrom rlang caller_env caller_arg
-check_arg_is_swim_tbl <- function(x,
-                                  arg = caller_arg(x),
-                                  call = caller_env()) {
-  # shared data for all messages
-  msg_x <- "You've supplied {.code {format_error_val(x)}} for {.arg {arg}} which is not a valid value"
-  msg_info <- "{.arg {arg}} must be a {.pkg ggwim} swim_tbl, generated using {.code streamline()}"
-  msg_class <- c("check_swim_tbl", "ggswim_cond")
-
-  if (!inherits(x, "swim_tbl")) {
-    cli_abort(
-      message = c(
-        "x" = msg_x,
-        "!" = "Must be of class {.cls swim_tbl}",
-        "i" = msg_info
-      ),
-      class = msg_class,
-      call = call
-    )
-  }
-  return(TRUE)
-}
-
-#' @rdname checkmate
 #' @importFrom checkmate check_character
 check_arg_is_character <- wrap_checkmate(check_character)
 
 #' @rdname checkmate
-#' @importFrom checkmate check_logical
-check_arg_is_logical <- wrap_checkmate(check_logical)
-
-#' @rdname checkmate
 #' @importFrom checkmate check_data_frame
 check_arg_is_dataframe <- wrap_checkmate(check_data_frame)
+
+#' @rdname checkmate
+#' @importFrom checkmate check_integerish
+check_arg_is_integerish <- wrap_checkmate(check_integerish)
+
+#' @rdname checkmate
+#' @importFrom checkmate check_list
+check_arg_is_list <- wrap_checkmate(check_list)
+
+#' @rdname checkmate
+#' @importFrom checkmate check_logical
+check_arg_is_logical <- wrap_checkmate(check_logical)
 
 #' @title
 #' Format value for error message

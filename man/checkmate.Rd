@@ -2,29 +2,32 @@
 % Please edit documentation in R/checks.R
 \name{checkmate}
 \alias{checkmate}
-\alias{check_arg_is_swim_tbl}
 \alias{check_arg_is_character}
-\alias{check_arg_is_logical}
 \alias{check_arg_is_dataframe}
+\alias{check_arg_is_integerish}
+\alias{check_arg_is_list}
+\alias{check_arg_is_logical}
 \title{Check an argument with checkmate}
 \usage{
-check_arg_is_swim_tbl(x, arg = caller_arg(x), call = caller_env())
-
 check_arg_is_character(x, ..., arg = caller_arg(x), call = caller_env())
 
-check_arg_is_logical(x, ..., arg = caller_arg(x), call = caller_env())
-
 check_arg_is_dataframe(x, ..., arg = caller_arg(x), call = caller_env())
+
+check_arg_is_integerish(x, ..., arg = caller_arg(x), call = caller_env())
+
+check_arg_is_list(x, ..., arg = caller_arg(x), call = caller_env())
+
+check_arg_is_logical(x, ..., arg = caller_arg(x), call = caller_env())
 }
 \arguments{
 \item{x}{An object to check}
+
+\item{...}{additional arguments passed on to checkmate}
 
 \item{arg}{The name of the argument to include in an error message. Captured
 by \code{rlang::caller_arg()} by default}
 
 \item{call}{the calling environment to use in the error message}
-
-\item{...}{additional arguments passed on to checkmate}
 
 \item{req_cols}{required fields for \code{check_arg_is_supertbl()}}
 }

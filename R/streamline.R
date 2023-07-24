@@ -25,7 +25,7 @@
 #' for `id`. Colors are supplied by setting list elements equal to hex or named colors.
 #' In the absence of colors, default `ggplot2` colors will be supplied.
 #'
-#' @returns a swim_tbl object
+#' @returns a list
 #'
 #' @importFrom rlang enquo get_expr
 #' @importFrom stats reorder
@@ -40,7 +40,7 @@ streamline <- function(df,
                        reference_event,
                        markers = NULL,
                        lanes) {
-  # Convert lanes to ordered factor
+  # Convert lanes to ordered factor --------------------------------------------
   if (is.null(names(lanes))) {
     lanes <- factor(unlist(lanes), levels = unlist(lanes), ordered = TRUE)
     lane_colors <- NULL
@@ -49,36 +49,28 @@ streamline <- function(df,
     lanes <- factor(names(lanes), levels = names(lanes), ordered = TRUE)
   }
 
-  # Check inputs ---------------------------------------------------------------
-  # TODO: Add checks for other args. To access "name" args, use df[[*]]
-  # TBD on how best to access "call" args (i.e. `markers`)
-  check_arg_is_dataframe(df)
-
   # Group subject vars and assign max time -------------------------------------
   # Replicate dplyr::group_by() using base R
-  # lapply/split separates into list elements per `id`
+  # lapply/split separates df into list elements per `id`
   grouped <- lapply(split(df, df[[id]]), lanes, FUN = function(group_df, lanes = lanes) {
     # Perform operations on each group
-    # i.e., calculate the max/min of 'time' column
-    min_value <- min(group_df[time], na.rm = TRUE)
-    max_value <- max(group_df[time], na.rm = TRUE)
 
     # Create a new column in the group_df with the max value
-    group_df$min_time <- min_value
-    group_df$max_time <- max_value
+    group_df$min_time <- min(group_df[time], na.rm = TRUE)
+    group_df$max_time <- max(group_df[time], na.rm = TRUE)
 
     # Create lane column
-    group_df$lane_col <- group_df$event
+    group_df$lane_column <- group_df$event
     # Default is to make empty data the first named lane
-    group_df$lane_col[!group_df$lane_col %in% lanes] <- as.character(lanes[[1]])
+    group_df$lane_column[!group_df$lane_column %in% lanes] <- as.character(lanes[[1]])
 
     group_df <- group_df |>
       # Fill down first, then up
-      fill(lane_col, .direction = "down") # nolint: object_usage_linter
+      fill(lane_column, .direction = "down") # nolint: object_usage_linter
 
     # Create marker column
-    group_df$marker_col <- group_df$event
-    group_df$marker_col[group_df$marker_col %in% lanes] <- NA
+    group_df$marker_column <- group_df$event
+    group_df$marker_column[group_df$marker_column %in% lanes] <- NA
 
     # Create a time difference column to support geom_bar() in ggswim()
     group_df$tdiff <- c(diff(group_df[[time]]), 0)
@@ -109,20 +101,5 @@ streamline <- function(df,
     event_levels = factor(result$event, levels = c(levels(lanes), levels(marker_levels)), ordered = TRUE)
   )
 
-  as_swim_tbl(out)
-}
-
-#' @title
-#' Add swim_tbl S3 class
-#'
-#' @param x an object to class
-#'
-#' @return
-#' The object with `swim_tbl` S3 class
-#'
-#' @keywords internal
-#'
-as_swim_tbl <- function(x) {
-  class(x) <- c("swim_tbl", class(x))
-  x
+  out
 }

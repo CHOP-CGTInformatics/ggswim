@@ -31,7 +31,7 @@ for \code{id}. Colors are supplied by setting list elements equal to hex or name
 In the absence of colors, default \code{ggplot2} colors will be supplied.}
 }
 \value{
-a swim_tbl object
+a list
 }
 \description{
 Prepare a dataset for use with \code{ggswim()} and ensure proper elements are made

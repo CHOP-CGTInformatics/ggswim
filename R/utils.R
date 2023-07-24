@@ -86,3 +86,36 @@ apply_gg_legend_order <- function(gg, lanes, markers) {
   gg <- gg_obj$plot
   gg
 }
+
+#' @title Detect if object is numeric or numeric-coercible
+#'
+#' @description
+#' This utility function takes a vector or variable and attempts to detect
+#' whether it is numeric or numeric-coercible (i.e. a numeric character string).
+#'
+#' @details
+#' At present, this is only intended to be used in detecting coercible character
+#' strings, not factors or boolean values since coercion to numeric is both
+#' possible and meaningful.
+#'
+#' @param data a vector or variable to test
+#'
+#' @importFrom cli cli_abort
+#'
+#' @returns a boolean
+#'
+
+is_numeric_coercible <- function(data) {
+  data <- unlist(data)
+
+  valid_data_types <- c("character", "numeric", "integer")
+
+  if (!class(data) %in% valid_data_types) {
+    cli_abort(message = c(
+      "x" = "{.arg data} not a valid data type to check for numeric coercion. Supplied class: {class(data)}",
+      "i" = "Class type should be one of the following: {valid_data_types}"
+    ))
+  }
+
+  all(!is.na(suppressWarnings(as.numeric(data))))
+}
