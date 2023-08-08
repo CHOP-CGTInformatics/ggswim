@@ -45,7 +45,8 @@ non-shapes, default \code{ggplot2} colors if shapes with no colors specified.}
 for \code{id}. Colors are supplied by setting list elements equal to hex or named colors.
 In the absence of colors, default \code{ggplot2} colors will be supplied.}
 
-\item{groups}{TBD}
+\item{groups}{A grouping term, supplied as an optional additional column in
+\code{df}.}
 
 \item{legend_title}{the titles of the legends, given as a vector of character
 strings}

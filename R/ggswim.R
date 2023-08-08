@@ -28,7 +28,8 @@
 #' @param lanes a list of character strings that define the colored line segments
 #' for `id`. Colors are supplied by setting list elements equal to hex or named colors.
 #' In the absence of colors, default `ggplot2` colors will be supplied.
-#' @param groups TBD
+#' @param groups A grouping term, supplied as an optional additional column in
+#' `df`.
 #' @param legend_title the titles of the legends, given as a vector of character
 #' strings
 #'
@@ -111,14 +112,6 @@ ggswim <- function(
   gg <- df |>
     ggplot(aes(x = tdiff, y = !!id, group = !!groups)) + # nolint: object_usage_linter
     geom_bar(aes(fill = lane_column), stat = "identity", size = 1, width = 0.05, orientation = "y") # nolint: object_usage_linter
-
-  if (!is.null(groups)) {
-    gg <- gg +
-      ggplot2::facet_grid(groups, scales = "free", space = "free", switch = "y") +
-      theme(strip.placement = "outside",
-            panel.spacing = ggplot2::unit(0, "in"),
-            strip.background.y = ggplot2::element_rect(fill = "white", color = "gray75"))
-  }
 
 
   # Emoji Marker Handling ------------------------------------------------------
@@ -208,6 +201,14 @@ ggswim <- function(
           name = legend_title[[1]]
         )
     )
+  }
+
+  if (!is.null(groups)) {
+    gg <- gg +
+      ggplot2::facet_grid(groups, scales = "free", space = "free", switch = "y") +
+      theme(strip.placement = "outside",
+            panel.spacing = ggplot2::unit(0, "in"),
+            strip.background.y = ggplot2::element_rect(fill = "white", color = "gray75"))
   }
 
   gg
