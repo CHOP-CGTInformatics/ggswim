@@ -35,7 +35,7 @@
 #'
 #' @importFrom ggplot2 ggplot aes geom_bar geom_point
 #' guides theme guide_legend scale_color_manual scale_fill_manual
-#' geom_label ggplot_build labs
+#' geom_label ggplot_build labs scale_color_manual
 #' @importFrom tidyr fill
 #'
 #' @export
@@ -180,6 +180,18 @@ ggswim <- function(
       name = legend_title[[1]]
     ) +
     labs(colour = legend_title[[2]]))
+
+  # If shape_colors specified, apply them
+  if (!is.null(shape_colors)) {
+    suppressMessages(
+      gg <- gg +
+        scale_color_manual(
+          values = assigned_colors$colors,
+          breaks = names(assigned_colors$colors),
+          name = legend_title[[1]]
+        )
+    )
+  }
 
   gg
 }
