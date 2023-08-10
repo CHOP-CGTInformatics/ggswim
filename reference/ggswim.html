@@ -53,6 +53,7 @@
 <span>  <span class="va">markers</span>,</span>
 <span>  shape_colors <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">lanes</span>,</span>
+<span>  groups <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  legend_title <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -100,6 +101,11 @@ non-shapes, default <code>ggplot2</code> colors if shapes with no colors specifi
 <dd><p>a list of character strings that define the colored line segments
 for <code>id</code>. Colors are supplied by setting list elements equal to hex or named colors.
 In the absence of colors, default <code>ggplot2</code> colors will be supplied.</p></dd>
+
+
+<dt>groups</dt>
+<dd><p>A grouping term, supplied as an optional additional column in
+<code>df</code>.</p></dd>
 
 
 <dt>legend_title</dt>
