@@ -178,26 +178,24 @@ ggswim <- function(
       )
     }
 
-
-  # Process and assign line colors from `lane_colors` for `scale_color_manual`
-  assigned_colors <- get_assigned_colors(df, gg, lanes, lane_colors, markers, shape_colors)
-
   # Suppress message related to existing color scale replacement
-  suppressMessages(gg <- gg +
-                     scale_fill_manual(
-                       values = assigned_colors$fills,
-                       breaks = names(assigned_colors$fills),
-                       name = legend_title[[1]]
-                     ) +
-                     labs(colour = legend_title[[2]]))
+  suppressMessages(
+    gg <- gg +
+      scale_fill_manual(
+        values = lane_colors,
+        name = legend_title[[1]]
+      ) +
+      labs(colour = legend_title[[2]])
+  )
 
   # If shape_colors specified, apply them
   if (!is.null(shape_colors)) {
+    names(shape_colors) <- names(unlist(markers))
+
     suppressMessages(
       gg <- gg +
         scale_color_manual(
-          values = assigned_colors$colors,
-          breaks = names(assigned_colors$colors),
+          values = shape_colors,
           name = legend_title[[1]]
         )
     )
@@ -264,65 +262,6 @@ get_guide_values <- function(df, gg, emoji_or_shape, lanes, markers, events) {
     out$shape_override <- ifelse(out$shape_override == "", 32, as.integer(out$label_override)) # 32 for blank
   }
   out
-}
-
-#' @title Reshape lane_colors
-#'
-#' @description
-#' In order to assign the correct colors to `ggplot2::scale_color_manual()`,
-#' it is necessary to account for the order of the legend output in combination
-#' with the assigned `markers`. This way, only lanes that are present get
-#' assigned the appropriate colors, in the order of the legend, and markers are
-#' assigned `NA`.
-#'
-#' @returns a named vector
-#'
-#' @param df a dataframe prepared for use with `ggswim()`
-#' @param gg a `ggplot` object
-#' @param lanes a list of character strings that define the colored line segments
-#' for `id`. Colors are supplied by setting list elements equal to hex or named colors.
-#' In the absence of colors, default `ggplot2` colors will be supplied.
-#' @param lane_colors a character vector defined in the `swim_tbl` that assigns
-#' user-defined colors to `lanes`
-#' @param markers a named list defining marker events on a `lane` in either
-#' standard numeric ggplot 2 shapes, emoji, or unicode form .
-#' Shapes can be supplied as character strings or integers.
-#' @param shape_colors If providing shapes for `markers`, provide vector
-#' specification for the colors those shapes should be. Default `NULL` for
-#' non-shapes, default `ggplot2` colors if shapes with no colors specified.
-#'
-#' @importFrom scales hue_pal
-#'
-#' @keywords internal
-
-get_assigned_colors <- function(df, gg, lanes, lane_colors, markers, shape_colors) {
-  # Label reorganization and identification
-  # First, get labels as they appear in the ggplot object
-  gg_build <- ggplot_build(gg)$plot$scales$scales
-  # Find the index positions where "colour" or "fill" is present
-  index_with_colour <- which(sapply(gg_build, function(x) "colour" %in% x$aesthetics))
-  index_with_fill <- which(sapply(gg_build, function(x) "fill" %in% x$aesthetics))
-
-  color_legend_labels <- gg_build[[index_with_colour]]$get_labels()
-  fill_legend_labels <- gg_build[[index_with_fill]]$get_labels()
-
-  # get only values that appear in the data
-  colors <- unlist(markers)[match(color_legend_labels, names(markers))]
-
-  # If shape_colors provided, use them, else assign default ggplot color pallete
-  if (!is.null(shape_colors)) {
-    colors_names <- names(colors)
-    names(shape_colors) <- names(colors)
-    colors <- shape_colors
-  } else {
-    colors_names <- names(colors)
-    colors <- hue_pal()(length(colors))
-    names(colors) <- colors_names
-  }
-
-  fills <- lane_colors[match(fill_legend_labels, names(lane_colors))]
-
-  list(colors = colors, fills = fills)
 }
 
 #' @title Get lane colors
