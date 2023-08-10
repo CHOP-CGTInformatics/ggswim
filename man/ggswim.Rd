@@ -13,6 +13,7 @@ ggswim(
   markers,
   shape_colors = NULL,
   lanes,
+  groups = NULL,
   legend_title = NULL
 )
 }
@@ -43,6 +44,9 @@ non-shapes, default \code{ggplot2} colors if shapes with no colors specified.}
 \item{lanes}{a list of character strings that define the colored line segments
 for \code{id}. Colors are supplied by setting list elements equal to hex or named colors.
 In the absence of colors, default \code{ggplot2} colors will be supplied.}
+
+\item{groups}{A grouping term, supplied as an optional additional column in
+\code{df}.}
 
 \item{legend_title}{the titles of the legends, given as a vector of character
 strings}

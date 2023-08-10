@@ -28,6 +28,8 @@
 #' @param lanes a list of character strings that define the colored line segments
 #' for `id`. Colors are supplied by setting list elements equal to hex or named colors.
 #' In the absence of colors, default `ggplot2` colors will be supplied.
+#' @param groups A grouping term, supplied as an optional additional column in
+#' `df`.
 #' @param legend_title the titles of the legends, given as a vector of character
 #' strings
 #'
@@ -49,9 +51,10 @@ ggswim <- function(
     markers,
     shape_colors = NULL,
     lanes,
+    groups = NULL,
     legend_title = NULL) {
   # Capture variables as expressions, allowing for piping in API
-  variables <- c("id", "time", "events", "reference_event")
+  variables <- c("id", "time", "events", "reference_event", "groups")
 
   # Parse variables to be passed to streamline()
   for (variable in variables) {
@@ -99,10 +102,17 @@ ggswim <- function(
     "emoji"
   )
 
+  # Set Group Levels if Applicable ---------------------------------------------
+  if (!is.null(groups)) {
+    new_levels <- factor(id, levels = rev(unique(df[[id]][order(df[[groups]], -df[[time]])])), ordered = TRUE)
+    df[[id]] <- factor(df[[id]], levels = levels(new_levels), ordered = TRUE)
+  }
+
   # Define initial gg object and apply lines colored by lanes spec -------------
   gg <- df |>
-    ggplot(aes(x = tdiff, y = !!id, group = !!id)) + # nolint: object_usage_linter
-    geom_bar(aes(fill = lane_column), stat = "identity", size = 1, width = .05) # nolint: object_usage_linter
+    ggplot(aes(x = tdiff, y = !!id, group = !!groups)) + # nolint: object_usage_linter
+    geom_bar(aes(fill = lane_column), stat = "identity", size = 1, width = 0.05, orientation = "y") # nolint: object_usage_linter
+
 
   # Emoji Marker Handling ------------------------------------------------------
   # If markers supplied as emojis, apply geom_label()
@@ -174,12 +184,12 @@ ggswim <- function(
 
   # Suppress message related to existing color scale replacement
   suppressMessages(gg <- gg +
-    scale_fill_manual(
-      values = assigned_colors$fills,
-      breaks = names(assigned_colors$fills),
-      name = legend_title[[1]]
-    ) +
-    labs(colour = legend_title[[2]]))
+                     scale_fill_manual(
+                       values = assigned_colors$fills,
+                       breaks = names(assigned_colors$fills),
+                       name = legend_title[[1]]
+                     ) +
+                     labs(colour = legend_title[[2]]))
 
   # If shape_colors specified, apply them
   if (!is.null(shape_colors)) {
@@ -191,6 +201,14 @@ ggswim <- function(
           name = legend_title[[1]]
         )
     )
+  }
+
+  if (!is.null(groups)) {
+    gg <- gg +
+      ggplot2::facet_grid(groups, scales = "free", space = "free", switch = "y") +
+      theme(strip.placement = "outside",
+            panel.spacing = ggplot2::unit(0, "in"),
+            strip.background.y = ggplot2::element_rect(fill = "white", color = "gray75"))
   }
 
   gg
