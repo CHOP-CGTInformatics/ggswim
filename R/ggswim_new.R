@@ -14,7 +14,7 @@
 #'
 #' @importFrom ggplot2 aes ggplot geom_segment
 #' @importFrom rlang enquo get_expr
-#' @importFrom dplyr arrange mutate row_number
+#' @importFrom dplyr arrange mutate row_number lag
 
 ggswim_new <- function(
     data,
@@ -32,18 +32,20 @@ ggswim_new <- function(
 
   # Pre-processing
   data_new <- data |>
-    arrange(.by = id, id, max(time), time) |>
+    arrange(.by = !!id, !!id, max(!!time), !!time) |>
     mutate(
-      .by = id,
-      xstart = ifelse(row_number() == 1, 0, lag(time)),
-      .before = time
-    ) |>
-    mutate(id = factor(id, levels = rev(unique(id))))
+      .by = !!id,
+      xstart = ifelse(row_number() == 1, 0, lag(!!time)),
+      .before = !!time
+    )
 
+  data_new[[id]] <- factor(data_new[[id]], levels = rev(unique(data_new[[id]])))
+
+  # data_new
   data_new |>
     ggplot() +
     geom_segment(
-      aes(x = xstart, y = id, xend = time, yend = id, colour = !!lane),
+      aes(x = xstart, y = !!id, xend = !!time, yend = !!id, colour = !!lane),
       linewidth = 10
     )
 }
