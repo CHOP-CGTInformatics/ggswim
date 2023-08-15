@@ -41,11 +41,20 @@ ggswim_new <- function(
 
   data_new[[id]] <- factor(data_new[[id]], levels = rev(unique(data_new[[id]])))
 
-  # data_new
-  data_new |>
+  out <- data_new |>
     ggplot() +
     geom_segment(
       aes(x = xstart, y = !!id, xend = !!time, yend = !!id, colour = !!lane),
       linewidth = 10
     )
+
+  # Define a new object to reference later, stashed in the ggplot object
+  out$guide_overrides <- list("colour_override" = NULL,
+                              "stroke_override" = NULL,
+                              "size_override" = NULL,
+                              "shape_override" = NULL)
+  out$guide_capture <- list()
+
+  # Return object
+  out
 }
