@@ -16,7 +16,7 @@
 #' @importFrom rlang enquo get_expr
 #' @importFrom dplyr arrange mutate row_number lag
 
-ggswim_new <- function(
+ggswim <- function(
     data,
     id,
     time,

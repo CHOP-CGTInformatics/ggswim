@@ -15,7 +15,7 @@
 #'
 #' @export
 #'
-#' @importFrom ggplot2 aes ggplot geom_point
+#' @importFrom ggplot2 aes ggplot geom_point guides guide_legend
 #' @importFrom rlang enquo get_expr
 #' @importFrom dplyr arrange mutate row_number
 

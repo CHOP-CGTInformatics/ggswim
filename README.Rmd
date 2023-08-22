@@ -38,108 +38,120 @@ You can install the development version of ggswim like so:
 devtools::install_github("CHOP-CGTInformatics/ggswim")
 ```
 
-## Example
+## Simple Data Example
 
-Below is a simple example for how to set up your "swim table" to pass along to `ggswim()`:
+Let's look at how to pass a simple dataframe to `ggswim()`, with some minor preprocessing to get it into an acceptable format:
 
 ```{r load_package and data, eval=TRUE, results='hide'}
 library(ggswim)
 
-df <- tibble::tribble(
-  ~subject_id, ~time, ~event,
-  1, 0, "Infusion",
-  1, 2, "CRS Grade 1",
-  1, 3, "CRS Grade 2",
-  1, 4, "CRS Grade 1",
-  1, 5, "No CRS",
-  1, 6, "Last Follow Up",
-  2, 0, "Infusion",
-  2, 1, "CRS Grade 1",
-  2, 4, "CRS Grade 2",
-  2, 7, "CRS Grade 1",
-  2, 8, "No CRS",
-  2, 9, "Last Follow Up",
-  3, 0, "Infusion",
-  3, 1, "CRS Grade 1",
-  3, 2, "CRS Grade 2",
-  3, 3, "CRS Grade 4",
-  3, 7, "CRS Grade 5",
-  3, 10, "Death"
-)
+my_simple_data <-
+  tibble::tibble(
+    id = 1:4,
+    trt = rep_len(c("Drug A", "Drug B"), length.out = 4),
+    time_to_last_followup = rexp(n = 4, rate = 0.5),
+    time_to_death = ifelse(id %% 2, time_to_last_followup, NA),
+    time_to_trt_stop = time_to_last_followup / 2
+  )
 
-df
+my_simple_data <- my_simple_data |>
+  dplyr::mutate(time_start = 0) |>
+  tidyr::pivot_longer(cols = c(time_start, time_to_last_followup),
+                      values_to = "time",
+                      names_to = "treatment_group")
 ```
 
-We'll also pre-define some arguments of interest and the plot accordingly. To showcase the different ways you can supply `markers` and `lanes` to `ggswim()`, we'll show a few examples together:
+We'll also define a start time and pivot the data into an easier to work with format. We'll also define some "markers" to signify events of interest in the subject timelines:
 
-```{r ggswim, eval=TRUE}
-lanes <- list(
-  "No CRS" = "gray",
-  "CRS Grade 1" = "yellow",
-  "CRS Grade 2" = "orange",
-  "CRS Grade 3" = "pink",
-  "CRS Grade 4" = "red",
-  "CRS Grade 5" = "black"
-)
-
-markers_emoji <- list(
-  "Last Follow Up" = "👤",
-  "Death" = "❌",
-  "Infusion" = "🏥"
-)
-
-plot1 <- df |>
-  ggswim(
-    id = subject_id,
-    time = time,
-    events = event,
-    reference_event = "Infusion",
-    markers = markers_emoji,
-    lanes = lanes,
-    legend_title = c("My Lanes Legend", "My Markers Legend")
-  ) +
-  ggplot2::labs(title = "My Swim Plot with Emojis", x = "Time", y = "Subject ID")
-
-markers_shape <- list(
-  "Last Follow Up" = 21,
-  "Death" = 4,
-  "Infusion" = 6
-)
-
-unnamed_lanes <- list(
-  "No CRS",
-  "CRS Grade 1",
-  "CRS Grade 2",
-  "CRS Grade 3",
-  "CRS Grade 4",
-  "CRS Grade 5"
-)
-
-plot2 <- df |>
-  ggswim(
-    id = subject_id,
-    time = time,
-    events = event,
-    reference_event = "Infusion",
-    markers = markers_shape,
-    lanes = unnamed_lanes,
-    legend_title = c("My Lanes Legend", "My Markers Legend")
-  ) +
-  ggplot2::labs(title = "My Swim Plot with Shapes", x = "Time", y = "Subject ID")
+```{r ggswim simple, eval=TRUE}
+my_simple_data |>
+  ggswim(id = id,
+         time = time,
+         lane = trt) |>
+  add_marker(id = id,
+             name = "Death",
+             time = time_to_death,
+             shape = 8, size = 3, color = "firebrick", stroke = 3) |>  # ggplot args for ...
+  add_marker(id = id,
+             name = "Treatment 1",
+             time = time_to_trt_stop,
+             shape = 4, size = 3, color = "steelblue", stroke = 3)
 ```
 
-The first plot (top) shows `markers` defined by emojis, with `lanes` assigned user-defined colors. The second plot (bottom) shows `markers` defined by [ggplot shapes](https://r-graphics.org/recipe-scatter-shapes#discussion-28) and `lanes` with no color designation. In this case, default ggplot colors are assigned.
+One fun thing to note about `add_markers()` is any number of the various aesthetic choices can be passed separate of the marker calls themselves! In the absence of declared arguments, defaults are passed instead:
 
-```{r plot1}
-plot1 +
-  ggplot2::labs(title = "My Swim Plot", x = "Time", y = "Subject ID") +
-  ggplot2::theme_minimal()
+```{r, eval=TRUE}
+ggswim(data = my_simple_data,
+       id = id,
+       time = time,
+       lane = trt) |>
+  add_marker(id = id,
+             name = "Death",
+             time = time_to_death) |>  # ggplot args for ...
+  add_marker(id = id,
+             name = "Treatment 1",
+             time = time_to_trt_stop, color = "firebrick") |>
+  add_marker(id = id,
+             name = "Treatment 2",
+             time = time_to_trt_stop, shape = 7, size = 7) |>
+  add_marker(id = id,
+             name = "Treatment 3",
+             time = time_to_trt_stop, stroke = 1, size = 3, color = "chartreuse2")
 ```
 
-```{r plot2}
-plot2 +
-  ggplot2::labs(title = "My Swim Plot", x = "Time", y = "Subject ID") +
-  ggplot2::theme_minimal()
+Now let's consider a more complex set of data, where we receive our "swim" data separate from our varying "marker" data:
+
+```{r complex data, eval=TRUE, results='hide'}
+my_complex_data <-
+  tibble::tibble(
+    subid = c(1, 1, 2, 2),
+    trt = c("On-Treatment", "Off-Treatment") |> rep_len(length.out = 4),
+    inttime = c(1, 4, 1, 3)
+  )
+my_pain_data <-
+  tibble::tibble(
+    subid = 1,
+    time_to_pain = c(0.5, 1.5, 2.5)
+  )
+
+my_score_data <-
+  tibble::tibble(
+    subid = c(1,1,2,2),
+    time_to_score = c(1, .75, 2.5, 0.5)
+  )
 ```
 
-One key thing to note is that lanes and markers are ordered as factors in the order they are received. Additionally, the first lane specifier is considered the default to be used in the absence of lane data in the event stream. Notice how "No CRS" is assigned at the beginning of the swim lanes even though it is not defined here in the original `df`.
+Let's observe how this looks via the same swim and marker functions:
+
+```{r ggswim complex, eval=TRUE}
+complex_swim <- my_complex_data |>
+  ggswim(id = subid,
+         time = inttime,
+         lane = trt) |> # Need to correct this
+  add_marker(data = my_pain_data,
+             id = subid,
+             time = time_to_pain,
+             name = "Pain",
+             shape = 5, size = 3, color = "orange", stroke = 3) |>
+  add_marker(data = my_score_data,
+             id = subid,
+             time = time_to_score,
+             name = "Score",
+             shape = 2, size = 3, color = "forestgreen", stroke = 3)
+
+complex_swim
+```
+
+The labels and theme may not be the most appealing though... Fortunately `ggswim()` and `add_marker()` work directly with expected `ggplot2` functions! Let's give this a makeover:
+
+```{r ggswim complex style update, eval=TRUE}
+complex_swim +
+  ggplot2::scale_color_manual(name = "Treatment Group",
+                              values = c("On-Treatment" = "skyblue", 
+                                         "Off-Treatment" = "wheat2")) +
+  ggplot2::scale_fill_manual(name = "Event", values = c(1,2)) +
+  ggplot2::theme_minimal() +
+  ggplot2::xlab("Day of Treatment") + ggplot2::ylab("Subject ID") +
+  ggplot2::ggtitle("My Swim Plot")
+```
+
