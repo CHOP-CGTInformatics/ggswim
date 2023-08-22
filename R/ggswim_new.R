@@ -49,10 +49,7 @@ ggswim_new <- function(
     )
 
   # Define a new object to reference later, stashed in the ggplot object
-  out$guide_overrides <- list("colour_override" = NULL,
-                              "stroke_override" = NULL,
-                              "size_override" = NULL,
-                              "shape_override" = NULL)
+  out$guide_overrides <- list()
   out$guide_capture <- list()
 
   # Return object

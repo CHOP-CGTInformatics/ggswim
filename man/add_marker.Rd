@@ -20,6 +20,9 @@ add_marker(ggswim_obj, data = NULL, id, time, name, ...)
 \item{...}{Other arguments passed on to layer(). These are often aesthetics,
 used to set an aesthetic to a fixed value, like colour = "red" or size = 3. They may also be parameters to the paired geom/stat.}
 }
+\value{
+A ggswim object
+}
 \description{
 A short description...
 }
