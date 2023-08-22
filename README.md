@@ -98,6 +98,8 @@ ggswim(data = my_simple_data,
 
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
+## Complex Data Example
+
 Now let’s consider a more complex set of data, where we receive our
 “swim” data separate from our varying “marker” data:
 
@@ -143,6 +145,8 @@ complex_swim
 ```
 
 <img src="man/figures/README-ggswim complex-1.png" width="100%" />
+
+## Beautification with `ggplot2`
 
 The labels and theme may not be the most appealing though… Fortunately
 `ggswim()` and `add_marker()` work directly with expected `ggplot2`

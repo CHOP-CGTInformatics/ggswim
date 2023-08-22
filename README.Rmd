@@ -99,6 +99,8 @@ ggswim(data = my_simple_data,
              time = time_to_trt_stop, stroke = 1, size = 3, color = "chartreuse2")
 ```
 
+## Complex Data Example
+
 Now let's consider a more complex set of data, where we receive our "swim" data separate from our varying "marker" data:
 
 ```{r complex data, eval=TRUE, results='hide'}
@@ -141,6 +143,8 @@ complex_swim <- my_complex_data |>
 
 complex_swim
 ```
+
+## Beautification with `ggplot2`
 
 The labels and theme may not be the most appealing though... Fortunately `ggswim()` and `add_marker()` work directly with expected `ggplot2` functions! Let's give this a makeover:
 
