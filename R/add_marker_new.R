@@ -39,6 +39,7 @@ add_marker_new <- function(
                          mapping = mapping,
                          ignore_mapping = c("x", "y"))
 
+  # Add a reference class to the layer
   out$swim_class <- "marker"
 
   out

@@ -25,10 +25,7 @@ ggswim_new <- function(
       ...
     )
 
-  #TODO: Finalize
-  # -------
-
-  # Define new class 'ggswim_obj``
+  # Define new class 'ggswim_obj'
   class(out) <- c("ggswim_obj", class(out))
   current_layer <- length(out$layers) # The max length can be considered the current working layer
 
@@ -39,6 +36,7 @@ ggswim_new <- function(
                                                  mapping = mapping,
                                                  ignore_mapping = c("x", "y", "yend", "xend"))
 
+  # Add a reference class to the layer
   out$layers[[current_layer]]$swim_class <- "ggswim"
 
   # Return object
