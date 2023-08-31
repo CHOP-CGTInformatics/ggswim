@@ -10,8 +10,6 @@
 #' @export
 #'
 #' @importFrom ggplot2 aes ggplot geom_segment
-#' @importFrom rlang get_expr
-#' @importFrom dplyr arrange mutate row_number lag
 
 ggswim_new <- function(
     data,

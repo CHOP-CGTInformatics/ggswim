@@ -7,6 +7,8 @@
 #'
 #' @returns a ggswim object
 #'
+#' @importFrom ggplot2 guides guide_legend
+#'
 #' @export
 
 streamline_legend <- function(
@@ -20,26 +22,25 @@ streamline_legend <- function(
   ggswim_layer <- filter_list_elements(ggswim_obj$layers, "swim_class", "ggswim")
   marker_layer <- filter_list_elements(ggswim_obj$layers, "swim_class", "marker")
 
-  ggswim_obj +
-   guides(
-     #TODO: support and remove colors that have relocated to fill for geom_point
-     # color = guide_legend(
-     #   override.aes = list(
-     #     shape = ggswim_layer[[1]]$overrides$shape,
-     #     size = ggswim_layer[[1]]$overrides$size,
-     #     colour = ggswim_layer[[1]]$overrides$colour, #TODO: Support color and colour
-     #     stroke = ggswim_layer[[1]]$overrides$stroke
-     #   )
-     # ),
-     fill = guide_legend(
-       override.aes = list(
-         shape = marker_layer[[1]]$overrides$shape,
-         size = marker_layer[[1]]$overrides$size,
-         colour = marker_layer[[1]]$overrides$colour, #TODO: Support color and colour
-         stroke = marker_layer[[1]]$overrides$stroke
-       )
-     )
-   )
+  guides(
+    #TODO: support and remove colors that have relocated to fill for geom_point
+    # color = guide_legend(
+    #   override.aes = list(
+    #     shape = ggswim_layer[[1]]$overrides$shape,
+    #     size = ggswim_layer[[1]]$overrides$size,
+    #     colour = ggswim_layer[[1]]$overrides$colour, #TODO: Support color and colour
+    #     stroke = ggswim_layer[[1]]$overrides$stroke
+    #   )
+    # ),
+    fill = guide_legend(
+      override.aes = list(
+        shape = marker_layer[[1]]$overrides$shape,
+        size = marker_layer[[1]]$overrides$size,
+        colour = marker_layer[[1]]$overrides$colour, #TODO: Support color and colour
+        stroke = marker_layer[[1]]$overrides$stroke
+      )
+    )
+  )
 }
 
 #' @title Find matching list element

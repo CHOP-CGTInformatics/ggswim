@@ -11,9 +11,7 @@
 #'
 #' @export
 #'
-#' @importFrom ggplot2 aes ggplot geom_point guides guide_legend
-#' @importFrom rlang get_expr enquos
-#' @importFrom dplyr arrange mutate row_number
+#' @importFrom ggplot2 aes geom_point
 
 add_marker_new <- function(
     data = NULL,

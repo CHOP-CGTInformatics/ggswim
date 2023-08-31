@@ -14,6 +14,7 @@
 #'
 #' @importFrom ggplot2 layer_data
 #' @importFrom rlang get_expr
+#' @importFrom dplyr arrange
 
 get_layer_data <- function(data, mapping, i = 1L) {
 
@@ -33,7 +34,7 @@ get_layer_data <- function(data, mapping, i = 1L) {
 
   if (!is.null(color_mapping)) {
     #TODO: Unsure we can ever guarantee this is correct... but might be a reasonable assumption
-    layer_data <- cbind(ggplot2::layer_data(i = i), color_mapping) |>
+    layer_data <- cbind(layer_data(i = i), color_mapping) |>
       cbind(y_mapping) |> #TODO: Remove
       arrange(color_mapping) # Assume correct since ggplot legend is arranged this way
   }
