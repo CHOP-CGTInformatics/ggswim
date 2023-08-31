@@ -31,9 +31,17 @@ add_marker_new <- function(
       ...
     )
 
-  #TODO: Finalize
-  # ----
-  layer_data <- get_layer_data(data, mapping)
+  #TODO: Might be non-standard, but for now necessary to get elements of the current layer requiring rendering
+  ref_plot <- ggswim_obj + out
+  current_layer <- length(ref_plot$layers) # The max length can be considered the current working layer
+
+  out <- insert_override(data = data, #TODO: Handle data if NULL
+                         layer_obj = out,
+                         current_layer = current_layer,
+                         mapping = mapping,
+                         ignore_mapping = c("x", "y"))
+
+  out$swim_class <- "marker"
 
   out
 }

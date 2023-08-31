@@ -9,6 +9,8 @@ ggswim_new(data, mapping = aes(), ..., environment = parent.frame())
 \arguments{
 \item{data}{a dataframe prepared for use with \code{ggswim()}}
 
+\item{mapping}{description}
+
 \item{...}{}
 }
 \description{
