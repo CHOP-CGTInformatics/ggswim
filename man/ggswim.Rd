@@ -4,18 +4,14 @@
 \alias{ggswim}
 \title{ggswim title}
 \usage{
-ggswim(data, id, time, lane)
+ggswim(data, mapping = aes(), ..., environment = parent.frame())
 }
 \arguments{
 \item{data}{a dataframe prepared for use with \code{ggswim()}}
 
-\item{id}{the y-axis variable of a swimmer plot, typically a unique
-subject or record identification column}
+\item{mapping}{description}
 
-\item{time}{the x-axis variable of the swimmer plot, typically a
-function of time given in date or numeric format}
-
-\item{lanes}{a column in \code{df} that represents segments of the swimmer plot}
+\item{...}{}
 }
 \description{
 A short description...

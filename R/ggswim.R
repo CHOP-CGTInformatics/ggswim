@@ -4,53 +4,43 @@
 #' A short description...
 #'
 #' @param data a dataframe prepared for use with `ggswim()`
-#' @param id the y-axis variable of a swimmer plot, typically a unique
-#' subject or record identification column
-#' @param time the x-axis variable of the swimmer plot, typically a
-#' function of time given in date or numeric format
-#' @param lanes a column in `df` that represents segments of the swimmer plot
+#' @param mapping description
+#' @param ...
 #'
 #' @export
 #'
-#' @importFrom ggplot2 aes ggplot geom_segment
-#' @importFrom rlang enquo get_expr
-#' @importFrom dplyr arrange mutate row_number lag
+#' @importFrom ggplot2 aes ggplot geom_col
 
 ggswim <- function(
     data,
-    id,
-    time,
-    lane
+    mapping = aes(),
+    ...,
+    environment = parent.frame()
 ) {
-  # Capture variables as expressions, allowing for piping in API
-  variables <- c("id", "time", "lane")
 
-  # Parse variables to be passed to streamline()
-  for (variable in variables) {
-    assign(variable, eval(parse(text = paste0("enquo(", variable, ") |> get_expr()"))))
-  }
+  # TODO: Finalize, determine if this is acceptable to enforce
+  data[[mapping$y |> get_expr()]] <- data[[mapping$y |> get_expr()]] |> as.factor()
 
-  # Pre-processing
-  data_new <- data |>
-    arrange(.by = !!id, !!id, max(!!time), !!time) |>
-    mutate(
-      .by = !!id,
-      xstart = ifelse(row_number() == 1, 0, lag(!!time)),
-      .before = !!time
-    )
-
-  data_new[[id]] <- factor(data_new[[id]], levels = rev(unique(data_new[[id]])))
-
-  out <- data_new |>
+  out <- data |>
     ggplot() +
-    geom_segment(
-      aes(x = xstart, y = !!id, xend = !!time, yend = !!id, colour = !!lane),
-      linewidth = 10
+    geom_col(
+      mapping,
+      ...
     )
 
-  # Define a new object to reference later, stashed in the ggplot object
-  out$guide_overrides <- list()
-  out$guide_capture <- list()
+  # Define new class 'ggswim_obj'
+  class(out) <- c("ggswim_obj", class(out))
+  current_layer <- length(out$layers) # The max length can be considered the current working layer
+
+  # Define a new object to reference later, stashed in the current layer
+  out$layers[[current_layer]] <- insert_override(data = data,
+                                                 layer_obj = out$layers[[current_layer]],
+                                                 current_layer = current_layer,
+                                                 mapping = mapping,
+                                                 ignore_mapping = c("x", "y"))
+
+  # Add a reference class to the layer
+  out$layers[[current_layer]]$swim_class <- "ggswim"
 
   # Return object
   out

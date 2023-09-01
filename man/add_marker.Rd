@@ -4,21 +4,14 @@
 \alias{add_marker}
 \title{add_marker title}
 \usage{
-add_marker(ggswim_obj, data = NULL, id, time, name, ...)
+add_marker(data = NULL, mapping = aes(), ..., environment = parent.frame())
 }
 \arguments{
-\item{ggswim_obj}{a ggswim_obj}
-
 \item{data}{data where markers reside, if in ggswim object leave \code{NULL} (default)}
 
-\item{id}{the id variable associated with the marker}
-
-\item{time}{the timestamp location for where to place the markers}
-
-\item{name}{the name of the marker. Default \code{NULL}}
-
 \item{...}{Other arguments passed on to layer(). These are often aesthetics,
-used to set an aesthetic to a fixed value, like colour = "red" or size = 3. They may also be parameters to the paired geom/stat.}
+used to set an aesthetic to a fixed value, like colour = "red" or size = 3.
+They may also be parameters to the paired geom/stat.}
 }
 \value{
 A ggswim object
