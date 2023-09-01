@@ -7,17 +7,21 @@
 get_layer_data(data, mapping, i = 1L)
 }
 \arguments{
-\item{data}{...}
+\item{data}{The data responsible for the current layer}
 
-\item{mapping}{...}
+\item{mapping}{Set of aesthetic mappings created by \code{aes()}. If specified and
+\code{inherit.aes = TRUE} (the default), it is combined with the default mapping
+at the top level of the plot. You must supply mapping if there is no plot mapping.}
 
-\item{i}{An integer to supply for the layer to retrieve.
-If none given, defaults to \code{1L}.}
+\item{i}{An integer to supply for the layer to retrieve. If none given, defaults
+to \code{1L}.}
 }
 \value{
 A dataframe
 }
 \description{
-A short description...
+This internal function looks for color and fill aesthetic mapping data in
+constructed ggplot objects and appends layer data with associated data from
+the parent data frame.
 }
 \keyword{internal}

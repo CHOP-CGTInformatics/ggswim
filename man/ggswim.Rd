@@ -2,17 +2,26 @@
 % Please edit documentation in R/ggswim.R
 \name{ggswim}
 \alias{ggswim}
-\title{ggswim title}
+\title{Plot individual level response trajectories}
 \usage{
 ggswim(data, mapping = aes(), ..., environment = parent.frame())
 }
 \arguments{
 \item{data}{a dataframe prepared for use with \code{ggswim()}}
 
-\item{mapping}{description}
+\item{mapping}{Set of aesthetic mappings created by \code{aes()}. If specified and
+\code{inherit.aes = TRUE} (the default), it is combined with the default mapping
+at the top level of the plot. You must supply mapping if there is no plot mapping.}
 
-\item{...}{}
+\item{...}{Other arguments passed to \code{geom_col}, often aesthetic fixed values,
+i.e. \code{color = "red"} or \code{size = 3}.}
 }
 \description{
-A short description...
+Visualize individual record response trajectories over time using a swimmer plot.
+}
+\details{
+A swimmer plot is a data visualization used to display individual
+subject data over time. It shows events or outcomes as points along a
+horizontal line for each subject, allowing easy comparison and pattern
+identification.
 }

@@ -7,7 +7,7 @@
 get_ggswim_obj_from_env(env)
 }
 \arguments{
-\item{env}{an enviornment object}
+\item{env}{an environment object}
 }
 \value{
 A ggswim object

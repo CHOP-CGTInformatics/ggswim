@@ -1,14 +1,18 @@
 #' @title Build Layer Data
 #'
 #' @description
-#' A short description...
+#' This internal function looks for color and fill aesthetic mapping data in
+#' constructed ggplot objects and appends layer data with associated data from
+#' the parent data frame.
 #'
 #' @returns A dataframe
 #'
-#' @param data ...
-#' @param mapping ...
-#' @param i An integer to supply for the layer to retrieve.
-#' If none given, defaults to `1L`.
+#' @param data The data responsible for the current layer
+#' @param mapping Set of aesthetic mappings created by `aes()`. If specified and
+#' `inherit.aes = TRUE` (the default), it is combined with the default mapping
+#' at the top level of the plot. You must supply mapping if there is no plot mapping.
+#' @param i An integer to supply for the layer to retrieve. If none given, defaults
+#' to `1L`.
 #'
 #' @keywords internal
 #'
@@ -54,18 +58,21 @@ get_layer_data <- function(data, mapping, i = 1L) {
 #' @title Insert override layer element
 #'
 #' @description
-#' A short description...
+#' A helper function that wraps `get_layer_data` and adds the result to a ggplot
+#' layer.
 #'
-#' @returns A ggplot layer object appended with `overrides`
+#' @returns A ggplot layer object appended with the `overrides` list object
 #'
 #' @keywords internal
 #'
-#' @param data a dataframe prepared for use with `ggswim()`
-#' @param layer_obj a ggswim layer object
+#' @param data The data responsible for the current layer
+#' @param layer_obj a ggplot layer object
 #' @param current_layer An integer value corresponding to the current working layer
-#' @param mapping description
+#' @param mapping Set of aesthetic mappings created by `aes()`. If specified and
+#' `inherit.aes = TRUE` (the default), it is combined with the default mapping
+#' at the top level of the plot. You must supply mapping if there is no plot mapping.
 #' @param ignore_mapping A vector of characters for mapping values to ignore.
-#' Will typically match "required" aes elements from ggplot geom functions
+#' Will typically match "required" `aes` elements from ggplot geom functions
 
 insert_override <- function(
     data,
@@ -80,13 +87,14 @@ insert_override <- function(
   # Define a new object to reference later, stashed in the current layer
   out$overrides <- list()
 
-  # TODO: Functionalize and finalize
+  # Subset aesthetic definitions mapped that aren't required by the geom
   used_mapping_names <- setdiff(names(mapping), ignore_mapping)
 
+  # Assign named list elements based on the used mapping elements
   out$overrides <- vector("list", length(used_mapping_names))
   names(out$overrides) <- used_mapping_names
 
-  # Testing mapping layer ----
+  # Assign the corresponding values to those mapping elements
   for (map_element in used_mapping_names) {
     out$overrides[[map_element]] <- unique(layer_data[[map_element]])
   }

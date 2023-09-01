@@ -1,14 +1,19 @@
-#' @title add_marker title
+#' @title Add markers of interest to level response trajectories
 #'
 #' @description
-#' A short description...
+#' "Markers" are used to specify events of interest along response trajectories
+#' across individual lanes.
 #'
 #' @returns A ggswim object
 #'
-#' @param data data where markers reside, if in ggswim object leave `NULL` (default)
-#' @param ... Other arguments passed on to layer(). These are often aesthetics,
-#' used to set an aesthetic to a fixed value, like colour = "red" or size = 3.
-#' They may also be parameters to the paired geom/stat.
+#' @param data a dataframe prepared for use with `ggswim()`, either coming from
+#' a parent `ggswim()` function, another `add_marker()` call, or a new dataframe
+#' prepared for use with `ggswim()`.
+#' @param mapping Set of aesthetic mappings created by `aes()`. If specified and
+#' `inherit.aes = TRUE` (the default), it is combined with the default mapping
+#' at the top level of the plot. You must supply mapping if there is no plot mapping.
+#' @param ... Other arguments passed to `geom_point`, often aesthetic fixed values,
+#' i.e. `color = "red"` or `size = 3`.
 #'
 #' @export
 #'
@@ -21,13 +26,6 @@ add_marker <- function(
     environment = parent.frame()
 ) {
 
-  # Handle cases where data is given or comes from higher layer stack
-  # data <- if ("ggswim_obj" %in% class(data)) {
-  #   data$data
-  # } else {
-  #   data
-  # }
-
   out <- geom_point(
     data = data,
     mapping = mapping,
@@ -35,12 +33,13 @@ add_marker <- function(
   )
 
   # Capture ggswim plot object for manipulating - Only necessary for identifying
-  #current layer and assigning overrides
+  # current layer and assigning overrides
   ggswim_obj <- get_ggswim_obj_from_env(environment)
 
   ref_plot <- ggswim_obj + out
   current_layer <- length(ref_plot$layers) # The max length can be considered the current working layer
 
+  # TODO: Determine if necessary to keep overrides
   # Handling for override data when no new data given, i.e. data from further
   # up layer stack
   override_data <- if (is.null(data)) {ggswim_obj$data} else {data}
@@ -51,6 +50,7 @@ add_marker <- function(
                          mapping = mapping,
                          ignore_mapping = c("x", "y"))
 
+  # TODO: Determine if necessary to keep layer reference value
   # Add a reference class to the layer
   out$swim_class <- "marker"
 
@@ -67,7 +67,7 @@ add_marker <- function(
 #'
 #' @returns A ggswim object
 #'
-#' @param env an enviornment object
+#' @param env an environment object
 
 get_ggswim_obj_from_env <- function(env) {
   sub_objects <- ls(env)

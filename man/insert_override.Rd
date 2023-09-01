@@ -7,21 +7,24 @@
 insert_override(data, layer_obj, current_layer, mapping, ignore_mapping)
 }
 \arguments{
-\item{data}{a dataframe prepared for use with \code{ggswim()}}
+\item{data}{The data responsible for the current layer}
 
-\item{layer_obj}{a ggswim layer object}
+\item{layer_obj}{a ggplot layer object}
 
 \item{current_layer}{An integer value corresponding to the current working layer}
 
-\item{mapping}{description}
+\item{mapping}{Set of aesthetic mappings created by \code{aes()}. If specified and
+\code{inherit.aes = TRUE} (the default), it is combined with the default mapping
+at the top level of the plot. You must supply mapping if there is no plot mapping.}
 
 \item{ignore_mapping}{A vector of characters for mapping values to ignore.
-Will typically match "required" aes elements from ggplot geom functions}
+Will typically match "required" \code{aes} elements from ggplot geom functions}
 }
 \value{
-A ggplot layer object appended with \code{overrides}
+A ggplot layer object appended with the \code{overrides} list object
 }
 \description{
-A short description...
+A helper function that wraps \code{get_layer_data} and adds the result to a ggplot
+layer.
 }
 \keyword{internal}

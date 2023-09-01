@@ -2,20 +2,26 @@
 % Please edit documentation in R/add_marker.R
 \name{add_marker}
 \alias{add_marker}
-\title{add_marker title}
+\title{Add markers of interest to level response trajectories}
 \usage{
 add_marker(data = NULL, mapping = aes(), ..., environment = parent.frame())
 }
 \arguments{
-\item{data}{data where markers reside, if in ggswim object leave \code{NULL} (default)}
+\item{data}{a dataframe prepared for use with \code{ggswim()}, either coming from
+a parent \code{ggswim()} function, another \code{add_marker()} call, or a new dataframe
+prepared for use with \code{ggswim()}.}
 
-\item{...}{Other arguments passed on to layer(). These are often aesthetics,
-used to set an aesthetic to a fixed value, like colour = "red" or size = 3.
-They may also be parameters to the paired geom/stat.}
+\item{mapping}{Set of aesthetic mappings created by \code{aes()}. If specified and
+\code{inherit.aes = TRUE} (the default), it is combined with the default mapping
+at the top level of the plot. You must supply mapping if there is no plot mapping.}
+
+\item{...}{Other arguments passed to \code{geom_point}, often aesthetic fixed values,
+i.e. \code{color = "red"} or \code{size = 3}.}
 }
 \value{
 A ggswim object
 }
 \description{
-A short description...
+"Markers" are used to specify events of interest along response trajectories
+across individual lanes.
 }
