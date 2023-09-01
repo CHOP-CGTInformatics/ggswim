@@ -32,23 +32,26 @@ add_marker <- function(
     ...
   )
 
+  # @TODO: this will need to be removed, accessing the parent.frame() only works
+  # When a plot is already made, it doesn't work when it is part of an initial
+  # chain as the object doesn't yet exist so we cannot determine the current layer
   # Capture ggswim plot object for manipulating - Only necessary for identifying
   # current layer and assigning overrides
-  ggswim_obj <- get_ggswim_obj_from_env(environment)
-
-  ref_plot <- ggswim_obj + out
-  current_layer <- length(ref_plot$layers) # The max length can be considered the current working layer
+  # ggswim_obj <- get_ggswim_obj_from_env(environment)
+  #
+  # ref_plot <- ggswim_obj + out
+  # current_layer <- length(ref_plot$layers) # The max length can be considered the current working layer
 
   # TODO: Determine if necessary to keep overrides
   # Handling for override data when no new data given, i.e. data from further
   # up layer stack
-  override_data <- if (is.null(data)) {ggswim_obj$data} else {data}
-
-  out <- insert_override(data = override_data,
-                         layer_obj = out,
-                         current_layer = current_layer,
-                         mapping = mapping,
-                         ignore_mapping = c("x", "y"))
+  # override_data <- if (is.null(data)) {ggswim_obj$data} else {data}
+  #
+  # out <- insert_override(data = override_data,
+  #                        layer_obj = out,
+  #                        current_layer = current_layer,
+  #                        mapping = mapping,
+  #                        ignore_mapping = c("x", "y"))
 
   # TODO: Determine if necessary to keep layer reference value
   # Add a reference class to the layer
