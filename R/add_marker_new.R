@@ -7,7 +7,8 @@
 #'
 #' @param data data where markers reside, if in ggswim object leave `NULL` (default)
 #' @param ... Other arguments passed on to layer(). These are often aesthetics,
-#' used to set an aesthetic to a fixed value, like colour = "red" or size = 3. They may also be parameters to the paired geom/stat.
+#' used to set an aesthetic to a fixed value, like colour = "red" or size = 3.
+#' They may also be parameters to the paired geom/stat.
 #'
 #' @export
 #'
@@ -20,20 +21,31 @@ add_marker_new <- function(
     environment = parent.frame()
 ) {
 
-  # Capture ggswim plot object for manipulating
-  ggswim_obj <- get_ggswim_obj_from_env(environment)
+  # Handle cases where data is given or comes from higher layer stack
+  # data <- if ("ggswim_obj" %in% class(data)) {
+  #   data$data
+  # } else {
+  #   data
+  # }
 
   out <- geom_point(
-      data = data,
-      mapping = mapping,
-      ...
-    )
+    data = data,
+    mapping = mapping,
+    ...
+  )
 
-  #TODO: Might be non-standard, but for now necessary to get elements of the current layer requiring rendering
+  # Capture ggswim plot object for manipulating - Only necessary for identifying
+  #current layer and assigning overrides
+  ggswim_obj <- get_ggswim_obj_from_env(environment)
+
   ref_plot <- ggswim_obj + out
   current_layer <- length(ref_plot$layers) # The max length can be considered the current working layer
 
-  out <- insert_override(data = data, #TODO: Handle data if NULL
+  # Handling for override data when no new data given, i.e. data from further
+  # up layer stack
+  override_data <- if (is.null(data)) {ggswim_obj$data} else {data}
+
+  out <- insert_override(data = override_data,
                          layer_obj = out,
                          current_layer = current_layer,
                          mapping = mapping,
@@ -66,12 +78,9 @@ get_ggswim_obj_from_env <- function(env) {
   for (sub_object in sub_objects) {
     obj <- get(sub_object, envir = env)
     obj_class <- class(obj)
-
     if ("ggswim_obj" %in% obj_class) {
       ggswim_object <- obj
     }
-
-    ggswim_object
   }
 
   ggswim_object

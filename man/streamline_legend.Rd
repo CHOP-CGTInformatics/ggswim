@@ -15,3 +15,4 @@ a ggswim object
 \description{
 A short description...
 }
+\keyword{internal}

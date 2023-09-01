@@ -21,7 +21,7 @@ get_layer_data <- function(data, mapping, i = 1L) {
   # Starting with color/colour, since that will always need to be given to result in a legend layer for ggsegment
   aes_mapping <- unlist(mapping)
 
-  #TODO: Currently functionality is limited to and requires a color aesthetic
+  #TODO: Currently functionality is limited to and requires a color or fill aesthetic
   if (any(c("color", "colour") %in% names(aes_mapping))) {
     colour_or_color <- ifelse("colour" %in% names(aes_mapping), "colour", "color")
     color_mapping <- data[[aes_mapping[[colour_or_color]] |> get_expr()]]
@@ -30,14 +30,25 @@ get_layer_data <- function(data, mapping, i = 1L) {
     color_mapping <- NULL
   }
 
-  y_mapping <- data[[aes_mapping[["y"]] |> get_expr()]] #TODO: Remove. Just a sanity check, shows mapping is equal to y col in layer_data output
+  if ("fill" %in% names(aes_mapping)) {
+    fill_mapping <- data[[aes_mapping[["fill"]] |> get_expr()]]
+  } else {
+    fill_mapping <- NULL
+  }
 
   if (!is.null(color_mapping)) {
     #TODO: Unsure we can ever guarantee this is correct... but might be a reasonable assumption
     layer_data <- cbind(layer_data(i = i), color_mapping) |>
-      cbind(y_mapping) |> #TODO: Remove
       arrange(color_mapping) # Assume correct since ggplot legend is arranged this way
   }
+
+  if (!is.null(fill_mapping)) {
+    #TODO: Unsure we can ever guarantee this is correct... but might be a reasonable assumption
+    layer_data <- cbind(layer_data(i = i), fill_mapping) |>
+      arrange(fill_mapping) # Assume correct since ggplot legend is arranged this way
+  }
+
+  layer_data
 }
 
 #' @title Insert override layer element
@@ -70,14 +81,14 @@ insert_override <- function(
   out$overrides <- list()
 
   # TODO: Functionalize and finalize
-  used_mapping_names <- names(mapping)[!names(mapping) %in% ignore_mapping]
+  used_mapping_names <- setdiff(names(mapping), ignore_mapping)
 
   out$overrides <- vector("list", length(used_mapping_names))
   names(out$overrides) <- used_mapping_names
 
   # Testing mapping layer ----
-  for (mapping in used_mapping_names) {
-    out$overrides[[mapping]] <- unique(layer_data[[mapping]])
+  for (map_element in used_mapping_names) {
+    out$overrides[[map_element]] <- unique(layer_data[[map_element]])
   }
 
   out

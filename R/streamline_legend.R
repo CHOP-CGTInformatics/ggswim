@@ -9,7 +9,7 @@
 #'
 #' @importFrom ggplot2 guides guide_legend
 #'
-#' @export
+#' @keywords internal
 
 streamline_legend <- function(
     ...,
@@ -24,14 +24,14 @@ streamline_legend <- function(
 
   guides(
     #TODO: support and remove colors that have relocated to fill for geom_point
-    # color = guide_legend(
-    #   override.aes = list(
-    #     shape = ggswim_layer[[1]]$overrides$shape,
-    #     size = ggswim_layer[[1]]$overrides$size,
-    #     colour = ggswim_layer[[1]]$overrides$colour, #TODO: Support color and colour
-    #     stroke = ggswim_layer[[1]]$overrides$stroke
-    #   )
-    # ),
+    color = guide_legend(
+      override.aes = list(
+        shape = ggswim_layer[[1]]$overrides$shape,
+        size = ggswim_layer[[1]]$overrides$size,
+        colour = c(ggswim_layer[[1]]$overrides$colour), #TODO: Support color and colour
+        stroke = ggswim_layer[[1]]$overrides$stroke
+      )
+    ),
     fill = guide_legend(
       override.aes = list(
         shape = marker_layer[[1]]$overrides$shape,

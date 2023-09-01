@@ -9,7 +9,7 @@
 #'
 #' @export
 #'
-#' @importFrom ggplot2 aes ggplot geom_segment
+#' @importFrom ggplot2 aes ggplot geom_col
 
 ggswim_new <- function(
     data,
@@ -18,9 +18,12 @@ ggswim_new <- function(
     environment = parent.frame()
 ) {
 
+  # TODO: Finalize, determine if this is acceptable to enforce
+  data[[mapping$y |> get_expr()]] <- data[[mapping$y |> get_expr()]] |> as.factor()
+
   out <- data |>
     ggplot() +
-    geom_segment(
+    geom_col(
       mapping,
       ...
     )
@@ -34,7 +37,7 @@ ggswim_new <- function(
                                                  layer_obj = out$layers[[current_layer]],
                                                  current_layer = current_layer,
                                                  mapping = mapping,
-                                                 ignore_mapping = c("x", "y", "yend", "xend"))
+                                                 ignore_mapping = c("x", "y"))
 
   # Add a reference class to the layer
   out$layers[[current_layer]]$swim_class <- "ggswim"

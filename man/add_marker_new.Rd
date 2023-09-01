@@ -10,7 +10,8 @@ add_marker_new(data = NULL, mapping = aes(), ..., environment = parent.frame())
 \item{data}{data where markers reside, if in ggswim object leave \code{NULL} (default)}
 
 \item{...}{Other arguments passed on to layer(). These are often aesthetics,
-used to set an aesthetic to a fixed value, like colour = "red" or size = 3. They may also be parameters to the paired geom/stat.}
+used to set an aesthetic to a fixed value, like colour = "red" or size = 3.
+They may also be parameters to the paired geom/stat.}
 }
 \value{
 A ggswim object
