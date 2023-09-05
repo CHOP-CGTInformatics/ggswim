@@ -101,3 +101,34 @@ insert_override <- function(
 
   out
 }
+
+
+
+#' @title Get ggswim object from an enviornment variable
+#'
+#' @description
+#' Determine the parent environment component containing a `ggswim_obj` class
+#' type and return the object
+#'
+#' @keywords internal
+#'
+#' @returns A ggswim object
+#'
+#' @param env an environment object
+
+get_ggswim_obj_from_env <- function(env) {
+  sub_objects <- ls(env)
+
+  ggswim_object <- list()
+
+  # Loop through sub-objects and classify them
+  for (sub_object in sub_objects) {
+    obj <- get(sub_object, envir = env)
+    obj_class <- class(obj)
+    if ("ggswim_obj" %in% obj_class) {
+      ggswim_object <- obj
+    }
+  }
+
+  ggswim_object
+}
