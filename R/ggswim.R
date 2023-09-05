@@ -43,11 +43,11 @@ ggswim <- function(
 
   # TODO: Determine if necessary to keep overrides
   # Define a new object to reference later, stashed in the current layer
-  out$layers[[current_layer]] <- insert_override(data = data,
-                                                 layer_obj = out$layers[[current_layer]],
-                                                 current_layer = current_layer,
-                                                 mapping = mapping,
-                                                 ignore_mapping = c("x", "y"))
+  # out$layers[[current_layer]] <- insert_override(data = data,
+  #                                                layer_obj = out$layers[[current_layer]],
+  #                                                current_layer = current_layer,
+  #                                                mapping = mapping,
+  #                                                ignore_mapping = c("x", "y"))
 
   # TODO: Determine if necessary to keep layer reference value
   # Add a reference class to the layer

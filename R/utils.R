@@ -66,7 +66,6 @@ get_layer_data <- function(data, mapping, i = 1L) {
 #' @keywords internal
 #'
 #' @param data The data responsible for the current layer
-#' @param layer_obj a ggplot layer object
 #' @param current_layer An integer value corresponding to the current working layer
 #' @param mapping Set of aesthetic mappings created by `aes()`. If specified and
 #' `inherit.aes = TRUE` (the default), it is combined with the default mapping
@@ -76,33 +75,27 @@ get_layer_data <- function(data, mapping, i = 1L) {
 
 insert_override <- function(
     data,
-    layer_obj,
     current_layer,
     mapping,
     ignore_mapping
 ) {
-  out <- layer_obj
+  out <- list()
   layer_data <- get_layer_data(data, mapping, i = current_layer)
-
-  # Define a new object to reference later, stashed in the current layer
-  out$overrides <- list()
 
   # Subset aesthetic definitions mapped that aren't required by the geom
   used_mapping_names <- setdiff(names(mapping), ignore_mapping)
 
   # Assign named list elements based on the used mapping elements
-  out$overrides <- vector("list", length(used_mapping_names))
-  names(out$overrides) <- used_mapping_names
+  out<- vector("list", length(used_mapping_names))
+  names(out) <- used_mapping_names
 
   # Assign the corresponding values to those mapping elements
   for (map_element in used_mapping_names) {
-    out$overrides[[map_element]] <- unique(layer_data[[map_element]])
+    out[[map_element]] <- c(out[[map_element]], unique(layer_data[[map_element]])) # keep any pre-existing elements
   }
 
   out
 }
-
-
 
 #' @title Get ggswim object from an enviornment variable
 #'
