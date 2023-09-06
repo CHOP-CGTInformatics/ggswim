@@ -2,13 +2,19 @@
 % Please edit documentation in R/add_marker.R
 \name{fix_legend}
 \alias{fix_legend}
-\title{legend fixing}
+\title{Fix legend display for multiple layers}
 \usage{
 fix_legend(ggswim_obj)
 }
 \arguments{
-\item{ggswim_obj}{description}
+\item{ggswim_obj}{A ggswim object}
 }
 \description{
-A short description...
+This function is primarily helpful when combining labels (like unicode emojis)
+and point (like shapes). This function seeks to override the values and present
+them in the same layer of the legend output.
+}
+\details{
+In its current state, \code{fix_legend()} can only work with a pre-rendered ggswim
+plot object, therefore it cannot be added to the \code{+} operator chain.
 }

@@ -28,10 +28,10 @@ get_layer_data <- function(data, mapping, i = 1L) {
   #TODO: Currently functionality is limited to and requires a color or fill aesthetic
   if (any(c("color", "colour") %in% names(aes_mapping))) {
     colour_or_color <- ifelse("colour" %in% names(aes_mapping), "colour", "color")
-    color_mapping <- data[[aes_mapping[[colour_or_color]] |> get_expr()]]
+    colour_mapping <- data[[aes_mapping[[colour_or_color]] |> get_expr()]]
   } else {
     colour_or_color <- NULL
-    color_mapping <- NULL
+    colour_mapping <- NULL
   }
 
   if ("fill" %in% names(aes_mapping)) {
@@ -40,10 +40,10 @@ get_layer_data <- function(data, mapping, i = 1L) {
     fill_mapping <- NULL
   }
 
-  if (!is.null(color_mapping)) {
+  if (!is.null(colour_mapping)) {
     #TODO: Unsure we can ever guarantee this is correct... but might be a reasonable assumption
-    layer_data <- cbind(layer_data(i = i), color_mapping) |>
-      arrange(color_mapping) # Assume correct since ggplot legend is arranged this way
+    layer_data <- cbind(layer_data(i = i), colour_mapping) |>
+      arrange(colour_mapping) # Assume correct since ggplot legend is arranged this way
   }
 
   if (!is.null(fill_mapping)) {

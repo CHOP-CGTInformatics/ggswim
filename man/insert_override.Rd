@@ -4,12 +4,10 @@
 \alias{insert_override}
 \title{Insert override layer element}
 \usage{
-insert_override(data, layer_obj, current_layer, mapping, ignore_mapping)
+insert_override(data, current_layer, mapping, ignore_mapping)
 }
 \arguments{
 \item{data}{The data responsible for the current layer}
-
-\item{layer_obj}{a ggplot layer object}
 
 \item{current_layer}{An integer value corresponding to the current working layer}
 
