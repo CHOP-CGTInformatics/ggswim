@@ -226,5 +226,7 @@ vignette and hope to provide a better handling method in the future.
 
 We have a lot of work to do with ggswim! Future plans include:
 
-\[ \] A full test suite \[ \] Enforced checks \[ \] Handling of fixed
-legend scales’ \[ \] Vignettes and documentation
+- A full test suite
+- Enforced checks
+- Handling of fixed legend scales
+- Vignettes and documentation

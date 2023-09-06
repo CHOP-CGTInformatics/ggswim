@@ -194,7 +194,7 @@ You'll notice in the call to `scale_color_manual()` we had to supply `NA` values
 
 We have a lot of work to do with ggswim! Future plans include:
 
-[ ] A full test suite
-[ ] Enforced checks
-[ ] Handling of fixed legend scales'
-[ ] Vignettes and documentation
+- A full test suite
+- Enforced checks
+- Handling of fixed legend scales
+- Vignettes and documentation
