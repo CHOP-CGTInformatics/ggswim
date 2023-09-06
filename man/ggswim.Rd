@@ -4,7 +4,7 @@
 \alias{ggswim}
 \title{Plot individual level response trajectories}
 \usage{
-ggswim(data, mapping = aes(), ..., environment = parent.frame())
+ggswim(data, mapping = aes(), ...)
 }
 \arguments{
 \item{data}{a dataframe prepared for use with \code{ggswim()}}

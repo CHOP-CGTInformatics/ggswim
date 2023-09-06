@@ -4,7 +4,7 @@
 \alias{add_marker}
 \title{Add markers of interest to level response trajectories}
 \usage{
-add_marker(data = NULL, mapping = aes(), ..., environment = parent.frame())
+add_marker(data = NULL, mapping = aes(), ...)
 }
 \arguments{
 \item{data}{a dataframe prepared for use with \code{ggswim()}, either coming from

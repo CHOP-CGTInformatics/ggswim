@@ -23,8 +23,7 @@
 ggswim <- function(
     data,
     mapping = aes(),
-    ...,
-    environment = parent.frame()
+    ...
 ) {
 
   # TODO: Finalize, determine if this is acceptable to enforce
@@ -40,14 +39,6 @@ ggswim <- function(
   # Define new class 'ggswim_obj'
   class(out) <- c("ggswim_obj", class(out))
   current_layer <- length(out$layers) # The max length can be considered the current working layer
-
-  # TODO: Determine if necessary to keep overrides
-  # Define a new object to reference later, stashed in the current layer
-  # out$layers[[current_layer]] <- insert_override(data = data,
-  #                                                layer_obj = out$layers[[current_layer]],
-  #                                                current_layer = current_layer,
-  #                                                mapping = mapping,
-  #                                                ignore_mapping = c("x", "y"))
 
   # TODO: Determine if necessary to keep layer reference value
   # Add a reference class to the layer
