@@ -17,6 +17,8 @@
 #' @importFrom dplyr bind_rows select arrange
 #' @importFrom tidyselect any_of
 #' @importFrom ggplot2 guides guide_legend
+#'
+#' @export
 
 fix_legend <- function(ggswim_obj) {
 
