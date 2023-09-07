@@ -35,7 +35,7 @@ fix_legend <- function(ggswim_obj) {
   }
 
   # if no `add_marker()` calls, then no need to build legend, exiting early ----
-  if (rlang::is_empty(label_layer_data) && rlang::is_empty(point_layer_data)) {
+  if (rlang::is_empty(label_layer_indices) && rlang::is_empty(point_layer_indices)) {
     # remove ggswim class, so default ggplot2 print methods will take over
     return(
       ggswim_obj |>
