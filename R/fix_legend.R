@@ -12,12 +12,6 @@
 #' @param ggswim_obj A ggswim object
 #'
 #' @returns A ggswim object
-#'
-#' @importFrom rlang is_empty
-#' @importFrom dplyr bind_rows select arrange
-#' @importFrom tidyselect any_of
-#' @importFrom ggplot2 guides guide_legend
-#'
 #' @export
 
 fix_legend <- function(ggswim_obj) {
@@ -40,6 +34,15 @@ fix_legend <- function(ggswim_obj) {
     }
   }
 
+  # if no `add_marker()` calls, then no need to build legend, exiting early ----
+  if (rlang::is_empty(label_layer_indices) && rlang::is_empty(point_layer_indices)) {
+    # remove ggswim class, so default ggplot2 print methods will take over
+    return(
+      ggswim_obj |>
+        structure(class = class(ggswim_obj) |> setdiff("ggswim_obj"))
+    )
+  }
+
   # Create bound layer dataframes
   label_layer_data <- bind_layer_data(ggswim_obj,
                                       layer_indices = label_layer_indices,
@@ -57,7 +60,7 @@ fix_legend <- function(ggswim_obj) {
   # Define override aesthetic guides
   override$colour <- bind_rows(label_layer_data, point_layer_data) |>
     select(any_of(accepted_colour_columns)) |>
-    arrange(colour_mapping) |>
+    arrange(.data$colour_mapping) |>
     unique()
 
   if ("label" %in% names(override$colour)) {
@@ -67,7 +70,7 @@ fix_legend <- function(ggswim_obj) {
   override$shape <- "none" # TODO: Determine if default should always be removal
 
   # Return fixed ggswim object
-  ggswim_obj +
+  (ggswim_obj +
     guides(
       shape = override$shape,
       colour = guide_legend(
@@ -78,7 +81,9 @@ fix_legend <- function(ggswim_obj) {
           shape = override$colour$shape
         )
       )
-    )
+    )) |>
+    # remove ggswim class, so default ggplot2 print methods will take over
+    structure(class = class(ggswim_obj) |> setdiff("ggswim_obj"))
 }
 
 

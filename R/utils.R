@@ -15,11 +15,6 @@
 #' to `1L`.
 #'
 #' @keywords internal
-#'
-#' @importFrom ggplot2 layer_data
-#' @importFrom rlang get_expr
-#' @importFrom dplyr arrange
-
 get_layer_data <- function(data, mapping, i = 1L) {
 
   # Starting with color/colour, since that will always need to be given to result in a legend layer for ggsegment

@@ -1,9 +1,6 @@
 #' @title
 #' Check an argument with checkmate
 #'
-#' @importFrom cli cli_abort
-#' @importFrom rlang caller_arg
-#'
 #' @param x An object to check
 #' @param arg The name of the argument to include in an error message. Captured
 #' by `rlang::caller_arg()` by default
@@ -20,8 +17,6 @@
 NULL
 
 # Function factory to wrap checkmate functions
-#' @importFrom rlang caller_arg caller_env
-#' @importFrom cli cli_abort
 #' @noRd
 wrap_checkmate <- function(f) {
   error_class <- caller_arg(f)
@@ -45,23 +40,18 @@ wrap_checkmate <- function(f) {
 }
 
 #' @rdname checkmate
-#' @importFrom checkmate check_character
 check_arg_is_character <- wrap_checkmate(check_character)
 
 #' @rdname checkmate
-#' @importFrom checkmate check_data_frame
 check_arg_is_dataframe <- wrap_checkmate(check_data_frame)
 
 #' @rdname checkmate
-#' @importFrom checkmate check_integerish
 check_arg_is_integerish <- wrap_checkmate(check_integerish)
 
 #' @rdname checkmate
-#' @importFrom checkmate check_list
 check_arg_is_list <- wrap_checkmate(check_list)
 
 #' @rdname checkmate
-#' @importFrom checkmate check_logical
 check_arg_is_logical <- wrap_checkmate(check_logical)
 
 #' @title
@@ -72,9 +62,6 @@ check_arg_is_logical <- wrap_checkmate(check_logical)
 #' @return
 #' If x is atomic, x with cli formatting to truncate to 5 values. Otherwise,
 #' a string summarizing x produced by as_label
-#'
-#' @importFrom rlang as_label is_atomic
-#' @importFrom cli cli_vec
 #'
 #' @keywords internal
 format_error_val <- function(x) {

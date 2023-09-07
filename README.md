@@ -177,20 +177,7 @@ p
 
 <img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
 
-Wow! … I think? It’s pretty busy and a little hard to follow. We will
-discuss more about why this is in an upcoming vignette, but for now we
-provide you with an additional function to sort this all out:
-`fix_legend()`. `fix_legend()` must be used on a rendered ggplot object,
-it will not work with the `+` operator.
-
-``` r
-fix_legend(p)
-```
-
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
-
-And now you can see that all of the emojis and shapes are correctly
-assigned in the legend! Now, about those colors and this ugly display….
+Wow!
 
 ## Making the Plot Pretty
 
@@ -216,7 +203,7 @@ p <- p +
 fix_legend(p)
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
 
 You’ll notice in the call to `scale_color_manual()` we had to supply
 `NA` values for the labels, we explain that more in the upcoming
