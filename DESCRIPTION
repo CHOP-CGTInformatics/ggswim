@@ -17,10 +17,7 @@ Imports:
     dplyr,
     ggplot2,
     grid,
-    rlang,
-    scales,
-    tibble,
-    tidyr
+    rlang
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Suggests: 
