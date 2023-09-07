@@ -59,9 +59,16 @@ fix_legend <- function(ggswim_obj) {
 
   # Define override aesthetic guides
   override$colour <- bind_rows(label_layer_data, point_layer_data) |>
-    select(any_of(accepted_colour_columns)) |>
-    arrange(.data$colour_mapping) |>
-    unique()
+    select(any_of(accepted_colour_columns))
+
+  # TODO: Make more elegant
+  if ("colour_mapping" %in% names(override$colour)){
+    # Arrange necessary to follow order of ggplot legend outputs
+    # (i.e. alphabetical, numeric, etc.)
+    override$colour <- override$colour |>
+      arrange(.data$colour_mapping) |>
+      unique()
+  }
 
   if ("label" %in% names(override$colour)) {
     override$colour$label[is.na(override$colour$label)] <- ""

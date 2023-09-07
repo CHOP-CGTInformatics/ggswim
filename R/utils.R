@@ -17,6 +17,8 @@
 #' @keywords internal
 get_layer_data <- function(data, mapping, i = 1L) {
 
+  layer_data <- NULL
+
   # Starting with color/colour, since that will always need to be given to result in a legend layer for ggsegment
   aes_mapping <- unlist(mapping)
 
