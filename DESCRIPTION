@@ -14,7 +14,9 @@ LazyData: true
 Imports: 
     checkmate,
     cli,
+    dplyr,
     ggplot2,
+    grid,
     rlang,
     scales,
     tibble,

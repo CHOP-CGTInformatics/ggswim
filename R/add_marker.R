@@ -17,7 +17,6 @@
 #'
 #' @export
 #'
-#' @importFrom ggplot2 aes geom_point geom_label
 
 add_marker <- function(
     data = NULL,

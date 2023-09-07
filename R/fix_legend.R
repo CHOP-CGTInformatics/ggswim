@@ -12,12 +12,6 @@
 #' @param ggswim_obj A ggswim object
 #'
 #' @returns A ggswim object
-#'
-#' @importFrom rlang is_empty
-#' @importFrom dplyr bind_rows select arrange
-#' @importFrom tidyselect any_of
-#' @importFrom ggplot2 guides guide_legend
-#'
 #' @export
 
 fix_legend <- function(ggswim_obj) {
