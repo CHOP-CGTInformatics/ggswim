@@ -167,7 +167,7 @@ Wow!
 Recall earlier that we said ggswim makes use of existing ggplot2 architecture. This means you can use your favorite manipulators to make your ggswim objects look however you please. Below, we take the pre-existing plot, `p`, and supply some beautifucation steps before sending it to `fix_legend()`:
 
 ```{r}
-p <- p +
+p +
   ggplot2::xlab("Time") + ggplot2::ylab("Subject ID") +
   ggplot2::ggtitle("My Swim Plot") +
   ggplot2::theme_minimal() +
@@ -177,9 +177,6 @@ p <- p +
                               values = c(19,15,8,18)) +
   ggplot2::scale_fill_manual(name = "Lanes",
                              values = c("steelblue", "cyan", "skyblue", "steelblue4"))
-
-
-fix_legend(p)
 ```
 
 You'll notice in the call to `scale_color_manual()` we had to supply `NA` values for the labels, we explain that more in the upcoming vignette and hope to provide a better handling method in the future.

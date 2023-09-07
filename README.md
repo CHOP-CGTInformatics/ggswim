@@ -188,7 +188,7 @@ pre-existing plot, `p`, and supply some beautifucation steps before
 sending it to `fix_legend()`:
 
 ``` r
-p <- p +
+p +
   ggplot2::xlab("Time") + ggplot2::ylab("Subject ID") +
   ggplot2::ggtitle("My Swim Plot") +
   ggplot2::theme_minimal() +
@@ -198,9 +198,6 @@ p <- p +
                               values = c(19,15,8,18)) +
   ggplot2::scale_fill_manual(name = "Lanes",
                              values = c("steelblue", "cyan", "skyblue", "steelblue4"))
-
-
-fix_legend(p)
 ```
 
 <img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
