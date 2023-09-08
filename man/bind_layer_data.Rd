@@ -4,7 +4,7 @@
 \alias{bind_layer_data}
 \title{Bind layer dataframes for legend}
 \usage{
-bind_layer_data(ggswim_obj, layer_indices, layer_data)
+bind_layer_data(ggswim_obj, layer_indices, layer_data, static_colours = NULL)
 }
 \arguments{
 \item{ggswim_obj}{description}
@@ -12,6 +12,8 @@ bind_layer_data(ggswim_obj, layer_indices, layer_data)
 \item{layer_indices}{description}
 
 \item{layer_data}{description}
+
+\item{static_colours}{description}
 }
 \value{
 A dataframe

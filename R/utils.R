@@ -13,9 +13,10 @@
 #' at the top level of the plot. You must supply mapping if there is no plot mapping.
 #' @param i An integer to supply for the layer to retrieve. If none given, defaults
 #' to `1L`.
+#' @param static_colours description
 #'
 #' @keywords internal
-get_layer_data <- function(data, mapping, i = 1L) {
+get_layer_data <- function(data, mapping, i = 1L, static_colours = NULL) {
 
   layer_data <- NULL
 
@@ -38,13 +39,18 @@ get_layer_data <- function(data, mapping, i = 1L) {
   }
 
   if (!is.null(colour_mapping)) {
-    # TODO: Unsure we can ever guarantee this is correct... but might be a reasonable assumption
     layer_data <- cbind(layer_data(i = i), colour_mapping) |>
       arrange(colour_mapping) # Assume correct since ggplot legend is arranged this way
+
+    # Handle static_colours
+    if (!is.null(static_colours)) {
+      if (i %in% static_colours$indices) {
+        layer_data$colour <- static_colours$colors[static_colours$indices == i]
+      }
+    }
   }
 
   if (!is.null(fill_mapping)) {
-    # TODO: Unsure we can ever guarantee this is correct... but might be a reasonable assumption
     layer_data <- cbind(layer_data(i = i), fill_mapping) |>
       arrange(fill_mapping) # Assume correct since ggplot legend is arranged this way
   }
