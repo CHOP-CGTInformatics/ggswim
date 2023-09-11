@@ -198,6 +198,8 @@ p +
                               values = c(19,15,8,18)) +
   ggplot2::scale_fill_manual(name = "Lanes",
                              values = c("steelblue", "cyan", "skyblue", "steelblue4"))
+#> Scale for colour is already present.
+#> Adding another scale for colour, which will replace the existing scale.
 ```
 
 <img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
@@ -205,6 +207,61 @@ p +
 You’ll notice in the call to `scale_color_manual()` we had to supply
 `NA` values for the labels, we explain that more in the upcoming
 vignette and hope to provide a better handling method in the future.
+
+## Alternative Approach: One-at-a-Time Markers
+
+Let’s say that instead of mapping aesthetic values in your data, you
+have a structure that is more conducive to adding one marker at a time.
+This approach is allows for a more direct declaration of values via
+static aesthetics (versus mapped ones). Let’s make an example below by
+first setting up some reference data:
+
+For this approach, we must supply a `name` for the marker value that
+will appear in the legend since we are no longer defining a mapped
+color. Now let’s try supplying a few different calls and see how ggswim
+responds:
+
+- `color`/`colour` differences
+- Different static values
+- Supply of different names
+
+``` r
+patient_data |>
+  dplyr::mutate(time_start = 0) |>
+  tidyr::pivot_longer(cols = c(time_start, time_to_last_followup),
+                      values_to = "time",
+                      names_to = "treatment_group") |>
+  ggswim(
+    aes(y = id,
+        x = time,
+        fill = trt)
+  ) +
+  add_marker(
+    data = dose_data_a,
+    mapping = aes(x = time, y = id2, name = "1ABC"), colour = "red", size = 5
+  ) +
+  add_marker(
+    data = dose_data_b,
+    mapping = aes(x = time, y = id2, name = "TEST2"), color = "blue", shape = 8
+  ) +
+  add_marker(
+    data = dose_type_a,
+    mapping = aes(x = time, y = id4, label = label, color = name)
+  )
+#> Warning: Duplicated aesthetics after name standardisation: colour
+#> Duplicated aesthetics after name standardisation: colour
+```
+
+<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
+
+Note that it is better to clean your data ahead of time and to limit the
+amount of varying behavior you introduce between `add_marker()` calls.
+The following issues are known:
+
+- Missing data in a layer followed by a layer with complete data will
+  remove the missing data from the legend
+- The legend title for one-at-a-time markers defaults to the first value
+  in the legend
 
 ### Future Plans
 
