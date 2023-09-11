@@ -82,6 +82,7 @@ fix_legend <- function(ggswim_obj) {
     # Arrange necessary to follow order of ggplot legend outputs
     # (i.e. alphabetical, numeric, etc.)
     override$colour <- override$colour |>
+      select(-dplyr::matches("group")) |> # TODO: Implemented due to NA vals with no add_marker() data, confirm acceptable
       arrange(.data$colour_mapping) |>
       unique()
   }
@@ -132,10 +133,17 @@ bind_layer_data <- function(ggswim_obj, layer_indices, layer_data, static_colour
   for (i in layer_indices) {
     # If first layer, overwrite empty variable
     if (is_empty(layer_data)) {
-      layer_data <- get_layer_data(data = ggswim_obj$layers[[i]]$data,
-                                   mapping = ggswim_obj$layers[[i]]$mapping,
-                                   i = i,
-                                   static_colours = static_colours)
+      layer_data <- get_layer_data(data = if (
+        # Handle instances where add_marker() inherits data from ggswim()
+        is_empty(ggswim_obj$layers[[i]]$data)
+      ) {
+        ggswim_obj$data
+      } else {
+        ggswim_obj$layers[[i]]$data
+      },
+      mapping = ggswim_obj$layers[[i]]$mapping,
+      i = i,
+      static_colours = static_colours)
     } else {
       added_layer_data <- get_layer_data(data = ggswim_obj$layers[[i]]$data,
                                          mapping = ggswim_obj$layers[[i]]$mapping,
