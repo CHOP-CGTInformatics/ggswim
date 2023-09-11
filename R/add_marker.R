@@ -55,16 +55,19 @@ add_marker <- function(
       } else {
         rlang::dots_list(...)$colour
       }
+
+      dots <- rlang::dots_list(...)[!names(rlang::dots_list(...)) %in% c("color", "colour")]
     }
 
     out <- geom_point(
       data = data,
       mapping = mapping,
+      colour = dots[names(dots) %in% c("color", "colour")],
       ...
     )
 
-    if (is.null(dots$colour)) {
-      out$aes_params$colour <- NULL # TODO: color/colour handling
+    if (is.null(dots$colour) & is.null(dots$color)) {
+      out$aes_params$colour <- NULL
     }
 
     out$static_colours <- static_colours
