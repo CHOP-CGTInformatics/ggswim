@@ -24,7 +24,7 @@ fix_legend <- function(ggswim_obj) {
   label_layer_data <- data.frame()
   point_layer_data <- data.frame()
 
-  # static_colours for static color manipulation and re-definition
+  # static_colours for static color manipulation and legend re-definition
   static_colours <- list()
   # override for guides legend override
   override <- list()
@@ -42,10 +42,11 @@ fix_legend <- function(ggswim_obj) {
     if (!is.null(ggswim_obj$layers[[i]]$static_colours)) {
       static_colours$indices <- c(static_colours$indices, i)
       static_colours$colors <- c(static_colours$colors, ggswim_obj$layers[[i]]$static_colours)
+      static_colours$name <- c(static_colours$name, ggswim_obj$layers[[i]]$mapping$colour |> get_expr() |> as.character())
     }
   }
 
-  # Convert static_colours to a dataframe since always same length
+  # Convert static_colours to a dataframe (will always have equal col lengths)
   static_colours <- data.frame(static_colours)
 
   # If no `add_marker()` calls, then no need to build legend, exiting early ----
@@ -67,12 +68,7 @@ fix_legend <- function(ggswim_obj) {
                                       layer_data = point_layer_data,
                                       static_colours = static_colours)
 
-  # TODO: Assign static color as data color ----
-  # if (nrow(static_colours) > 0) {
-  #
-  # }
-
-  # TODO: Verify column names
+  # TODO: Verify all acceptable column names
   accepted_colour_columns <- c(
     "colour", "label", "group", "fill", "size", "shape", "stroke", "colour_mapping"
   )
@@ -90,6 +86,7 @@ fix_legend <- function(ggswim_obj) {
       unique()
   }
 
+  # Handle forcing of labels into color aesthetic of legend
   if ("label" %in% names(override$colour)) {
     override$colour$label[is.na(override$colour$label)] <- ""
   }
@@ -98,17 +95,19 @@ fix_legend <- function(ggswim_obj) {
 
   # Return fixed ggswim object
   (ggswim_obj +
-    guides(
-      shape = override$shape,
-      colour = guide_legend(
-        override.aes = list(
-          label = override$colour$label,
-          fill = override$colour$fill,
-          color = override$colour$colour,
-          shape = override$colour$shape
+      scale_color_manual(values = setNames(override$colour$colour,
+                                           override$colour$colour_mapping)) +
+      guides(
+        shape = override$shape,
+        colour = guide_legend(
+          override.aes = list(
+            label = override$colour$label,
+            fill = override$colour$fill,
+            color = override$colour$colour,
+            shape = override$colour$shape
+          )
         )
-      )
-    )) |>
+      )) |>
     # remove ggswim class, so default ggplot2 print methods will take over
     structure(class = class(ggswim_obj) |> setdiff("ggswim_obj"))
 }
