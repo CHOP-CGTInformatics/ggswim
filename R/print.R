@@ -9,5 +9,5 @@
 #' @examples
 #' # TODO: add example
 print.ggswim_obj <- function(x, ...) {
-  fix_legend(x) |> print()
+  update_ggswim(x) |> print()
 }

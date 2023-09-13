@@ -18,7 +18,7 @@ referenced in the message output}
 }
 \description{
 \code{ggswim()} and \code{add_marker()} do not support all of the aesthetic mappings
-their wrapped functions do. By design, this helps \code{fix_legend()} work
+their wrapped functions do. By design, this helps \code{update_ggswim()} work
 appropriately.
 }
 \keyword{interal}

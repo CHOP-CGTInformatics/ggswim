@@ -1,20 +1,28 @@
-#' @title Fix legend display for multiple layers
+#' @title Apply ggswim fixes and display updates
 #'
 #' @description
-#' This function is primarily helpful when combining labels (like unicode emojis)
-#' and point (like shapes). This function seeks to override the values and present
-#' them in the same layer of the legend output.
+#' This function seeks to correct the output of manual overrides introduced by
+#' `add_marker()` depending on the combination of layer types the user provides.
+#'
+#' It is to be run automatically in the background as a print method via
+#' `print.ggswim_obj()`.
 #'
 #' @details
-#' In its current state, `fix_legend()` can only work with a pre-rendered ggswim
-#' plot object, therefore it cannot be added to the `+` operator chain.
+#' In its current state, `update_ggswim()` can only work with a pre-rendered
+#' ggswim plot object, therefore it cannot be added to the `+` operator chain.
+#'
+#' `update_ggswim()` makes use of `ggplot2::guides()` to dynamically override
+#' displays in the layers of the ggswim legend. It also applies a call to
+#' `ggplot2::scale_color_manual()` in applicable cases where a user calls out
+#' a static `color`/`colour` argument in addition to the required `color`
+#' mapping aesthetic (handled by arg: `name`).
 #'
 #' @param ggswim_obj A ggswim object
 #'
 #' @returns A ggswim object
 #' @export
 
-fix_legend <- function(ggswim_obj) {
+update_ggswim <- function(ggswim_obj) {
 
   # Set up initial capture variables ----
   # Indices for layer positions in ggswim_obj

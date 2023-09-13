@@ -9,7 +9,7 @@
 #' @examples
 #' # TODO: add example
 grid.draw.ggswim_obj <- function(x, recording = TRUE) {
-  fix_legend(x) |>
+  update_ggswim(x) |>
     grid::grid.draw(recording = recording)
 }
 

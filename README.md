@@ -184,8 +184,8 @@ Wow!
 Recall earlier that we said ggswim makes use of existing ggplot2
 architecture. This means you can use your favorite manipulators to make
 your ggswim objects look however you please. Below, we take the
-pre-existing plot, `p`, and supply some beautifucation steps before
-sending it to `fix_legend()`:
+pre-existing plot, `p`, and supply some beautification steps before
+rendering:
 
 ``` r
 p +
