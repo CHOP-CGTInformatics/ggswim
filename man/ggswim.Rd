@@ -4,55 +4,18 @@
 \alias{ggswim}
 \title{Plot individual level response trajectories}
 \usage{
-ggswim(
-  df,
-  id,
-  time,
-  events,
-  reference_event,
-  markers,
-  shape_colors = NULL,
-  lanes,
-  groups = NULL,
-  legend_title = NULL
-)
+ggswim(data, mapping = aes(), ...)
 }
 \arguments{
-\item{df}{a dataframe prepared for use with \code{ggswim()}}
+\item{data}{a dataframe prepared for use with \code{ggswim()}}
 
-\item{id}{the y-axis variable of a swimmer plot, typically a unique
-subject or record identification column}
+\item{mapping}{Set of aesthetic mappings created by \code{aes()}. If specified and
+\code{inherit.aes = TRUE} (the default), it is combined with the default mapping
+at the top level of the plot. You must supply mapping if there is no plot mapping.
+More information about accepted mapping arguments can be found in \strong{Aesthetics}.}
 
-\item{time}{the x-axis variable of the swimmer plot, typically a
-function of time given in date or numeric format}
-
-\item{events}{the column that will supply data for the \code{reference_event},
-\code{markers}, and \code{lanes} arguments}
-
-\item{reference_event}{a character string found in \code{events} that establishes
-the time-zero reference point for the x-axis for use when \code{time} is given in
-a date/date-time format rather than in an integer/numeric format}
-
-\item{markers}{a named list defining marker events on a \code{lane} in either
-standard numeric ggplot 2 shapes, emoji, or unicode form .
-Shapes can be supplied as character strings or integers.}
-
-\item{shape_colors}{If providing shapes for \code{markers}, provide vector
-specification for the colors those shapes should be. Default \code{NULL} for
-non-shapes, default \code{ggplot2} colors if shapes with no colors specified.}
-
-\item{lanes}{a list of character strings that define the colored line segments
-for \code{id}. Colors are supplied by setting list elements equal to hex or named colors.
-In the absence of colors, default \code{ggplot2} colors will be supplied.}
-
-\item{groups}{A grouping term, supplied as an optional additional column in
-\code{df}.}
-
-\item{legend_title}{the titles of the legends, given as a vector of character
-strings}
-}
-\value{
-a ggplot2 figure
+\item{...}{Other arguments passed to \code{ggswim()}, often aesthetic fixed values,
+i.e. \code{color = "red"} or \code{size = 3}.}
 }
 \description{
 Visualize individual record response trajectories over time using a swimmer plot.
@@ -63,3 +26,19 @@ subject data over time. It shows events or outcomes as points along a
 horizontal line for each subject, allowing easy comparison and pattern
 identification.
 }
+\section{Aesthetics}{
+
+\code{ggswim()} understands the following aesthetics (required aesthetics are in bold):
+\itemize{
+\item \strong{\code{x}}
+\item \strong{\code{y}}
+\item \code{alpha}
+\item \code{fill}
+\item \code{group}
+\item \code{linetype}
+\item \code{linewidth}
+}
+
+\strong{Note}: \code{ggswim()} \strong{does not} support mapping using \code{color}/\code{colour}.
+}
+

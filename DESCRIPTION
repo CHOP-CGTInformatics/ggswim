@@ -14,11 +14,10 @@ LazyData: true
 Imports: 
     checkmate,
     cli,
+    dplyr,
     ggplot2,
-    rlang,
-    scales,
-    tibble,
-    tidyr
+    grid,
+    rlang
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Suggests: 
