@@ -33,8 +33,8 @@ add_marker <- function(
       ...
     )
 
-    # Tag the layer with a reference label
-    out$swim_class <- "marker_label"
+    # Tag the layer with a reference attribute
+    attributes(out)$swim_class <- "marker_label"
 
   } else {
 
@@ -72,8 +72,8 @@ add_marker <- function(
 
     out$static_colours <- static_colours
 
-    # Tag the layer with a reference label
-    out$swim_class <- "marker_point"
+    # Tag the layer with a reference attribute
+    attributes(out)$swim_class <- "marker_point"
   }
 
   out

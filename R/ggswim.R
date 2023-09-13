@@ -52,9 +52,8 @@ ggswim <- function(
   class(out) <- c("ggswim_obj", class(out))
   current_layer <- length(out$layers) # The max length can be considered the current working layer
 
-  # TODO: Determine if necessary to keep layer reference value
-  # Add a reference class to the layer
-  out$layers[[current_layer]]$swim_class <- "ggswim"
+  # Add a reference class to the layer attributes
+  attributes(out$layers[[current_layer]])$swim_class <- "ggswim"
 
   # Return object
   out

@@ -31,11 +31,11 @@ fix_legend <- function(ggswim_obj) {
 
   # Determine indices of layers in ggplot object that contain labels, points, and static colors
   for (i in seq_along(ggswim_obj$layers)) {
-    if (ggswim_obj$layers[[i]]$swim_class == "marker_label") {
+    if (attributes(ggswim_obj$layers[[i]])$swim_class == "marker_label") {
       label_layer_indices <- c(label_layer_indices, i)
     }
 
-    if (ggswim_obj$layers[[i]]$swim_class == "marker_point") {
+    if (attributes(ggswim_obj$layers[[i]])$swim_class == "marker_point") {
       point_layer_indices <- c(point_layer_indices, i)
     }
 
