@@ -11,9 +11,10 @@ ggswim(data, mapping = aes(), ...)
 
 \item{mapping}{Set of aesthetic mappings created by \code{aes()}. If specified and
 \code{inherit.aes = TRUE} (the default), it is combined with the default mapping
-at the top level of the plot. You must supply mapping if there is no plot mapping.}
+at the top level of the plot. You must supply mapping if there is no plot mapping.
+More information about accepted mapping arguments can be found in \strong{Aesthetics}.}
 
-\item{...}{Other arguments passed to \code{geom_col}, often aesthetic fixed values,
+\item{...}{Other arguments passed to \code{ggswim()}, often aesthetic fixed values,
 i.e. \code{color = "red"} or \code{size = 3}.}
 }
 \description{
@@ -25,3 +26,19 @@ subject data over time. It shows events or outcomes as points along a
 horizontal line for each subject, allowing easy comparison and pattern
 identification.
 }
+\section{Aesthetics}{
+
+\code{ggswim()} understands the following aesthetics (required aesthetics are in bold):
+\itemize{
+\item \strong{x}
+\item \strong{y}
+\item alpha
+\item fill
+\item group
+\item linetype
+\item linewidth
+}
+
+\strong{Note}: \code{ggswim()} \strong{does not} support mapping using \code{color}/\code{colour}.
+}
+

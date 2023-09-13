@@ -13,12 +13,24 @@
 #' @param mapping Set of aesthetic mappings created by `aes()`. If specified and
 #' `inherit.aes = TRUE` (the default), it is combined with the default mapping
 #' at the top level of the plot. You must supply mapping if there is no plot mapping.
-#' @param ... Other arguments passed to `geom_col`, often aesthetic fixed values,
+#' More information about accepted mapping arguments can be found in **Aesthetics**.
+#' @param ... Other arguments passed to `ggswim()`, often aesthetic fixed values,
 #' i.e. `color = "red"` or `size = 3`.
 #'
-#' @export
+#' @section Aesthetics:
+#' `ggswim()` understands the following aesthetics (required aesthetics are in bold):
 #'
-#' @importFrom ggplot2 aes ggplot geom_col
+#' - **x**
+#' - **y**
+#' - alpha
+#' - fill
+#' - group
+#' - linetype
+#' - linewidth
+#'
+#' **Note**: `ggswim()` **does not** support mapping using `color`/`colour`.
+#'
+#' @export
 
 ggswim <- function(
     data,
