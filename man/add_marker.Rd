@@ -13,9 +13,10 @@ prepared for use with \code{ggswim()}.}
 
 \item{mapping}{Set of aesthetic mappings created by \code{aes()}. If specified and
 \code{inherit.aes = TRUE} (the default), it is combined with the default mapping
-at the top level of the plot. You must supply mapping if there is no plot mapping.}
+at the top level of the plot. You must supply mapping if there is no plot mapping.
+More information about accepted mapping arguments can be found in \strong{Aesthetics}.}
 
-\item{...}{Other arguments passed to \code{geom_point}, often aesthetic fixed values,
+\item{...}{Other arguments passed to \code{add_marker()}, often aesthetic fixed values,
 i.e. \code{color = "red"} or \code{size = 3}.}
 }
 \value{
@@ -25,3 +26,39 @@ A ggswim object
 "Markers" are used to specify events of interest along response trajectories
 across individual lanes.
 }
+\section{Aesthetics}{
+
+\code{add_marker()} understands the following aesthetics (required aesthetics are in bold)
+when using \code{color}/\code{colour} akin to \code{geom_point()}
+\itemize{
+\item \strong{\code{x}}
+\item \strong{\code{y}}
+\item \strong{\code{color}}/\strong{\code{colour}}
+\item \code{alpha}
+\item \code{group}
+\item \code{shape}
+\item \code{size}
+\item \code{stroke}
+}
+
+\code{add_marker()} understands the following aesthetics (required aesthetics are in bold)
+when using \code{label} akin to \code{geom_label()}
+\itemize{
+\item \strong{\code{x}}
+\item \strong{\code{y}}
+\item \strong{\code{color}}/\strong{\code{colour}}
+\item \strong{\code{label}}
+\item \code{alpha}
+\item \code{angle}
+\item \code{family}
+\item \code{fontface}
+\item \code{group}
+\item \code{hjust}
+\item \code{lineheight}
+\item \code{size}
+\item \code{vjust}
+}
+
+\strong{Note}: \code{add_marker()} \strong{does not} support mapping using \code{fill}.
+}
+

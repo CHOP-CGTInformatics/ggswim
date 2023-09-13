@@ -12,8 +12,41 @@
 #' @param mapping Set of aesthetic mappings created by `aes()`. If specified and
 #' `inherit.aes = TRUE` (the default), it is combined with the default mapping
 #' at the top level of the plot. You must supply mapping if there is no plot mapping.
-#' @param ... Other arguments passed to `geom_point`, often aesthetic fixed values,
+#' More information about accepted mapping arguments can be found in **Aesthetics**.
+#' @param ... Other arguments passed to `add_marker()`, often aesthetic fixed values,
 #' i.e. `color = "red"` or `size = 3`.
+#'
+#' @section Aesthetics:
+#' `add_marker()` understands the following aesthetics (required aesthetics are in bold)
+#' when using `color`/`colour` akin to `geom_point()`
+#'
+#' - **`x`**
+#' - **`y`**
+#' - **`color`**/**`colour`**
+#' - `alpha`
+#' - `group`
+#' - `shape`
+#' - `size`
+#' - `stroke`
+#'
+#' `add_marker()` understands the following aesthetics (required aesthetics are in bold)
+#' when using `label` akin to `geom_label()`
+#'
+#' - **`x`**
+#' - **`y`**
+#' - **`color`**/**`colour`**
+#' - **`label`**
+#' - `alpha`
+#' - `angle`
+#' - `family`
+#' - `fontface`
+#' - `group`
+#' - `hjust`
+#' - `lineheight`
+#' - `size`
+#' - `vjust`
+#'
+#' **Note**: `add_marker()` **does not** support mapping using `fill`.
 #'
 #' @export
 #'

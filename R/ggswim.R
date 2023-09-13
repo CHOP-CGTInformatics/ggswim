@@ -20,13 +20,13 @@
 #' @section Aesthetics:
 #' `ggswim()` understands the following aesthetics (required aesthetics are in bold):
 #'
-#' - **x**
-#' - **y**
-#' - alpha
-#' - fill
-#' - group
-#' - linetype
-#' - linewidth
+#' - **`x`**
+#' - **`y`**
+#' - `alpha`
+#' - `fill`
+#' - `group`
+#' - `linetype`
+#' - `linewidth`
 #'
 #' **Note**: `ggswim()` **does not** support mapping using `color`/`colour`.
 #'

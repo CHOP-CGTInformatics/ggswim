@@ -30,13 +30,13 @@ identification.
 
 \code{ggswim()} understands the following aesthetics (required aesthetics are in bold):
 \itemize{
-\item \strong{x}
-\item \strong{y}
-\item alpha
-\item fill
-\item group
-\item linetype
-\item linewidth
+\item \strong{\code{x}}
+\item \strong{\code{y}}
+\item \code{alpha}
+\item \code{fill}
+\item \code{group}
+\item \code{linetype}
+\item \code{linewidth}
 }
 
 \strong{Note}: \code{ggswim()} \strong{does not} support mapping using \code{color}/\code{colour}.
