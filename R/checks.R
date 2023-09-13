@@ -54,6 +54,28 @@ check_arg_is_list <- wrap_checkmate(check_list)
 #' @rdname checkmate
 check_arg_is_logical <- wrap_checkmate(check_logical)
 
+#' @title
+#' Format value for error message
+#'
+#' @param x value to format
+#'
+#' @return
+#' If x is atomic, x with cli formatting to truncate to 5 values. Otherwise,
+#' a string summarizing x produced by as_label
+#'
+#' @importFrom rlang as_label is_atomic
+#' @importFrom cli cli_vec
+#'
+#' @keywords internal
+format_error_val <- function(x) {
+  if (is_atomic(x)) {
+    out <- cli_vec(x, style = list("vec-trunc" = 5, "vec-last" = ", "))
+  } else {
+    out <- as_label(x)
+  }
+  out
+}
+
 #' @title check for unsupported mapping args
 #'
 #' @description
