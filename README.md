@@ -262,10 +262,13 @@ Note that it is better to clean your data ahead of time and to limit the
 amount of varying behavior you introduce between `add_marker()` calls.
 The following issues are known:
 
-- Missing data in a layer followed by a layer with complete data will
-  remove the missing data from the legend
-- The legend title for one-at-a-time markers defaults to the first value
-  in the legend
+- ⚠️ Missing data in a layer followed by a layer with complete data may
+  result in an error.
+  - This is related to how we enforce re-entry of color mapping into
+    one-at-a-time marker handling and has been seen in examples where
+    `geom_point()` doesn’t automatically remove missing values
+- ⚠️ The legend title for one-at-a-time markers defaults to the first
+  value in the legend
   - This can be resolved by updating the `color` and `fill` arguments in
     `ggplot2::labs()`
 
