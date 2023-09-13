@@ -58,6 +58,7 @@ build_ggswim <- function(ggswim_obj) {
   static_colours <- data.frame(static_colours)
 
   # If no `add_marker()` calls, then no need to build legend, exiting early ----
+  # requires indices to be built first for determination
   if (rlang::is_empty(label_layer_indices) && rlang::is_empty(point_layer_indices)) {
     # remove ggswim class, so default ggplot2 print methods will take over
     return(
@@ -85,7 +86,6 @@ build_ggswim <- function(ggswim_obj) {
   override$colour <- bind_rows(label_layer_data, point_layer_data) |>
     select(any_of(accepted_colour_columns))
 
-  # TODO: Make more elegant
   if ("colour_mapping" %in% names(override$colour)){
     # Arrange necessary to follow order of ggplot legend outputs
     # (i.e. alphabetical, numeric, etc.)

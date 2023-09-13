@@ -106,6 +106,7 @@ add_marker <- function(
       dots <- rlang::dots_list(...)[!names(rlang::dots_list(...)) %in% c("color", "colour")]
     }
 
+    # TODO: Fix issue causing removal of NA values and subsequent `build_ggswim()` failure
     out <- geom_point(
       data = data,
       mapping = mapping,
