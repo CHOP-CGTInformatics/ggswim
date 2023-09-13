@@ -19,7 +19,16 @@
     <loc>/pull_request_template.html</loc>
   </url>
   <url>
-    <loc>/reference/apply_gg_legend_order.html</loc>
+    <loc>/reference/add_marker.html</loc>
+  </url>
+  <url>
+    <loc>/reference/bind_layer_data.html</loc>
+  </url>
+  <url>
+    <loc>/reference/build_ggswim.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_supported_mapping_aes.html</loc>
   </url>
   <url>
     <loc>/reference/checkmate.html</loc>
@@ -28,24 +37,24 @@
     <loc>/reference/format_error_val.html</loc>
   </url>
   <url>
-    <loc>/reference/get_guide_values.html</loc>
+    <loc>/reference/get_layer_data.html</loc>
   </url>
   <url>
-    <loc>/reference/get_lane_colors.html</loc>
+    <loc>/reference/ggswim-package.html</loc>
   </url>
   <url>
     <loc>/reference/ggswim.html</loc>
   </url>
   <url>
+    <loc>/reference/grid.draw.ggswim_obj.html</loc>
+  </url>
+  <url>
     <loc>/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/is_numeric_coercible.html</loc>
+    <loc>/reference/print.ggswim_obj.html</loc>
   </url>
   <url>
-    <loc>/reference/streamline.html</loc>
-  </url>
-  <url>
-    <loc>/reference/update_gg_legend_order.html</loc>
+    <loc>/reference/reexports.html</loc>
   </url>
 </urlset>

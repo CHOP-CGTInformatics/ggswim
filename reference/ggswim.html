@@ -44,87 +44,46 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ggswim</span><span class="op">(</span></span>
-<span>  <span class="va">df</span>,</span>
-<span>  <span class="va">id</span>,</span>
-<span>  <span class="va">time</span>,</span>
-<span>  <span class="va">events</span>,</span>
-<span>  <span class="va">reference_event</span>,</span>
-<span>  <span class="va">markers</span>,</span>
-<span>  shape_colors <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">lanes</span>,</span>
-<span>  groups <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  legend_title <span class="op">=</span> <span class="cn">NULL</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ggswim</span><span class="op">(</span><span class="va">data</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>df</dt>
+    <dl><dt>data</dt>
 <dd><p>a dataframe prepared for use with <code>ggswim()</code></p></dd>
 
 
-<dt>id</dt>
-<dd><p>the y-axis variable of a swimmer plot, typically a unique
-subject or record identification column</p></dd>
+<dt>mapping</dt>
+<dd><p>Set of aesthetic mappings created by <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code>. If specified and
+<code>inherit.aes = TRUE</code> (the default), it is combined with the default mapping
+at the top level of the plot. You must supply mapping if there is no plot mapping.
+More information about accepted mapping arguments can be found in <strong>Aesthetics</strong>.</p></dd>
 
 
-<dt>time</dt>
-<dd><p>the x-axis variable of the swimmer plot, typically a
-function of time given in date or numeric format</p></dd>
-
-
-<dt>events</dt>
-<dd><p>the column that will supply data for the <code>reference_event</code>,
-<code>markers</code>, and <code>lanes</code> arguments</p></dd>
-
-
-<dt>reference_event</dt>
-<dd><p>a character string found in <code>events</code> that establishes
-the time-zero reference point for the x-axis for use when <code>time</code> is given in
-a date/date-time format rather than in an integer/numeric format</p></dd>
-
-
-<dt>markers</dt>
-<dd><p>a named list defining marker events on a <code>lane</code> in either
-standard numeric ggplot 2 shapes, emoji, or unicode form .
-Shapes can be supplied as character strings or integers.</p></dd>
-
-
-<dt>shape_colors</dt>
-<dd><p>If providing shapes for <code>markers</code>, provide vector
-specification for the colors those shapes should be. Default <code>NULL</code> for
-non-shapes, default <code>ggplot2</code> colors if shapes with no colors specified.</p></dd>
-
-
-<dt>lanes</dt>
-<dd><p>a list of character strings that define the colored line segments
-for <code>id</code>. Colors are supplied by setting list elements equal to hex or named colors.
-In the absence of colors, default <code>ggplot2</code> colors will be supplied.</p></dd>
-
-
-<dt>groups</dt>
-<dd><p>A grouping term, supplied as an optional additional column in
-<code>df</code>.</p></dd>
-
-
-<dt>legend_title</dt>
-<dd><p>the titles of the legends, given as a vector of character
-strings</p></dd>
+<dt>...</dt>
+<dd><p>Other arguments passed to <code>ggswim()</code>, often aesthetic fixed values,
+i.e. <code>color = "red"</code> or <code>size = 3</code>.</p></dd>
 
 </dl></div>
-    <div id="value">
-    <h2>Value</h2>
-    
-
-<p>a ggplot2 figure</p>
-    </div>
     <div id="details">
     <h2>Details</h2>
     <p>A swimmer plot is a data visualization used to display individual
 subject data over time. It shows events or outcomes as points along a
 horizontal line for each subject, allowing easy comparison and pattern
 identification.</p>
+    </div>
+    <div id="aesthetics">
+    <h2>Aesthetics</h2>
+    
+
+<p><code>ggswim()</code> understands the following aesthetics (required aesthetics are in bold):</p><ul><li><p><strong><code>x</code></strong></p></li>
+<li><p><strong><code>y</code></strong></p></li>
+<li><p><code>alpha</code></p></li>
+<li><p><code>fill</code></p></li>
+<li><p><code>group</code></p></li>
+<li><p><code>linetype</code></p></li>
+<li><p><code>linewidth</code></p></li>
+</ul><p><strong>Note</strong>: <code>ggswim()</code> <strong>does not</strong> support mapping using <code>color</code>/<code>colour</code>.</p>
     </div>
 
   </div>
