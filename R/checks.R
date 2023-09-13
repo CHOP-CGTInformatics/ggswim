@@ -58,7 +58,7 @@ check_arg_is_logical <- wrap_checkmate(check_logical)
 #'
 #' @description
 #' `ggswim()` and `add_marker()` do not support all of the aesthetic mappings
-#' their wrapped functions do. By design, this helps `update_ggswim()` work
+#' their wrapped functions do. By design, this helps `build_ggswim()` work
 #' appropriately.
 #'
 #' @keywords interal

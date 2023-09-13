@@ -30,12 +30,14 @@
 #' - `stroke`
 #'
 #' `add_marker()` understands the following aesthetics (required aesthetics are in bold)
-#' when using `label` akin to `geom_label()`
+#' when using `label` akin to `geom_label()`. See "Notes" below for additional
+#' considerations and requirements.
 #'
 #' - **`x`**
 #' - **`y`**
 #' - **`color`**/**`colour`**
-#' - **`label`**
+#' - **`label`** *
+#' - `name` *
 #' - `alpha`
 #' - `angle`
 #' - `family`
@@ -48,6 +50,12 @@
 #'
 #' **Note**: `add_marker()` **does not** support mapping using `fill`.
 #'
+#' **Note**: If using `label`, a secondary `color` reference is required to make
+#' the label appear in the color layer of the legend.
+#'
+#' **Note**: If using a dynamic `color` call, a specifying `name` is required for
+#' aesthetic mapping to render the legend correctly.
+#'
 #' @export
 
 add_marker <- function(
@@ -58,7 +66,7 @@ add_marker <- function(
 
   # Enforce checks ----
   check_supported_mapping_aes(mapping = mapping,
-                              unsupported_aes = c("fill", "test", "test2"),
+                              unsupported_aes = c("fill"),
                               parent_func = "add_marker()")
 
   # Identify labels ----

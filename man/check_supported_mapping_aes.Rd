@@ -18,7 +18,7 @@ referenced in the message output}
 }
 \description{
 \code{ggswim()} and \code{add_marker()} do not support all of the aesthetic mappings
-their wrapped functions do. By design, this helps \code{update_ggswim()} work
+their wrapped functions do. By design, this helps \code{build_ggswim()} work
 appropriately.
 }
 \keyword{interal}

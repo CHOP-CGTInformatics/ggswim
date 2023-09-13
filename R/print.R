@@ -9,5 +9,5 @@
 #' @examples
 #' # TODO: add example
 print.ggswim_obj <- function(x, ...) {
-  update_ggswim(x) |> print()
+  build_ggswim(x) |> print()
 }

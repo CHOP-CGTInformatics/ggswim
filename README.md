@@ -189,7 +189,7 @@ rendering:
 
 ``` r
 p +
-  ggplot2::xlab("Time") + ggplot2::ylab("Subject ID") +
+  ggplot2::labs(x = "Time", y = "Subject ID", color = "Markers") +
   ggplot2::ggtitle("My Swim Plot") +
   ggplot2::theme_minimal() +
   ggplot2::scale_color_manual(name = "Markers",
@@ -246,8 +246,12 @@ patient_data |>
   ) +
   add_marker(
     data = dose_type_a,
-    mapping = aes(x = time, y = id4, label = label, color = name)
-  )
+    mapping = aes(x = time, y = id4, label = label, color = name),
+    label.size = NA, fill = NA, size = 5
+  ) +
+  ggplot2::labs(x = "Time", y = "Subject ID", color = "Markers", fill = "Lanes") + 
+  ggplot2::ggtitle("My Swimmer Plot") +
+  ggplot2::theme_minimal()
 #> Warning: Duplicated aesthetics after name standardisation: colour
 #> Duplicated aesthetics after name standardisation: colour
 ```
@@ -262,6 +266,8 @@ The following issues are known:
   remove the missing data from the legend
 - The legend title for one-at-a-time markers defaults to the first value
   in the legend
+  - This can be resolved by updating the `color` and `fill` arguments in
+    `ggplot2::labs()`
 
 ### Future Plans
 

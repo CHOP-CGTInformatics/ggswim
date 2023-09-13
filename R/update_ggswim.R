@@ -8,10 +8,10 @@
 #' `print.ggswim_obj()`.
 #'
 #' @details
-#' In its current state, `update_ggswim()` can only work with a pre-rendered
+#' In its current state, `build_ggswim()` can only work with a pre-rendered
 #' ggswim plot object, therefore it cannot be added to the `+` operator chain.
 #'
-#' `update_ggswim()` makes use of `ggplot2::guides()` to dynamically override
+#' `build_ggswim()` makes use of `ggplot2::guides()` to dynamically override
 #' displays in the layers of the ggswim legend. It also applies a call to
 #' `ggplot2::scale_color_manual()` in applicable cases where a user calls out
 #' a static `color`/`colour` argument in addition to the required `color`
@@ -22,7 +22,7 @@
 #' @returns A ggswim object
 #' @export
 
-update_ggswim <- function(ggswim_obj) {
+build_ggswim <- function(ggswim_obj) {
 
   # Set up initial capture variables ----
   # Indices for layer positions in ggswim_obj
