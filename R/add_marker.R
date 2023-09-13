@@ -49,7 +49,6 @@
 #' **Note**: `add_marker()` **does not** support mapping using `fill`.
 #'
 #' @export
-#'
 
 add_marker <- function(
     data = NULL,
@@ -57,8 +56,15 @@ add_marker <- function(
     ...
 ) {
 
+  # Enforce checks ----
+  check_supported_mapping_aes(mapping = mapping,
+                              unsupported_aes = c("fill", "test", "test2"),
+                              parent_func = "add_marker()")
+
+  # Identify labels ----
   labels <- ifelse("label" %in% names(mapping), TRUE, FALSE)
 
+  # Apply geom_label() or geom_point() ----
   if (labels) {
     out <- geom_label(
       data = data,

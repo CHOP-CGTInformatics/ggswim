@@ -54,21 +54,32 @@ check_arg_is_list <- wrap_checkmate(check_list)
 #' @rdname checkmate
 check_arg_is_logical <- wrap_checkmate(check_logical)
 
-#' @title
-#' Format value for error message
+#' @title check for unsupported mapping args
 #'
-#' @param x value to format
+#' @description
+#' `ggswim()` and `add_marker()` do not support all of the aesthetic mappings
+#' their wrapped functions do. By design, this helps `fix_legend()` work
+#' appropriately.
 #'
-#' @return
-#' If x is atomic, x with cli formatting to truncate to 5 values. Otherwise,
-#' a string summarizing x produced by as_label
+#' @keywords interal
 #'
-#' @keywords internal
-format_error_val <- function(x) {
-  if (is_atomic(x)) {
-    out <- cli_vec(x, style = list("vec-trunc" = 5, "vec-last" = ", "))
-  } else {
-    out <- as_label(x)
+#' @param mapping Set of aesthetic mappings created by `aes()`. If specified and
+#' `inherit.aes = TRUE` (the default), it is combined with the default mapping
+#' at the top level of the plot. You must supply mapping if there is no plot mapping.
+#' @param unsupported_aes A character vector
+#' @param parent_func The function in which this is being called, to be
+#' referenced in the message output
+
+check_supported_mapping_aes <- function(mapping,
+                                          unsupported_aes,
+                                          parent_func) {
+  msg = c("x" = "Unsupported aesthetic mapping params detected: {.code {detected_aes}}",
+          "i" = "{.code {parent_func}} does not support {.code {detected_aes}} aesthetic mapping.")
+  cond_class = c("ggswim_cond", "unsupported_aes")
+
+  if (any(unsupported_aes %in% names(mapping))) {
+    detected_aes <- names(mapping)[names(mapping) %in% unsupported_aes]
+
+    cli_abort(message = msg, call = caller_env(), class = cond_class)
   }
-  out
 }
