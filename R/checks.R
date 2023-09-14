@@ -105,3 +105,52 @@ check_supported_mapping_aes <- function(mapping,
     cli_abort(message = msg, call = caller_env(), class = cond_class)
   }
 }
+
+#' @title Check for plot legend discrepancies due to missing data
+#'
+#' @description
+#' There is a known issue with ggswim `add_markers()` where missing data in prior
+#' layers can cause issues when compared to non-missing data in subsequent layers.
+#' Due to the way ggswim handles manipulation of the legend to allow for combination
+#' of various layer types under the "colour" layer, NA values must be dropped from
+#' the legend display if they are detected in the data but not in the `ggswim_obj`.
+#'
+#' This error occurs due to a mismatch in expected values supplied to the `guide()`
+#' via the `override` reference list.
+#'
+#' @keywords internal
+#'
+#' @param ggswim_obj A ggswim object
+#' @param override An internal list object responsible for legend `guide()` rebuilds
+#'
+#' @returns A boolean
+
+check_for_na_legend_discrepancy <- function(ggswim_obj, override) {
+  gg_built <- ggplot_build(ggswim_obj)
+
+  for (i in seq_along(gg_built$plot$scales$scales)) {
+    # Non aes scales contain multiple elements, but aes scales only have the one (colour, fill, shape, etc.)
+    # For this check, we are interested in the colour scale
+    current_scale <- gg_built$plot$scales$scales[[i]]
+    is_colour_scale <- length(current_scale$aesthetics) == 1 && current_scale$aesthetics == "colour"
+
+    if (is_colour_scale) {
+      # Check that NA exists in list of overrides, but does not exist in the plot itself
+      # Use na.value for the default NA colour value (i.e. "grey50")
+      plot_legend_missing_na <- any(is.na(override$colour$colour_mapping)) &&
+        !any(is.na(current_scale$palette.cache)) &&
+        !any(current_scale$palette.cache == current_scale$na.value)
+    }
+  }
+
+  if (plot_legend_missing_na) {
+    cli_warn(
+      message = c("!" = "Missing data detected that has been dropped from the legend display.",
+                  "i" = "Missing data may still appear in the {.code ggswim} plot."),
+      call = caller_env(),
+      class = c("ggswim_cond", "na_legend_discrepancy")
+    )
+  }
+
+  plot_legend_missing_na
+}

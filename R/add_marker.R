@@ -87,10 +87,11 @@ add_marker <- function(
 
     dots <- rlang::dots_list(...)
     static_colours <- NULL
+    name_detected <- "name" %in% names(mapping)
 
     # Artificially create a column that will serve as the aes mapping "color" column
     # Currently dependent on "name" in mapping aes
-    if ("name" %in% names(mapping)) {
+    if (name_detected) {
       data <- data |>
         dplyr::mutate(!!mapping$name := mapping$name)
 
@@ -103,7 +104,7 @@ add_marker <- function(
         rlang::dots_list(...)$colour
       }
 
-      dots <- rlang::dots_list(...)[!names(rlang::dots_list(...)) %in% c("color", "colour")]
+      dots[names(dots) %in% c("color" , "colour")] <- c()
     }
 
     # TODO: Fix issue causing removal of NA values and subsequent `build_ggswim()` failure
@@ -114,8 +115,8 @@ add_marker <- function(
       ...
     )
 
-    if (is.null(dots$colour) & is.null(dots$color)) {
-      out$aes_params$colour <- NULL
+    if (is.null(dots$colour) && is.null(dots$color)) {
+        out$aes_params$colour <- NULL
     }
 
     out$static_colours <- static_colours
