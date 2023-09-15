@@ -1,0 +1,32 @@
+url: https://chop-cgtinformatics.github.io/ggswim/
+
+template:
+  bootstrap: 5
+  bslib:
+    code_font: {google: "Fira Code"}
+
+home:
+  title: Create swimmer plots with - ggswim
+
+navbar:
+  structure:
+    left: [intro, reference, articles]
+    right: [search, github]
+
+search:
+  exclude: ['news/index.html']
+
+reference:
+- title: "Swimmer Plots"
+  descr: >
+    Create swimmer plots.
+  contents:
+  - ggswim
+  - add_marker
+  - build_ggswim
+- title: "Internals"
+  descr: >
+    Internal helpers for ggswim.
+  contents:
+  - grid.draw.ggswim_obj
+  - print.ggswim_obj

@@ -83,7 +83,7 @@ format_error_val <- function(x) {
 #' their wrapped functions do. By design, this helps `build_ggswim()` work
 #' appropriately.
 #'
-#' @keywords interal
+#' @keywords internal
 #'
 #' @param mapping Set of aesthetic mappings created by `aes()`. If specified and
 #' `inherit.aes = TRUE` (the default), it is combined with the default mapping

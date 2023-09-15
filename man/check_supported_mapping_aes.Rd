@@ -21,4 +21,4 @@ referenced in the message output}
 their wrapped functions do. By design, this helps \code{build_ggswim()} work
 appropriately.
 }
-\keyword{interal}
+\keyword{internal}
