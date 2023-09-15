@@ -1,69 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/404.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/LICENSE.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/articles/index.html</loc>
   </url>
   <url>
-    <loc>/articles/intro_ggswim.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/articles/intro_ggswim.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/authors.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/index.html</loc>
   </url>
   <url>
-    <loc>/pull_request_template.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/pull_request_template.html</loc>
   </url>
   <url>
-    <loc>/reference/add_marker.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/add_marker.html</loc>
   </url>
   <url>
-    <loc>/reference/bind_layer_data.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/bind_layer_data.html</loc>
   </url>
   <url>
-    <loc>/reference/build_ggswim.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/build_ggswim.html</loc>
   </url>
   <url>
-    <loc>/reference/check_supported_mapping_aes.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/check_supported_mapping_aes.html</loc>
   </url>
   <url>
-    <loc>/reference/checkmate.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/checkmate.html</loc>
   </url>
   <url>
-    <loc>/reference/drop_missing_override_data.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/drop_missing_override_data.html</loc>
   </url>
   <url>
-    <loc>/reference/format_error_val.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/format_error_val.html</loc>
   </url>
   <url>
-    <loc>/reference/get_layer_data.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/get_layer_data.html</loc>
   </url>
   <url>
-    <loc>/reference/ggswim-package.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/ggswim-package.html</loc>
   </url>
   <url>
-    <loc>/reference/ggswim.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/ggswim.html</loc>
   </url>
   <url>
-    <loc>/reference/grid.draw.ggswim_obj.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/grid.draw.ggswim_obj.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/print.ggswim_obj.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/print.ggswim_obj.html</loc>
   </url>
   <url>
-    <loc>/reference/reexports.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/reexports.html</loc>
   </url>
 </urlset>
