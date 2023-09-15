@@ -102,7 +102,22 @@ build_ggswim <- function(ggswim_obj) {
 
   override$shape <- "none" # TODO: Determine if default should always be removal
 
-  # Return fixed ggswim object
+  # Drop any NA values from the `colour` layer that would cause guide() errors ----
+  # Throw warning letting users know NA values have been removed
+  na_data_in_colour_layer <- any(is.na(override$colour$colour_mapping))
+
+  if (na_data_in_colour_layer) {
+    cli_warn(
+      message = c("!" = "Missing data detected and removed from the colour layer of the {.code ggswim} plot."),
+      call = caller_env(),
+      class = c("ggswim_cond", "missing_colour_data")
+    )
+
+    # Remove the NA data from the override
+    override$colour <- override$colour[!is.na(override$colour$colour_mapping), , drop = FALSE]
+  }
+
+  # Return fixed ggswim object and guide overrides -----
   (ggswim_obj +
       scale_color_manual(values = setNames(override$colour$colour,
                                            override$colour$colour_mapping)) +
