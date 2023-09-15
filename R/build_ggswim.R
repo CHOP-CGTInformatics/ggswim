@@ -90,7 +90,7 @@ build_ggswim <- function(ggswim_obj) {
     # Arrange necessary to follow order of ggplot legend outputs
     # (i.e. alphabetical, numeric, etc.)
     override$colour <- override$colour |>
-      select(-dplyr::matches("group")) |> # TODO: Implemented due to NA vals with no add_marker() data, confirm acceptable
+      select(-dplyr::matches("group")) |> # Implemented due to NA vals with inherited add_marker() data
       arrange(.data$colour_mapping) |>
       unique()
   }
@@ -103,19 +103,7 @@ build_ggswim <- function(ggswim_obj) {
   override$shape <- "none" # TODO: Determine if default should always be removal
 
   # Drop any NA values from the `colour` layer that would cause guide() errors ----
-  # Throw warning letting users know NA values have been removed
-  na_data_in_colour_layer <- any(is.na(override$colour$colour_mapping))
-
-  if (na_data_in_colour_layer) {
-    cli_warn(
-      message = c("!" = "Missing data detected and removed from the colour layer of the {.code ggswim} plot."),
-      call = caller_env(),
-      class = c("ggswim_cond", "missing_colour_data")
-    )
-
-    # Remove the NA data from the override
-    override$colour <- override$colour[!is.na(override$colour$colour_mapping), , drop = FALSE]
-  }
+  override <- drop_missing_override_data(override)
 
   # Return fixed ggswim object and guide overrides -----
   (ggswim_obj +
@@ -178,4 +166,37 @@ bind_layer_data <- function(ggswim_obj, layer_indices, layer_data, static_colour
   }
 
   layer_data
+}
+
+#' @title Check for missing data
+#'
+#' @description
+#' Internal checking function responsible for alerting the user to missing data
+#' present in the `colour` aesthetic layer. ggswim does not allow for this
+#' and will automatically correct it by dropping missing data.
+#'
+#' @returns the `override` list object, responsible for powering `guides()`.
+#' Corrected for missing data if any exists.
+#'
+#' @param override the `override` list object, responsible for powering `guides()`
+#'
+#' @keywords internal
+
+drop_missing_override_data <- function(override) {
+  # Throw warning letting users know NA values have been removed
+  na_data_in_colour_layer <- any(is.na(override$colour$colour_mapping))
+
+  if (na_data_in_colour_layer) {
+    cli_warn(
+      message = c("!" = "Missing data detected that has been dropped from the legend display.",
+                  "i" = "Missing data may still appear in the {.code ggswim} plot."),
+      call = caller_env(),
+      class = c("ggswim_cond", "missing_colour_data")
+    )
+
+    # Remove the NA data from the override
+    override$colour <- override$colour[!is.na(override$colour$colour_mapping), , drop = FALSE]
+  }
+
+  return(override)
 }
