@@ -102,15 +102,8 @@ build_ggswim <- function(ggswim_obj) {
 
   override$shape <- "none" # TODO: Determine if default should always be removal
 
-  # Catch and convert legend discrepancies in instances where missing data is dropped ----
-  if (any(is.na(override$colour$colour_mapping))) {
-    legend_discrepancy_found <- check_for_na_legend_discrepancy(ggswim_obj, override)
-
-    # If discrepancy found, drop NA from override to stop error. Throw warning to user
-    if (legend_discrepancy_found) {
-      override$colour <- override$colour[!is.na(override$colour$colour_mapping), , drop = FALSE]
-    }
-  }
+  # Drop any NA values from the `colour` layer that would cause guide() errors ----
+  override$colour <- override$colour[!is.na(override$colour$colour_mapping), , drop = FALSE]
 
   # Return fixed ggswim object
   (ggswim_obj +

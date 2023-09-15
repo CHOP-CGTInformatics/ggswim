@@ -112,6 +112,7 @@ add_marker <- function(
       data = data,
       mapping = mapping,
       colour = dots[names(dots) %in% c("color", "colour")],
+      na.rm = TRUE,
       ...
     )
 
