@@ -52,7 +52,7 @@ First we'll define a few sets of data to work with:
 - `dose_data_a` & `dose_data_b`: a dataframe with two doses corresponding to multiple potential time points for the patients in `patient_data`
 - `dose_type`: a dataframe with two drug distrbution method types identified using labels and names
 
-```{r, include=FALSE, eval=TRUE, message=FALSE}
+```{r, include=TRUE, eval=TRUE, message=FALSE}
 set.seed(123)
 patient_data <-
   tibble::tibble(

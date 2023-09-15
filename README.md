@@ -50,6 +50,40 @@ First we’ll define a few sets of data to work with:
   identified using labels and names
 
 ``` r
+set.seed(123)
+patient_data <-
+  tibble::tibble(
+    id = 1:4,
+    trt = rep_len(c("Drug A", "Drug B"), length.out = 4),
+    time_to_last_followup = c(5,2,4,7),
+    time_to_death = ifelse(id %% 2, time_to_last_followup, NA),
+    end_time = c(5,2,4,7)
+  ) |> dplyr::mutate(time_start = 0) |>
+  tidyr::pivot_longer(cols = c(time_start, time_to_last_followup),
+                      values_to = "time",
+                      names_to = "treatment_group")
+
+dose_data_a <- tibble::tibble(
+  id2 = c(1,1,1,2,2,2,3,4,4,4),
+  type = sample(c("Dose I", "Dose II"), 10, replace = TRUE),
+  time = c(0,1.5,2,0,0.5,1,1.25,2,3,7)
+)
+
+dose_data_b <- tibble::tibble(
+  id3 = c(1,1,2,3,4),
+  type2 = sample(c("Dose III", "Dose IV"), 5, replace = TRUE),
+  time = c(0.5, 0.75, 0.25, 3, 6)
+)
+
+dose_type <- tibble::tibble(
+  id4 = c(1,2,3,4),
+  label = c("💊", "💉", "💊", "💉"),
+  name = c("Method A", "Method B", "Method A", "Method B"),
+  time = c(.15, 0.1, 2.25, 5.5)
+)
+```
+
+``` r
 library(ggswim)
 library(ggplot2)
 
