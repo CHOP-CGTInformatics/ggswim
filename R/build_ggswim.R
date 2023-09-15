@@ -95,7 +95,7 @@ build_ggswim <- function(ggswim_obj) {
       unique()
   }
 
-  # Handle forcing of labels into color aesthetic of legend
+  # Setup label coercion into color layer of legend
   if ("label" %in% names(override$colour)) {
     override$colour$label[is.na(override$colour$label)] <- ""
   }

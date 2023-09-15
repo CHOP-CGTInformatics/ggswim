@@ -49,7 +49,7 @@ considerations and requirements.
 \item \strong{\code{y}}
 \item \strong{\code{color}}/\strong{\code{colour}}
 \item \strong{\code{label}} *
-\item \code{name} *
+\item \code{name} **
 \item \code{alpha}
 \item \code{angle}
 \item \code{family}
@@ -61,12 +61,13 @@ considerations and requirements.
 \item \code{vjust}
 }
 
-\strong{Note}: \code{add_marker()} \strong{does not} support mapping using \code{fill}.
-
-\strong{Note}: If using \code{label}, a secondary \code{color} reference is required to make
+\strong{Notes}:
+\itemize{
+\item \code{add_marker()} \strong{does not} support mapping using \code{fill}.
+\item *If using \code{label}, a secondary \code{color} reference is required to make
 the label appear in the color layer of the legend.
-
-\strong{Note}: If using a dynamic \code{color} call, a specifying \code{name} is required for
+\item **If using a dynamic \code{color} call, a specifying \code{name} is required for
 aesthetic mapping to render the legend correctly.
+}
 }
 

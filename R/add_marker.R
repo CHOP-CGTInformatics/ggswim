@@ -37,7 +37,7 @@
 #' - **`y`**
 #' - **`color`**/**`colour`**
 #' - **`label`** *
-#' - `name` *
+#' - `name` **
 #' - `alpha`
 #' - `angle`
 #' - `family`
@@ -48,12 +48,12 @@
 #' - `size`
 #' - `vjust`
 #'
-#' **Note**: `add_marker()` **does not** support mapping using `fill`.
+#' **Notes**:
 #'
-#' **Note**: If using `label`, a secondary `color` reference is required to make
+#' - `add_marker()` **does not** support mapping using `fill`.
+#' - *If using `label`, a secondary `color` reference is required to make
 #' the label appear in the color layer of the legend.
-#'
-#' **Note**: If using a dynamic `color` call, a specifying `name` is required for
+#' - **If using a dynamic `color` call, a specifying `name` is required for
 #' aesthetic mapping to render the legend correctly.
 #'
 #' @export

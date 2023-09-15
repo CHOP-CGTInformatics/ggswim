@@ -21,5 +21,9 @@ Imports:
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Suggests: 
+    knitr,
+    rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Config/Needs/website: rmarkdown
+VignetteBuilder: knitr

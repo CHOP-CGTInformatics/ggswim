@@ -1,0 +1,190 @@
+---
+title: "Introduction to ggswim"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The ggswim package provides users with a convenient and flexible framework for quickly developing swimmer plots in a way that coincides with typical ggplot2 design principles. In this article, we will demonstrate some of the options available to developers.
+
+In its current state, ggswim uses two main functions: `ggswim()` and `add_marker()`. 
+
+`ggswim()` is wrapped around `geom_col()` and is responsible for providing the horizontal bars of a swimmer plot, what we'll refer to as the "lanes." `add_marker()` is wrapped around `geom_point()` and `geom_label()` to add points/shapes/labels or what we'll refer to as the "markers" for events on the swimmer plots lanes.
+
+Because ggswim is built on top of existing ggplot2 infrastructure, those familiar with ggplot2 will be able to implement the same layer-building development practices they are used to, including stylizing and themeing.
+
+### Building swimmer plots with aesthetic mapping
+
+In this first example, let's build a swimmer plot using `aes()` and dynamic mapping of data. We'll start with an initial dataframe, `patient_data`, and build marker layers onto it with additional "dose" dataframes:
+
+```{r aes mapping data}
+library(ggswim)
+library(ggplot2)
+
+patient_data <-
+  tibble::tibble(
+    id = 1:4,
+    trt = rep_len(c("Drug A", "Drug B"), length.out = 4),
+    time_to_last_followup = c(5,2,4,7),
+    time_to_death = ifelse(id %% 2, time_to_last_followup, NA),
+    end_time = c(5,2,4,7)
+  )
+
+dose_data_a <- tibble::tibble(
+  id = c(1,1,1,2,2,2,3,4,4,4),
+  type = sample(c("Dose I", "Dose II"), 10, replace = TRUE),
+  time = c(0,1.5,2,0,0.5,1,1.25,2,3,7)
+)
+
+dose_data_b <- tibble::tibble(
+  id = c(1,1,2,3,4),
+  type = sample(c("Dose III", "Dose IV"), 5, replace = TRUE),
+  time = c(0.5, 0.75, 0.25, 3, 6)
+)
+```
+
+Now, let's make the plot using `ggswim()` and two `add_marker()` calls:
+
+```{r aes mapping plot}
+p <- patient_data |>
+  dplyr::mutate(time_start = 0) |>
+  tidyr::pivot_longer(cols = c(time_start, time_to_last_followup),
+                      values_to = "time",
+                      names_to = "treatment_group") |>
+  ggswim(
+    mapping = aes(y = id,
+        x = time,
+        fill = trt), width = 0.1
+  ) +
+  add_marker(data = dose_data_a,
+             mapping = aes(
+               x = time,
+               y = id,
+               shape = type,
+               color = type,
+             ), size = 3) +
+  add_marker(data = dose_data_b,
+             mapping = aes(
+               x = time,
+               y = id,
+               shape = type,
+               color = type,
+             ), size = 5)
+
+p
+```
+
+This is great for shapes and points, but what if we wanted to get fancy and add in some labels like emojis? This is where some ggswim magic really shines. ggswim's `add_marker()` allows for both types of displays to appear and does the leg work of rending them both appropriately in the legend. Let's add some medical emojis to a new dataframe we'll call `does_type`:
+
+```{r label mapping}
+dose_type <- tibble::tibble(
+  id = c(1,2,3,4),
+  label = c("💊", "💉", "💊", "💉"),
+  name = c("Method A", "Method B", "Method A", "Method B"),
+  time = c(.15, 0.1, 2.25, 5.5)
+)
+
+p <- p + 
+  add_marker(
+    dose_type,
+    aes(x = time,
+        y = id,
+        label = label,
+        color = name),
+    label.size = NA, fill = NA, size = 5
+  )
+
+p
+```
+
+This is great and all, but it could look better right? Remember how earlier we mentioned you can use existing ggplot2 functions with ggswim outputs? Let's implement some here so we can find a bit more joy in our plot:
+
+```{r mapping finalizing}
+p +
+  labs(x = "Time", y = "Subject ID", color = "Markers") +
+  ggtitle("My Swimmer Plot") +
+  theme_minimal() +
+  scale_color_manual(name = "Markers",
+                              values = c("firebrick", "tomato", "orange", "chartreuse2", NA, NA)) +
+  scale_shape_manual(name = "Markers",
+                              values = c(19,15,8,18)) +
+  scale_fill_manual(name = "Lanes",
+                             values = c("steelblue", "cyan", "skyblue", "steelblue4"))
+```
+
+### Building swimmer plots with individual markers
+
+Not all data is made, or received equal, and so ggswim was developed to cater to both dynamic mapping of markers as well as static assignment of markers. What do we mean by this?
+
+Well, let's say that instead of setting your mapped `aes()` "colour" to a variable, you instead only have one marker in the dataset supplied and want to define the `color` yourself. Let's change the previous datasets so they are split and contain only one marker level per dataframe:
+
+```{r static mapping}
+dose_data_a <- tibble::tibble(
+  id = c(1,1,1,2,2,2,3,4,4,4),
+  type = sample(c("Dose I"), 10, replace = TRUE),
+  time = c(0,1.5,2,0,0.5,1,1.25,2,3,7)
+)
+
+dose_data_b <- tibble::tibble(
+  id = c(1,1,1,2,2,2,3,4,4,4),
+  type = sample(c("Dose II"), 10, replace = TRUE),
+  time = c(.15,2,3,.5,0.9,1.3,1,4,1,8)
+)
+
+dose_type_a <- tibble::tibble(
+  id = c(1,2),
+  label = c("💊", "💊"),
+  name = c("Method A", "Method A"),
+  time = c(.15, 0.1)
+)
+```
+
+For this to work, we still need to specify a `name` argument to `add_marker()` which acts as an anchor point for the legend. You'll notice in the dataframes for `dose_type_a` and `dose_type_b` we have a `label` and a `name` column to reference. Let's plot it similarly to what we did above:
+
+```{r static plot}
+p <- patient_data |>
+  dplyr::mutate(time_start = 0) |>
+  tidyr::pivot_longer(cols = c(time_start, time_to_last_followup),
+                      values_to = "time",
+                      names_to = "treatment_group") |>
+  ggswim(
+    aes(y = id,
+        x = time,
+        fill = trt)
+  ) +
+  add_marker(
+    data = dose_data_a,
+    mapping = aes(x = time, y = id, name = "Dose I"), colour = "red", size = 5
+  ) +
+  add_marker(
+    data = dose_data_b,
+    mapping = aes(x = time, y = id, name = "Dose II"), color = "blue", shape = 8
+  ) +
+  add_marker(
+    data = dose_type_a,
+    mapping = aes(x = time, y = id, label = label, color = name),
+    label.size = NA, fill = NA, size = 5
+  ) + 
+  ggtitle("My Swimmer Plot") +
+  labs(color = "Event", fill = "Drug") +
+  theme_minimal()
+
+p
+```
+
+This complicated set of information illustrates that ggswim was able to handle the following complexities:
+
+- Emoji and point displays in the same graph and grouped intelligently into the appropriate legend layer
+- Data from various sources
+- Marker mapping using a combination of static and dynamic mapping associations
+
+### Additional notes
+
+- ggswim does not support missing data for mapping aesthetics. Developers will be warned about missing data that may appear in the display, but will be removed from the legend.
+- `ggswim()` does not support mapping using the `colour` argument
+- `add_marker()` does not support mapping using the `fill` argument
+- For emojis and other shapes to properly appear, users may need to switch the graphics rendering device to AGG
