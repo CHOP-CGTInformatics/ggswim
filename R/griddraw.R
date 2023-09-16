@@ -8,8 +8,7 @@
 #'
 #' @examples
 #' # TODO: add example
-grid.draw.ggswim_obj <- function(x, recording = TRUE) {
+grid.draw.ggswim_obj <- function(x, recording = TRUE) { # nolint: object_name_linter
   build_ggswim(x) |>
     grid::grid.draw(recording = recording)
 }
-

@@ -98,13 +98,13 @@ add_marker <- function(
       mapping$colour <- rlang::sym(mapping$name)
       mapping <- mapping[names(mapping) != "name"] # remove name
 
-      static_colours <- if ("color" %in% names(rlang::dots_list(...))){
+      static_colours <- if ("color" %in% names(rlang::dots_list(...))) {
         rlang::dots_list(...)$color
       } else {
         rlang::dots_list(...)$colour
       }
 
-      dots[names(dots) %in% c("color" , "colour")] <- c()
+      dots[names(dots) %in% c("color", "colour")] <- c()
     }
 
     # TODO: Fix issue causing removal of NA values and subsequent `build_ggswim()` failure

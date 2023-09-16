@@ -15,7 +15,7 @@ In its current state, ggswim uses two main functions: `ggswim()` and `add_marker
 
 `ggswim()` is wrapped around `geom_col()` and is responsible for providing the horizontal bars of a swimmer plot, what we'll refer to as the "lanes." `add_marker()` is wrapped around `geom_point()` and `geom_label()` to add points/shapes/labels or what we'll refer to as the "markers" for events on the swimmer plots lanes.
 
-Because ggswim is built on top of existing ggplot2 infrastructure, those familiar with ggplot2 will be able to implement the same layer-building development practices they are used to, including stylizing and themeing.
+Because ggswim is built on top of existing ggplot2 infrastructure, those familiar with ggplot2 will be able to implement the same layer-building development practices they are used to, including stylizing and themes.
 
 ### Building swimmer plots with aesthetic mapping
 
@@ -29,19 +29,19 @@ patient_data <-
   tibble::tibble(
     id = 1:4,
     trt = rep_len(c("Drug A", "Drug B"), length.out = 4),
-    time_to_last_followup = c(5,2,4,7),
+    time_to_last_followup = c(5, 2, 4, 7),
     time_to_death = ifelse(id %% 2, time_to_last_followup, NA),
-    end_time = c(5,2,4,7)
+    end_time = c(5, 2, 4, 7)
   )
 
 dose_data_a <- tibble::tibble(
-  id = c(1,1,1,2,2,2,3,4,4,4),
+  id = c(1, 1, 1, 2, 2, 2, 3, 4, 4, 4),
   type = sample(c("Dose I", "Dose II"), 10, replace = TRUE),
-  time = c(0,1.5,2,0,0.5,1,1.25,2,3,7)
+  time = c(0, 1.5, 2, 0, 0.5, 1, 1.25, 2, 3, 7)
 )
 
 dose_data_b <- tibble::tibble(
-  id = c(1,1,2,3,4),
+  id = c(1, 1, 2, 3, 4),
   type = sample(c("Dose III", "Dose IV"), 5, replace = TRUE),
   time = c(0.5, 0.75, 0.25, 3, 6)
 )
@@ -82,13 +82,13 @@ This is great for shapes and points, but what if we wanted to get fancy and add 
 
 ```{r label mapping}
 dose_type <- tibble::tibble(
-  id = c(1,2,3,4),
+  id = c(1, 2, 3, 4),
   label = c("💊", "💉", "💊", "💉"),
   name = c("Method A", "Method B", "Method A", "Method B"),
   time = c(.15, 0.1, 2.25, 5.5)
 )
 
-p <- p + 
+p <- p +
   add_marker(
     dose_type,
     aes(x = time,
@@ -111,7 +111,7 @@ p +
   scale_color_manual(name = "Markers",
                               values = c("firebrick", "tomato", "orange", "chartreuse2", NA, NA)) +
   scale_shape_manual(name = "Markers",
-                              values = c(19,15,8,18)) +
+                              values = c(19, 15, 8, 18)) +
   scale_fill_manual(name = "Lanes",
                              values = c("steelblue", "cyan", "skyblue", "steelblue4"))
 ```
@@ -124,19 +124,19 @@ Well, let's say that instead of setting your mapped `aes()` "colour" to a variab
 
 ```{r static mapping}
 dose_data_a <- tibble::tibble(
-  id = c(1,1,1,2,2,2,3,4,4,4),
+  id = c(1, 1, 1, 2, 2, 2, 3, 4, 4, 4),
   type = sample(c("Dose I"), 10, replace = TRUE),
-  time = c(0,1.5,2,0,0.5,1,1.25,2,3,7)
+  time = c(0, 1.5, 2, 0, 0.5, 1, 1.25, 2, 3, 7)
 )
 
 dose_data_b <- tibble::tibble(
-  id = c(1,1,1,2,2,2,3,4,4,4),
+  id = c(1, 1, 1, 2, 2, 2, 3, 4, 4, 4),
   type = sample(c("Dose II"), 10, replace = TRUE),
-  time = c(.15,2,3,.5,0.9,1.3,1,4,1,8)
+  time = c(.15, 2, 3, .5, 0.9, 1.3, 1, 4, 1, 8)
 )
 
 dose_type_a <- tibble::tibble(
-  id = c(1,2),
+  id = c(1, 2),
   label = c("💊", "💊"),
   name = c("Method A", "Method A"),
   time = c(.15, 0.1)
@@ -168,7 +168,7 @@ p <- patient_data |>
     data = dose_type_a,
     mapping = aes(x = time, y = id, label = label, color = name),
     label.size = NA, fill = NA, size = 5
-  ) + 
+  ) +
   ggtitle("My Swimmer Plot") +
   labs(color = "Event", fill = "Drug") +
   theme_minimal()

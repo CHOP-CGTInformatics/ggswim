@@ -50,7 +50,10 @@ build_ggswim <- function(ggswim_obj) {
     if (!is.null(ggswim_obj$layers[[i]]$static_colours)) {
       static_colours$indices <- c(static_colours$indices, i)
       static_colours$colors <- c(static_colours$colors, ggswim_obj$layers[[i]]$static_colours)
-      static_colours$name <- c(static_colours$name, ggswim_obj$layers[[i]]$mapping$colour |> get_expr() |> as.character())
+      static_colours$name <- c(static_colours$name,
+                               ggswim_obj$layers[[i]]$mapping$colour |>
+                                 get_expr() |>
+                                 as.character())
     }
   }
 
@@ -86,7 +89,7 @@ build_ggswim <- function(ggswim_obj) {
   override$colour <- bind_rows(label_layer_data, point_layer_data) |>
     select(any_of(accepted_colour_columns))
 
-  if ("colour_mapping" %in% names(override$colour)){
+  if ("colour_mapping" %in% names(override$colour)) {
     # Arrange necessary to follow order of ggplot legend outputs
     # (i.e. alphabetical, numeric, etc.)
     override$colour <- override$colour |>

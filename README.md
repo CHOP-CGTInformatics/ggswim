@@ -15,10 +15,13 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![R-CMD-check](https://github.com/CHOP-CGTInformatics/ggswim/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CHOP-CGTInformatics/ggswim/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The ggswim package provides an easy set of commands to create “swimmer”
-plots.
+The ggswim package provides a convenient set of commands to easily
+create “swimmer” plots.
 
 ## Installation
+
+ggswim is in its very early stages, but in active development! Expect to
+see many changes in the near future to the API and documentation.
 
 You can install the development version of ggswim like so:
 
@@ -28,15 +31,17 @@ devtools::install_github("CHOP-CGTInformatics/ggswim")
 
 ## Background
 
-At it’s core, the ggswim package leverages the already fantastic
-capabilities of ggplot2 and seeks to preserve as much of the flexibility
-and structure that it provides as possible. Therefore, when using ggswim
-you will likely notice that much of the documentation and underlying
-functionality wrap it! So what makes it different? ggswim provides some
-opinionated decisions to steer plots and the data provided in a way that
-makes swimmer plots easily accessible and easy to build upon.
+ggswim provides developers with a set of commands that make it easy to
+create beautiful swimmer plots using the architecture they may already
+be familiar with in ggplot2. The main functions that power ggswim are
+wrapped around core ggplot2 functions, leveraging the ability to add
+layers at a whim for whatever the developer’s display requires.
 
-Let’s start with some simple examples of how this works.
+The ggswim package reduces the complexity behind making reproducible
+legend displays that correctly show points of interest and are key to
+telling the story of the swimmer plot.
+
+Let’s show a quick example of how this works below!
 
 ## A Sample Data Set
 
@@ -46,7 +51,7 @@ First we’ll define a few sets of data to work with:
 - `dose_data_a` & `dose_data_b`: a dataframe with two doses
   corresponding to multiple potential time points for the patients in
   `patient_data`
-- `dose_type`: a dataframe with two drug distrbution method types
+- `dose_type`: a dataframe with two drug distribution method types
   identified using labels and names
 
 ``` r
@@ -135,5 +140,5 @@ p +
 We have a lot of work to do with ggswim! Future plans include:
 
 - A full test suite
-- Enforced checks
-- Vignettes and documentation
+- Better checks for ggswim-compatible data structures
+- Additional vignettes and improved documentation
