@@ -90,6 +90,8 @@ build_ggswim <- function(ggswim_obj) {
     select(any_of(accepted_colour_columns))
 
   if ("colour_mapping" %in% names(override$colour)) {
+    # Convert to factor to handle issue with lowercase/uppercase arrange issues
+    override$colour$colour_mapping <- factor(override$colour$colour_mapping)
     # Arrange necessary to follow order of ggplot legend outputs
     # (i.e. alphabetical, numeric, etc.)
     override$colour <- override$colour |>
