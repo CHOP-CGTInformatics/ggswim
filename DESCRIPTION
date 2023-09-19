@@ -18,6 +18,7 @@ Imports:
     ggplot2,
     grid,
     rlang,
+    tibble,
     tidyr,
     vdiffr
 RoxygenNote: 7.2.3
