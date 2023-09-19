@@ -13,7 +13,8 @@
 #' at the top level of the plot. You must supply mapping if there is no plot mapping.
 #' @param i An integer to supply for the layer to retrieve. If none given, defaults
 #' to `1L`.
-#' @param static_colours description
+#' @param static_colours an inherited dataframe from add_marker that captures
+#' and defines static color indices
 #'
 #' @keywords internal
 get_layer_data <- function(data, mapping, i = 1L, static_colours = NULL) {

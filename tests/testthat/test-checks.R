@@ -19,3 +19,24 @@ test_that("checkmate wrappers work", {
   expect_error(check_arg_is_logical(123), class = "check_logical")
   expect_true(check_arg_is_logical(TRUE))
 })
+
+test_that("check_supported_mapping_aes works", {
+  mapping <- data.frame(
+    "x" = "xvals",
+    "y" = "yvals",
+    "fill" = "fillvals",
+    "colour" = "colourvals"
+  )
+  unsupported_aes <- c("fill")
+
+  parent_func <- "test_function()"
+
+  expect_error(
+    check_supported_mapping_aes(mapping, unsupported_aes, parent_func),
+    class = "unsupported_aes"
+  )
+
+  expect_no_error(
+    check_supported_mapping_aes(mapping, unsupported_aes = NULL, parent_func)
+  )
+})

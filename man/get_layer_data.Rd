@@ -16,7 +16,8 @@ at the top level of the plot. You must supply mapping if there is no plot mappin
 \item{i}{An integer to supply for the layer to retrieve. If none given, defaults
 to \code{1L}.}
 
-\item{static_colours}{description}
+\item{static_colours}{an inherited dataframe from add_marker that captures
+and defines static color indices}
 }
 \value{
 A dataframe

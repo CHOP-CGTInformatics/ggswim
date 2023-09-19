@@ -6,7 +6,9 @@
 #' @importFrom rlang caller_arg caller_env as_label is_atomic get_expr .data
 #'   is_empty :=
 #' @importFrom dplyr arrange bind_rows select arrange any_of
-#' @importFrom checkmate check_logical check_list check_integerish check_data_frame
+#' @importFrom checkmate check_logical check_list check_integerish
+#' @importFrom("stats", "setNames") check_data_frame
+#' @importFrom vdiffr expect_doppelganger
 #'   check_character
 "_PACKAGE"
 
