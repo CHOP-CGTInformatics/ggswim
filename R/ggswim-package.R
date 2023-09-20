@@ -10,6 +10,7 @@
 #' @importFrom stats setNames
 #' @importFrom vdiffr expect_doppelganger
 #' @importFrom tidyr pivot_longer
+#' @importFrom tibble tibble tribble
 "_PACKAGE"
 
 ## usethis namespace: start

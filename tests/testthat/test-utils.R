@@ -7,9 +7,10 @@ p1 <- ggplot() +
 
 p2 <- ggswim(df, aes(x = hp, y = mpg, fill = cyl)) +
   add_marker(mapping = aes(x = hp, y = mpg, color = names)) +
-  add_marker(df[c('hp', 'mpg', 'wt')],
+  add_marker(df[c("hp", "mpg", "wt")],
              mapping = aes(x = hp, y = mpg, name = "test"),
-             color = "firebrick")
+             color = "firebrick") |>
+  suppressWarnings()
 
 # Static colour df representative of above p2
 static_colour_df <- data.frame(

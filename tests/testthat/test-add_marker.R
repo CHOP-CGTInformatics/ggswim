@@ -60,9 +60,10 @@ test_that("add_marker works for aes mapping", {
 
 test_that("add_marker works for static aesthetics", {
 
-  mk1_layer <- add_marker(data = mk1_data[mk1_data$type == "Dose I",],
+  mk1_layer <- add_marker(data = mk1_data[mk1_data$type == "Dose I", ],
                           mapping = aes(x = time, y = id, name = "Dose Name"),
-                          color = 'red', size = 10)
+                          color = "red", size = 10) |>
+    suppressWarnings()
 
   p1 <- ggswim_layer +
     mk1_layer
