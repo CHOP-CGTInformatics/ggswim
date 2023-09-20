@@ -3,6 +3,3 @@ linters: linters_with_defaults(
     object_length_linter = object_length_linter(45),
     cyclocomp_linter = NULL
   )
-exclusions: list(
-    "tests/testthat/fixtures"
-  )
