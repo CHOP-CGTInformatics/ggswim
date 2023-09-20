@@ -61,13 +61,13 @@
 add_marker <- function(
     data = NULL,
     mapping = aes(),
-    ...
-) {
-
+    ...) {
   # Enforce checks ----
-  check_supported_mapping_aes(mapping = mapping,
-                              unsupported_aes = c("fill"),
-                              parent_func = "add_marker()")
+  check_supported_mapping_aes(
+    mapping = mapping,
+    unsupported_aes = c("fill"),
+    parent_func = "add_marker()"
+  )
 
   # Identify labels ----
   labels <- ifelse("label" %in% names(mapping), TRUE, FALSE)
@@ -82,9 +82,7 @@ add_marker <- function(
 
     # Tag the layer with a reference attribute
     attributes(out)$swim_class <- "marker_label"
-
   } else {
-
     dots <- rlang::dots_list(...)
     static_colours <- NULL
     name_detected <- "name" %in% names(mapping)
@@ -117,7 +115,7 @@ add_marker <- function(
     )
 
     if (is.null(dots$colour) && is.null(dots$color)) {
-        out$aes_params$colour <- NULL
+      out$aes_params$colour <- NULL
     }
 
     out$static_colours <- static_colours

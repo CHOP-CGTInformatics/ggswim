@@ -11,11 +11,12 @@ pt_data <- tibble::tribble(
 )
 
 test_that("ggswim works for simple dataset", {
-
   p <- ggswim(pt_data, aes(x = time, y = id, fill = trt))
 
-  vdiffr::expect_doppelganger(title = "Simple geom_col appears from ggswim",
-                      fig = p)
+  vdiffr::expect_doppelganger(
+    title = "Simple geom_col appears from ggswim",
+    fig = p
+  )
 })
 
 test_that("error on color/colour argument", {

@@ -35,12 +35,13 @@
 ggswim <- function(
     data,
     mapping = aes(),
-    ...
-) {
+    ...) {
   # Enforce checks ----
-  check_supported_mapping_aes(mapping = mapping,
-                              unsupported_aes = c("color", "colour"),
-                              parent_func = "add_marker()")
+  check_supported_mapping_aes(
+    mapping = mapping,
+    unsupported_aes = c("color", "colour"),
+    parent_func = "add_marker()"
+  )
 
   # TODO: Finalize, determine if this is acceptable to enforce
   data[[mapping$y |> get_expr()]] <- data[[mapping$y |> get_expr()]] |> as.factor()

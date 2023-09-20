@@ -62,28 +62,31 @@ patient_data <-
   tibble::tibble(
     id = 1:4,
     trt = rep_len(c("Drug A", "Drug B"), length.out = 4),
-    time_to_last_followup = c(5,2,4,7),
+    time_to_last_followup = c(5, 2, 4, 7),
     time_to_death = ifelse(id %% 2, time_to_last_followup, NA),
-    end_time = c(5,2,4,7)
-  ) |> dplyr::mutate(time_start = 0) |>
-  tidyr::pivot_longer(cols = c(time_start, time_to_last_followup),
-                      values_to = "time",
-                      names_to = "treatment_group")
+    end_time = c(5, 2, 4, 7)
+  ) |>
+  dplyr::mutate(time_start = 0) |>
+  tidyr::pivot_longer(
+    cols = c(time_start, time_to_last_followup),
+    values_to = "time",
+    names_to = "treatment_group"
+  )
 
 dose_data_a <- tibble::tibble(
-  id2 = c(1,1,1,2,2,2,3,4,4,4),
+  id2 = c(1, 1, 1, 2, 2, 2, 3, 4, 4, 4),
   type = sample(c("Dose I", "Dose II"), 10, replace = TRUE),
-  time = c(0,1.5,2,0,0.5,1,1.25,2,3,7)
+  time = c(0, 1.5, 2, 0, 0.5, 1, 1.25, 2, 3, 7)
 )
 
 dose_data_b <- tibble::tibble(
-  id3 = c(1,1,2,3,4),
+  id3 = c(1, 1, 2, 3, 4),
   type2 = sample(c("Dose III", "Dose IV"), 5, replace = TRUE),
   time = c(0.5, 0.75, 0.25, 3, 6)
 )
 
 dose_type <- tibble::tibble(
-  id4 = c(1,2,3,4),
+  id4 = c(1, 2, 3, 4),
   label = c("💊", "💉", "💊", "💉"),
   name = c("Method A", "Method B", "Method A", "Method B"),
   time = c(.15, 0.1, 2.25, 5.5)
@@ -94,32 +97,41 @@ dose_type <- tibble::tibble(
 library(ggswim)
 library(ggplot2)
 
-p <- patient_data |> 
+p <- patient_data |>
   ggswim(
-    aes(y = id,
-        x = time,
-        fill = trt), width = 0.1
+    aes(
+      y = id,
+      x = time,
+      fill = trt
+    ),
+    width = 0.1
   ) +
-  add_marker(data = dose_data_a,
-             mapping = aes(
-               x = time,
-               y = id2,
-               shape = type,
-               color = type
-             ), size = 3) +
-  add_marker(data = dose_data_b,
-             mapping = aes(
-               x = time,
-               y = id3,
-               shape = type2,
-               color = type2,
-             ), size = 5) +
+  add_marker(
+    data = dose_data_a,
+    mapping = aes(
+      x = time,
+      y = id2,
+      shape = type,
+      color = type
+    ), size = 3
+  ) +
+  add_marker(
+    data = dose_data_b,
+    mapping = aes(
+      x = time,
+      y = id3,
+      shape = type2,
+      color = type2,
+    ), size = 5
+  ) +
   add_marker(
     data = dose_type,
-    mapping = aes(x = time,
-        y = id4,
-        label = label,
-        color = name),
+    mapping = aes(
+      x = time,
+      y = id4,
+      label = label,
+      color = name
+    ),
     label.size = NA, fill = NA, size = 5
   )
 
@@ -127,12 +139,18 @@ p +
   ggplot2::labs(x = "Time", y = "Subject ID", color = "Markers") +
   ggplot2::ggtitle("My Swim Plot") +
   ggplot2::theme_minimal() +
-  ggplot2::scale_color_manual(name = "Markers",
-                              values = c("firebrick", "tomato", "orange", "chartreuse2", NA, NA)) +
-  ggplot2::scale_shape_manual(name = "Markers",
-                              values = c(19,15,8,18)) +
-  ggplot2::scale_fill_manual(name = "Lanes",
-                             values = c("steelblue", "cyan", "skyblue", "steelblue4"))
+  ggplot2::scale_color_manual(
+    name = "Markers",
+    values = c("firebrick", "tomato", "orange", "chartreuse2", NA, NA)
+  ) +
+  ggplot2::scale_shape_manual(
+    name = "Markers",
+    values = c(19, 15, 8, 18)
+  ) +
+  ggplot2::scale_fill_manual(
+    name = "Lanes",
+    values = c("steelblue", "cyan", "skyblue", "steelblue4")
+  )
 ```
 
 ### Future Plans

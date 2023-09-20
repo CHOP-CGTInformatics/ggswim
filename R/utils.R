@@ -18,7 +18,6 @@
 #'
 #' @keywords internal
 get_layer_data <- function(data, mapping, i = 1L, static_colours = NULL) {
-
   layer_data <- NULL
 
   # Starting with color/colour, since that will always need to be given to result in a legend layer for ggsegment

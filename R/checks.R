@@ -95,8 +95,10 @@ format_error_val <- function(x) {
 check_supported_mapping_aes <- function(mapping,
                                         unsupported_aes,
                                         parent_func) {
-  msg <- c("x" = "Unsupported aesthetic mapping params detected: {.code {detected_aes}}",
-          "i" = "{.code {parent_func}} does not support {.code {detected_aes}} aesthetic mapping.")
+  msg <- c(
+    "x" = "Unsupported aesthetic mapping params detected: {.code {detected_aes}}",
+    "i" = "{.code {parent_func}} does not support {.code {detected_aes}} aesthetic mapping."
+  )
   cond_class <- c("ggswim_cond", "unsupported_aes")
 
   if (any(unsupported_aes %in% names(mapping))) {

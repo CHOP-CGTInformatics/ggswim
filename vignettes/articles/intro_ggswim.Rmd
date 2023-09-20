@@ -52,28 +52,36 @@ Now, let's make the plot using `ggswim()` and two `add_marker()` calls:
 ```{r aes mapping plot}
 p <- patient_data |>
   dplyr::mutate(time_start = 0) |>
-  tidyr::pivot_longer(cols = c(time_start, time_to_last_followup),
-                      values_to = "time",
-                      names_to = "treatment_group") |>
+  tidyr::pivot_longer(
+    cols = c(time_start, time_to_last_followup),
+    values_to = "time",
+    names_to = "treatment_group"
+  ) |>
   ggswim(
-    mapping = aes(y = id,
-        x = time,
-        fill = trt), width = 0.1
+    mapping = aes(
+      y = id,
+      x = time,
+      fill = trt
+    ), width = 0.1
   ) +
-  add_marker(data = dose_data_a,
-             mapping = aes(
-               x = time,
-               y = id,
-               shape = type,
-               color = type,
-             ), size = 3) +
-  add_marker(data = dose_data_b,
-             mapping = aes(
-               x = time,
-               y = id,
-               shape = type,
-               color = type,
-             ), size = 5)
+  add_marker(
+    data = dose_data_a,
+    mapping = aes(
+      x = time,
+      y = id,
+      shape = type,
+      color = type,
+    ), size = 3
+  ) +
+  add_marker(
+    data = dose_data_b,
+    mapping = aes(
+      x = time,
+      y = id,
+      shape = type,
+      color = type,
+    ), size = 5
+  )
 
 p
 ```
@@ -91,10 +99,12 @@ dose_type <- tibble::tibble(
 p <- p +
   add_marker(
     dose_type,
-    aes(x = time,
-        y = id,
-        label = label,
-        color = name),
+    aes(
+      x = time,
+      y = id,
+      label = label,
+      color = name
+    ),
     label.size = NA, fill = NA, size = 5
   )
 
@@ -108,12 +118,18 @@ p +
   labs(x = "Time", y = "Subject ID", color = "Markers") +
   ggtitle("My Swimmer Plot") +
   theme_minimal() +
-  scale_color_manual(name = "Markers",
-                              values = c("firebrick", "tomato", "orange", "chartreuse2", NA, NA)) +
-  scale_shape_manual(name = "Markers",
-                              values = c(19, 15, 8, 18)) +
-  scale_fill_manual(name = "Lanes",
-                             values = c("steelblue", "cyan", "skyblue", "steelblue4"))
+  scale_color_manual(
+    name = "Markers",
+    values = c("firebrick", "tomato", "orange", "chartreuse2", NA, NA)
+  ) +
+  scale_shape_manual(
+    name = "Markers",
+    values = c(19, 15, 8, 18)
+  ) +
+  scale_fill_manual(
+    name = "Lanes",
+    values = c("steelblue", "cyan", "skyblue", "steelblue4")
+  )
 ```
 
 ### Building swimmer plots with individual markers
@@ -148,13 +164,17 @@ For this to work, we still need to specify a `name` argument to `add_marker()` w
 ```{r static plot}
 p <- patient_data |>
   dplyr::mutate(time_start = 0) |>
-  tidyr::pivot_longer(cols = c(time_start, time_to_last_followup),
-                      values_to = "time",
-                      names_to = "treatment_group") |>
+  tidyr::pivot_longer(
+    cols = c(time_start, time_to_last_followup),
+    values_to = "time",
+    names_to = "treatment_group"
+  ) |>
   ggswim(
-    aes(y = id,
-        x = time,
-        fill = trt)
+    aes(
+      y = id,
+      x = time,
+      fill = trt
+    )
   ) +
   add_marker(
     data = dose_data_a,

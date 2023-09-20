@@ -23,7 +23,6 @@
 #' @export
 
 build_ggswim <- function(ggswim_obj) {
-
   # Set up initial capture variables ----
   # Indices for layer positions in ggswim_obj
   label_layer_indices <- c()
@@ -50,10 +49,12 @@ build_ggswim <- function(ggswim_obj) {
     if (!is.null(ggswim_obj$layers[[i]]$static_colours)) {
       static_colours$indices <- c(static_colours$indices, i)
       static_colours$colors <- c(static_colours$colors, ggswim_obj$layers[[i]]$static_colours)
-      static_colours$name <- c(static_colours$name,
-                               ggswim_obj$layers[[i]]$mapping$colour |>
-                                 get_expr() |>
-                                 as.character())
+      static_colours$name <- c(
+        static_colours$name,
+        ggswim_obj$layers[[i]]$mapping$colour |>
+          get_expr() |>
+          as.character()
+      )
     }
   }
 
@@ -72,13 +73,15 @@ build_ggswim <- function(ggswim_obj) {
 
   # Create bound layer dataframes ----
   label_layer_data <- bind_layer_data(ggswim_obj,
-                                      layer_indices = label_layer_indices,
-                                      layer_data = label_layer_data)
+    layer_indices = label_layer_indices,
+    layer_data = label_layer_data
+  )
 
   point_layer_data <- bind_layer_data(ggswim_obj,
-                                      layer_indices = point_layer_indices,
-                                      layer_data = point_layer_data,
-                                      static_colours = static_colours)
+    layer_indices = point_layer_indices,
+    layer_data = point_layer_data,
+    static_colours = static_colours
+  )
 
   # TODO: Verify all acceptable column names
   accepted_colour_columns <- c(
@@ -112,19 +115,21 @@ build_ggswim <- function(ggswim_obj) {
 
   # Return fixed ggswim object and guide overrides -----
   (ggswim_obj +
-      scale_color_manual(values = setNames(override$colour$colour,
-                                           override$colour$colour_mapping)) +
-      guides(
-        shape = override$shape,
-        colour = guide_legend(
-          override.aes = list(
-            label = override$colour$label,
-            fill = override$colour$fill,
-            color = override$colour$colour,
-            shape = override$colour$shape
-          )
+    scale_color_manual(values = setNames(
+      override$colour$colour,
+      override$colour$colour_mapping
+    )) +
+    guides(
+      shape = override$shape,
+      colour = guide_legend(
+        override.aes = list(
+          label = override$colour$label,
+          fill = override$colour$fill,
+          color = override$colour$colour,
+          shape = override$colour$shape
         )
-      )) |>
+      )
+    )) |>
     # remove ggswim class, so default ggplot2 print methods will take over
     structure(class = class(ggswim_obj) |> setdiff("ggswim_obj"))
 }
@@ -149,22 +154,26 @@ bind_layer_data <- function(ggswim_obj, layer_indices, layer_data, static_colour
   for (i in layer_indices) {
     # If first layer, overwrite empty variable
     if (is_empty(layer_data)) {
-      layer_data <- get_layer_data(data = if (
-        # Handle instances where add_marker() inherits data from ggswim()
-        is_empty(ggswim_obj$layers[[i]]$data)
-      ) {
-        ggswim_obj$data
-      } else {
-        ggswim_obj$layers[[i]]$data
-      },
-      mapping = ggswim_obj$layers[[i]]$mapping,
-      i = i,
-      static_colours = static_colours)
+      layer_data <- get_layer_data(
+        data = if (
+          # Handle instances where add_marker() inherits data from ggswim()
+          is_empty(ggswim_obj$layers[[i]]$data)
+        ) {
+          ggswim_obj$data
+        } else {
+          ggswim_obj$layers[[i]]$data
+        },
+        mapping = ggswim_obj$layers[[i]]$mapping,
+        i = i,
+        static_colours = static_colours
+      )
     } else {
-      added_layer_data <- get_layer_data(data = ggswim_obj$layers[[i]]$data,
-                                         mapping = ggswim_obj$layers[[i]]$mapping,
-                                         i = i,
-                                         static_colours = static_colours)
+      added_layer_data <- get_layer_data(
+        data = ggswim_obj$layers[[i]]$data,
+        mapping = ggswim_obj$layers[[i]]$mapping,
+        i = i,
+        static_colours = static_colours
+      )
 
       layer_data <- bind_rows(layer_data, added_layer_data)
     }
@@ -193,8 +202,10 @@ drop_missing_override_data <- function(override) {
 
   if (na_data_in_colour_layer) {
     cli_warn(
-      message = c("!" = "Missing data detected that has been dropped from the legend display.",
-                  "i" = "Missing data may still appear in the {.code ggswim} plot."),
+      message = c(
+        "!" = "Missing data detected that has been dropped from the legend display.",
+        "i" = "Missing data may still appear in the {.code ggswim} plot."
+      ),
       call = caller_env(),
       class = c("ggswim_cond", "missing_colour_data")
     )
