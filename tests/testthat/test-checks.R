@@ -1,3 +1,17 @@
+test_that("wrap_checkmate works", {
+  out <- wrap_checkmate(checkmate::check_character)
+  expect_equal(class(out), "function")
+  expect_error(out(3), class = "ggswim_cond")
+})
+
+test_that("forma_error_val works", {
+  out_atomic <- format_error_val("character")
+  out_non_atomic <- format_error_val(data.frame())
+
+  expect_equal(class(out_atomic), "character")
+  expect_equal(class(out_non_atomic), "character")
+})
+
 test_that("checkmate wrappers work", {
   # character
   expect_error(check_arg_is_character(123), class = "check_character")

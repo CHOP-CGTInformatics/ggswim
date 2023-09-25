@@ -1,11 +1,12 @@
 df <- mtcars
 df$names <- rownames(mtcars)
 rownames(df) <- NULL
+df$cyl <- factor(df$cyl)
 
-p1 <- ggplot() +
+simple_ggplot <- ggplot() +
   geom_point(df, mapping = aes(x = hp, y = mpg, color = names))
 
-p2 <- ggswim(df, aes(x = hp, y = mpg, fill = cyl)) +
+ggswim_plot <- ggswim(df, aes(x = hp, y = mpg, fill = cyl)) +
   add_marker(mapping = aes(x = hp, y = mpg, color = names)) +
   add_marker(df[c("hp", "mpg", "wt")],
     mapping = aes(x = hp, y = mpg, name = "test"),
@@ -13,15 +14,15 @@ p2 <- ggswim(df, aes(x = hp, y = mpg, fill = cyl)) +
   ) |>
     suppressWarnings()
 
-# Static colour df representative of above p2
+# Static colour df representative of above ggswim_plot
 static_colour_df <- data.frame(
   "indices" = 3, "colors" = "firebrick", "name" = "test"
 )
 
-test_that("get_layer_data works with simple dataset and aes mapping", {
+test_that("get_layer_data works with simple dataset and aes colour mapping", {
   layer_data <- get_layer_data(
-    data = p1$layers[[1]]$data,
-    mapping = p1$layers[[1]]$mapping,
+    data = simple_ggplot$layers[[1]]$data,
+    mapping = simple_ggplot$layers[[1]]$mapping,
     i = 1L
   )
 
@@ -29,11 +30,22 @@ test_that("get_layer_data works with simple dataset and aes mapping", {
   expect_equal(class(layer_data), "data.frame")
 })
 
-
-test_that("get_layer_data works with a swim framework and static mapping", {
+test_that("get_layer_data works with swim framework and aes fill mapping", {
   layer_data <- get_layer_data(
-    data = p2$layers[[3]]$data,
-    mapping = p2$layers[[3]]$mapping,
+    data = df,
+    mapping = ggswim_plot$layers[[1]]$mapping,
+    i = 1L
+  )
+
+  expect_true(all(c("fill_mapping", "fill") %in% names(layer_data)))
+  expect_equal(class(layer_data), "data.frame")
+})
+
+
+test_that("get_layer_data works with a swim framework and static colour mapping", {
+  layer_data <- get_layer_data(
+    data = ggswim_plot$layers[[3]]$data,
+    mapping = ggswim_plot$layers[[3]]$mapping,
     i = 3L
   )
 

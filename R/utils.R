@@ -20,7 +20,8 @@
 get_layer_data <- function(data, mapping, i = 1L, static_colours = NULL) {
   layer_data <- NULL
 
-  # Starting with color/colour, since that will always need to be given to result in a legend layer for ggsegment
+  # Starting with color/colour, since that will always need to be given to result
+  # in a legend layer for ggplots
   aes_mapping <- unlist(mapping)
 
   # TODO: Currently functionality is limited to and requires a color or fill aesthetic
@@ -32,6 +33,7 @@ get_layer_data <- function(data, mapping, i = 1L, static_colours = NULL) {
     colour_mapping <- NULL
   }
 
+  # TODO: get_expr() will fail if something like `factor(arg)` is supplied
   if ("fill" %in% names(aes_mapping)) {
     fill_mapping <- data[[aes_mapping[["fill"]] |> get_expr()]]
   } else {
