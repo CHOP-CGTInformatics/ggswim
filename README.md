@@ -47,93 +47,43 @@ Let’s show a quick example of how this works below!
 
 ## A Sample Data Set
 
-First we’ll define a few sets of data to work with:
+ggswim comes packaged with a sample dataset called `patient_status`,
+which is a list containing 3 tibbles:
 
-- `patient_data`: a dataframe containing per-patient, record-level data
-- `dose_data_a` & `dose_data_b`: a dataframe with two doses
-  corresponding to multiple potential time points for the patients in
-  `patient_data`
-- `dose_type`: a dataframe with two drug distribution method types
-  identified using labels and names
-
-``` r
-set.seed(123)
-patient_data <-
-  tibble::tibble(
-    id = 1:4,
-    trt = rep_len(c("Drug A", "Drug B"), length.out = 4),
-    time_to_last_followup = c(5, 2, 4, 7),
-    time_to_death = ifelse(id %% 2, time_to_last_followup, NA),
-    end_time = c(5, 2, 4, 7)
-  ) |>
-  dplyr::mutate(time_start = 0) |>
-  tidyr::pivot_longer(
-    cols = c(time_start, time_to_last_followup),
-    values_to = "time",
-    names_to = "treatment_group"
-  )
-
-dose_data_a <- tibble::tibble(
-  id2 = c(1, 1, 1, 2, 2, 2, 3, 4, 4, 4),
-  type = sample(c("Dose I", "Dose II"), 10, replace = TRUE),
-  time = c(0, 1.5, 2, 0, 0.5, 1, 1.25, 2, 3, 7)
-)
-
-dose_data_b <- tibble::tibble(
-  id3 = c(1, 1, 2, 3, 4),
-  type2 = sample(c("Dose III", "Dose IV"), 5, replace = TRUE),
-  time = c(0.5, 0.75, 0.25, 3, 6)
-)
-
-dose_type <- tibble::tibble(
-  id4 = c(1, 2, 3, 4),
-  label = c("💊", "💉", "💊", "💉"),
-  name = c("Method A", "Method B", "Method A", "Method B"),
-  time = c(.15, 0.1, 2.25, 5.5)
-)
-```
+- `patient_status`
+- `adverse_events`
+- `medication_administration`
 
 ``` r
 library(ggswim)
 library(ggplot2)
 
-p <- patient_data |>
-  ggswim(
-    aes(
-      y = id,
-      x = time,
-      fill = trt
-    ),
-    width = 0.1
-  ) +
-  add_marker(
-    data = dose_data_a,
-    mapping = aes(
-      x = time,
-      y = id2,
-      shape = type,
-      color = type
-    ), size = 3
-  ) +
-  add_marker(
-    data = dose_data_b,
-    mapping = aes(
-      x = time,
-      y = id3,
-      shape = type2,
-      color = type2,
-    ), size = 5
-  ) +
-  add_marker(
-    data = dose_type,
-    mapping = aes(
-      x = time,
-      y = id4,
-      label = label,
-      color = name
-    ),
-    label.size = NA, fill = NA, size = 5
-  )
+patient_data <- ggswim::patient_data
+
+patient_status <- patient_data$patient_status
+adverse_events <- patient_data$adverse_events
+medication_administration <- patient_data$medication_administration
+
+p <- patient_status |>
+  tidyr::pivot_longer(c(time_start, time_end)) |>
+  dplyr::arrange(cohort, dplyr::desc(value)) |> 
+  dplyr::mutate(subject_id = factor(subject_id, levels = unique(subject_id))) |> 
+  ggswim(data = patient_status,
+         mapping = aes(x = value,
+                       y = subject_id,
+                       fill = cohort)) +
+  add_marker(data = adverse_events,
+             mapping = aes(x = time_of_event,
+                           y = subject_id,
+                           color = adverse_event_name,
+                           shape = adverse_event_name),
+             size = 5) +
+  add_marker(data = medication_administration,
+             mapping = aes(x = time_of_event,
+                           y = subject_id,
+                           label = medication,
+                           color = name),
+             label.size = NA, fill = NA, size = 5)
 
 p +
   ggplot2::labs(x = "Time", y = "Subject ID", color = "Markers") +
@@ -141,7 +91,7 @@ p +
   ggplot2::theme_minimal() +
   ggplot2::scale_color_manual(
     name = "Markers",
-    values = c("firebrick", "tomato", "orange", "chartreuse2", NA, NA)
+    values = c("firebrick", "tomato", NA, NA, "chartreuse2")
   ) +
   ggplot2::scale_shape_manual(
     name = "Markers",
@@ -149,11 +99,11 @@ p +
   ) +
   ggplot2::scale_fill_manual(
     name = "Lanes",
-    values = c("steelblue", "cyan", "skyblue", "steelblue4")
+    values = c("steelblue", "cyan")
   )
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
 ### Future Plans
 

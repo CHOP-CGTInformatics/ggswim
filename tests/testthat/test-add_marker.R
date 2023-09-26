@@ -87,3 +87,10 @@ test_that("error on fill argument", {
     class = "unsupported_aes"
   )
 })
+
+test_that("warn on label without color argument", {
+  expect_warning(
+    add_marker(mk2_data, aes(x = time, y = id, label = trt)),
+    class = "marker_label_aes"
+  )
+})

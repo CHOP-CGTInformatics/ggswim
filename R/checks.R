@@ -137,4 +137,3 @@ check_marker_label_aes <- function(mapping) {
     }
   }
 }
-

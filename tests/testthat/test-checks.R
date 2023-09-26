@@ -68,8 +68,6 @@ test_that("check_marker_label_aes works", {
     "y" = "yvals",
     "label" = "labelvals"
   )
-
-
   expect_no_condition(check_marker_label_aes(mapping = mapping_pass))
-  expect_warning(check_marker_label_aes(mapping = mapping_warn))
+  expect_warning(check_marker_label_aes(mapping = mapping_warn), class = "marker_label_aes")
 })
