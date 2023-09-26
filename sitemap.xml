@@ -34,6 +34,9 @@
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/build_ggswim.html</loc>
   </url>
   <url>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/check_marker_label_aes.html</loc>
+  </url>
+  <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/check_supported_mapping_aes.html</loc>
   </url>
   <url>
@@ -59,6 +62,9 @@
   </url>
   <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/patient_data.html</loc>
   </url>
   <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/print.ggswim_obj.html</loc>
