@@ -24,6 +24,11 @@ reference:
   - ggswim
   - add_marker
   - build_ggswim
+- title: "Datasets"
+  descr: >
+    Internal datasets for use in testing.
+  contents:
+  - patient_data
 - title: "Internals"
   descr: >
     Internal helpers for ggswim.
