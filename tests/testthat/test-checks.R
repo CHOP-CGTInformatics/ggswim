@@ -54,3 +54,22 @@ test_that("check_supported_mapping_aes works", {
     check_supported_mapping_aes(mapping, unsupported_aes = NULL, parent_func)
   )
 })
+
+test_that("check_marker_label_aes works", {
+  mapping_pass <- data.frame(
+    "x" = "xvals",
+    "y" = "yvals",
+    "label" = "labelvals",
+    "colour" = "colourvals"
+  )
+
+  mapping_warn <- data.frame(
+    "x" = "xvals",
+    "y" = "yvals",
+    "label" = "labelvals"
+  )
+
+
+  expect_no_condition(check_marker_label_aes(mapping = mapping_pass))
+  expect_warning(check_marker_label_aes(mapping = mapping_warn))
+})

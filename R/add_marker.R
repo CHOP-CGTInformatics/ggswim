@@ -69,6 +69,8 @@ add_marker <- function(
     parent_func = "add_marker()"
   )
 
+  check_marker_label_aes(mapping = mapping)
+
   # Identify labels ----
   labels <- ifelse("label" %in% names(mapping), TRUE, FALSE)
 

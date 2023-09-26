@@ -107,3 +107,34 @@ check_supported_mapping_aes <- function(mapping,
     cli_abort(message = msg, call = caller_env(), class = cond_class)
   }
 }
+
+#' @title check add_markers for label and color arguments
+#'
+#' @description
+#' While not required, the legend will not display with label icons if users don't
+#' supply `color` or `colour` to `aes()` along with `label`. Since this doesn't
+#' break the app, a warning should be thrown.
+#'
+#' @param mapping Set of aesthetic mappings created by `aes()`. If specified and
+#' `inherit.aes = TRUE` (the default), it is combined with the default mapping
+#' at the top level of the plot. You must supply mapping if there is no plot mapping.
+#'
+#' @keywords internal
+
+check_marker_label_aes <- function(mapping) {
+
+  msg <- c(
+    "!" = "Label mapping detected but no colour aes supplied.",
+    "i" = "Label icons may not appear in the legend without a colour aesthetic."
+  )
+  cond_class <- c("ggswim_cond", "marker_label_aes")
+
+  if ("label" %in% names(mapping)) {
+    if (!any(c("color", "colour") %in% names(mapping))) {
+      cli_warn(message = msg,
+               call = caller_env(),
+               class = cond_class)
+    }
+  }
+}
+
