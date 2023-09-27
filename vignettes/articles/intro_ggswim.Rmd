@@ -31,11 +31,25 @@ adverse_events <- patient_data$adverse_events
 medication_administration <- patient_data$medication_administration
 ```
 
+As mentioned in the README, `patient_status` is currently built to reflect a typical dataset in the wild. To make this work well and appear nicely in our swimmer plot output, a little bit of some preparation is required. Below we perform the follow manipulations:
+
+- Pivot the data so that `time_start` and `time_end` comprise a single value.
+- Add a sorting variable, `time_sorting`, to support arrangement using summed time values
+- Arrange the data by cohort groups, time sorted values, and subject ID factor levels
+
+```{r}
+patient_status <- patient_status |>
+  tidyr::pivot_longer(c(time_start, time_end)) |>
+  dplyr::mutate(.by = subject_id,
+                time_sorting = sum(value)) |> 
+  dplyr::arrange(cohort, time_sorting) |>
+  dplyr::mutate(subject_id = factor(subject_id, levels = unique(subject_id)))
+```
+
 Now, let's make the plot using `ggswim()` and our first `add_marker()` call:
 
 ```{r aes mapping plot}
 p <- patient_status |>
-  tidyr::pivot_longer(c(time_start, time_end)) |>
   ggswim(data = patient_status,
          mapping = aes(x = value,
                        y = subject_id,
@@ -108,7 +122,6 @@ Now, let's plot it similarly to what we did above:
 
 ```{r static plot}
 patient_status |>
-  tidyr::pivot_longer(c(time_start, time_end)) |>
   ggswim(data = patient_status,
          mapping = aes(x = value,
                        y = subject_id,

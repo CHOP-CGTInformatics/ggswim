@@ -54,6 +54,10 @@ which is a list containing 3 tibbles:
 - `adverse_events`
 - `medication_administration`
 
+At present, a little bit of some data manipulation is required to get
+`patient_status` from a typically expected structure to one that is
+ready for swimming:
+
 ``` r
 library(ggswim)
 library(ggplot2)
@@ -64,10 +68,17 @@ patient_status <- patient_data$patient_status
 adverse_events <- patient_data$adverse_events
 medication_administration <- patient_data$medication_administration
 
-p <- patient_status |>
+patient_status <- patient_status |>
   tidyr::pivot_longer(c(time_start, time_end)) |>
-  dplyr::arrange(cohort, dplyr::desc(value)) |> 
-  dplyr::mutate(subject_id = factor(subject_id, levels = unique(subject_id))) |> 
+  dplyr::mutate(.by = subject_id,
+                time_sorting = sum(value)) |> 
+  dplyr::arrange(cohort, time_sorting) |>
+  dplyr::mutate(subject_id = factor(subject_id, levels = unique(subject_id)))
+```
+
+Now that the data preparation is out of the way, we’re ready to swim!
+
+``` r
   ggswim(data = patient_status,
          mapping = aes(x = value,
                        y = subject_id,
@@ -83,9 +94,7 @@ p <- patient_status |>
                            y = subject_id,
                            label = medication,
                            color = name),
-             label.size = NA, fill = NA, size = 5)
-
-p +
+             label.size = NA, fill = NA, size = 5) +
   ggplot2::labs(x = "Time", y = "Subject ID", color = "Markers") +
   ggplot2::ggtitle("My Swim Plot") +
   ggplot2::theme_minimal() +
@@ -103,7 +112,7 @@ p +
   )
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
 
 ### Future Plans
 
