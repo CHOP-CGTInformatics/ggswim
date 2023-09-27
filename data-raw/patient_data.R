@@ -43,8 +43,8 @@ medication_administration <- tibble::tibble(subject_id = factor(rep(1:10, length
   sample_n(5) |>
   arrange(subject_id) |>
   mutate(
-    medication = rep(sample(c("❌", "✅")), length.out = n()),
-    name = ifelse(medication == "✅", "Medication A", "Medication B"),
+    medication = rep(sample(c("\U274C", "\U2705")), length.out = n()),
+    name = ifelse(medication == "\U2705", "Medication A", "Medication B"),
   ) |>
   left_join(patient_status, by = "subject_id",
             relationship = "many-to-many") |> # Temp join to reference time vals
