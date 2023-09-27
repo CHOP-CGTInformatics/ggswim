@@ -94,15 +94,15 @@ p +
   ggplot2::theme_minimal() +
   ggplot2::scale_color_manual(
     name = "Markers",
-    values = c("firebrick", "tomato", NA, NA, "chartreuse2")
+    values = c("firebrick", "forestgreen", NA, NA, "purple")
   ) +
   ggplot2::scale_shape_manual(
     name = "Markers",
-    values = c(19, 15, 8, 18)
+    values = c(19, 13, 9)
   ) +
   ggplot2::scale_fill_manual(
     name = "Lanes",
-    values = c("steelblue", "cyan")
+    values = c("steelblue1", "goldenrod1")
   )
 ```
 

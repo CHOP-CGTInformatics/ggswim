@@ -20,7 +20,7 @@ patient_status <- tibble::tibble(subject_id = rep(1:10, length.out = 15)) |>
   relocate(time_start, .before = time_end) |>
   mutate(subject_id = factor(subject_id))
 
-set.seed(123)
+set.seed(1)
 
 adverse_events <- tibble::tibble(subject_id = factor(rep(1:10, length.out = 15))) |>
   sample_n(8) |>
@@ -32,12 +32,12 @@ adverse_events <- tibble::tibble(subject_id = factor(rep(1:10, length.out = 15))
             relationship = "many-to-many") |> # Temp join to reference time vals
   mutate(
     .by = subject_id,
-    time_of_event = ave(time_end, adverse_event_name, FUN = function(x) runif(1, 0, x[1]))
+    time_of_event = runif(n = n(), min = time_start, max = time_end)
   ) |>
   select(-c(cohort, status, time_start, time_end)) |>
   unique()
 
-set.seed(123)
+set.seed(1)
 
 medication_administration <- tibble::tibble(subject_id = factor(rep(1:10, length.out = 15))) |>
   sample_n(5) |>
@@ -50,7 +50,7 @@ medication_administration <- tibble::tibble(subject_id = factor(rep(1:10, length
             relationship = "many-to-many") |> # Temp join to reference time vals
   mutate(
     .by = subject_id,
-    time_of_event = ave(time_end, medication, FUN = function(x) runif(1, 0, x[1]))
+    time_of_event = runif(n = n(), min = time_start, max = time_end)
   ) |>
   select(-c(cohort, status, time_start, time_end)) |>
   unique()
