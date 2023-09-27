@@ -102,11 +102,29 @@ dataset.</p>
 <span><span class="va">patient_status</span> <span class="op">&lt;-</span> <span class="va">patient_data</span><span class="op">$</span><span class="va">patient_status</span></span>
 <span><span class="va">adverse_events</span> <span class="op">&lt;-</span> <span class="va">patient_data</span><span class="op">$</span><span class="va">adverse_events</span></span>
 <span><span class="va">medication_administration</span> <span class="op">&lt;-</span> <span class="va">patient_data</span><span class="op">$</span><span class="va">medication_administration</span></span></code></pre></div>
+<p>As mentioned in the README, <code>patient_status</code> is currently
+built to reflect a typical dataset in the wild. To make this work well
+and appear nicely in our swimmer plot output, a little bit of some
+preparation is required. Below we perform the follow manipulations:</p>
+<ul>
+<li>Pivot the data so that <code>time_start</code> and
+<code>time_end</code> comprise a single value.</li>
+<li>Add a sorting variable, <code>time_sorting</code>, to support
+arrangement using summed time values</li>
+<li>Arrange the data by cohort groups, time sorted values, and subject
+ID factor levels</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">patient_status</span> <span class="op">&lt;-</span> <span class="va">patient_status</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">time_start</span>, <span class="va">time_end</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>.by <span class="op">=</span> <span class="va">subject_id</span>,</span>
+<span>                time_sorting <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">cohort</span>, <span class="va">time_sorting</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>subject_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">subject_id</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">subject_id</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Now, let’s make the plot using <code><a href="../reference/ggswim.html">ggswim()</a></code> and our first
 <code><a href="../reference/add_marker.html">add_marker()</a></code> call:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">patient_status</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">time_start</span>, <span class="va">time_end</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">patient_status</span>,</span>
 <span>         mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span>,</span>
 <span>                       y <span class="op">=</span> <span class="va">subject_id</span>,</span>
@@ -127,7 +145,7 @@ types of displays to appear and does the leg work of rending them both
 appropriately in the legend under the same layer. Let’s add these with
 another <code><a href="../reference/add_marker.html">add_marker()</a></code> call using the
 <code>medication_administration</code> data:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">p</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/add_marker.html">add_marker</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">medication_administration</span>,</span>
 <span>             mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time_of_event</span>,</span>
@@ -142,7 +160,7 @@ another <code><a href="../reference/add_marker.html">add_marker()</a></code> cal
 earlier we mentioned you can use existing ggplot2 functions with ggswim
 outputs? Let’s implement some here so we can find a bit more joy in our
 plot:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Time"</span>, y <span class="op">=</span> <span class="st">"Subject ID"</span>, color <span class="op">=</span> <span class="st">"Markers"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"My Swim Plot"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -175,7 +193,7 @@ one marker level per dataframe.</p>
 <p>For this to work, we also need to specify an <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code>
 <code>name</code> argument to <code><a href="../reference/add_marker.html">add_marker()</a></code> which acts as an
 anchor point for the legend.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adverse_event_cardio</span> <span class="op">&lt;-</span> <span class="va">adverse_events</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">adverse_event_name</span> <span class="op">==</span> <span class="st">"Cardiac Disorder"</span><span class="op">)</span></span>
 <span></span>
@@ -185,9 +203,8 @@ anchor point for the legend.</p>
 <span><span class="va">adverse_event_psych</span> <span class="op">&lt;-</span> <span class="va">adverse_events</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">adverse_event_name</span> <span class="op">==</span> <span class="st">"Psychiatric Disorder"</span><span class="op">)</span></span></code></pre></div>
 <p>Now, let’s plot it similarly to what we did above:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">patient_status</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">time_start</span>, <span class="va">time_end</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">patient_status</span>,</span>
 <span>         mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span>,</span>
 <span>                       y <span class="op">=</span> <span class="va">subject_id</span>,</span>
