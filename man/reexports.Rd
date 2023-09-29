@@ -5,6 +5,8 @@
 \alias{reexports}
 \alias{grid.draw}
 \alias{ggsave}
+\alias{\%+\%}
+\alias{aes}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -12,7 +14,7 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{ggplot2}{\code{\link[ggplot2]{ggsave}}}
+  \item{ggplot2}{\code{\link[ggplot2:gg-add]{\%+\%}}, \code{\link[ggplot2]{aes}}, \code{\link[ggplot2]{ggsave}}}
 
   \item{grid}{\code{\link[grid]{grid.draw}}}
 }}

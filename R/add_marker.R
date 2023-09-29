@@ -57,6 +57,15 @@
 #' aesthetic mapping to render the legend correctly.
 #'
 #' @export
+#'
+#' @examples
+#' add_marker(data = adverse_events,
+#'            mapping = aes(x = time_of_event,
+#'                          y = subject_id,
+#'                          color = adverse_event_name,
+#'                          shape = adverse_event_name),
+#'             size = 5)
+#'
 
 add_marker <- function(
     data = NULL,
@@ -107,7 +116,6 @@ add_marker <- function(
       dots[names(dots) %in% c("color", "colour")] <- c()
     }
 
-    # TODO: Fix issue causing removal of NA values and subsequent `build_ggswim()` failure
     out <- geom_point(
       data = data,
       mapping = mapping,

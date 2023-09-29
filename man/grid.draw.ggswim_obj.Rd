@@ -16,8 +16,15 @@
 None
 }
 \description{
-Draw ggswim object
+\code{grid::grid.draw()} methods for objects of classes 'ggswim_obj' and 'ggcuminc'.
+These are implemented to allow users to directly call \code{ggplot2::ggsave()}
+on 'ggswim' figures.
 }
 \examples{
-# TODO: add example
+  ggswim(data = patient_status,
+         mapping = aes(x = value,
+                       y = subject_id,
+                       fill = cohort)) |>
+  grid.draw()
 }
+\keyword{internal}

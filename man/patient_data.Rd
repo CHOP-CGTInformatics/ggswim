@@ -3,24 +3,51 @@
 \docType{data}
 \name{patient_data}
 \alias{patient_data}
+\alias{patient_status}
+\alias{adverse_events}
+\alias{medication_administration}
 \title{Patient data}
 \format{
 A list with the following tibbles:
 \describe{
 \item{patient_status}{A 5 column tibble with patient IDs, cohorts, status, and start and end times}
 \item{adverse_events}{A 4 column tibble with patient IDs, AE names, and time of event}
-\item{medication administration}{A 5 column tibble with patient IDs, labels for
+\item{medication_administration}{A 5 column tibble with patient IDs, labels for
 medications, names of medications, and time of event}
 }
+
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 30 rows and 6 columns.
+
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 14 rows and 3 columns.
+
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 8 rows and 4 columns.
 }
 \usage{
 patient_data
+
+patient_status
+
+adverse_events
+
+medication_administration
 }
 \description{
 A sample list dataset containing patient status, adverse event, and
 medication distribution information. Suitable for a \code{ggswim()} display.
 }
+\section{Functions}{
+\itemize{
+\item \code{patient_status}: A tibble subset from the \code{patient_data} list
+
+\item \code{adverse_events}: A tibble subset from the \code{patient_data} list
+
+\item \code{medication_administration}: A tibble subset from the \code{patient_data} list
+
+}}
 \examples{
 patient_data
+patient_status
+adverse_events
+medication_administration
 }
 \keyword{datasets}

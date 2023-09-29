@@ -29,3 +29,6 @@ displays in the layers of the ggswim legend. It also applies a call to
 a static \code{color}/\code{colour} argument in addition to the required \code{color}
 mapping aesthetic (handled by arg: \code{name}).
 }
+\examples{
+# TODO: Add example
+}

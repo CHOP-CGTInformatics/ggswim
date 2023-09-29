@@ -54,36 +54,19 @@ Let's show a quick example of how this works below!
 ggswim comes packaged with a sample dataset called `patient_status`, which is a list containing 3 tibbles:
 
 - `patient_status`
+  - `patient_status` has already been prepared in a way that makes it easy to use with ggswim, but may not be very representative of how one receives data in the wild
 - `adverse_events`
 - `medication_administration`
 
-At present, a little bit of some data manipulation is required to get `patient_status` from a typically expected structure to one that is ready for swimming:
+Each of these tibbles are also available to call individually. Let's load the data and get ready to swim!
 
 ```{r, message=FALSE}
 library(ggswim)
-library(ggplot2)
 
-patient_data <- ggswim::patient_data
-
-patient_status <- patient_data$patient_status
-adverse_events <- patient_data$adverse_events
-medication_administration <- patient_data$medication_administration
-
-patient_status <- patient_status |>
-  tidyr::pivot_longer(c(time_start, time_end)) |>
-  dplyr::mutate(.by = subject_id,
-                time_sorting = sum(value)) |> 
-  dplyr::arrange(cohort, time_sorting) |>
-  dplyr::mutate(subject_id = factor(subject_id, levels = unique(subject_id)))
-```
-
-Now that the data preparation is out of the way, we're ready to swim!
-
-```{r, message=FALSE}
-  ggswim(data = patient_status,
-         mapping = aes(x = value,
-                       y = subject_id,
-                       fill = cohort)) +
+ggswim(data = patient_status,
+       mapping = aes(x = value,
+                     y = subject_id,
+                     fill = cohort)) +
   add_marker(data = adverse_events,
              mapping = aes(x = time_of_event,
                            y = subject_id,

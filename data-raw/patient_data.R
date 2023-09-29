@@ -55,8 +55,20 @@ medication_administration <- tibble::tibble(subject_id = factor(rep(1:10, length
   select(-c(cohort, status, time_start, time_end)) |>
   unique()
 
+
+# Below added to help with documentation and reduction of repeated code:
+patient_status <- patient_status |>
+  tidyr::pivot_longer(c(time_start, time_end)) |>
+  mutate(.by = subject_id,
+         time_sorting = sum(value)) |>
+  arrange(cohort, time_sorting) |>
+  mutate(subject_id = factor(subject_id, levels = unique(subject_id)))
+
 patient_data <- list(patient_status = patient_status,
                      adverse_events = adverse_events,
                      medication_administration = medication_administration)
 
 usethis::use_data(patient_data, overwrite = TRUE)
+usethis::use_data(patient_status, overwrite = TRUE)
+usethis::use_data(adverse_events, overwrite = TRUE)
+usethis::use_data(medication_administration, overwrite = TRUE)

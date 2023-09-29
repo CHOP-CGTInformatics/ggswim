@@ -2,7 +2,7 @@
 % Please edit documentation in R/print.R
 \name{print.ggswim_obj}
 \alias{print.ggswim_obj}
-\title{Print ggswim}
+\title{Print ggswim object}
 \usage{
 \method{print}{ggswim_obj}(x, ...)
 }
@@ -15,8 +15,13 @@
 a ggplot
 }
 \description{
-Print ggswim
+Print ggswim object
 }
 \examples{
-# TODO: add example
+  ggswim(data = patient_status,
+         mapping = aes(x = value,
+                       y = subject_id,
+                       fill = cohort)) |>
+  print()
 }
+\keyword{internal}

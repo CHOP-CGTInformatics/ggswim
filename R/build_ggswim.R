@@ -21,6 +21,9 @@
 #'
 #' @returns A ggswim object
 #' @export
+#'
+#' @examples
+#' # TODO: Add example
 
 build_ggswim <- function(ggswim_obj) {
   # Set up initial capture variables ----
