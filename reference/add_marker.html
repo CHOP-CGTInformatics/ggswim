@@ -85,7 +85,7 @@ i.e. <code>color = "red"</code> or <code>size = 3</code>.</p></dd>
     
 
 <p><code>add_marker()</code> understands the following aesthetics (required aesthetics are in bold)
-when using <code>color</code>/<code>colour</code> akin to <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point()</a></code></p><ul><li><p><strong><code>x</code></strong></p></li>
+when using <code>color</code>/<code>colour</code> akin to <code>geom_point()</code></p><ul><li><p><strong><code>x</code></strong></p></li>
 <li><p><strong><code>y</code></strong></p></li>
 <li><p><strong><code>color</code></strong>/<strong><code>colour</code></strong></p></li>
 <li><p><code>alpha</code></p></li>
@@ -94,7 +94,7 @@ when using <code>color</code>/<code>colour</code> akin to <code><a href="https:/
 <li><p><code>size</code></p></li>
 <li><p><code>stroke</code></p></li>
 </ul><p><code>add_marker()</code> understands the following aesthetics (required aesthetics are in bold)
-when using <code>label</code> akin to <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_label()</a></code>. See "Notes" below for additional
+when using <code>label</code> akin to <code>geom_label()</code>. See "Notes" below for additional
 considerations and requirements.</p><ul><li><p><strong><code>x</code></strong></p></li>
 <li><p><strong><code>y</code></strong></p></li>
 <li><p><strong><code>color</code></strong>/<strong><code>colour</code></strong></p></li>
@@ -116,6 +116,21 @@ the label appear in the color layer of the legend.</p></li>
 aesthetic mapping to render the legend correctly.</p></li>
 </ul></div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">add_marker</span><span class="op">(</span>data <span class="op">=</span> <span class="va">adverse_events</span>,</span></span>
+<span class="r-in"><span>           mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time_of_event</span>,</span></span>
+<span class="r-in"><span>                         y <span class="op">=</span> <span class="va">subject_id</span>,</span></span>
+<span class="r-in"><span>                         color <span class="op">=</span> <span class="va">adverse_event_name</span>,</span></span>
+<span class="r-in"><span>                         shape <span class="op">=</span> <span class="va">adverse_event_name</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>            size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mapping: x = ~time_of_event, y = ~subject_id, colour = ~adverse_event_name, shape = ~adverse_event_name </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> geom_point: na.rm = TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> stat_identity: na.rm = TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> position_identity </span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
