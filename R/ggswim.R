@@ -31,6 +31,12 @@
 #' **Note**: `ggswim()` **does not** support mapping using `color`/`colour`.
 #'
 #' @export
+#'
+#' @examples
+#' ggswim(data = patient_status,
+#'        mapping = aes(x = value,
+#'                      y = subject_id,
+#'                      fill = cohort))
 
 ggswim <- function(
     data,

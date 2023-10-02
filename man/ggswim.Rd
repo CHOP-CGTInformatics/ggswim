@@ -42,3 +42,9 @@ identification.
 \strong{Note}: \code{ggswim()} \strong{does not} support mapping using \code{color}/\code{colour}.
 }
 
+\examples{
+ggswim(data = patient_status,
+       mapping = aes(x = value,
+                     y = subject_id,
+                     fill = cohort))
+}

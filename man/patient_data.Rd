@@ -6,14 +6,17 @@
 \alias{patient_status}
 \alias{adverse_events}
 \alias{medication_administration}
-\title{Patient data}
+\title{Patient Dataset}
 \format{
-A list with the following tibbles:
+A list containing three tibbles:
 \describe{
-\item{patient_status}{A 5 column tibble with patient IDs, cohorts, status, and start and end times}
-\item{adverse_events}{A 4 column tibble with patient IDs, AE names, and time of event}
-\item{medication_administration}{A 5 column tibble with patient IDs, labels for
-medications, names of medications, and time of event}
+\item{patient_status}{A tibble containing information about patient status
+including subject ID, cohort, status, name, value, and time sorting.}
+\item{adverse_events}{A tibble containing information about adverse
+events including subject ID, adverse event name, and time of event.}
+\item{medication_administration}{A tibble containing information about
+medication administration including subject ID, medication name, name,
+and time of event.}
 }
 
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 30 rows and 6 columns.
@@ -22,8 +25,11 @@ An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) w
 
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 8 rows and 4 columns.
 }
+\source{
+This dataset is for demonstration purposes only.
+}
 \usage{
-patient_data
+data(patient_data)
 
 patient_status
 
@@ -32,22 +38,18 @@ adverse_events
 medication_administration
 }
 \description{
-A sample list dataset containing patient status, adverse event, and
-medication distribution information. Suitable for a \code{ggswim()} display.
+This dataset provides information about patients, their status, adverse events,
+and medication administration.
 }
-\section{Functions}{
-\itemize{
-\item \code{patient_status}: A tibble subset from the \code{patient_data} list
-
-\item \code{adverse_events}: A tibble subset from the \code{patient_data} list
-
-\item \code{medication_administration}: A tibble subset from the \code{patient_data} list
-
-}}
 \examples{
 patient_data
+
+patient_data$patient_status
+
 patient_status
+
 adverse_events
+
 medication_administration
 }
 \keyword{datasets}

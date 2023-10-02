@@ -33,7 +33,9 @@ The ggswim package provides a convenient set of commands to easily create "swimm
 
 ## Installation
 
-ggswim is in its very early stages, but in active development! Expect to see many changes in the near future to the API and documentation.
+⚠️ ggswim is in its very early stages, but in active development!⚠️
+
+Expect to see many changes in the near future to the API and documentation.
 
 You can install the development version of ggswim like so:
 
@@ -95,11 +97,3 @@ ggswim(data = patient_status,
     values = c("steelblue1", "goldenrod1")
   )
 ```
-
-### Future Plans
-
-We have a lot of work to do with ggswim! Future plans include:
-
-- A full test suite
-- Better checks for ggswim-compatible data structures
-- Additional vignettes and improved documentation

@@ -22,8 +22,10 @@ create “swimmer” plots.
 
 ## Installation
 
-ggswim is in its very early stages, but in active development! Expect to
-see many changes in the near future to the API and documentation.
+⚠️ ggswim is in its very early stages, but in active development!⚠️
+
+Expect to see many changes in the near future to the API and
+documentation.
 
 You can install the development version of ggswim like so:
 
@@ -97,11 +99,3 @@ ggswim(data = patient_status,
 ```
 
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
-
-### Future Plans
-
-We have a lot of work to do with ggswim! Future plans include:
-
-- A full test suite
-- Better checks for ggswim-compatible data structures
-- Additional vignettes and improved documentation

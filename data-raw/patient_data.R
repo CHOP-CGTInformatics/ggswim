@@ -1,4 +1,3 @@
-## code to prepare `patient_data` dataset goes here
 library(dplyr)
 
 set.seed(123)
