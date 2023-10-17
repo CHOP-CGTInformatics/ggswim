@@ -16,6 +16,7 @@
 #' More information about accepted mapping arguments can be found in **Aesthetics**.
 #' @param ... Other arguments passed to `ggswim()`, often aesthetic fixed values,
 #' i.e. `color = "red"` or `size = 3`.
+#' @param arrow description
 #'
 #' @section Aesthetics:
 #' `ggswim()` understands the following aesthetics (required aesthetics are in bold):
@@ -41,6 +42,7 @@
 ggswim <- function(
     data,
     mapping = aes(),
+    arrow = NULL,
     ...) {
   # Enforce checks ----
   check_supported_mapping_aes(
@@ -59,12 +61,40 @@ ggswim <- function(
       ...
     )
 
+
+
   # Define new class 'ggswim_obj'
   class(out) <- c("ggswim_obj", class(out))
   current_layer <- length(out$layers) # The max length can be considered the current working layer
 
   # Add a reference class to the layer attributes
   attributes(out$layers[[current_layer]])$swim_class <- "ggswim"
+
+  arrow <- enquo(arrow) |> get_expr()
+  if(!is.null(arrow)) {
+    x_val <- mapping$x |> get_expr()
+    y_val <- mapping$y |> get_expr()
+
+    temp <- data[data[arrow] == TRUE, ] |>
+      dplyr::mutate(
+        .by = y_val,
+        xend = sum(!!x_val)
+      )
+
+    out <- out +
+      ggplot2::geom_segment(temp,
+                            mapping = aes(x = xend,
+                                          y = .data[[mapping$y |> get_expr()]],
+                                          yend = .data[[mapping$y |> get_expr()]],
+                                          xend = xend + 2),
+                            arrow = ggplot2::arrow(type = "closed",
+                                                   length = ggplot2::unit(0.2, "inches")))
+
+    current_layer <- length(out$layers) # The max length can be considered the current working layer
+
+    # Add a reference class to the layer attributes
+    attributes(out$layers[[current_layer]])$swim_class <- "ggswim"
+  }
 
   # Return object
   out
