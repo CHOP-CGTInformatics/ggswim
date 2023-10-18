@@ -160,7 +160,7 @@ check_arrow_fill_type <- function(arrow_type, arrow_fill) {
   )
   cond_class <- c("ggswim_cond", "arrow_fill_type")
 
-  if (arrow_type != "closed" & !is.null(arrow_fill)) {
+  if (arrow_type != "closed" && !is.null(arrow_fill)) {
     cli_warn(message = msg,
              call = caller_env(),
              class = cond_class)

@@ -24,7 +24,7 @@ at the top level of the plot. You must supply mapping if there is no plot mappin
 More information about accepted mapping arguments can be found in \strong{Aesthetics}.}
 
 \item{arrow}{A column indicating what swim lanes should have arrows applied.
-The column must be a boolean data type (T/F).}
+The column must be a logical data type (T/F).}
 
 \item{arrow_colour}{Border/line color to use for the arrow. Default "black".}
 

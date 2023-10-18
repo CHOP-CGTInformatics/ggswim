@@ -17,7 +17,7 @@
 #' @param ... Other arguments passed to `ggswim()`, often aesthetic fixed values,
 #' i.e. `color = "red"` or `size = 3`.
 #' @param arrow A column indicating what swim lanes should have arrows applied.
-#' The column must be a boolean data type (T/F).
+#' The column must be a logical data type (T/F).
 #' @param arrow_colour Border/line color to use for the arrow. Default "black".
 #' @param arrow_length A unit specifying the length of the arrow head (from tip to base).
 #' Must be a ggplot2 `unit()` object. Default `ggplot2::unit(0.25, "inches")`.
@@ -107,7 +107,7 @@ ggswim <- function(
 #' @param data a dataframe prepared for use with `ggswim()`
 #' @param ggswim_obj A ggswim object
 #' @param arrow A column indicating what swim lanes should have arrows applied.
-#' The column must be a boolean data type (T/F).
+#' The column must be a logical data type (T/F).
 #' @param arrow_colour Border/line color to use for the arrow. Default "black".
 #' @param arrow_length A unit specifying the length of the arrow head (from tip to base).
 #' Must be a ggplot2 `unit()` object. Default `ggplot2::unit(0.25, "inches")`.
@@ -133,6 +133,7 @@ add_arrows <- function(data,
                        arrow_type) {
   # Implement UI checks ----
   # Check that warning supplied if `arrow_fill` !NULL and `arrow_type` "open"
+  check_arg_is_logical(data[[arrow]])
   check_arrow_fill_type(arrow_type, arrow_fill)
 
   x_val <- mapping$x |> get_expr()
@@ -141,18 +142,18 @@ add_arrows <- function(data,
   true_arrow_data <- data[data[arrow] == TRUE, ] |>
     mutate(
       .by = y_val,
-      xend = sum(!!x_val)
+      xend = sum(!!x_val) # nolint: object_usage_linter
     )
 
   out <- ggswim_obj +
     geom_segment(true_arrow_data,
-                          mapping = aes(x = xend,
-                                        y = .data[[mapping$y |> get_expr()]],
-                                        yend = .data[[mapping$y |> get_expr()]],
-                                        xend = xend + 2), colour = arrow_colour,
-                          arrow = arrow(type = arrow_type,
-                                                 length = arrow_length),
-                          arrow.fill = arrow_fill)
+                 mapping = aes(x = xend, # nolint: object_usage_linter
+                               y = .data[[mapping$y |> get_expr()]],
+                               yend = .data[[mapping$y |> get_expr()]],
+                               xend = xend + 2), colour = arrow_colour,
+                 arrow = arrow(type = arrow_type,
+                               length = arrow_length),
+                 arrow.fill = arrow_fill)
 
   current_layer <- length(out$layers) # The max length can be considered the current working layer
 

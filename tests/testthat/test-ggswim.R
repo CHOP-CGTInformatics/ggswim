@@ -61,4 +61,18 @@ test_that("add_arrows works", {
     title = "Arrows appear using default values",
     fig = p_arrow
   )
+
+  # Check for logical supplied to arg `arrow`
+  expect_error(
+    add_arrows(data = pt_data,
+               ggswim_obj = p,
+               mapping = aes(x = time, y = id),
+               arrow = "cohort",
+               # replicate defaults inherited from ggswim()
+               arrow_type = "closed",
+               arrow_colour = "black",
+               arrow_fill = NULL,
+               arrow_length = unit(0.25, "inches")),
+    class = "ggswim_cond"
+  )
 })
