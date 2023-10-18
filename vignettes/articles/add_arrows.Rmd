@@ -1,0 +1,55 @@
+---
+title: "Adding arrows to ggswim"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(ggswim)
+```
+
+ggswim optionally allows users to add arrows to the tail ends of their swimmer plot lanes to illustrate continuation of specific records. Use case examples includes depicting continuation of care and subject survival statuses.
+
+Under the hood, arrows makes a simple call to `ggplot2::geom_segment()` with some slight manipulations. The segments are all of length 0, but the arrows are made visible by supplying a specifying length. `ggswim()` lets users control that length as well as color, fill, and type options (see `?ggswim` for more information).
+
+Let's start with an example similar to the one we've been using in the README.
+
+```{r}
+ggswim(data = patient_status,
+       mapping = aes(x = value,
+                     y = subject_id,
+                     fill = cohort))
+```
+
+To add arrows to our plot, we first need to specify a boolean column that basically tells `ggswim()` whether or not to tack on an arrow to the row. In the case of `patient_status`, this column is called `alive` and assigns `TRUE`/`FALSE` for a patient's survival status at the time of plotting.
+
+```{r}
+head(patient_status)
+```
+
+Let's add the arrows onto the plot from before:
+
+```{r}
+ggswim(data = patient_status,
+       mapping = aes(x = value,
+                     y = subject_id,
+                     fill = cohort),
+       arrow = alive)
+```
+
+Default values are set for arrows, but can be manipulated for different aesthetic preferences. Below we add color and fill specifiers:
+
+```{r}
+ggswim(data = patient_status,
+       mapping = aes(x = value,
+                     y = subject_id,
+                     fill = cohort),
+       arrow = alive,
+       arrow_colour = "cyan4",
+       arrow_fill = "cyan2")
+```

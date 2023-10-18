@@ -1,13 +1,13 @@
 pt_data <- tibble::tribble(
-  ~"id", ~"trt", ~"end_time", ~"time",
-  1, "Drug A", 5, 0,
-  1, "Drug A", 5, 5,
-  2, "Drug B", 2, 0,
-  2, "Drug B", 2, 2,
-  3, "Drug A", 4, 0,
-  3, "Drug A", 4, 4,
-  4, "Drug B", 7, 0,
-  4, "Drug B", 7, 7
+  ~"id", ~"trt", ~"end_time", ~"time", ~"alive",
+  1, "Drug A", 5, 0, TRUE,
+  1, "Drug A", 5, 5, TRUE,
+  2, "Drug B", 2, 0, FALSE,
+  2, "Drug B", 2, 2, FALSE,
+  3, "Drug A", 4, 0, FALSE,
+  3, "Drug A", 4, 4, FALSE,
+  4, "Drug B", 7, 0, TRUE,
+  4, "Drug B", 7, 7, TRUE
 )
 
 test_that("ggswim works for simple dataset", {
@@ -36,4 +36,43 @@ test_that("test for expected attributes", {
   expect_setequal(class(p), c("ggswim_obj", "gg", "ggplot"))
   expect_true("swim_class" %in% names(attributes(p$layers[[1]])))
   expect_true(attributes(p$layers[[1]])$swim_class == "ggswim")
+})
+
+test_that("add_arrows works", {
+  p <- ggswim(pt_data, aes(x = time, y = id))
+
+  p_arrow <- add_arrows(data = pt_data,
+                        ggswim_obj = p,
+                        mapping = aes(x = time, y = id),
+                        arrow = "alive",
+                        # replicate defaults inherited from ggswim()
+                        arrow_type = "closed",
+                        arrow_colour = "black",
+                        arrow_fill = NULL,
+                        arrow_length = unit(0.25, "inches"))
+
+  expect_setequal(class(p_arrow), c("ggswim_obj", "gg", "ggplot"))
+  expect_true("swim_class" %in% names(attributes(p_arrow$layers[[1]])))
+  expect_true("swim_class" %in% names(attributes(p_arrow$layers[[2]])))
+  expect_true(attributes(p_arrow$layers[[1]])$swim_class == "ggswim")
+  expect_true(attributes(p_arrow$layers[[2]])$swim_class == "ggswim")
+
+  vdiffr::expect_doppelganger(
+    title = "Arrows appear using default values",
+    fig = p_arrow
+  )
+
+  # Check for logical supplied to arg `arrow`
+  expect_error(
+    add_arrows(data = pt_data,
+               ggswim_obj = p,
+               mapping = aes(x = time, y = id),
+               arrow = "cohort",
+               # replicate defaults inherited from ggswim()
+               arrow_type = "closed",
+               arrow_colour = "black",
+               arrow_fill = NULL,
+               arrow_length = unit(0.25, "inches")),
+    class = "ggswim_cond"
+  )
 })

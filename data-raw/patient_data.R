@@ -1,7 +1,7 @@
 library(dplyr)
 
+# Set Up patient_status dataframe ----
 set.seed(123)
-
 patient_status <- tibble::tibble(subject_id = rep(1:10, length.out = 15)) |>
   sample_n(15) |>
   arrange(subject_id) |>
@@ -19,8 +19,8 @@ patient_status <- tibble::tibble(subject_id = rep(1:10, length.out = 15)) |>
   relocate(time_start, .before = time_end) |>
   mutate(subject_id = factor(subject_id))
 
+# Set up adverse_events dataframe ----
 set.seed(1)
-
 adverse_events <- tibble::tibble(subject_id = factor(rep(1:10, length.out = 15))) |>
   sample_n(8) |>
   arrange(subject_id) |>
@@ -36,8 +36,8 @@ adverse_events <- tibble::tibble(subject_id = factor(rep(1:10, length.out = 15))
   select(-c(cohort, status, time_start, time_end)) |>
   unique()
 
+# Set up medication_administration dataframe ----
 set.seed(1)
-
 medication_administration <- tibble::tibble(subject_id = factor(rep(1:10, length.out = 15))) |>
   sample_n(5) |>
   arrange(subject_id) |>
@@ -54,7 +54,7 @@ medication_administration <- tibble::tibble(subject_id = factor(rep(1:10, length
   select(-c(cohort, status, time_start, time_end)) |>
   unique()
 
-
+# Apply edits to patient_status and join on arrow status ----
 # Below added to help with documentation and reduction of repeated code:
 patient_status <- patient_status |>
   tidyr::pivot_longer(c(time_start, time_end)) |>
@@ -63,6 +63,18 @@ patient_status <- patient_status |>
   arrange(cohort, time_sorting) |>
   mutate(subject_id = factor(subject_id, levels = unique(subject_id)))
 
+# Join on arrows status via `alive` column ----
+set.seed(1)
+# Generate a random 'alive' value for each unique subject_id
+alive_status <- patient_status %>%
+  distinct(subject_id) %>%
+  mutate(alive = sample(c(TRUE, FALSE), size = n(), replace = TRUE))
+
+# Join the random 'alive' values back to the original data
+patient_status <- patient_status %>%
+  left_join(alive_status, by = "subject_id")
+
+# Make final patient_data list ----
 patient_data <- list(patient_status = patient_status,
                      adverse_events = adverse_events,
                      medication_administration = medication_administration)

@@ -71,3 +71,17 @@ test_that("check_marker_label_aes works", {
   expect_no_condition(check_marker_label_aes(mapping = mapping_pass))
   expect_warning(check_marker_label_aes(mapping = mapping_warn), class = "marker_label_aes")
 })
+
+test_that("check_arrow_fill_type works", {
+  arrow_type_open <- "open"
+  arrow_type_closed <- "closed"
+  arrow_fill <- "red"
+
+  expect_no_condition(
+    check_arrow_fill_type(arrow_fill = arrow_fill, arrow_type = arrow_type_closed)
+  )
+  expect_warning(
+    check_arrow_fill_type(arrow_fill = arrow_fill, arrow_type = arrow_type_open),
+    class = "arrow_fill_type"
+  )
+})

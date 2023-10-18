@@ -63,11 +63,10 @@ patient_status
 Now, let's make the plot using `ggswim()` and our first `add_marker()` call:
 
 ```{r aes mapping plot}
-p <- patient_status |>
-  ggswim(data = patient_status,
-         mapping = aes(x = value,
-                       y = subject_id,
-                       fill = cohort)) +
+p <- ggswim(data = patient_status,
+            mapping = aes(x = value,
+                          y = subject_id,
+                          fill = cohort)) +
   add_marker(data = adverse_events,
              mapping = aes(x = time_of_event,
                            y = subject_id,
@@ -137,11 +136,10 @@ adverse_event_psych <- adverse_events |>
 Now, let's plot it similarly to what we did above:
 
 ```{r static plot}
-patient_status |>
-  ggswim(data = patient_status,
-         mapping = aes(x = value,
-                       y = subject_id,
-                       fill = cohort)) +
+ggswim(data = patient_status,
+       mapping = aes(x = value,
+                     y = subject_id,
+                     fill = cohort)) +
   add_marker(data = adverse_event_cardio,
              mapping = aes(x = time_of_event,
                            y = subject_id,
