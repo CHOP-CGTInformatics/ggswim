@@ -19,7 +19,7 @@ medication administration including subject ID, medication name, name,
 and time of event.}
 }
 
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 30 rows and 6 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 30 rows and 7 columns.
 
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 14 rows and 3 columns.
 

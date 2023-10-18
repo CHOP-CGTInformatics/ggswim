@@ -137,3 +137,32 @@ check_marker_label_aes <- function(mapping) {
     }
   }
 }
+
+
+#' @title check add_arrows for arrow_fill and arrow_type arguments
+#'
+#' @description
+#' Supply users with a warning when `arrow_type` is not "closed" and an `arrow_fill`
+#' argument is specified. No error will occur, but nothing will indicate an issue
+#' in the output.
+#'
+#' @param arrow_fill Fill colour to use for the arrow head (if closed). Default `NULL`.
+#' @param arrow_type One of "open" or "closed" indicating whether the arrow head should
+#' be a closed triangle. Default "closed."
+#'
+#' @keywords internal
+
+check_arrow_fill_type <- function(arrow_type, arrow_fill) {
+
+  msg <- c(
+    "!" = "Arrow fill color supplied for an open arrow type.",
+    "i" = "Fill colors will only appear for 'closed' arrows types."
+  )
+  cond_class <- c("ggswim_cond", "arrow_fill_type")
+
+  if (arrow_type != "closed" & !is.null(arrow_fill)) {
+    cli_warn(message = msg,
+             call = caller_env(),
+             class = cond_class)
+  }
+}
