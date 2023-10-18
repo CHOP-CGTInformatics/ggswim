@@ -24,6 +24,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/add_arrows.html">Adding arrows to ggswim</a>
     <a class="dropdown-item" href="../articles/intro_ggswim.html">Introduction to ggswim</a>
   </div>
 </li>
@@ -48,7 +49,16 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ggswim</span><span class="op">(</span><span class="va">data</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ggswim</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  arrow <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  arrow_colour <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>  arrow_length <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">0.25</span>, <span class="st">"inches"</span><span class="op">)</span>,</span>
+<span>  arrow_fill <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  arrow_type <span class="op">=</span> <span class="st">"closed"</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -62,6 +72,29 @@
 <code>inherit.aes = TRUE</code> (the default), it is combined with the default mapping
 at the top level of the plot. You must supply mapping if there is no plot mapping.
 More information about accepted mapping arguments can be found in <strong>Aesthetics</strong>.</p></dd>
+
+
+<dt>arrow</dt>
+<dd><p>A column indicating what swim lanes should have arrows applied.
+The column must be a logical data type (T/F).</p></dd>
+
+
+<dt>arrow_colour</dt>
+<dd><p>Border/line color to use for the arrow. Default "black".</p></dd>
+
+
+<dt>arrow_length</dt>
+<dd><p>A unit specifying the length of the arrow head (from tip to base).
+Must be a ggplot2 <code>unit()</code> object. Default <code>ggplot2::unit(0.25, "inches")</code>.</p></dd>
+
+
+<dt>arrow_fill</dt>
+<dd><p>Fill colour to use for the arrow head (if closed). Default <code>NULL</code>.</p></dd>
+
+
+<dt>arrow_type</dt>
+<dd><p>One of "open" or "closed" indicating whether the arrow head should
+be a closed triangle. Default "closed."</p></dd>
 
 
 <dt>...</dt>

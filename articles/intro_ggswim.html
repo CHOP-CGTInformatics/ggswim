@@ -42,6 +42,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/add_arrows.html">Adding arrows to ggswim</a>
     <a class="dropdown-item" href="../articles/intro_ggswim.html">Introduction to ggswim</a>
   </div>
 </li>
@@ -132,28 +133,27 @@ subject ID factor levels</li>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ggswim</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">patient_status</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 30 × 6</span></span></span>
-<span><span class="co">#&gt;    subject_id cohort   status    name       value time_sorting</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 9          Cohort B On Study  time_start  0            4.98</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 9          Cohort B On Study  time_end    4.98         4.98</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 10         Cohort B On Study  time_start  0            8.19</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 10         Cohort B On Study  time_end    8.19         8.19</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 4          Cohort B On Study  time_start  0           24.2 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 4          Cohort B On Study  time_end    4.73        24.2 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 4          Cohort B Off Study time_start  4.73        24.2 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 4          Cohort B Off Study time_end   14.7         24.2 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 8          Cohort A On Study  time_start  0            1.41</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 8          Cohort A On Study  time_end    1.41         1.41</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 30 × 7</span></span></span>
+<span><span class="co">#&gt;    subject_id cohort   status    name       value time_sorting alive</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 9          Cohort B On Study  time_start  0            4.98 TRUE </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 9          Cohort B On Study  time_end    4.98         4.98 TRUE </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 10         Cohort B On Study  time_start  0            8.19 FALSE</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 10         Cohort B On Study  time_end    8.19         8.19 FALSE</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 4          Cohort B On Study  time_start  0           24.2  TRUE </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 4          Cohort B On Study  time_end    4.73        24.2  TRUE </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 4          Cohort B Off Study time_start  4.73        24.2  TRUE </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 4          Cohort B Off Study time_end   14.7         24.2  TRUE </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 8          Cohort A On Study  time_start  0            1.41 TRUE </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 8          Cohort A On Study  time_end    1.41         1.41 TRUE </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 20 more rows</span></span></span></code></pre></div>
 <p>Now, let’s make the plot using <code><a href="../reference/ggswim.html">ggswim()</a></code> and our first
 <code><a href="../reference/add_marker.html">add_marker()</a></code> call:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">patient_status</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">patient_status</span>,</span>
-<span>         mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span>,</span>
-<span>                       y <span class="op">=</span> <span class="va">subject_id</span>,</span>
-<span>                       fill <span class="op">=</span> <span class="va">cohort</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">patient_status</span>,</span>
+<span>            mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span>,</span>
+<span>                          y <span class="op">=</span> <span class="va">subject_id</span>,</span>
+<span>                          fill <span class="op">=</span> <span class="va">cohort</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/add_marker.html">add_marker</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">adverse_events</span>,</span>
 <span>             mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time_of_event</span>,</span>
 <span>                           y <span class="op">=</span> <span class="va">subject_id</span>,</span>
@@ -231,11 +231,10 @@ anchor point for the legend.</p>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">adverse_event_name</span> <span class="op">==</span> <span class="st">"Psychiatric Disorder"</span><span class="op">)</span></span></code></pre></div>
 <p>Now, let’s plot it similarly to what we did above:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">patient_status</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">patient_status</span>,</span>
-<span>         mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span>,</span>
-<span>                       y <span class="op">=</span> <span class="va">subject_id</span>,</span>
-<span>                       fill <span class="op">=</span> <span class="va">cohort</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">patient_status</span>,</span>
+<span>       mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span>,</span>
+<span>                     y <span class="op">=</span> <span class="va">subject_id</span>,</span>
+<span>                     fill <span class="op">=</span> <span class="va">cohort</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/add_marker.html">add_marker</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">adverse_event_cardio</span>,</span>
 <span>             mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time_of_event</span>,</span>
 <span>                           y <span class="op">=</span> <span class="va">subject_id</span>,</span>

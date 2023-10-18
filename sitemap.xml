@@ -10,6 +10,9 @@
     <loc>https://chop-cgtinformatics.github.io/ggswim/LICENSE.html</loc>
   </url>
   <url>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/articles/add_arrows.html</loc>
+  </url>
+  <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/articles/index.html</loc>
   </url>
   <url>
@@ -25,6 +28,9 @@
     <loc>https://chop-cgtinformatics.github.io/ggswim/pull_request_template.html</loc>
   </url>
   <url>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/add_arrows.html</loc>
+  </url>
+  <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/add_marker.html</loc>
   </url>
   <url>
@@ -32,6 +38,9 @@
   </url>
   <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/build_ggswim.html</loc>
+  </url>
+  <url>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/check_arrow_fill_type.html</loc>
   </url>
   <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/check_marker_label_aes.html</loc>
