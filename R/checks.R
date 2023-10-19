@@ -122,7 +122,6 @@ check_supported_mapping_aes <- function(mapping,
 #' @keywords internal
 
 check_marker_label_aes <- function(mapping) {
-
   msg <- c(
     "!" = "Label mapping detected but no colour aes supplied.",
     "i" = "Label icons may not appear in the legend without a colour aesthetic."
@@ -131,9 +130,11 @@ check_marker_label_aes <- function(mapping) {
 
   if ("label" %in% names(mapping)) {
     if (!any(c("color", "colour") %in% names(mapping))) {
-      cli_warn(message = msg,
-               call = caller_env(),
-               class = cond_class)
+      cli_warn(
+        message = msg,
+        call = caller_env(),
+        class = cond_class
+      )
     }
   }
 }
@@ -153,7 +154,6 @@ check_marker_label_aes <- function(mapping) {
 #' @keywords internal
 
 check_arrow_fill_type <- function(arrow_type, arrow_fill) {
-
   msg <- c(
     "!" = "Arrow fill color supplied for an open arrow type.",
     "i" = "Fill colors will only appear for 'closed' arrows types."
@@ -161,8 +161,10 @@ check_arrow_fill_type <- function(arrow_type, arrow_fill) {
   cond_class <- c("ggswim_cond", "arrow_fill_type")
 
   if (arrow_type != "closed" && !is.null(arrow_fill)) {
-    cli_warn(message = msg,
-             call = caller_env(),
-             class = cond_class)
+    cli_warn(
+      message = msg,
+      call = caller_env(),
+      class = cond_class
+    )
   }
 }

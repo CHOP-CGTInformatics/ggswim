@@ -41,15 +41,17 @@ test_that("test for expected attributes", {
 test_that("add_arrows works", {
   p <- ggswim(pt_data, aes(x = time, y = id))
 
-  p_arrow <- add_arrows(data = pt_data,
-                        ggswim_obj = p,
-                        mapping = aes(x = time, y = id),
-                        arrow = "alive",
-                        # replicate defaults inherited from ggswim()
-                        arrow_type = "closed",
-                        arrow_colour = "black",
-                        arrow_fill = NULL,
-                        arrow_length = unit(0.25, "inches"))
+  p_arrow <- add_arrows(
+    data = pt_data,
+    ggswim_obj = p,
+    mapping = aes(x = time, y = id),
+    arrow = "alive",
+    # replicate defaults inherited from ggswim()
+    arrow_type = "closed",
+    arrow_colour = "black",
+    arrow_fill = NULL,
+    arrow_length = unit(0.25, "inches")
+  )
 
   expect_setequal(class(p_arrow), c("ggswim_obj", "gg", "ggplot"))
   expect_true("swim_class" %in% names(attributes(p_arrow$layers[[1]])))
@@ -64,15 +66,17 @@ test_that("add_arrows works", {
 
   # Check for logical supplied to arg `arrow`
   expect_error(
-    add_arrows(data = pt_data,
-               ggswim_obj = p,
-               mapping = aes(x = time, y = id),
-               arrow = "cohort",
-               # replicate defaults inherited from ggswim()
-               arrow_type = "closed",
-               arrow_colour = "black",
-               arrow_fill = NULL,
-               arrow_length = unit(0.25, "inches")),
+    add_arrows(
+      data = pt_data,
+      ggswim_obj = p,
+      mapping = aes(x = time, y = id),
+      arrow = "cohort",
+      # replicate defaults inherited from ggswim()
+      arrow_type = "closed",
+      arrow_colour = "black",
+      arrow_fill = NULL,
+      arrow_length = unit(0.25, "inches")
+    ),
     class = "ggswim_cond"
   )
 })

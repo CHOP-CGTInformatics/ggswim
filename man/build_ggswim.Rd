@@ -30,9 +30,13 @@ a static \code{color}/\code{colour} argument in addition to the required \code{c
 mapping aesthetic (handled by arg: \code{name}).
 }
 \examples{
-ggswim_obj <- ggswim(data = patient_status,
-                     mapping = aes(x = value,
-                                   y = subject_id,
-                                   fill = cohort))
+ggswim_obj <- ggswim(
+  data = patient_status,
+  mapping = aes(
+    x = value,
+    y = subject_id,
+    fill = cohort
+  )
+)
 build_ggswim(ggswim_obj)
 }

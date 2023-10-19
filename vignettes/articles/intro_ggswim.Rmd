@@ -63,16 +63,24 @@ patient_status
 Now, let's make the plot using `ggswim()` and our first `add_marker()` call:
 
 ```{r aes mapping plot}
-p <- ggswim(data = patient_status,
-            mapping = aes(x = value,
-                          y = subject_id,
-                          fill = cohort)) +
-  add_marker(data = adverse_events,
-             mapping = aes(x = time_of_event,
-                           y = subject_id,
-                           color = adverse_event_name,
-                           shape = adverse_event_name),
-             size = 5)
+p <- ggswim(
+  data = patient_status,
+  mapping = aes(
+    x = value,
+    y = subject_id,
+    fill = cohort
+  )
+) +
+  add_marker(
+    data = adverse_events,
+    mapping = aes(
+      x = time_of_event,
+      y = subject_id,
+      color = adverse_event_name,
+      shape = adverse_event_name
+    ),
+    size = 5
+  )
 
 p
 ```
@@ -81,12 +89,16 @@ This is great for shapes and points, but what if we wanted to get fancy and add 
 
 ```{r label mapping}
 p <- p +
-  add_marker(data = medication_administration,
-             mapping = aes(x = time_of_event,
-                           y = subject_id,
-                           label = medication,
-                           color = name),
-             label.size = NA, fill = NA, size = 5)
+  add_marker(
+    data = medication_administration,
+    mapping = aes(
+      x = time_of_event,
+      y = subject_id,
+      label = medication,
+      color = name
+    ),
+    label.size = NA, fill = NA, size = 5
+  )
 
 p
 ```
@@ -136,25 +148,41 @@ adverse_event_psych <- adverse_events |>
 Now, let's plot it similarly to what we did above:
 
 ```{r static plot}
-ggswim(data = patient_status,
-       mapping = aes(x = value,
-                     y = subject_id,
-                     fill = cohort)) +
-  add_marker(data = adverse_event_cardio,
-             mapping = aes(x = time_of_event,
-                           y = subject_id,
-                           name = "AE: Cardiac Disorder"),
-             color = "red", size = 5) +
-  add_marker(data = adverse_event_inf,
-             mapping = aes(x = time_of_event,
-                           y = subject_id,
-                           name = "AE: Infection"),
-             color = "blue", size = 5, shape = 12) +
-  add_marker(data = adverse_event_psych,
-             mapping = aes(x = time_of_event,
-                           y = subject_id,
-                           name = "AE: Psychiatric Disorder"),
-             color = "green", size = 5, shape = 2)
+ggswim(
+  data = patient_status,
+  mapping = aes(
+    x = value,
+    y = subject_id,
+    fill = cohort
+  )
+) +
+  add_marker(
+    data = adverse_event_cardio,
+    mapping = aes(
+      x = time_of_event,
+      y = subject_id,
+      name = "AE: Cardiac Disorder"
+    ),
+    color = "red", size = 5
+  ) +
+  add_marker(
+    data = adverse_event_inf,
+    mapping = aes(
+      x = time_of_event,
+      y = subject_id,
+      name = "AE: Infection"
+    ),
+    color = "blue", size = 5, shape = 12
+  ) +
+  add_marker(
+    data = adverse_event_psych,
+    mapping = aes(
+      x = time_of_event,
+      y = subject_id,
+      name = "AE: Psychiatric Disorder"
+    ),
+    color = "green", size = 5, shape = 2
+  )
 ```
 
 This example showcases ggswim's ability to handle different data structures from varying sources. Due to its flexible framework, users can customize the output to suit whatever best suits their needs.
