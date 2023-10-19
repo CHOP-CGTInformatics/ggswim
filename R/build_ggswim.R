@@ -23,12 +23,15 @@
 #' @export
 #'
 #' @examples
-#' ggswim_obj <- ggswim(data = patient_status,
-#'                      mapping = aes(x = value,
-#'                                    y = subject_id,
-#'                                    fill = cohort))
+#' ggswim_obj <- ggswim(
+#'   data = patient_status,
+#'   mapping = aes(
+#'     x = value,
+#'     y = subject_id,
+#'     fill = cohort
+#'   )
+#' )
 #' build_ggswim(ggswim_obj)
-
 build_ggswim <- function(ggswim_obj) {
   # Set up initial capture variables ----
   # Indices for layer positions in ggswim_obj

@@ -59,14 +59,17 @@
 #' @export
 #'
 #' @examples
-#' add_marker(data = adverse_events,
-#'            mapping = aes(x = time_of_event,
-#'                          y = subject_id,
-#'                          color = adverse_event_name,
-#'                          shape = adverse_event_name),
-#'             size = 5)
+#' add_marker(
+#'   data = adverse_events,
+#'   mapping = aes(
+#'     x = time_of_event,
+#'     y = subject_id,
+#'     color = adverse_event_name,
+#'     shape = adverse_event_name
+#'   ),
+#'   size = 5
+#' )
 #'
-
 add_marker <- function(
     data = NULL,
     mapping = aes(),

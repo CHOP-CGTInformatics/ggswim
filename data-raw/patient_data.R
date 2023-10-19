@@ -27,8 +27,10 @@ adverse_events <- tibble::tibble(subject_id = factor(rep(1:10, length.out = 15))
   mutate(
     adverse_event_name = rep(sample(c("Infection", "Cardiac Disorder", "Psychiatric Disorder")), length.out = n())
   ) |>
-  left_join(patient_status, by = "subject_id",
-            relationship = "many-to-many") |> # Temp join to reference time vals
+  left_join(patient_status,
+    by = "subject_id",
+    relationship = "many-to-many"
+  ) |> # Temp join to reference time vals
   mutate(
     .by = subject_id,
     time_of_event = runif(n = n(), min = time_start, max = time_end)
@@ -45,8 +47,10 @@ medication_administration <- tibble::tibble(subject_id = factor(rep(1:10, length
     medication = rep(sample(c("\U274C", "\U2705")), length.out = n()),
     name = ifelse(medication == "\U2705", "Medication A", "Medication B"),
   ) |>
-  left_join(patient_status, by = "subject_id",
-            relationship = "many-to-many") |> # Temp join to reference time vals
+  left_join(patient_status,
+    by = "subject_id",
+    relationship = "many-to-many"
+  ) |> # Temp join to reference time vals
   mutate(
     .by = subject_id,
     time_of_event = runif(n = n(), min = time_start, max = time_end)
@@ -58,8 +62,10 @@ medication_administration <- tibble::tibble(subject_id = factor(rep(1:10, length
 # Below added to help with documentation and reduction of repeated code:
 patient_status <- patient_status |>
   tidyr::pivot_longer(c(time_start, time_end)) |>
-  mutate(.by = subject_id,
-         time_sorting = sum(value)) |>
+  mutate(
+    .by = subject_id,
+    time_sorting = sum(value)
+  ) |>
   arrange(cohort, time_sorting) |>
   mutate(subject_id = factor(subject_id, levels = unique(subject_id)))
 
@@ -75,9 +81,11 @@ patient_status <- patient_status %>%
   left_join(alive_status, by = "subject_id")
 
 # Make final patient_data list ----
-patient_data <- list(patient_status = patient_status,
-                     adverse_events = adverse_events,
-                     medication_administration = medication_administration)
+patient_data <- list(
+  patient_status = patient_status,
+  adverse_events = adverse_events,
+  medication_administration = medication_administration
+)
 
 usethis::use_data(patient_data, overwrite = TRUE)
 usethis::use_data(patient_status, overwrite = TRUE)

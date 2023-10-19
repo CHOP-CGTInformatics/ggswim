@@ -41,11 +41,14 @@
 #' @export
 #'
 #' @examples
-#' ggswim(data = patient_status,
-#'        mapping = aes(x = value,
-#'                      y = subject_id,
-#'                      fill = cohort))
-
+#' ggswim(
+#'   data = patient_status,
+#'   mapping = aes(
+#'     x = value,
+#'     y = subject_id,
+#'     fill = cohort
+#'   )
+#' )
 ggswim <- function(
     data,
     mapping = aes(),
@@ -83,14 +86,16 @@ ggswim <- function(
   # Handle arrows ----
   arrow <- enquo(arrow) |> get_expr()
   if (!is.null(arrow)) {
-    out <- add_arrows(data = data,
-                      ggswim_obj = out,
-                      mapping = mapping,
-                      arrow = arrow,
-                      arrow_colour = arrow_colour,
-                      arrow_type = arrow_type,
-                      arrow_fill = arrow_fill,
-                      arrow_length = arrow_length)
+    out <- add_arrows(
+      data = data,
+      ggswim_obj = out,
+      mapping = mapping,
+      arrow = arrow,
+      arrow_colour = arrow_colour,
+      arrow_type = arrow_type,
+      arrow_fill = arrow_fill,
+      arrow_length = arrow_length
+    )
   }
 
   # Return object
@@ -147,13 +152,18 @@ add_arrows <- function(data,
 
   out <- ggswim_obj +
     geom_segment(true_arrow_data,
-                 mapping = aes(x = xend, # nolint: object_usage_linter
-                               y = .data[[mapping$y |> get_expr()]],
-                               yend = .data[[mapping$y |> get_expr()]],
-                               xend = xend + 2), colour = arrow_colour,
-                 arrow = arrow(type = arrow_type,
-                               length = arrow_length),
-                 arrow.fill = arrow_fill)
+      mapping = aes(
+        x = xend, # nolint: object_usage_linter
+        y = .data[[mapping$y |> get_expr()]],
+        yend = .data[[mapping$y |> get_expr()]],
+        xend = xend + 2
+      ), colour = arrow_colour,
+      arrow = arrow(
+        type = arrow_type,
+        length = arrow_length
+      ),
+      arrow.fill = arrow_fill
+    )
 
   current_layer <- length(out$layers) # The max length can be considered the current working layer
 

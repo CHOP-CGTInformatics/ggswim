@@ -28,7 +28,6 @@
 #' adverse_events
 #'
 #' medication_administration
-
 "patient_data"
 
 #' @rdname patient_data

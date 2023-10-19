@@ -65,25 +65,36 @@ load the data and get ready to swim!
 ``` r
 library(ggswim)
 
-ggswim(data = patient_status,
-       mapping = aes(x = value,
-                     y = subject_id,
-                     fill = cohort)) +
-  add_marker(data = adverse_events,
-             mapping = aes(x = time_of_event,
-                           y = subject_id,
-                           color = adverse_event_name,
-                           shape = adverse_event_name),
-             size = 5) +
-  add_marker(data = medication_administration,
-             mapping = aes(x = time_of_event,
-                           y = subject_id,
-                           label = medication,
-                           color = name),
-             label.size = NA, fill = NA, size = 5) +
+ggswim(
+  data = patient_status,
+  mapping = aes(
+    x = value,
+    y = subject_id,
+    fill = cohort
+  )
+) +
+  add_marker(
+    data = adverse_events,
+    mapping = aes(
+      x = time_of_event,
+      y = subject_id,
+      color = adverse_event_name,
+      shape = adverse_event_name
+    ),
+    size = 5
+  ) +
+  add_marker(
+    data = medication_administration,
+    mapping = aes(
+      x = time_of_event,
+      y = subject_id,
+      label = medication,
+      color = name
+    ),
+    label.size = NA, fill = NA, size = 5
+  ) +
   ggplot2::labs(x = "Time", y = "Subject ID", color = "Markers") +
   ggplot2::ggtitle("My Swim Plot") +
-  ggplot2::theme_minimal() +
   ggplot2::scale_color_manual(
     name = "Markers",
     values = c("firebrick", "forestgreen", NA, NA, "purple")
@@ -95,7 +106,8 @@ ggswim(data = patient_status,
   ggplot2::scale_fill_manual(
     name = "Lanes",
     values = c("steelblue1", "goldenrod1")
-  )
+  ) +
+  theme_ggswim()
 ```
 
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
