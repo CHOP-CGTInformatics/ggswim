@@ -119,12 +119,16 @@ aesthetic mapping to render the legend correctly.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">add_marker</span><span class="op">(</span>data <span class="op">=</span> <span class="va">adverse_events</span>,</span></span>
-<span class="r-in"><span>           mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time_of_event</span>,</span></span>
-<span class="r-in"><span>                         y <span class="op">=</span> <span class="va">subject_id</span>,</span></span>
-<span class="r-in"><span>                         color <span class="op">=</span> <span class="va">adverse_event_name</span>,</span></span>
-<span class="r-in"><span>                         shape <span class="op">=</span> <span class="va">adverse_event_name</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>            size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">add_marker</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="va">adverse_events</span>,</span></span>
+<span class="r-in"><span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    x <span class="op">=</span> <span class="va">time_of_event</span>,</span></span>
+<span class="r-in"><span>    y <span class="op">=</span> <span class="va">subject_id</span>,</span></span>
+<span class="r-in"><span>    color <span class="op">=</span> <span class="va">adverse_event_name</span>,</span></span>
+<span class="r-in"><span>    shape <span class="op">=</span> <span class="va">adverse_event_name</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  size <span class="op">=</span> <span class="fl">5</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> mapping: x = ~time_of_event, y = ~subject_id, colour = ~adverse_event_name, shape = ~adverse_event_name </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> geom_point: na.rm = TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> stat_identity: na.rm = TRUE</span>
