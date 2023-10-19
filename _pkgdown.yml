@@ -24,6 +24,7 @@ reference:
   - ggswim
   - add_marker
   - build_ggswim
+  - theme_ggswim
 - title: "Datasets"
   descr: >
     Internal datasets for use in testing.
