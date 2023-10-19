@@ -5,8 +5,16 @@
 #'
 #' @export
 #'
-#' @importFrom ggplot2 %+replace% theme_minimal theme element_text
-#' element_blank margin element_line element_rect
+#' @examples
+#' ggswim(
+#'   data = patient_status,
+#'   mapping = aes(
+#'     x = value,
+#'     y = subject_id,
+#'     fill = cohort
+#'   )
+#' ) +
+#' theme_ggswim()
 
 theme_ggswim <- function() {
   font <- "serif"

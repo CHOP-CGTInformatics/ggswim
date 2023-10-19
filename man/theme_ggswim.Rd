@@ -9,3 +9,14 @@ theme_ggswim()
 \description{
 An alternative theme for ggswim plots.
 }
+\examples{
+ggswim(
+  data = patient_status,
+  mapping = aes(
+    x = value,
+    y = subject_id,
+    fill = cohort
+  )
+) +
+theme_ggswim()
+}

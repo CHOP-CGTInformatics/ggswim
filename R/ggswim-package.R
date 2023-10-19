@@ -2,6 +2,8 @@
 #' @aliases ggswim-package
 #' @importFrom ggplot2 aes geom_point geom_label layer_data ggplot geom_col
 #'   guides guide_legend scale_color_manual geom_segment arrow unit
+#'   %+replace% theme_minimal theme element_text element_blank margin
+#'   element_line element_rect
 #' @importFrom cli cli_abort cli_vec cli_warn
 #' @importFrom rlang caller_arg caller_env as_label is_atomic get_expr .data
 #'   is_empty := enquo

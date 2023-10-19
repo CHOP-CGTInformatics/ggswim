@@ -18,10 +18,14 @@ a ggplot
 Print ggswim object
 }
 \examples{
-  ggswim(data = patient_status,
-         mapping = aes(x = value,
-                       y = subject_id,
-                       fill = cohort)) |>
+ggswim(
+  data = patient_status,
+  mapping = aes(
+    x = value,
+    y = subject_id,
+    fill = cohort
+  )
+) |>
   print()
 }
 \keyword{internal}
