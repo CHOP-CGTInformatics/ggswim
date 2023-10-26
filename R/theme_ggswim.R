@@ -23,10 +23,10 @@ theme_ggswim <- function() {
 
     theme(
       # Grid Elements ----
-      axis.ticks = element_line(color = "steelblue2", size = 1),
-      panel.grid.major.x = element_line(color = "gray60", size = 0.3),
-      panel.grid.minor.x = element_line(color = "gray80", size = 0.1),
-      panel.grid.major.y = element_line(color = "gray60", size = 0.3),
+      axis.ticks = element_line(color = "steelblue3", size = 1),
+      panel.grid.major.x = element_blank(),
+      panel.grid.minor.x = element_blank(),
+      panel.grid.major.y = element_blank(),
       panel.grid.minor.y = element_blank(),
       axis.line = element_line(
         color = "steelblue3", size = 1,
