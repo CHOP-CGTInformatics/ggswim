@@ -33,6 +33,9 @@
 #' )
 #' build_ggswim(ggswim_obj)
 build_ggswim <- function(ggswim_obj) {
+  # Checks ----
+  check_ggswim_obj(ggswim_obj)
+
   # Set up initial capture variables ----
   # Indices for layer positions in ggswim_obj
   label_layer_indices <- c()

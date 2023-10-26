@@ -168,3 +168,30 @@ check_arrow_fill_type <- function(arrow_type, arrow_fill) {
     )
   }
 }
+
+#' @title check build_ggswim receives a ggswim class object
+#'
+#' @description
+#' Supply users with an error when `build_ggswim()` is used outside of the
+#' context of a `ggswim_obj` class object.
+#'
+#' @param obj The ggplot object passed to the ggswim print method. Ideally, should
+#' always have an enforced `ggswim_obj` class type when ggswim is being used.
+#'
+#' @keywords internal
+
+check_ggswim_obj <- function(obj) {
+  msg <- c(
+    "x" = "Unsupported object passed to {.code build_ggswim}.",
+    "i" = "{.code build_ggswim} only accepts objects of class type 'ggswim_obj'."
+  )
+  cond_class <- c("ggswim_cond", "ggswim_obj_class")
+
+  if (!"ggswim_obj" %in% class(obj)) {
+    cli_abort(
+      message = msg,
+      call = caller_env(),
+      class = cond_class
+    )
+  }
+}

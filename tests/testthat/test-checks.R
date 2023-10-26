@@ -1,3 +1,15 @@
+pt_data <- tibble::tribble(
+  ~"id", ~"trt", ~"end_time", ~"time", ~"alive",
+  1, "Drug A", 5, 0, TRUE,
+  1, "Drug A", 5, 5, TRUE,
+  2, "Drug B", 2, 0, FALSE,
+  2, "Drug B", 2, 2, FALSE,
+  3, "Drug A", 4, 0, FALSE,
+  3, "Drug A", 4, 4, FALSE,
+  4, "Drug B", 7, 0, TRUE,
+  4, "Drug B", 7, 7, TRUE
+)
+
 test_that("wrap_checkmate works", {
   out <- wrap_checkmate(checkmate::check_character)
   expect_equal(class(out), "function")
@@ -83,5 +95,19 @@ test_that("check_arrow_fill_type works", {
   expect_warning(
     check_arrow_fill_type(arrow_fill = arrow_fill, arrow_type = arrow_type_open),
     class = "arrow_fill_type"
+  )
+})
+
+test_that("check_ggswim_obj works", {
+  ggswim_obj <- ggswim(pt_data, aes(x = time, y = id, fill = trt))
+  non_ggswim_obj <- ggplot(mtcars) + geom_point(aes(x = cyl, y = hp))
+
+  # Using default enabled print method
+  expect_no_error(
+    check_ggswim_obj(ggswim_obj)
+  )
+  expect_error(
+    check_ggswim_obj(non_ggswim_obj),
+    class = "ggswim_obj_class"
   )
 })
