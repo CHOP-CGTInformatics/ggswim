@@ -20,6 +20,7 @@ Imports:
     rlang,
     tibble,
     tidyr,
+    tidyselect,
     vdiffr
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)

@@ -80,3 +80,34 @@ test_that("add_arrows works", {
     class = "ggswim_cond"
   )
 })
+
+test_that("ggswim throws a warning when there is missing data", {
+  missing_data <- tibble::tribble(
+    ~"id", ~"val1", ~"val2",
+    1, "A", 1,
+    2, NA, 2
+  )
+
+  p_missing <- ggswim(pt_data, aes(x = time, y = id, fill = trt)) +
+    add_marker(data = missing_data,
+               mapping = aes(x = val2, y = id, colour = val1))
+
+  expect_warning(p_missing |> build_ggswim(), class = "missing_colour_data")
+
+  suppressWarnings(
+    vdiffr::expect_doppelganger(
+      title = "Missing data appears in ggswim plot, but is dropped from legend",
+      fig = p_missing
+    )
+  )
+})
+
+test_that("ggswim works with arrow arguments", {
+  p <- ggswim(pt_data, aes(x = time, y = id, fill = trt),
+              arrow = alive)
+
+  vdiffr::expect_doppelganger(
+    title = "Arrows appear in ggswim with defaults",
+    fig = p
+  )
+})

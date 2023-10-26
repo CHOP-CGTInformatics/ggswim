@@ -146,7 +146,7 @@ add_arrows <- function(data,
 
   true_arrow_data <- data[data[arrow] == TRUE, ] |>
     mutate(
-      .by = y_val,
+      .by = all_of(y_val),
       xend = sum(!!x_val) # nolint: object_usage_linter
     )
 

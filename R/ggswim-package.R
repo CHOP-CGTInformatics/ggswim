@@ -12,6 +12,7 @@
 #' @importFrom stats setNames
 #' @importFrom vdiffr expect_doppelganger
 #' @importFrom tidyr pivot_longer
+#' @importFrom tidyselect all_of
 #' @importFrom tibble tibble tribble
 "_PACKAGE"
 
