@@ -13,11 +13,11 @@ knitr::opts_chunk$set(
 library(ggswim)
 ```
 
-ggswim optionally allows users to add arrows to the tail ends of their swimmer plot lanes to illustrate continuation of specific records. Use case examples includes depicting continuation of care and subject survival statuses.
+In certain scenarios, it can be userful to visually indicate the continuation of specific records in a swimmer plot. This is where the optional feature of adding arrows to the tail ends of swimmer plot lanes in ggswim comes in handy. Example use cases include illustrating the ongoing care of patients or highlighting record "survival" statuses.
 
-Under the hood, arrows makes a simple call to `ggplot2::geom_segment()` with some slight manipulations. The segments are all of length 0, but the arrows are made visible by supplying a specifying length. `ggswim()` lets users control that length as well as color, fill, and type options (see `?ggswim` for more information).
+Behind the scenes, the inclusion of arrows is facilitated by a call to `ggplot2::geom_segment()`, coupled with some fine-tuning. While the segments themselves have zero length, the arrows are made possible with a defined length parameter. Within `ggswim()`, users have full control over this length, along with options for color, fill, and type (refer to `?ggswim` for detailed information).
 
-Let's start with an example similar to the one we've been using in the README.
+Let's dive into an example, similar to the one we've been using in the README, to see this feature in action.
 
 ```{r}
 ggswim(
@@ -30,7 +30,7 @@ ggswim(
 )
 ```
 
-To add arrows to our plot, we first need to specify a boolean column that basically tells `ggswim()` whether or not to tack on an arrow to the row. In the case of `patient_status`, this column is called `alive` and assigns `TRUE`/`FALSE` for a patient's survival status at the time of plotting.
+Before we can incorporate arrows into our swimmer plot, we need to designate a boolean column that informs `ggswim()` when to append an arrow to a specific row. In our example using `patient_status`, this column is named `alive` and takes on `TRUE` or `FALSE` values to denote a patient's survival status at the time of plotting.
 
 ```{r}
 head(patient_status)

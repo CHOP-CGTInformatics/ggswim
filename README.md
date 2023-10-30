@@ -22,45 +22,42 @@ create “swimmer” plots.
 
 ## Installation
 
-⚠️ ggswim is in its very early stages, but in active development!⚠️
-
-Expect to see many changes in the near future to the API and
-documentation.
-
 You can install the development version of ggswim like so:
 
 ``` r
 devtools::install_github("CHOP-CGTInformatics/ggswim")
 ```
 
-## Background
+## ggswim: Elegant Swimmer Plots with ggplot2
 
-ggswim provides developers with a set of commands that make it easy to
-create beautiful swimmer plots using the architecture they may already
-be familiar with in ggplot2. The main functions that power ggswim are
-wrapped around core ggplot2 functions, leveraging the ability to add
-layers at a whim for whatever the developer’s display requires.
+ggswim simplifies the creation of stunning swimmer plots by seamlessly
+integrating with the familiar ggplot2 framework, allowing developers to
+effortlessly add layers and customize displays to their needs.
 
-The ggswim package reduces the complexity behind making reproducible
-legend displays that correctly show points of interest and are key to
-telling the story of the swimmer plot.
+One of ggswim’s key strengths is its ability to streamline the process
+of generating clear, reproducible legends. This ensures that crucial
+points of interest are effectively communicated, enhancing the narrative
+of the swimmer plot.
 
-Let’s show a quick example of how this works below!
+Let’s dive right into a quick example to showcase the simplicity and
+effectiveness of ggswim!
 
-## A Sample Data Set
+## Exploring the Sample Dataset
 
-ggswim comes packaged with a sample dataset called `patient_status`,
-which is a list containing 3 tibbles:
+To help you get started, ggswim includes a sample dataset named
+`patient_status`. This dataset comprises three tibbles:
 
-- `patient_status`
-  - `patient_status` has already been prepared in a way that makes it
-    easy to use with ggswim, but may not be very representative of how
-    one receives data in the wild
-- `adverse_events`
-- `medication_administration`
+- `patient_status`: Designed for ease of use with ggswim, it may not
+  perfectly mirror real-world data, but serves as an ideal starting
+  point. A 7 column tibble with subject cohorts, statuses, and start and
+  end times.
+- `adverse_events`: A 3 column tibble showcasing 3 kinds of AEs and the
+  time when they occurred
+- `medication_administration`: A 4 column tibble showcasing 2 kinds of
+  medications and the time they were given
 
-Each of these tibbles are also available to call individually. Let’s
-load the data and get ready to swim!
+You can also access each of these tibbles individually. Let’s load the
+data and dive into creating our swimmer plots!
 
 ``` r
 library(ggswim)
