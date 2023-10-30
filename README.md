@@ -51,8 +51,8 @@ To help you get started, ggswim includes a sample dataset named
   perfectly mirror real-world data, but serves as an ideal starting
   point. A 7 column tibble with subject cohorts, statuses, and start and
   end times.
-- `adverse_events`: A 3 column tibble showcasing 3 kinds of AEs and the
-  time when they occurred
+- `adverse_events`: A 3 column tibble showcasing 3 kinds of adverse
+  events and the time when they occurred
 - `medication_administration`: A 4 column tibble showcasing 2 kinds of
   medications and the time they were given
 

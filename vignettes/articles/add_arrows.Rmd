@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 library(ggswim)
 ```
 
-In certain scenarios, it can be userful to visually indicate the continuation of specific records in a swimmer plot. This is where the optional feature of adding arrows to the tail ends of swimmer plot lanes in ggswim comes in handy. Example use cases include illustrating the ongoing care of patients or highlighting record "survival" statuses.
+In certain scenarios, it can be useful to visually indicate the continuation of specific records in a swimmer plot. This is where the optional feature of adding arrows to the tail ends of swimmer plot lanes in ggswim comes in handy. Example use cases include illustrating the ongoing care of patients or highlighting record "survival" statuses.
 
 Behind the scenes, the inclusion of arrows is facilitated by a call to `ggplot2::geom_segment()`, coupled with some fine-tuning. While the segments themselves have zero length, the arrows are made possible with a defined length parameter. Within `ggswim()`, users have full control over this length, along with options for color, fill, and type (refer to `?ggswim` for detailed information).
 
