@@ -4,14 +4,27 @@ template:
   bootstrap: 5
   bslib:
     code_font: {google: "Fira Code"}
+    primary: "#40b7e6"
 
 home:
   title: Create swimmer plots with - ggswim
 
 navbar:
+  bg: primary
   structure:
     left: [intro, reference, articles]
     right: [search, github]
+  left:
+    - icon: fa-home
+      href: index.html
+    - text: Get Started
+      href: articles/ggswim.html
+    - text: Reference
+      href: reference/index.html
+    - text: Articles
+      menu:
+        - text: "Adding Arrows"
+          href: articles/add_arrows.html
 
 search:
   exclude: ['news/index.html']
