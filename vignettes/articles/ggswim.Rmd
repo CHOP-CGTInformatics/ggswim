@@ -1,12 +1,5 @@
 ---
 title: "Getting Started with ggswim"
-output: rmarkdown::html_vignette
-description: >
-  Start here for an introduction on how to use ggswim.
-vignette: >
-  %\VignetteIndexEntry{Getting Started with ggswim}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
