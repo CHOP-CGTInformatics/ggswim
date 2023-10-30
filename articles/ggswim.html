@@ -80,35 +80,34 @@
 
     
     
-<p>The ggswim package provides users with a convenient and flexible
-framework for quickly developing swimmer plots in a way that coincides
-with typical ggplot2 design principles. In this article, we will
-demonstrate some of the options available to developers.</p>
-<p>In its current state, ggswim uses two main functions:
-<code><a href="../reference/ggswim.html">ggswim()</a></code> and <code><a href="../reference/add_marker.html">add_marker()</a></code>.</p>
-<p><code><a href="../reference/ggswim.html">ggswim()</a></code> is wrapped around <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col()</a></code> and
-is responsible for providing the horizontal bars of a swimmer plot, what
-we’ll refer to as the “lanes.” <code><a href="../reference/add_marker.html">add_marker()</a></code> is wrapped
-around <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_label()</a></code> to add
-points/shapes/labels or what we’ll refer to as the “markers” for events
-on the swimmer plots lanes.</p>
-<p>Because ggswim is built on top of existing ggplot2 infrastructure,
-those familiar with ggplot2 will be able to implement the same
-layer-building development practices they are used to, including
-stylizing and themes.</p>
+<p>The ggswim package eases the development of swimmer plots in R by
+seamlessly integrating with the ggplot2 framework. In this vignette,
+we’ll walk through how users can create visually striking swimmer
+plots.</p>
+<p>At the heart of ggswim are two pivotal functions:
+<code><a href="../reference/ggswim.html">ggswim()</a></code> and <code><a href="../reference/add_marker.html">add_marker()</a></code>. The former, an
+extension of <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col()</a></code>, allows users to construct the
+fundamental horizontal bars, often referred to as “lanes.” Meanwhile,
+<code><a href="../reference/add_marker.html">add_marker()</a></code> leverages <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point()</a></code> and
+<code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_label()</a></code> to effortlessly embed key events or “markers”
+onto the plot. These can take the form of unicode shapes, symbols, or
+even emojis.</p>
+<p>Drawing from the well-established principles of ggplot2, ggswim
+allows users to apply familiar layer-building techniques, including the
+application of styles and themes.</p>
+<p>Let’s dive in and explore the boundless possibilities that
+<code>ggswim</code> offers for expressive swimmer plots!</p>
 <div class="section level3">
 <h3 id="building-swimmer-plots-with-aesthetic-mapping">Building swimmer plots with aesthetic mapping<a class="anchor" aria-label="anchor" href="#building-swimmer-plots-with-aesthetic-mapping"></a>
 </h3>
-<p>In this first example, let’s build a swimmer plot using
-<code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> and dynamic mapping of data. As with the README, we
-will be using ggswim’s internal <code>patient_data</code> list
-dataset.</p>
-<p>As mentioned in the README, <code>patient_status</code> is currently
-built to reflect a typical dataset in the wild. To make this work well
-and appear nicely in our swimmer plot output, a little bit of some
-preparation was required. Unlike what we provide for you out of the box,
-a more typical <code>patient_status</code> might look something like
-this:</p>
+<p>To start, let’s build a swimmer plot using <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> and
+dynamic mapping of data. As with the README, we will be using ggswim’s
+internal <code>patient_data</code> list dataset.</p>
+<p>As mentioned in the README, <code>patient_status</code> is built to
+reflect a typical dataset in the wild. To make this work well and appear
+nicely in our swimmer plot output, a little bit of preparation was
+required. Unlike what we provide for you out of the box, a more typical
+<code>patient_status</code> might look something like this:</p>
 <pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 15 × 5</span></span></span>
 <span><span class="co">#&gt;    subject_id cohort   status    time_start time_end</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
@@ -130,10 +129,10 @@ this:</p>
 <p>Therefore, when viewing the available <code>patient_status</code>,
 keep in mind it has undergone the following data cleaning steps:</p>
 <ul>
-<li>A pivot so that <code>time_start</code> and <code>time_end</code>
-comprise a single value.</li>
-<li>Addition of a sorting variable, <code>time_sorting</code>, to
-support arrangement using summed time values</li>
+<li>A pivot that keeps <code>time_start</code> and <code>time_end</code>
+under one column</li>
+<li>The addition of a sorting variable, <code>time_sorting</code>, to
+support arrangement using summed times</li>
 <li>Arrangement of the data by cohort groups, time sorted values, and
 subject ID factor levels</li>
 </ul>
@@ -179,13 +178,11 @@ subject ID factor levels</li>
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
 <p><img src="ggswim_files/figure-html/aes%20mapping%20plot-1.png" width="700"></p>
-<p>This is great for shapes and points, but what if we wanted to get
-fancy and add in some labels like emojis? This is where some ggswim
-magic really shines. ggswim’s <code><a href="../reference/add_marker.html">add_marker()</a></code> allows for both
-types of displays to appear and does the leg work of rending them both
-appropriately in the legend under the same layer. Let’s add these with
-another <code><a href="../reference/add_marker.html">add_marker()</a></code> call using the
-<code>medication_administration</code> data:</p>
+<p>In addition to shapes and symbols, ggswim supports the use of emojis
+when rendering swimmer plots. <code><a href="../reference/add_marker.html">add_marker()</a></code> allows users to
+specify shapes or emojis by using the appropriate argument callouts
+(<code>label</code> and <code>shape</code>). Let’s add a layer using
+emojis via the <code>medication_administration</code> dataset:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">p</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/add_marker.html">add_marker</a></span><span class="op">(</span></span>
@@ -201,10 +198,11 @@ another <code><a href="../reference/add_marker.html">add_marker()</a></code> cal
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
 <p><img src="ggswim_files/figure-html/label%20mapping-1.png" width="700"></p>
-<p>This is great and all, but it could look better right? Remember how
-earlier we mentioned you can use existing ggplot2 functions with ggswim
-outputs? Let’s implement some here so we can find a bit more joy in our
-plot:</p>
+<p>At this point we have a working swimmer plot with lanes and two
+different kinds of marker layers. Recall that ggswim works within the
+ggplot2 framework, therefore customization can be done using the same
+ggplot2 theme and styling functions users may already be familiar
+with:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
@@ -225,22 +223,31 @@ plot:</p>
 <span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"steelblue"</span>, <span class="st">"cyan"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="ggswim_files/figure-html/mapping%20finalizing-1.png" width="700"></p>
+<p>However, ggswim also provides a convenient theme function all of its
+own if desired:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">p</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Time"</span>, y <span class="op">=</span> <span class="st">"Subject ID"</span>, color <span class="op">=</span> <span class="st">"Markers"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"My Swim Plot"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/theme_ggswim.html">theme_ggswim</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ggswim_files/figure-html/mapping%20with%20theme_ggswim-1.png" width="700"></p>
 </div>
 <div class="section level3">
-<h3 id="building-swimmer-plots-with-individual-markers">Building swimmer plots with individual markers<a class="anchor" aria-label="anchor" href="#building-swimmer-plots-with-individual-markers"></a>
+<h3 id="customizing-markers-a-deeper-dive">Customizing Markers: A Deeper Dive<a class="anchor" aria-label="anchor" href="#customizing-markers-a-deeper-dive"></a>
 </h3>
-<p>Not all data is made, or received equal, and so ggswim was developed
-to cater to both dynamic mapping of markers as well as static assignment
-of markers. What do we mean by this?</p>
-<p>Well, let’s say that instead of setting your mapped
-<code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> “colour” to a variable, you instead only have one
-marker in the dataset supplied and want to define the <code>color</code>
-yourself. Let’s split up <code>adverse_events</code> so there is only
-one marker level per dataframe.</p>
-<p>For this to work, we also need to specify an <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code>
-<code>name</code> argument to <code><a href="../reference/add_marker.html">add_marker()</a></code> which acts as an
-anchor point for the legend.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>In the world of data, one size rarely fits all. That’s why ggswim
+caters to both dynamic and static marker assignments. But what does that
+mean exactly?</p>
+<p>Imagine you have a dataset where you want to manually define the
+color of a single, significant marker rather than relying on a mapped
+variable. By splitting up <code>adverse_events</code> into distinct data
+frames, you can achieve this customized effect.</p>
+<p>To make it all come together, make sure to include an
+<code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> <code>name</code> argument within
+<code><a href="../reference/add_marker.html">add_marker()</a></code>. This serves as a crucial anchor point for the
+legend, ensuring clarity in your visualization.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adverse_event_cardio</span> <span class="op">&lt;-</span> <span class="va">adverse_events</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">adverse_event_name</span> <span class="op">==</span> <span class="st">"Cardiac Disorder"</span><span class="op">)</span></span>
 <span></span>
@@ -249,8 +256,8 @@ anchor point for the legend.</p>
 <span></span>
 <span><span class="va">adverse_event_psych</span> <span class="op">&lt;-</span> <span class="va">adverse_events</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">adverse_event_name</span> <span class="op">==</span> <span class="st">"Psychiatric Disorder"</span><span class="op">)</span></span></code></pre></div>
-<p>Now, let’s plot it similarly to what we did above:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<p>Now, let’s plot it similarly to how we have previously:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">patient_status</span>,</span>
 <span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
@@ -285,31 +292,36 @@ anchor point for the legend.</p>
 <span>      name <span class="op">=</span> <span class="st">"AE: Psychiatric Disorder"</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    color <span class="op">=</span> <span class="st">"green"</span>, size <span class="op">=</span> <span class="fl">5</span>, shape <span class="op">=</span> <span class="fl">2</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Duplicated aesthetics after name standardisation: <span style="color: #00BB00;">colour</span></span></span>
-<span><span class="co">#&gt; Duplicated aesthetics after name standardisation: <span style="color: #00BB00;">colour</span></span></span>
-<span><span class="co">#&gt; Duplicated aesthetics after name standardisation: <span style="color: #00BB00;">colour</span></span></span></code></pre></div>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/theme_ggswim.html">theme_ggswim</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ggswim_files/figure-html/static%20plot-1.png" width="700"></p>
 <p>This example showcases ggswim’s ability to handle different data
-structures from varying sources. Due to its flexible framework, users
-can customize the output to suit whatever best suits their needs.</p>
+structures from varying sources. Its adaptable framework lets users
+customize the output precisely to their unique requirements.</p>
 </div>
 <div class="section level3">
 <h3 id="additional-notes">Additional notes<a class="anchor" aria-label="anchor" href="#additional-notes"></a>
 </h3>
+<p>Here are some essential points to keep in mind when working with
+ggswim:</p>
 <ul>
-<li>ggswim does not support missing data for mapping aesthetics.
-Developers will be warned about missing data that may appear in the
-display, but will be removed from the legend.</li>
-<li>
-<code><a href="../reference/ggswim.html">ggswim()</a></code> does not support mapping using the
-<code>colour</code> argument</li>
-<li>
-<code><a href="../reference/add_marker.html">add_marker()</a></code> does not support mapping using the
-<code>fill</code> argument</li>
-<li>For emojis and other shapes to properly appear, users may need to
-switch the graphics rendering device to AGG</li>
+<li><p><strong>Handling Missing Data:</strong> ggswim does not support
+missing data for mapping aesthetics. If any are detected, developers
+will receive a warning, and the missing data may appear as
+<code>NA</code> values in the display, but will be excluded from the
+legend.</p></li>
+<li><p><strong>Color Mapping with <code><a href="../reference/ggswim.html">ggswim()</a></code>:</strong> Please
+note that <code><a href="../reference/ggswim.html">ggswim()</a></code> does not support mapping using the
+<code>colour</code> argument.</p></li>
+<li><p><strong>Filling Markers with <code><a href="../reference/add_marker.html">add_marker()</a></code>:</strong>
+Similarly, <code><a href="../reference/add_marker.html">add_marker()</a></code> does not support mapping using the
+<code>fill</code> argument.</p></li>
+<li><p><strong>Rendering Emojis and Custom Shapes:</strong> To ensure
+emojis and other custom shapes display correctly, users may need to
+switch the graphics rendering device to AGG.</p></li>
 </ul>
+<p>These considerations will help you make the most of ggswim while
+building your visualizations.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
