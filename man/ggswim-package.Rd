@@ -6,6 +6,8 @@
 \alias{_PACKAGE}
 \title{ggswim: Create Swimmer Plots with ggplot2}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 Create swimmer plots using the ggplot2 framework.
 }
 \author{
