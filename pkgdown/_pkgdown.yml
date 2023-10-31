@@ -5,6 +5,7 @@ template:
   bslib:
     code_font: {google: "Fira Code"}
     primary: "#40b7e6"
+    text-muted: "#FFFFFF"
 
 home:
   title: Create swimmer plots with - ggswim
