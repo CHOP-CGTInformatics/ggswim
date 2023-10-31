@@ -3,9 +3,12 @@ Type: Package
 Title: Create Swimmer Plots with ggplot2
 Version: 0.1.0
 Authors@R: c(
-    person("Richard", "Hanna", , "richardshanna91@gmail.com", role = c("aut", "cre")),
-    person("Stephan", "Kadauke", , "kadaukes@chop.edu", role = "aut"),
-    person("Ezra", "Porter", , "ezrajporter@gmail.com", role = "aut")
+    person("Richard", "Hanna", , "richardshanna91@gmail.com", role = c("aut", "cre"),
+    comment = c(ORCID = "0009-0005-6496-8154")),
+    person("Stephan", "Kadauke", , "kadaukes@chop.edu", role = "aut",
+    comment = c(ORCID = "0000-0003-2996-8034")),
+    person("Ezra", "Porter", , "ezrajporter@gmail.com", role = "aut",
+    comment = c(ORCID = "0000-0002-4690-8343"))
   )
 Description: Create swimmer plots using the ggplot2 framework.
 License: MIT + file LICENSE
