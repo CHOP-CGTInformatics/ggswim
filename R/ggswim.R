@@ -144,16 +144,18 @@ add_arrows <- function(data,
   x_val <- mapping$x |> get_expr()
   y_val <- mapping$y |> get_expr()
 
+  xend <- NULL # define to avoid global variable note
+
   true_arrow_data <- data[data[arrow] == TRUE, ] |>
     mutate(
       .by = all_of(y_val),
-      xend = sum(!!x_val) # nolint: object_usage_linter
+      xend = sum(!!x_val)
     )
 
   out <- ggswim_obj +
     geom_segment(true_arrow_data,
       mapping = aes(
-        x = xend, # nolint: object_usage_linter
+        x = xend,
         y = .data[[mapping$y |> get_expr()]],
         yend = .data[[mapping$y |> get_expr()]],
         xend = xend + 2

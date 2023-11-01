@@ -71,6 +71,6 @@
 <rect x='664.37' y='313.40' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
 <circle cx='673.01' cy='322.04' r='1.95' style='stroke-width: 0.71; stroke: #F8766D; fill: #F8766D;' />
 <text x='687.13' y='325.07' style='font-size: 8.80px; font-family: sans;' textLength='5.87px' lengthAdjust='spacingAndGlyphs'>A</text>
-<text x='27.90' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='377.18px' lengthAdjust='spacingAndGlyphs'>Missing data appears in ggswim plot, but is dropped from legend</text>
+<text x='27.90' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='289.87px' lengthAdjust='spacingAndGlyphs'>Missing data appears, but is dropped from legend</text>
 </g>
 </svg>

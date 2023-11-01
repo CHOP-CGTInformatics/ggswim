@@ -96,7 +96,7 @@ test_that("ggswim throws a warning when there is missing data", {
 
   suppressWarnings(
     vdiffr::expect_doppelganger(
-      title = "Missing data appears in ggswim plot, but is dropped from legend",
+      title = "Missing data appears, but is dropped from legend",
       fig = p_missing
     )
   )
