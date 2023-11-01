@@ -51,12 +51,15 @@ build_ggswim <- function(ggswim_obj) {
 
   # Determine indices of layers in ggplot object that contain labels, points, and static colors
   for (i in seq_along(ggswim_obj$layers)) {
-    if (attributes(ggswim_obj$layers[[i]])$swim_class == "marker_label") {
-      label_layer_indices <- c(label_layer_indices, i)
-    }
+    # Check for swim_class attrs, required to allow for other types of layer additions (ex: geom_vline)
+    if ("swim_class" %in% names(attributes(ggswim_obj$layers[[i]]))) {
+      if (attributes(ggswim_obj$layers[[i]])$swim_class == "marker_label") {
+        label_layer_indices <- c(label_layer_indices, i)
+      }
 
-    if (attributes(ggswim_obj$layers[[i]])$swim_class == "marker_point") {
-      point_layer_indices <- c(point_layer_indices, i)
+      if (attributes(ggswim_obj$layers[[i]])$swim_class == "marker_point") {
+        point_layer_indices <- c(point_layer_indices, i)
+      }
     }
 
     if (!is.null(ggswim_obj$layers[[i]]$static_colours)) {

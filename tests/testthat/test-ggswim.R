@@ -111,3 +111,28 @@ test_that("ggswim works with arrow arguments", {
     fig = p
   )
 })
+
+test_that("ggswim works with other layer types", {
+  # This test looks for the inclusion of `geom_vline`, which makes for a new layer
+  # We want to test that `build_ggswim()` doesn't fail on render and a vline appears
+
+  pt_data_neg <- tibble::tribble(
+    ~"id", ~"trt", ~"end_time", ~"time", ~"alive",
+    1, "Drug A", 5, -5, TRUE,
+    1, "Drug A", 5, 5, TRUE,
+    2, "Drug B", 2, -10, FALSE,
+    2, "Drug B", 2, 2, FALSE,
+    3, "Drug A", 4, 0, FALSE,
+    3, "Drug A", 4, 4, FALSE,
+    4, "Drug B", 7, 3, TRUE,
+    4, "Drug B", 7, 7, TRUE
+  )
+
+  p <- ggswim(data = pt_data_neg, aes(x = time, y = id, fill = trt)) +
+    ggplot2::geom_vline(xintercept = 0)
+
+  vdiffr::expect_doppelganger(
+    title = "A vertical line appears on the ggswim plot",
+    fig = p
+  )
+})
