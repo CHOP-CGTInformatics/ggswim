@@ -12,7 +12,7 @@ ggswim_plot <- ggswim(df, aes(x = hp, y = mpg, fill = cyl)) +
     mapping = aes(x = hp, y = mpg, name = "test"),
     color = "firebrick"
   ) |>
-    suppressWarnings()
+  suppressWarnings()
 
 # Static colour df representative of above ggswim_plot
 static_colour_df <- data.frame(
@@ -55,4 +55,34 @@ test_that("get_layer_data works with a swim framework and static colour mapping"
   # and colour mapping
   expect_true(length(unique(layer_data$colour)) == 1)
   expect_true(length(unique(layer_data$colour_mapping)) == 1)
+})
+
+test_that("get_layer_data works with a swim framework and coerced mapping", {
+  ggswim_plot_coercions <- ggswim(df, aes(x = hp, y = mpg, fill = cyl)) +
+    add_marker(mapping = aes(x = hp, y = mpg, color = factor(names)))
+
+  expect_no_error(
+    get_layer_data(
+      data = ggswim_plot_coercions$data,
+      mapping = ggswim_plot_coercions$layers[[2]]$mapping,
+      i = 2L
+    )
+  )
+})
+
+test_that("retrieve_original_aes works", {
+  data <- mtcars
+  coerced_mapping <- aes(x = "cyl", y = "hp", color = factor("disp"))
+  non_coerced_mapping <- aes(x = "cyl", y = "hp", color = "disp")
+
+  expect_no_error(
+    retrieve_original_aes(data = data, aes_mapping = unlist(non_coerced_mapping), aes_var = "colour")
+  )
+  expect_no_error(
+    retrieve_original_aes(data = data, aes_mapping = unlist(coerced_mapping), aes_var = "colour")
+  )
+  expect_equal(
+    retrieve_original_aes(data = data, aes_mapping = unlist(non_coerced_mapping), aes_var = "colour"),
+    retrieve_original_aes(data = data, aes_mapping = unlist(coerced_mapping), aes_var = "colour")
+  )
 })
