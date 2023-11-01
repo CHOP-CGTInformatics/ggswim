@@ -100,7 +100,8 @@ test_that("check_arrow_fill_type works", {
 
 test_that("check_ggswim_obj works", {
   ggswim_obj <- ggswim(pt_data, aes(x = time, y = id, fill = trt))
-  non_ggswim_obj <- ggplot(mtcars) + geom_point(aes(x = cyl, y = hp))
+  non_ggswim_obj <- ggplot(mtcars) +
+    geom_point(aes(x = cyl, y = hp))
 
   # Using default enabled print method
   expect_no_error(

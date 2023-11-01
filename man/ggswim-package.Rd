@@ -10,6 +10,15 @@
 
 Create swimmer plots using the ggplot2 framework.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://chop-cgtinformatics.github.io/ggswim/}
+  \item \url{https://github.com/CHOP-CGTInformatics/ggswim}
+  \item Report bugs at \url{https://github.com/CHOP-CGTInformatics/ggswim/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Richard Hanna \email{richardshanna91@gmail.com} (\href{https://orcid.org/0009-0005-6496-8154}{ORCID})
 

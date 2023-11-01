@@ -129,7 +129,6 @@ p +
 However, ggswim also provides a convenient theme function all of its own if desired:
 
 ```{r mapping with theme_ggswim}
-
 p +
   labs(x = "Time", y = "Subject ID", color = "Markers") +
   ggtitle("My Swim Plot") +

@@ -89,8 +89,10 @@ test_that("ggswim throws a warning when there is missing data", {
   )
 
   p_missing <- ggswim(pt_data, aes(x = time, y = id, fill = trt)) +
-    add_marker(data = missing_data,
-               mapping = aes(x = val2, y = id, colour = val1))
+    add_marker(
+      data = missing_data,
+      mapping = aes(x = val2, y = id, colour = val1)
+    )
 
   expect_warning(p_missing |> build_ggswim(), class = "missing_colour_data")
 
@@ -104,7 +106,8 @@ test_that("ggswim throws a warning when there is missing data", {
 
 test_that("ggswim works with arrow arguments", {
   p <- ggswim(pt_data, aes(x = time, y = id, fill = trt),
-              arrow = alive)
+    arrow = alive
+  )
 
   vdiffr::expect_doppelganger(
     title = "Arrows appear in ggswim with defaults",

@@ -18,5 +18,5 @@ ggswim(
     fill = cohort
   )
 ) +
-theme_ggswim()
+  theme_ggswim()
 }
