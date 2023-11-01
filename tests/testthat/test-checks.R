@@ -112,3 +112,16 @@ test_that("check_ggswim_obj works", {
     class = "ggswim_obj_class"
   )
 })
+
+test_that("check_coerced_data works", {
+  valid_vector <- c("colour")
+  invalid_vector <- c("factor", "colour")
+
+  expect_no_error(
+    check_coerced_data(valid_vector)
+  )
+  expect_error(
+    check_coerced_data(invalid_vector),
+    class = "coerced_vars"
+  )
+})

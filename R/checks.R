@@ -195,3 +195,42 @@ check_ggswim_obj <- function(obj) {
     )
   }
 }
+
+#' @title check for coerced data inside a ggswim function
+#'
+#' @description
+#' Supply users with an error when a coercion to data elements occurs inside of
+#' `ggswim()` or `add_marker()` and cannot be rectified with
+#' `retrieve_original_aes()`.
+#'
+#' @details
+#' ggswim references internal ggplot layers and any aesthetic mapping
+#' required for downstream rendering. If a user applies a coercion in a function,
+#' ggswim may not be able to parse the original variable. For example, in
+#' `ggswim(mtcars, aes(x = hp, y = cyl, color = factor(disp)`),
+#' `rlang::get_expr()` will see the color mapping aesthetic as `factor(disp)`,
+#' and not `disp`.
+#'
+#' @param layer_aes a character vector to test for existence in the names of a
+#' dataset
+#'
+#' @keywords internal
+
+check_coerced_data <- function(expr) {
+  # If either no results, or no unique results, throw error
+  result <- ifelse(length(expr) != 1, TRUE, FALSE)
+
+  msg <- c(
+    "x" = "Unsupported ggswim aesthetic mapping detected.",
+    "i" = "ggswim could not reconcile coerced aesthetic mapping variables with the supplied dataset."
+  )
+  cond_class <- c("ggswim_cond", "coerced_vars")
+
+  if (result) {
+    cli_abort(
+      message = msg,
+      call = caller_env(),
+      class = cond_class
+    )
+  }
+}
