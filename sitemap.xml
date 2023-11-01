@@ -43,6 +43,9 @@
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/check_arrow_fill_type.html</loc>
   </url>
   <url>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/check_coerced_data.html</loc>
+  </url>
+  <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/check_ggswim_obj.html</loc>
   </url>
   <url>
@@ -83,6 +86,9 @@
   </url>
   <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/reexports.html</loc>
+  </url>
+  <url>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/retrieve_original_aes.html</loc>
   </url>
   <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/theme_ggswim.html</loc>
