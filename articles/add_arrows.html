@@ -129,14 +129,14 @@ patient’s survival status at the time of plotting.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">patient_status</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
-<span><span class="co">#&gt;   subject_id cohort   status   name       value time_sorting alive</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 9          Cohort B On Study time_start  0            4.98 TRUE </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 9          Cohort B On Study time_end    4.98         4.98 TRUE </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 10         Cohort B On Study time_start  0            8.19 FALSE</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 10         Cohort B On Study time_end    8.19         8.19 FALSE</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 4          Cohort B On Study time_start  0           24.2  TRUE </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 4          Cohort B On Study time_end    4.73        24.2  TRUE</span></span></code></pre></div>
+<span><span class="co">#&gt;   subject_id cohort   status   alive name       value time_sorting</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 8          Cohort A On Study TRUE  time_start     0            2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 8          Cohort A On Study TRUE  time_end       2            2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 6          Cohort A On Study FALSE time_start     0            5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 6          Cohort A On Study FALSE time_end       5            5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 7          Cohort A On Study TRUE  time_start     0            8</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 7          Cohort A On Study TRUE  time_end       8            8</span></span></code></pre></div>
 <p>Let’s add the arrows onto the plot from before:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span></span>

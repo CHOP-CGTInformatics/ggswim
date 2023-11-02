@@ -155,18 +155,18 @@ subject ID factor levels</li>
 <span></span>
 <span><span class="va">patient_status</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 30 × 7</span></span></span>
-<span><span class="co">#&gt;    subject_id cohort   status    name       value time_sorting alive</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 9          Cohort B On Study  time_start  0            4.98 TRUE </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 9          Cohort B On Study  time_end    4.98         4.98 TRUE </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 10         Cohort B On Study  time_start  0            8.19 FALSE</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 10         Cohort B On Study  time_end    8.19         8.19 FALSE</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 4          Cohort B On Study  time_start  0           24.2  TRUE </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 4          Cohort B On Study  time_end    4.73        24.2  TRUE </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 4          Cohort B Off Study time_start  4.73        24.2  TRUE </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 4          Cohort B Off Study time_end   14.7         24.2  TRUE </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 8          Cohort A On Study  time_start  0            1.41 TRUE </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 8          Cohort A On Study  time_end    1.41         1.41 TRUE </span></span>
+<span><span class="co">#&gt;    subject_id cohort   status    alive name       value time_sorting</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 8          Cohort A On Study  TRUE  time_start     0            2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 8          Cohort A On Study  TRUE  time_end       2            2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 6          Cohort A On Study  FALSE time_start     0            5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 6          Cohort A On Study  FALSE time_end       5            5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 7          Cohort A On Study  TRUE  time_start     0            8</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 7          Cohort A On Study  TRUE  time_end       8            8</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2          Cohort A On Study  TRUE  time_start     0           16</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2          Cohort A On Study  TRUE  time_end       5           16</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2          Cohort A Off Study TRUE  time_start     5           16</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2          Cohort A Off Study TRUE  time_end       6           16</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 20 more rows</span></span></span></code></pre></div>
 <p>Now, let’s make the plot using <code><a href="../reference/ggswim.html">ggswim()</a></code> and our first
 <code><a href="../reference/add_marker.html">add_marker()</a></code> call:</p>
