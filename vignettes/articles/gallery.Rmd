@@ -45,43 +45,43 @@ Some pre-work is necessary to get our data in the right format and shape for a s
 
 ```{r pbcseq preparation}
 pbcseq_prep <- survival::pbcseq |>
-  filter(id <= 20) |> 
+  filter(id <= 20) |>
   mutate(
     .by = id,
     min_day = min(day),
     max_day = max(day)
-  ) |> 
-  relocate(c(min_day, max_day), .after = day) |> 
-  arrange(trt, max_day) |> 
+  ) |>
+  relocate(c(min_day, max_day), .after = day) |>
+  arrange(trt, max_day) |>
   mutate(id = factor(id, levels = unique(id)),
          trt = factor(trt))
 
-pbcseq_prep |> 
+pbcseq_prep |>
   rmarkdown::paged_table()
 ```
 
 Now all we need is to subset for what makes up the lanes. We'll also add a column called `alive`, which will be `TRUE` if the patient was not declared dead at the end of the study (`status == 2`). This will help us add arrows onto our plot later.
 
 ```{r pbcseq lanes}
-pbcseq_lanes <- pbcseq_prep |> 
-  select(id, trt, max_day, status) |> 
-  mutate(alive = ifelse(status == "2", FALSE, TRUE)) |> 
+pbcseq_lanes <- pbcseq_prep |>
+  select(id, trt, max_day, status) |>
+  mutate(alive = ifelse(status == "2", FALSE, TRUE)) |>
   unique()
 
-pbcseq_lanes |> 
+pbcseq_lanes |>
   rmarkdown::paged_table()
 ```
 
 Let's also prepare a markers data subset. For simplicity, we'll focus just on `ascites`, `hepato`, and `spiders` in this example since they come in values of 1 or 0 already and are easy to work with. A `pivot_longer()` from the tidyr package lets us expand this subset into an easy to work with dataframe containing the event/marker type,the day it happened, and the record associated.
 
 ```{r pbcseq markers}
-pbcseq_markers <- pbcseq_prep |> 
-  select(id, day, ascites, hepato, spiders) |> 
+pbcseq_markers <- pbcseq_prep |>
+  select(id, day, ascites, hepato, spiders) |>
   tidyr::pivot_longer(c(ascites, hepato, spiders),
-                      names_to = "marker") |> 
+                      names_to = "marker") |>
   filter(value == 1)
 
-pbcseq_markers |> 
+pbcseq_markers |>
   rmarkdown::paged_table()
 ```
 
@@ -106,7 +106,7 @@ Let's say we have a dataset where our analysis period has varying per-zero time 
 
 ```{r patient_status_negative}
 set.seed(135)
-patient_status_negative <- patient_status |> 
+patient_status_negative <- patient_status |>
   mutate(
     value = case_when(
       value == 0 ~ sample(c(-5:0), size = 30, replace = TRUE),
@@ -114,7 +114,7 @@ patient_status_negative <- patient_status |>
     )
   )
 
-patient_status_negative |> 
+patient_status_negative |>
   rmarkdown::paged_table()
 ```
 
