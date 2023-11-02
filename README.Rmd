@@ -60,7 +60,8 @@ ggswim(
     x = value,
     y = subject_id,
     fill = cohort
-  )
+  ),
+  arrow = alive
 ) +
   add_marker(
     data = adverse_events,
@@ -90,7 +91,7 @@ ggswim(
   ) +
   ggplot2::scale_shape_manual(
     name = "Markers",
-    values = c(19, 13, 9)
+    values = c(19, 18, 15)
   ) +
   ggplot2::scale_fill_manual(
     name = "Lanes",

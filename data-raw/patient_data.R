@@ -1,62 +1,67 @@
 library(dplyr)
 
 # Set Up patient_status dataframe ----
-set.seed(123)
-patient_status <- tibble::tibble(subject_id = rep(1:10, length.out = 15)) |>
-  sample_n(15) |>
-  arrange(subject_id) |>
+patient_status <- tibble::tribble(
+  ~"subject_id", ~"cohort", ~"status", ~"time_start", ~"time_end", ~"alive",
+  1, "Cohort A", "On Study", 0, 5, TRUE,
+  1, "Cohort A", "Off Study", 5, 12, TRUE,
+  2, "Cohort A", "On Study", 0, 5, TRUE,
+  2, "Cohort A", "Off Study", 5, 6, TRUE,
+  3, "Cohort A", "On Study", 0, 5, FALSE,
+  3, "Cohort A", "Off Study", 5, 14, FALSE,
+  4, "Cohort B", "On Study", 0, 5, TRUE,
+  4, "Cohort B", "Off Study", 5, 7, TRUE,
+  5, "Cohort A", "On Study", 0, 5, FALSE,
+  5, "Cohort A", "Off Study", 5, 8, FALSE,
+  6, "Cohort A", "On Study", 0, 5, FALSE,
+  7, "Cohort A", "On Study", 0, 8, TRUE,
+  8, "Cohort A", "On Study", 0, 2, TRUE,
+  9, "Cohort B", "On Study", 0, 5, TRUE,
+  10, "Cohort B", "On Study", 0, 8, TRUE
+) |>
   mutate(
-    .by = subject_id,
-    cohort = rep(sample(c("Cohort A", "Cohort B"), 1), length.out = n(), each = length(unique(subject_id))),
-    cohort = factor(cohort, levels = c("Cohort B", "Cohort A")),
-    status = ifelse(duplicated(subject_id) | !duplicated(subject_id, fromLast = TRUE), "On Study", "Off Study"),
-    status = factor(status, levels = c("On Study", "Off Study"), ordered = TRUE),
-    time_end = ifelse(status == "On Study", runif(n(), 1, 10), runif(n(), 11, 20)),
-    time_start = ifelse(status == "On Study", 0, NA),
-    time_start = ifelse(is.na(time_start), lead(time_end), time_start)
-  ) |>
-  arrange(subject_id, status) |>
-  relocate(time_start, .before = time_end) |>
-  mutate(subject_id = factor(subject_id))
+    subject_id = factor(subject_id)
+  )
 
 # Set up adverse_events dataframe ----
-set.seed(1)
-adverse_events <- tibble::tibble(subject_id = factor(rep(1:10, length.out = 15))) |>
-  sample_n(8) |>
-  arrange(subject_id) |>
+adverse_events <- tibble::tribble(
+  ~"subject_id", ~"adverse_event_name", ~"time_of_event",
+  1, "Psychiatric Disorder", 5,
+  1, "Psychiatric Disorder", 12,
+  1, "Infection", 10,
+  1, "Infection", 18,
+  2, "Cardiac Disorder", 3,
+  2, "Cardiac Disorder", 12,
+  3, "Psychiatric Disorder", 6,
+  3, "Psychiatric Disorder", 12,
+  3, "Infection", 8,
+  3, "Infection", 22,
+  4, "Psychiatric Disorder", 2,
+  4, "Cardiac Disorder", 15,
+  7, "Psychiatric Disorder", 5,
+  9, "Infection", 5
+) |>
   mutate(
-    adverse_event_name = rep(sample(c("Infection", "Cardiac Disorder", "Psychiatric Disorder")), length.out = n())
-  ) |>
-  left_join(patient_status,
-    by = "subject_id",
-    relationship = "many-to-many"
-  ) |> # Temp join to reference time vals
-  mutate(
-    .by = subject_id,
-    time_of_event = runif(n = n(), min = time_start, max = time_end)
-  ) |>
-  select(-c(cohort, status, time_start, time_end)) |>
-  unique()
+    subject_id = factor(subject_id)
+  )
+
 
 # Set up medication_administration dataframe ----
-set.seed(1)
-medication_administration <- tibble::tibble(subject_id = factor(rep(1:10, length.out = 15))) |>
-  sample_n(5) |>
-  arrange(subject_id) |>
+medication_administration <- tibble::tribble(
+  ~"subject_id", ~"medication", ~"name", ~"time_of_event",
+  1, "\U274C", "Medication B", 2,
+  1, "\U274C", "Medication B", 21,
+  2, "\U2705", "Medication A", 5,
+  2, "\U2705", "Medication A", 15,
+  4, "\U274C", "Medication B", 7,
+  4, "\U274C", "Medication B", 14,
+  7, "\U2705", "Medication A", 3,
+  9, "\U274C", "Medication B", 3
+) |>
   mutate(
-    medication = rep(sample(c("\U274C", "\U2705")), length.out = n()),
-    name = ifelse(medication == "\U2705", "Medication A", "Medication B"),
-  ) |>
-  left_join(patient_status,
-    by = "subject_id",
-    relationship = "many-to-many"
-  ) |> # Temp join to reference time vals
-  mutate(
-    .by = subject_id,
-    time_of_event = runif(n = n(), min = time_start, max = time_end)
-  ) |>
-  select(-c(cohort, status, time_start, time_end)) |>
-  unique()
+    subject_id = factor(subject_id)
+  )
+
 
 # Apply edits to patient_status and join on arrow status ----
 # Below added to help with documentation and reduction of repeated code:
@@ -68,17 +73,6 @@ patient_status <- patient_status |>
   ) |>
   arrange(cohort, time_sorting) |>
   mutate(subject_id = factor(subject_id, levels = unique(subject_id)))
-
-# Join on arrows status via `alive` column ----
-set.seed(1)
-# Generate a random 'alive' value for each unique subject_id
-alive_status <- patient_status %>%
-  distinct(subject_id) %>%
-  mutate(alive = sample(c(TRUE, FALSE), size = n(), replace = TRUE))
-
-# Join the random 'alive' values back to the original data
-patient_status <- patient_status %>%
-  left_join(alive_status, by = "subject_id")
 
 # Make final patient_data list ----
 patient_data <- list(
