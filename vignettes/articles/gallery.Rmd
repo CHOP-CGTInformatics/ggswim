@@ -1,0 +1,140 @@
+---
+title: "Gallery"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, message=FALSE, warning=FALSE}
+library(ggswim)
+library(dplyr)
+```
+
+This gallery will explore and showcase different ways to use ggswim using other datasets. We'll use the dplyr package heavily so it is loaded with this article.
+
+## Data Spotlight: `pbcseq`
+
+For the next few examples, we will work with the `survival::pbcseq` dataset from the survival package. This dataset was chosen as it contains a number of the elements we might expect to see in survival data including follow-up times, event markers, and subject statuses.
+
+Let's first take a look at this dataset:
+
+```{r pbcseq dataset}
+library(survival)
+
+pbcseq |>
+  rmarkdown::paged_table()
+```
+
+For this demo, let's pay particular attention to the following variables:
+
+- `id`
+- `day`
+- `trt`
+- `status`
+- `ascites`, `hepato`, and `spiders`
+
+> Consult `?survival::pbcseq` for more information about these variables and the dataset as a whole.
+
+We'll make a swim plot of the first 20 records, where the lanes stretch the length of the record's enrollment period along the x-axis, are identified by their ID on the y-axis, and filled and grouped by their treatment category (`trt`).
+
+Some pre-work is necessary to get our data in the right format and shape for a swim plot. Most notably, `day` is not quite ready for the column plot that makes up the lanes of ggswim. For this dataset, the start date is always 0, but had it been variable then we might have had to adjust our code to encompass a start and end date. Fortunately, we only really need the max date of each record's enrollment. Lastly, converting some of these variables to factors will help us with arranging the swim plot in the most effective way.
+
+```{r pbcseq preparation}
+pbcseq_prep <- survival::pbcseq |>
+  filter(id <= 20) |>
+  mutate(
+    .by = id,
+    min_day = min(day),
+    max_day = max(day)
+  ) |>
+  relocate(c(min_day, max_day), .after = day) |>
+  arrange(trt, max_day) |>
+  mutate(id = factor(id, levels = unique(id)),
+         trt = factor(trt))
+
+pbcseq_prep |>
+  rmarkdown::paged_table()
+```
+
+Now all we need is to subset for what makes up the lanes. We'll also add a column called `alive`, which will be `TRUE` if the patient was not declared dead at the end of the study (`status == 2`). This will help us add arrows onto our plot later.
+
+```{r pbcseq lanes}
+pbcseq_lanes <- pbcseq_prep |>
+  select(id, trt, max_day, status) |>
+  mutate(alive = ifelse(status == "2", FALSE, TRUE)) |>
+  unique()
+
+pbcseq_lanes |>
+  rmarkdown::paged_table()
+```
+
+Let's also prepare a markers data subset. For simplicity, we'll focus just on `ascites`, `hepato`, and `spiders` in this example since they come in values of 1 or 0 already and are easy to work with. A `pivot_longer()` from the tidyr package lets us expand this subset into an easy to work with dataframe containing the event/marker type,the day it happened, and the record associated.
+
+```{r pbcseq markers}
+pbcseq_markers <- pbcseq_prep |>
+  select(id, day, ascites, hepato, spiders) |>
+  tidyr::pivot_longer(c(ascites, hepato, spiders),
+                      names_to = "marker") |>
+  filter(value == 1)
+
+pbcseq_markers |>
+  rmarkdown::paged_table()
+```
+
+Now we have everything we need to make a swimmer plot. Our first call to `ggswim()` makes use of `pbseq_lanes` and our single call to `add_marker()` uses the newly created `pbseq_markers` dataframe. It is important to note that we specify `trt` as the fill option for the lanes and `marker` as the color for the markers. These are unique and specific to these functions, and are explained in greater detail in the documentation. 
+
+```{r pbcseq swim plot}
+ggswim(
+  data = pbcseq_lanes, aes(x = max_day, y = id, fill = trt),
+  arrow = "alive"
+) +
+  add_marker(
+    data = pbcseq_markers,
+    aes(x = day, y = id, color = marker, shape = marker),
+    size = 3, alpha = 0.5
+  ) +
+  theme_ggswim()
+```
+
+## Negative Swim Lanes
+
+Let's say we have a dataset where our analysis period has varying per-zero time points. Up until now, we've only ever really worked with classic datasets that look at "0" as the initial time point and move positively on the x-axis. To exemplify this, we'll modify the internal `patient_status` dataframe to show how `ggswim()` can handle negative time series data with a new dataframe called `patient_status_negative`:
+
+```{r patient_status_negative}
+set.seed(135)
+patient_status_negative <- patient_status |>
+  mutate(
+    value = case_when(
+      value == 0 ~ sample(c(-5:0), size = 30, replace = TRUE),
+      TRUE ~ value
+    )
+  )
+
+patient_status_negative |>
+  rmarkdown::paged_table()
+```
+
+Notice how we replaced any initial starting point for a given record of "0" with a random value between -5 and 0. Now let's plot with `ggswim()`:
+
+```{r negative ggswim}
+ggswim(
+  patient_status_negative,
+  aes(x = value, y = subject_id, fill = cohort)
+)
+```
+
+This looks good, but let's make it a little more aligned with how we would want to display the data. Let's clean it a bit and give it an identifiable vertical line to separate positive and negative time periods:
+
+```{r negative swim pretty}
+ggswim(
+  patient_status_negative,
+  aes(x = value, y = subject_id, fill = cohort)
+) +
+  ggplot2::geom_vline(xintercept = 0, linetype = 3) +
+  theme_ggswim()
+```
+

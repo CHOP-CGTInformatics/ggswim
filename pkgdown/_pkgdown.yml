@@ -26,7 +26,8 @@ navbar:
       menu:
         - text: "Adding Arrows"
           href: articles/add_arrows.html
-
+        - text: "Gallery"
+          href: articles/gallery.html
 search:
   exclude: ['news/index.html']
 
