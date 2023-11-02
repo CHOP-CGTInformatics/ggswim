@@ -152,13 +152,15 @@ add_arrows <- function(data,
       xend = sum(!!x_val)
     )
 
+  arrow_neck_length <- max(true_arrow_data$xend) * 0.15 # TODO: Determine better default
+
   out <- ggswim_obj +
     geom_segment(true_arrow_data,
       mapping = aes(
         x = xend,
         y = .data[[mapping$y |> get_expr()]],
         yend = .data[[mapping$y |> get_expr()]],
-        xend = xend + 2
+        xend = xend + arrow_neck_length
       ), colour = arrow_colour,
       arrow = arrow(
         type = arrow_type,
