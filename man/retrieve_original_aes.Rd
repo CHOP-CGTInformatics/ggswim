@@ -13,6 +13,9 @@ retrieve_original_aes(data, aes_mapping, aes_var)
 
 \item{aes_var}{the aesthetic variable to test for (ex: \code{color}, \code{shape})}
 }
+\value{
+The original variable name as a character string
+}
 \description{
 Attempt to detect instances where users manipulate \code{aes()} names that ggswim
 requires to access and identify layer types downstream. In instances where

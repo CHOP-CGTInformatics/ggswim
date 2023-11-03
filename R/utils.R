@@ -27,15 +27,16 @@ get_layer_data <- function(data, mapping, i = 1L, static_colours = NULL) {
   # TODO: Currently functionality is limited to and requires a color or fill aesthetic
   if (any(c("color", "colour") %in% names(aes_mapping))) {
     colour_or_color <- ifelse("colour" %in% names(aes_mapping), "colour", "color")
-    colour_mapping <- retrieve_original_aes(data, aes_mapping, aes_var = colour_or_color)
+    colour_mapping_var <- retrieve_original_aes(data, aes_mapping, aes_var = colour_or_color)
+    colour_mapping <- data[[colour_mapping_var]]
   } else {
     colour_or_color <- NULL
     colour_mapping <- NULL
   }
 
-  # TODO: get_expr() will fail if something like `factor(arg)` is supplied
   if ("fill" %in% names(aes_mapping)) {
-    fill_mapping <- retrieve_original_aes(data, aes_mapping, aes_var = "fill")
+    fill_mapping_var <- retrieve_original_aes(data, aes_mapping, aes_var = "fill")
+    fill_mapping <- data[[fill_mapping_var]]
   } else {
     fill_mapping <- NULL
   }
@@ -79,6 +80,8 @@ get_layer_data <- function(data, mapping, i = 1L, static_colours = NULL) {
 #' @param aes_mapping a list of mapping data (i.e. `unlist(mapping)`)
 #' @param aes_var the aesthetic variable to test for (ex: `color`, `shape`)
 #'
+#' @returns The original variable name as a character string
+#'
 #' @keywords internal
 
 retrieve_original_aes <- function(data, aes_mapping, aes_var) {
@@ -90,5 +93,5 @@ retrieve_original_aes <- function(data, aes_mapping, aes_var) {
   # If original var cannot be validated, throw error
   check_coerced_data(expr = original_var)
 
-  data[[original_var]]
+  original_var
 }

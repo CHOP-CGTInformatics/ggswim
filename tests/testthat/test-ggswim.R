@@ -139,3 +139,15 @@ test_that("ggswim works with other layer types", {
     fig = p
   )
 })
+
+test_that("ggswim works with coerced mapping", {
+  p <- ggswim(data = pt_data,
+              mapping = aes(x = as.numeric(time),
+                            y = factor(id),
+                            fill = factor(trt)))
+
+  vdiffr::expect_doppelganger(
+    title = "ggswim works with coerced mapping",
+    fig = p
+  )
+})

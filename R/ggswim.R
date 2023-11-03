@@ -66,7 +66,12 @@ ggswim <- function(
   )
 
   # TODO: Finalize, determine if this is acceptable to enforce
-  data[[mapping$y |> get_expr()]] <- data[[mapping$y |> get_expr()]] |> as.factor()
+  # Attempt to extract original y variable and coerce to factor
+  original_y_var <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "y")
+  data[[original_y_var]] <- data[[original_y_var]] |> as.factor()
+
+  # original_x_var <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "x")
+  # data[[original_x_var]] <- data[[original_x_var]] |> as.factor()
 
   # Create ggplot and geom_col layers ----
   out <- data |>
@@ -141,15 +146,15 @@ add_arrows <- function(data,
   check_arg_is_logical(data[[arrow]])
   check_arrow_fill_type(arrow_type, arrow_fill)
 
-  x_val <- mapping$x |> get_expr()
-  y_val <- mapping$y |> get_expr()
+  x_val <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "x")
+  y_val <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "y")
 
   xend <- NULL # define to avoid global variable note
 
   true_arrow_data <- data[data[arrow] == TRUE, ] |>
     mutate(
       .by = all_of(y_val),
-      xend = sum(!!x_val)
+      xend = sum(.data[[x_val]])
     )
 
   arrow_neck_length <- max(true_arrow_data$xend) * 0.15 # TODO: Determine better default
@@ -158,8 +163,8 @@ add_arrows <- function(data,
     geom_segment(true_arrow_data,
       mapping = aes(
         x = xend,
-        y = .data[[mapping$y |> get_expr()]],
-        yend = .data[[mapping$y |> get_expr()]],
+        y = .data[[y_val]],
+        yend = .data[[y_val]],
         xend = xend + arrow_neck_length
       ), colour = arrow_colour,
       arrow = arrow(
