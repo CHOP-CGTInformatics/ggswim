@@ -9,6 +9,7 @@ args
 callouts
 cli
 colour
+dplyr
 ggcuminc
 ggplot
 ggswim's
@@ -16,4 +17,5 @@ ggswim’s
 pre
 tibble
 tibbles
+tidyr
 unicode
