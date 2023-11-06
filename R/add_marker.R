@@ -2,7 +2,10 @@
 #'
 #' @description
 #' "Markers" are used to specify events of interest along response trajectories
-#' across individual lanes.
+#' across individual lanes. `add_marker()` wraps `geom_point()` or `geom_label()`
+#' depending on the users designation of `color`/`colour` and `label` arguments.
+#'
+#' See **Aesthetics** for more information.
 #'
 #' @returns A ggswim object
 #'

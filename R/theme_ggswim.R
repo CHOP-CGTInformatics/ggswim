@@ -1,7 +1,11 @@
 #' @title ggswim Theme
 #'
 #' @description
-#' An alternative theme for ggswim plots.
+#' Alternative themes for ggswim plots:
+#'
+#' - `theme_ggswim()`: Builds on `theme_minimal()` with removal of grid lines and some aesthetic updates.
+#'
+#' @returns a ggplot2 theme
 #'
 #' @export
 #'

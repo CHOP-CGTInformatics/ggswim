@@ -21,7 +21,7 @@
 #' @param arrow_colour Border/line color to use for the arrow. Default "black".
 #' @param arrow_length A unit specifying the length of the arrow head (from tip to base).
 #' Must be a ggplot2 `unit()` object. Default `ggplot2::unit(0.25, "inches")`.
-#' @param arrow_fill Fill colour to use for the arrow head (if closed). Default `NULL`.
+#' @param arrow_fill Fill color/colour to use for the arrow head (if closed). Default `NULL`.
 #' @param arrow_type One of "open" or "closed" indicating whether the arrow head should
 #' be a closed triangle. Default "closed."
 #'

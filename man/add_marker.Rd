@@ -24,7 +24,10 @@ A ggswim object
 }
 \description{
 "Markers" are used to specify events of interest along response trajectories
-across individual lanes.
+across individual lanes. \code{add_marker()} wraps \code{geom_point()} or \code{geom_label()}
+depending on the users designation of \code{color}/\code{colour} and \code{label} arguments.
+
+See \strong{Aesthetics} for more information.
 }
 \section{Aesthetics}{
 

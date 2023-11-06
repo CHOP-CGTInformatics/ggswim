@@ -6,8 +6,14 @@
 \usage{
 theme_ggswim()
 }
+\value{
+a ggplot2 theme
+}
 \description{
-An alternative theme for ggswim plots.
+Alternative themes for ggswim plots:
+\itemize{
+\item \code{theme_ggswim()}: Builds on \code{theme_minimal()} with removal of grid lines and some aesthetic updates.
+}
 }
 \examples{
 ggswim(

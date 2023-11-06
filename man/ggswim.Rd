@@ -31,7 +31,7 @@ The column must be a logical data type (T/F).}
 \item{arrow_length}{A unit specifying the length of the arrow head (from tip to base).
 Must be a ggplot2 \code{unit()} object. Default \code{ggplot2::unit(0.25, "inches")}.}
 
-\item{arrow_fill}{Fill colour to use for the arrow head (if closed). Default \code{NULL}.}
+\item{arrow_fill}{Fill color/colour to use for the arrow head (if closed). Default \code{NULL}.}
 
 \item{arrow_type}{One of "open" or "closed" indicating whether the arrow head should
 be a closed triangle. Default "closed."}
