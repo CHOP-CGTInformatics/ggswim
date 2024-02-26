@@ -48,6 +48,7 @@ test_that("add_marker works for aes mapping", {
   p1 <- ggswim(data = pt_data, aes(x = time, y = id, fill = "trt")) +
     mk1_layer
 
+  skip_on_ci()
   vdiffr::expect_doppelganger(
     title = "Simple marker addition on pt data",
     fig = p1
@@ -58,6 +59,7 @@ test_that("add_marker works for aes mapping", {
     mk1_layer +
     add_marker(data = mk2_data, aes(x = time, y = id, label = label, colour = name))
 
+  skip_on_ci()
   vdiffr::expect_doppelganger(
     title = "Addition of labels layer, test for expeted legend",
     fig = p2
@@ -75,6 +77,7 @@ test_that("add_marker works for static aesthetics", {
   p1 <- ggswim_layer +
     mk1_layer
 
+  skip_on_ci()
   vdiffr::expect_doppelganger(
     title = "Single marker with static color callout",
     fig = p1

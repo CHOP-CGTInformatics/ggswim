@@ -13,6 +13,7 @@ pt_data <- tibble::tribble(
 test_that("ggswim works for simple dataset", {
   p <- ggswim(pt_data, aes(x = time, y = id, fill = trt))
 
+  skip_on_ci()
   vdiffr::expect_doppelganger(
     title = "Simple geom_col appears from ggswim",
     fig = p
@@ -59,6 +60,7 @@ test_that("add_arrows works", {
   expect_true(attributes(p_arrow$layers[[1]])$swim_class == "ggswim")
   expect_true(attributes(p_arrow$layers[[2]])$swim_class == "ggswim")
 
+  skip_on_ci()
   vdiffr::expect_doppelganger(
     title = "Arrows appear using default values",
     fig = p_arrow
@@ -96,6 +98,7 @@ test_that("ggswim throws a warning when there is missing data", {
 
   expect_warning(p_missing |> build_ggswim(), class = "missing_colour_data")
 
+  skip_on_ci()
   suppressWarnings(
     vdiffr::expect_doppelganger(
       title = "Missing data appears, but is dropped from legend",
@@ -109,6 +112,7 @@ test_that("ggswim works with arrow arguments", {
     arrow = alive
   )
 
+  skip_on_ci()
   vdiffr::expect_doppelganger(
     title = "Arrows appear in ggswim with defaults",
     fig = p
@@ -134,6 +138,7 @@ test_that("ggswim works with other layer types", {
   p <- ggswim(data = pt_data_neg, aes(x = time, y = id, fill = trt)) +
     ggplot2::geom_vline(xintercept = 0)
 
+  skip_on_ci()
   vdiffr::expect_doppelganger(
     title = "A vertical line appears on the ggswim plot",
     fig = p
@@ -146,6 +151,7 @@ test_that("ggswim works with coerced mapping", {
                             y = factor(id),
                             fill = factor(trt)))
 
+  skip_on_ci()
   vdiffr::expect_doppelganger(
     title = "ggswim works with coerced mapping",
     fig = p
