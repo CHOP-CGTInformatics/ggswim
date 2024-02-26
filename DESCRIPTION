@@ -26,18 +26,18 @@ Imports:
     rlang,
     tibble,
     tidyr,
-    tidyselect,
-    vdiffr
+    tidyselect
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Suggests: 
     knitr,
     lintr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    vdiffr
 Config/testthat/edition: 3
 Config/Needs/website: rmarkdown
 Language: en-US
 VignetteBuilder: knitr
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5)

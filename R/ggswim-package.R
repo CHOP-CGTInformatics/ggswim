@@ -10,7 +10,6 @@
 #' @importFrom dplyr arrange bind_rows select arrange any_of mutate
 #' @importFrom checkmate check_logical check_list check_integerish check_data_frame check_character
 #' @importFrom stats setNames
-#' @importFrom vdiffr expect_doppelganger
 #' @importFrom tidyr pivot_longer
 #' @importFrom tidyselect all_of
 #' @importFrom tibble tibble tribble
