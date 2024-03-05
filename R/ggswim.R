@@ -62,7 +62,7 @@ ggswim <- function(
   check_supported_mapping_aes(
     mapping = mapping,
     unsupported_aes = c("color", "colour"),
-    parent_func = "add_marker()"
+    parent_func = "ggswim()"
   )
 
   # TODO: Finalize, determine if this is acceptable to enforce
@@ -80,7 +80,10 @@ ggswim <- function(
 
   # Define new class 'ggswim_obj'
   class(out) <- c("ggswim_obj", class(out))
-  current_layer <- length(out$layers) # The max length can be considered the current working layer
+  # The max length can be considered the current working layer
+  # TODO: Determine if holds true, or should hold true, when adding ggswim layer
+  # onto an existing ggplot
+  current_layer <- length(out$layers)
 
   # Add a reference class to the layer attributes
   attributes(out$layers[[current_layer]])$swim_class <- "ggswim"
@@ -148,6 +151,8 @@ add_arrows <- function(data,
 
   xend <- NULL # define to avoid global variable note
 
+  # Filter for only data where arrows are TRUE, sum xend for instances of non-zero
+  # start values
   true_arrow_data <- data[data[arrow] == TRUE, ] |>
     mutate(
       .by = all_of(y_val),

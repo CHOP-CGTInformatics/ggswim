@@ -218,7 +218,7 @@ check_ggswim_obj <- function(obj) {
 
 check_coerced_data <- function(expr) {
   # If either no results, or no unique results, throw error
-  result <- ifelse(length(expr) != 1, TRUE, FALSE)
+  valid_result <- length(expr) != 1
 
   msg <- c(
     "x" = "Unsupported ggswim aesthetic mapping detected.",
@@ -226,7 +226,7 @@ check_coerced_data <- function(expr) {
   )
   cond_class <- c("ggswim_cond", "coerced_vars")
 
-  if (result) {
+  if (valid_result) {
     cli_abort(
       message = msg,
       call = caller_env(),

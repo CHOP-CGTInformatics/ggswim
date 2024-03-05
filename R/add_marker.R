@@ -80,17 +80,17 @@ add_marker <- function(
   # Enforce checks ----
   check_supported_mapping_aes(
     mapping = mapping,
-    unsupported_aes = c("fill"),
+    unsupported_aes = "fill",
     parent_func = "add_marker()"
   )
 
   check_marker_label_aes(mapping = mapping)
 
   # Identify labels ----
-  labels <- ifelse("label" %in% names(mapping), TRUE, FALSE)
+  has_labels <- "label" %in% names(mapping)
 
   # Apply geom_label() or geom_point() ----
-  if (labels) {
+  if (has_labels) {
     out <- geom_label(
       data = data,
       mapping = mapping,
