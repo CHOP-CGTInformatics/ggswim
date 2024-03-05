@@ -70,9 +70,6 @@ ggswim <- function(
   original_y_var <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "y")
   data[[original_y_var]] <- data[[original_y_var]] |> as.factor()
 
-  # original_x_var <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "x")
-  # data[[original_x_var]] <- data[[original_x_var]] |> as.factor()
-
   # Create ggplot and geom_col layers ----
   out <- data |>
     ggplot() +
