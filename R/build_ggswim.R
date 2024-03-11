@@ -122,8 +122,8 @@ build_ggswim <- function(ggswim_obj) {
       select(-dplyr::matches("group")) |> # Implemented due to NA vals with inherited add_marker() data
       unique() |>
       # Ensure proper level ordering in output
-      mutate(order_col = match(.data$colour_mapping, ref_guide$.label)) % |>
-      arrange(.data$order_col) % |>
+      mutate(order_col = match(.data$colour_mapping, ref_guide$.label)) |>
+      arrange(.data$order_col) |>
       select(-.data$order_col)
   }
 

@@ -86,7 +86,8 @@ test_that("add_arrows works", {
 })
 
 test_that("ggswim works with arrow arguments", {
-  p <- ggswim(pt_data, position = "stack", aes(x = time, y = id, fill = trt),
+  p <- ggswim(pt_data,
+    position = "stack", aes(x = time, y = id, fill = trt),
     arrow = alive
   )
 
@@ -124,11 +125,15 @@ test_that("ggswim works with other layer types", {
 })
 
 test_that("ggswim works with coerced mapping", {
-  p <- ggswim(data = pt_data,
-              position = "stack",
-              mapping = aes(x = as.numeric(time),
-                            y = factor(id),
-                            fill = factor(trt)))
+  p <- ggswim(
+    data = pt_data,
+    position = "stack",
+    mapping = aes(
+      x = as.numeric(time),
+      y = factor(id),
+      fill = factor(trt)
+    )
+  )
 
   skip_on_ci()
   vdiffr::expect_doppelganger(

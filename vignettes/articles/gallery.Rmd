@@ -53,8 +53,10 @@ pbcseq_prep <- survival::pbcseq |>
   ) |>
   relocate(c(min_day, max_day), .after = day) |>
   arrange(trt, max_day) |>
-  mutate(id = factor(id, levels = unique(id)),
-         trt = factor(trt))
+  mutate(
+    id = factor(id, levels = unique(id)),
+    trt = factor(trt)
+  )
 
 pbcseq_prep |>
   rmarkdown::paged_table()
@@ -78,7 +80,8 @@ To prepare a swimmer markers data subset, we'll focus just on `ascites`, `hepato
 pbcseq_markers <- pbcseq_prep |>
   select(id, day, ascites, hepato, spiders) |>
   tidyr::pivot_longer(c(ascites, hepato, spiders),
-                      names_to = "marker") |>
+    names_to = "marker"
+  ) |>
   filter(value == 1)
 
 pbcseq_markers |>

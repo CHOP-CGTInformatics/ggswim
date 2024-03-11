@@ -12,7 +12,7 @@ ggswim_plot <- ggswim(df, aes(x = hp, y = mpg, fill = cyl)) +
     mapping = aes(x = hp, y = mpg, name = "test"),
     color = "firebrick"
   ) |>
-    suppressWarnings()
+  suppressWarnings()
 
 # Static colour df representative of above ggswim_plot
 static_colour_df <- data.frame(
@@ -87,10 +87,14 @@ test_that("retrieve_original_aes works", {
     retrieve_original_aes(data = data, aes_mapping = unlist(coerced_mapping), aes_var = "colour")
   )
 
-  expect_true(is.character(retrieve_original_aes(data = data,
-                                                 aes_mapping = unlist(coerced_mapping),
-                                                 aes_var = "colour")))
-  expect_true(length(retrieve_original_aes(data = data,
-                                           aes_mapping = unlist(coerced_mapping),
-                                           aes_var = "colour")) == 1)
+  expect_true(is.character(retrieve_original_aes(
+    data = data,
+    aes_mapping = unlist(coerced_mapping),
+    aes_var = "colour"
+  )))
+  expect_true(length(retrieve_original_aes(
+    data = data,
+    aes_mapping = unlist(coerced_mapping),
+    aes_var = "colour"
+  )) == 1)
 })
