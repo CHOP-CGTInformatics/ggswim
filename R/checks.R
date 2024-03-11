@@ -234,3 +234,32 @@ check_coerced_data <- function(expr) {
     )
   }
 }
+
+#' @title check for unsupported position args
+#'
+#' @description
+#' `ggswim()` accepts `position` arguments of either `stack` or `identity`.
+#' Others such as `dodge` and `jitter` are not supported.
+#'
+#' @keywords internal
+#'
+#' @param position Position adjustment. ggswim accepts either "stack", or "identity"
+#' depending on the use case. Default "identity".
+#' @param parent_func The function in which this is being called, to be
+#' referenced in the message output
+
+check_supported_position_args <- function(position,
+                                          parent_func) {
+  msg <- c(
+    "x" = "Unsupported position param detected: {.code {position}}",
+    "i" = "{.code {parent_func}} does not support {.code {position}} position
+    args. Please use one of 'identity' or 'stack' instead."
+  )
+  cond_class <- c("ggswim_cond", "unsupported_position")
+
+  supported_vals <- c("stack", "identity")
+
+  if (!position %in% supported_vals) {
+    cli_abort(message = msg, call = caller_env(), class = cond_class)
+  }
+}

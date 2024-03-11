@@ -125,3 +125,16 @@ test_that("check_coerced_data works", {
     class = "coerced_vars"
   )
 })
+
+test_that("check_supported_position_args works", {
+  parent_func <- "test_function()"
+
+  expect_error(
+    check_supported_position_args(position = "test", parent_func),
+    class = "unsupported_position"
+  )
+
+  expect_no_error(
+    check_supported_position_args(position = "identity", parent_func)
+  )
+})

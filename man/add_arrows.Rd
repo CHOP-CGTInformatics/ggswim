@@ -8,6 +8,7 @@ add_arrows(
   data,
   ggswim_obj,
   mapping,
+  position,
   arrow,
   arrow_colour,
   arrow_length,
@@ -24,6 +25,9 @@ add_arrows(
 \code{inherit.aes = TRUE} (the default), it is combined with the default mapping
 at the top level of the plot. You must supply mapping if there is no plot mapping.
 More information about accepted mapping arguments can be found in \strong{Aesthetics}.}
+
+\item{position}{Position adjustment. ggswim accepts either "stack", or "identity"
+depending on the use case. Default "identity".}
 
 \item{arrow}{A column indicating what swim lanes should have arrows applied.
 The column must be a logical data type (T/F).}

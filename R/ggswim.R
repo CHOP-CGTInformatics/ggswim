@@ -14,6 +14,8 @@
 #' `inherit.aes = TRUE` (the default), it is combined with the default mapping
 #' at the top level of the plot. You must supply mapping if there is no plot mapping.
 #' More information about accepted mapping arguments can be found in **Aesthetics**.
+#' @param position Position adjustment. ggswim accepts either "stack", or "identity"
+#' depending on the use case. Default "identity".
 #' @param ... Other arguments passed to `ggswim()`, often aesthetic fixed values,
 #' i.e. `color = "red"` or `size = 3`.
 #' @param arrow A column indicating what swim lanes should have arrows applied.
@@ -47,11 +49,13 @@
 #'     x = value,
 #'     y = subject_id,
 #'     fill = cohort
-#'   )
+#'   ),
+#'   position = "identity"
 #' )
 ggswim <- function(
     data,
     mapping = aes(),
+    position = "identity",
     arrow = NULL,
     arrow_colour = "black",
     arrow_length = unit(0.25, "inches"),
@@ -65,6 +69,11 @@ ggswim <- function(
     parent_func = "ggswim()"
   )
 
+  check_supported_position_args(
+    position = position,
+    parent_func = "ggswim()"
+  )
+
   # TODO: Finalize, determine if this is acceptable to enforce
   # Attempt to extract original y variable and coerce to factor
   original_y_var <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "y")
@@ -75,6 +84,7 @@ ggswim <- function(
     ggplot() +
     geom_col(
       mapping,
+      position = position,
       ...
     )
 
@@ -95,6 +105,7 @@ ggswim <- function(
       data = data,
       ggswim_obj = out,
       mapping = mapping,
+      position = position,
       arrow = arrow,
       arrow_colour = arrow_colour,
       arrow_type = arrow_type,
@@ -116,6 +127,8 @@ ggswim <- function(
 #'
 #' @param data a dataframe prepared for use with `ggswim()`
 #' @param ggswim_obj A ggswim object
+#' @param position Position adjustment. ggswim accepts either "stack", or "identity"
+#' depending on the use case. Default "identity".
 #' @param arrow A column indicating what swim lanes should have arrows applied.
 #' The column must be a logical data type (T/F).
 #' @param arrow_colour Border/line color to use for the arrow. Default "black".
@@ -136,6 +149,7 @@ ggswim <- function(
 add_arrows <- function(data,
                        ggswim_obj,
                        mapping,
+                       position,
                        arrow,
                        arrow_colour,
                        arrow_length,
@@ -156,7 +170,11 @@ add_arrows <- function(data,
   true_arrow_data <- data[data[arrow] == TRUE, ] |>
     mutate(
       .by = all_of(y_val),
-      xend = sum(.data[[x_val]])
+      xend = case_when(
+        position == "identity" ~ max(.data[[x_val]], na.rm = TRUE),
+        position == "stack" ~ sum(.data[[x_val]], na.rm = TRUE),
+        TRUE ~ NA
+      )
     )
 
   arrow_neck_length <- max(true_arrow_data$xend) * 0.15 # TODO: Determine better default

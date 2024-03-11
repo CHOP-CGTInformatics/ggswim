@@ -7,6 +7,7 @@
 ggswim(
   data,
   mapping = aes(),
+  position = "identity",
   arrow = NULL,
   arrow_colour = "black",
   arrow_length = unit(0.25, "inches"),
@@ -22,6 +23,9 @@ ggswim(
 \code{inherit.aes = TRUE} (the default), it is combined with the default mapping
 at the top level of the plot. You must supply mapping if there is no plot mapping.
 More information about accepted mapping arguments can be found in \strong{Aesthetics}.}
+
+\item{position}{Position adjustment. ggswim accepts either "stack", or "identity"
+depending on the use case. Default "identity".}
 
 \item{arrow}{A column indicating what swim lanes should have arrows applied.
 The column must be a logical data type (T/F).}
@@ -71,6 +75,7 @@ ggswim(
     x = value,
     y = subject_id,
     fill = cohort
-  )
+  ),
+  position = "identity"
 )
 }
