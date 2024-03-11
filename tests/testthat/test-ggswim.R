@@ -11,7 +11,7 @@ pt_data <- tibble::tribble(
 )
 
 test_that("ggswim works for simple dataset", {
-  p <- ggswim(pt_data, aes(x = time, y = id, fill = trt))
+  p <- ggswim(pt_data, position = "stack", aes(x = time, y = id, fill = trt))
 
   skip_on_ci()
   vdiffr::expect_doppelganger(
@@ -22,17 +22,17 @@ test_that("ggswim works for simple dataset", {
 
 test_that("error on color/colour argument", {
   expect_error(
-    ggswim(pt_data, aes(x = time, y = id, color = trt)),
+    ggswim(pt_data, position = "stack", aes(x = time, y = id, color = trt)),
     class = "unsupported_aes"
   )
   expect_error(
-    ggswim(pt_data, aes(x = time, y = id, colour = trt)),
+    ggswim(pt_data, position = "stack", aes(x = time, y = id, colour = trt)),
     class = "unsupported_aes"
   )
 })
 
 test_that("test for expected attributes", {
-  p <- ggswim(pt_data, aes(x = time, y = id, fill = trt))
+  p <- ggswim(pt_data, position = "stack", aes(x = time, y = id, fill = trt))
 
   expect_setequal(class(p), c("ggswim_obj", "gg", "ggplot"))
   expect_true("swim_class" %in% names(attributes(p$layers[[1]])))
@@ -40,11 +40,12 @@ test_that("test for expected attributes", {
 })
 
 test_that("add_arrows works", {
-  p <- ggswim(pt_data, aes(x = time, y = id))
+  p <- ggswim(pt_data, position = "stack", aes(x = time, y = id))
 
   p_arrow <- add_arrows(
     data = pt_data,
     ggswim_obj = p,
+    position = "stack",
     mapping = aes(x = time, y = id),
     arrow = "alive",
     # replicate defaults inherited from ggswim()
@@ -72,6 +73,7 @@ test_that("add_arrows works", {
       data = pt_data,
       ggswim_obj = p,
       mapping = aes(x = time, y = id),
+      position = "stack",
       arrow = "cohort",
       # replicate defaults inherited from ggswim()
       arrow_type = "closed",
@@ -84,7 +86,7 @@ test_that("add_arrows works", {
 })
 
 test_that("ggswim works with arrow arguments", {
-  p <- ggswim(pt_data, aes(x = time, y = id, fill = trt),
+  p <- ggswim(pt_data, position = "stack", aes(x = time, y = id, fill = trt),
     arrow = alive
   )
 
@@ -111,7 +113,7 @@ test_that("ggswim works with other layer types", {
     4, "Drug B", 7, 7, TRUE
   )
 
-  p <- ggswim(data = pt_data_neg, aes(x = time, y = id, fill = trt)) +
+  p <- ggswim(data = pt_data_neg, position = "stack", aes(x = time, y = id, fill = trt)) +
     ggplot2::geom_vline(xintercept = 0)
 
   skip_on_ci()
@@ -123,6 +125,7 @@ test_that("ggswim works with other layer types", {
 
 test_that("ggswim works with coerced mapping", {
   p <- ggswim(data = pt_data,
+              position = "stack",
               mapping = aes(x = as.numeric(time),
                             y = factor(id),
                             fill = factor(trt)))

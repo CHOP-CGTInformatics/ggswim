@@ -160,7 +160,7 @@ add_arrows <- function(data,
   check_arg_is_logical(data[[arrow]])
   check_arrow_fill_type(arrow_type, arrow_fill)
 
-  x_val <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "x")
+  x_val <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "x") # nolint: object_usage_linter
   y_val <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "y")
 
   xend <- NULL # define to avoid global variable note

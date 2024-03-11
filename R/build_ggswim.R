@@ -116,15 +116,15 @@ build_ggswim <- function(ggswim_obj) {
 
     # Reference level ordering in underlying layers
     ref_guide <- get_guide_data(ggswim_obj, "color") |>
-      mutate(.label = factor(.label, ordered = T))
+      mutate(.label = factor(.data$.label, ordered = TRUE))
 
     override$colour <- override$colour |>
       select(-dplyr::matches("group")) |> # Implemented due to NA vals with inherited add_marker() data
       unique() |>
       # Ensure proper level ordering in output
-      mutate(order_col = match(colour_mapping, ref_guide$.label)) %>%
-      arrange(order_col) %>%
-      select(-order_col)
+      mutate(order_col = match(.data$colour_mapping, ref_guide$.label)) % |>
+      arrange(.data$order_col) % |>
+      select(-.data$order_col)
   }
 
   # Setup label coercion into color layer of legend
