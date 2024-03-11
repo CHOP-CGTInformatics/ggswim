@@ -113,10 +113,18 @@ build_ggswim <- function(ggswim_obj) {
     override$colour$colour_mapping <- factor(override$colour$colour_mapping)
     # Arrange necessary to follow order of ggplot legend outputs
     # (i.e. alphabetical, numeric, etc.)
+
+    # Reference level ordering in underlying layers
+    ref_guide <- get_guide_data(ggswim_obj, "color") |>
+      mutate(.label = factor(.label, ordered = T))
+
     override$colour <- override$colour |>
       select(-dplyr::matches("group")) |> # Implemented due to NA vals with inherited add_marker() data
-      arrange(.data$colour_mapping) |>
-      unique()
+      unique() |>
+      # Ensure proper level ordering in output
+      mutate(order_col = match(colour_mapping, ref_guide$.label)) %>%
+      arrange(order_col) %>%
+      select(-order_col)
   }
 
   # Setup label coercion into color layer of legend
