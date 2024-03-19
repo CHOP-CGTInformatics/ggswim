@@ -98,6 +98,31 @@ test_that("check_arrow_fill_type works", {
   )
 })
 
+test_that("check_arrow_neck_length works", {
+  accepted_val_1 <- 15
+  accepted_val_2 <- as.name("test")
+  unnaccepted_val_1 <- TRUE
+  unnaccepted_val_2 <- "test"
+
+  expect_no_error(
+    check_arrow_neck_length(arrow_neck_length = accepted_val_1)
+  )
+
+  expect_no_error(
+    check_arrow_neck_length(arrow_neck_length = accepted_val_2)
+  )
+
+  expect_error(
+    check_arrow_neck_length(arrow_neck_length = unnaccepted_val_1),
+    class = "arrow_neck_length_class"
+  )
+
+  expect_error(
+    check_arrow_neck_length(arrow_neck_length = unnaccepted_val_2),
+    class = "arrow_neck_length_class"
+  )
+})
+
 test_that("check_ggswim_obj works", {
   ggswim_obj <- ggswim(pt_data, aes(x = time, y = id, fill = trt))
   non_ggswim_obj <- ggplot(mtcars) +

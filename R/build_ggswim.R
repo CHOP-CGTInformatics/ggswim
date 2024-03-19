@@ -124,7 +124,7 @@ build_ggswim <- function(ggswim_obj) {
       # Ensure proper level ordering in output
       mutate(order_col = match(.data$colour_mapping, ref_guide$.label)) |>
       arrange(.data$order_col) |>
-      select(-.data$order_col)
+      select(-"order_col")
   }
 
   # Setup label coercion into color layer of legend

@@ -10,7 +10,7 @@ check_arrow_fill_type(arrow_type, arrow_fill)
 \item{arrow_type}{One of "open" or "closed" indicating whether the arrow head should
 be a closed triangle. Default "closed."}
 
-\item{arrow_fill}{Fill colour to use for the arrow head (if closed). Default \code{NULL}.}
+\item{arrow_fill}{Fill color/colour to use for the arrow head (if closed). Default \code{NULL}.}
 }
 \description{
 Supply users with a warning when \code{arrow_type} is not "closed" and an \code{arrow_fill}

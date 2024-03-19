@@ -21,9 +21,12 @@
 #' @param arrow A column indicating what swim lanes should have arrows applied.
 #' The column must be a logical data type (T/F).
 #' @param arrow_colour Border/line color to use for the arrow. Default "black".
-#' @param arrow_length A unit specifying the length of the arrow head (from tip to base).
-#' Must be a ggplot2 `unit()` object. Default `ggplot2::unit(0.25, "inches")`.
 #' @param arrow_fill Fill color/colour to use for the arrow head (if closed). Default `NULL`.
+#' @param arrow_head_length A unit specifying the length of the arrow head (from tip to base).
+#' Must be a ggplot2 `unit()` object. Default `ggplot2::unit(0.25, "inches")`.
+#' @param arrow_neck_length The length of the neck of the arrow from the end of a
+#' swim lane to the base of the arrow head. Either an integer value or a column
+#' specifier. The default, `NULL`, sets a value proportional to the max lane value.
 #' @param arrow_type One of "open" or "closed" indicating whether the arrow head should
 #' be a closed triangle. Default "closed."
 #'
@@ -58,7 +61,8 @@ ggswim <- function(
     position = "identity",
     arrow = NULL,
     arrow_colour = "black",
-    arrow_length = unit(0.25, "inches"),
+    arrow_head_length = unit(0.25, "inches"),
+    arrow_neck_length = NULL,
     arrow_fill = NULL,
     arrow_type = "closed",
     ...) {
@@ -100,6 +104,12 @@ ggswim <- function(
 
   # Handle arrows ----
   arrow <- enquo(arrow) |> get_expr()
+  arrow_neck_length <- if (quo_is_symbolic(quo(arrow_neck_length))) {
+    enquo(arrow_neck_length) |> get_expr()
+  } else {
+    arrow_neck_length
+  }
+
   if (!is.null(arrow)) {
     out <- add_arrows(
       data = data,
@@ -110,7 +120,8 @@ ggswim <- function(
       arrow_colour = arrow_colour,
       arrow_type = arrow_type,
       arrow_fill = arrow_fill,
-      arrow_length = arrow_length
+      arrow_head_length = arrow_head_length,
+      arrow_neck_length = arrow_neck_length
     )
   }
 
@@ -127,20 +138,7 @@ ggswim <- function(
 #'
 #' @param data a dataframe prepared for use with `ggswim()`
 #' @param ggswim_obj A ggswim object
-#' @param position Position adjustment. ggswim accepts either "stack", or "identity"
-#' depending on the use case. Default "identity".
-#' @param arrow A column indicating what swim lanes should have arrows applied.
-#' The column must be a logical data type (T/F).
-#' @param arrow_colour Border/line color to use for the arrow. Default "black".
-#' @param arrow_length A unit specifying the length of the arrow head (from tip to base).
-#' Must be a ggplot2 `unit()` object. Default `ggplot2::unit(0.25, "inches")`.
-#' @param arrow_fill Fill colour to use for the arrow head (if closed). Default `NULL`.
-#' @param arrow_type One of "open" or "closed" indicating whether the arrow head should
-#' be a closed triangle. Default "closed."
-#' @param mapping Set of aesthetic mappings created by `aes()`. If specified and
-#' `inherit.aes = TRUE` (the default), it is combined with the default mapping
-#' at the top level of the plot. You must supply mapping if there is no plot mapping.
-#' More information about accepted mapping arguments can be found in **Aesthetics**.
+#' @inheritParams ggswim
 #' @param ... Other arguments passed to `ggswim()`, often aesthetic fixed values,
 #' i.e. `color = "red"` or `size = 3`.
 #'
@@ -152,13 +150,15 @@ add_arrows <- function(data,
                        position,
                        arrow,
                        arrow_colour,
-                       arrow_length,
+                       arrow_head_length,
+                       arrow_neck_length,
                        arrow_fill,
                        arrow_type) {
   # Implement UI checks ----
   # Check that warning supplied if `arrow_fill` !NULL and `arrow_type` "open"
   check_arg_is_logical(data[[arrow]])
   check_arrow_fill_type(arrow_type, arrow_fill)
+  check_arrow_neck_length(arrow_neck_length)
 
   x_val <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "x") # nolint: object_usage_linter
   y_val <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "y")
@@ -177,7 +177,10 @@ add_arrows <- function(data,
       )
     )
 
-  arrow_neck_length <- max(true_arrow_data$xend) * 0.15 # TODO: Determine better default
+  # If NULL, neck length to be a 0.15 proportion
+  if (is.null(arrow_neck_length)) {
+    arrow_neck_length <- max(true_arrow_data$xend) * 0.15
+  }
 
   out <- ggswim_obj +
     geom_segment(true_arrow_data,
@@ -185,11 +188,15 @@ add_arrows <- function(data,
         x = xend,
         y = .data[[y_val]],
         yend = .data[[y_val]],
-        xend = xend + arrow_neck_length
+        xend = if (is.name(arrow_neck_length)) {
+          xend + .data[[arrow_neck_length]]
+        } else {
+          xend + arrow_neck_length
+        },
       ), colour = arrow_colour,
       arrow = arrow(
         type = arrow_type,
-        length = arrow_length
+        length = arrow_head_length
       ),
       arrow.fill = arrow_fill
     )

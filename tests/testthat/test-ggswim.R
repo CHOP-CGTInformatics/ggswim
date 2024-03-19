@@ -52,7 +52,8 @@ test_that("add_arrows works", {
     arrow_type = "closed",
     arrow_colour = "black",
     arrow_fill = NULL,
-    arrow_length = unit(0.25, "inches")
+    arrow_head_length = unit(0.25, "inches"),
+    arrow_neck_length = NULL
   )
 
   expect_setequal(class(p_arrow), c("ggswim_obj", "gg", "ggplot"))
@@ -79,7 +80,8 @@ test_that("add_arrows works", {
       arrow_type = "closed",
       arrow_colour = "black",
       arrow_fill = NULL,
-      arrow_length = unit(0.25, "inches")
+      arrow_head_length = unit(0.25, "inches"),
+      arrow_neck_length = NULL
     ),
     class = "ggswim_cond"
   )

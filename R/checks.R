@@ -147,9 +147,7 @@ check_marker_label_aes <- function(mapping) {
 #' argument is specified. No error will occur, but nothing will indicate an issue
 #' in the output.
 #'
-#' @param arrow_fill Fill colour to use for the arrow head (if closed). Default `NULL`.
-#' @param arrow_type One of "open" or "closed" indicating whether the arrow head should
-#' be a closed triangle. Default "closed."
+#' @inheritParams ggswim
 #'
 #' @keywords internal
 
@@ -162,6 +160,36 @@ check_arrow_fill_type <- function(arrow_type, arrow_fill) {
 
   if (arrow_type != "closed" && !is.null(arrow_fill)) {
     cli_warn(
+      message = msg,
+      call = caller_env(),
+      class = cond_class
+    )
+  }
+}
+
+#' @title check add_arrows for arrow_neck_length argument
+#'
+#' @description
+#' Supply users with an error when `arrow_neck_length` is not an integer, a
+#' symbolic column from the parent dataset, or the default (`NULL`).
+#'
+#' @inheritParams ggswim
+#'
+#' @keywords internal
+
+check_arrow_neck_length <- function(arrow_neck_length) {
+  class_type <- class(arrow_neck_length)
+
+  accepted_class_types <- c("numeric", "name", "NULL")
+
+  msg <- c(
+    "x" = "Unsupported data type supplied to .{.code arrow_neck_length}: {class_type}",
+    "i" = "Supported class types include numeric values, column names, or `NULL`."
+  )
+  cond_class <- c("ggswim_cond", "arrow_neck_length_class")
+
+  if (!class_type %in% accepted_class_types) {
+    cli_abort(
       message = msg,
       call = caller_env(),
       class = cond_class

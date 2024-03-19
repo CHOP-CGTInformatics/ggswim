@@ -7,7 +7,7 @@
 #' @importFrom dplyr case_when
 #' @importFrom cli cli_abort cli_vec cli_warn
 #' @importFrom rlang caller_arg caller_env as_label is_atomic get_expr .data
-#'   is_empty := enquo
+#'   is_empty := enquo quo_is_symbolic quo
 #' @importFrom dplyr arrange bind_rows select arrange any_of mutate
 #' @importFrom checkmate check_logical check_list check_integerish check_data_frame check_character
 #' @importFrom stats setNames
