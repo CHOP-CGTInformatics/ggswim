@@ -86,14 +86,14 @@ test_that("add_marker works for static aesthetics", {
 
 test_that("error on fill argument", {
   expect_error(
-    add_marker(pt_data, aes(x = time, y = id, fill = trt)),
+    add_marker(data = pt_data, aes(x = time, y = id, fill = trt)),
     class = "unsupported_aes"
   )
 })
 
 test_that("warn on label without color argument", {
   expect_warning(
-    add_marker(mk2_data, aes(x = time, y = id, label = trt)),
+    add_marker(data = mk2_data, aes(x = time, y = id, label = trt)),
     class = "marker_label_aes"
   )
 })

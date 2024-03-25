@@ -20,16 +20,18 @@ library(ggswim)
 
 ggswim(
   patient_data,
-  mapping = aes(x = delta_t0_months,
-                y = pt_id, fill = 
-                  disease_assessment_status)
+  mapping = aes(
+    x = delta_t0_months,
+    y = pt_id, fill =
+      disease_assessment_status
+  )
 )
 ```
 
 Before we can incorporate arrows into our swimmer plot, we need to designate a boolean column that informs `ggswim()` when to append an arrow to a specific row. In our example using `patient_status`, this column is named `arrow_status` and takes on `TRUE` or `FALSE` values to denote a patient's study status at the time of plotting.
 
 ```{r}
-patient_data |> 
+patient_data |>
   rmarkdown::paged_table()
 ```
 
@@ -38,9 +40,11 @@ Let's add the arrows onto the plot from before:
 ```{r}
 ggswim(
   patient_data,
-  mapping = aes(x = delta_t0_months,
-                y = pt_id, fill = 
-                  disease_assessment_status),
+  mapping = aes(
+    x = delta_t0_months,
+    y = pt_id, fill =
+      disease_assessment_status
+  ),
   arrow = arrow_status
 )
 ```

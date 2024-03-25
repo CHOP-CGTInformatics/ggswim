@@ -26,7 +26,7 @@ Let's start with observing the structure of each dataset:
 ```{r patient_data , echo=FALSE, include=TRUE}
 library(ggswim)
 
-patient_data |> 
+patient_data |>
   rmarkdown::paged_table()
 ```
 
@@ -43,9 +43,11 @@ Now, let's make the plot using `ggswim()` and our first `add_marker()` call:
 ```{r ggswim plot}
 p <- ggswim(
   patient_data |> dplyr::rename("Status Markers" = bcell_status),
-  mapping = aes(x = delta_t0_months,
-                y = pt_id, fill = 
-                  disease_assessment_status)
+  mapping = aes(
+    x = delta_t0_months,
+    y = pt_id, fill =
+      disease_assessment_status
+  )
 )
 
 p
@@ -54,28 +56,31 @@ p
 Here we have a simple bar chart, showing infusions grouped by patients with a given disease assessment status. `ggswim()` does the work of setting up a `geom_col()` and readying your plot layers for additional ggwim-specific features such as "markers." Let's add a marker layer next and reference `bcell_status` from the same `patient_data` dataset. Additionally, we'll add another marker layer from the `infusion_events` dataset:
 
 ```{r infusion_events}
-infusion_events |> 
+infusion_events |>
   rmarkdown::paged_table()
 ```
 
 This dataset is much simpler, having only 3 columns indicating infusions (considered `t0`) and reinfusions at some point beyond `t0` if a patient required any.
 
 ```{r first marker plot}
-
 p <- p +
   add_marker(
-    aes(x = delta_t0_months, 
-        y = pt_id, 
-        color = `Status Markers`, 
-        shape = `Status Markers`),
+    aes(
+      x = delta_t0_months,
+      y = pt_id,
+      color = `Status Markers`,
+      shape = `Status Markers`
+    ),
     size = 5, position = "identity", alpha = 1
   ) +
   add_marker(
     data = infusion_events,
-    aes(x = infusion_delta_t0, 
-        y = pt_id, 
-        color = infusion_type, 
-        shape = infusion_type),
+    aes(
+      x = infusion_delta_t0,
+      y = pt_id,
+      color = infusion_type,
+      shape = infusion_type
+    ),
     size = 5, position = "identity", alpha = 1
   )
 
@@ -87,7 +92,7 @@ Now we can see shapes have been added to establish our markers... though some bl
 Our last dataset involved end of study events, i.e. events that indicate a patient has left the study for varying reasons.
 
 ```{r end_study_events}
-end_study_events |> 
+end_study_events |>
   rmarkdown::paged_table()
 ```
 
@@ -97,10 +102,12 @@ You'll notice that this dataset includes use of emojis under `end_study_label`. 
 p <- p +
   add_marker(
     data = end_study_events,
-    aes(x = delta_t0_months, 
-        y = pt_id, 
-        label = end_study_label, 
-        color = end_study_name),
+    aes(
+      x = delta_t0_months,
+      y = pt_id,
+      label = end_study_label,
+      color = end_study_name
+    ),
     label.size = NA, fill = NA, size = 5
   )
 
@@ -163,10 +170,12 @@ ggswim(
 ) +
   # Same markers as before for Disease Assessment
   add_marker(
-    aes(x = delta_t0_months, 
-        y = pt_id, 
-        color = `Status Markers`, 
-        shape = `Status Markers`),
+    aes(
+      x = delta_t0_months,
+      y = pt_id,
+      color = `Status Markers`,
+      shape = `Status Markers`
+    ),
     size = 5, position = "identity", alpha = 1
   ) +
   # New manual color markers for Infusions

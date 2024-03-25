@@ -1,3 +1,4 @@
+# nolint start
 # Load Libraries ----
 # Uncomment below to load libraries (avoids renv)
 # library(REDCapTidieR)
@@ -65,8 +66,10 @@ join_data <- function(db_tbl_list,
 
 # Load Data ----
 # Uncomment below to load libraries (avoids renv)
-db <- read_redcap(Sys.getenv("REDCAP_URI"),
-                  Sys.getenv("PRODIGY_REDCAP_API"))
+db <- read_redcap(
+  Sys.getenv("REDCAP_URI"),
+  Sys.getenv("PRODIGY_REDCAP_API")
+)
 
 db <- db |>
   extract_tibbles()
@@ -76,18 +79,19 @@ db_tbls <- db |>
   join_data()
 
 prodigy <- db_tbls |>
-  select(infseq_id,
-         # Infusion Vars
-         infseq_number,
-         infusion_admin,
-         infusion_date,
-         # Disease Assessment Vars
-         dasmt_date,
-         dasmt_bcell_status, # BCR
-         dasmt_overall, # CR, CRi
-         # End of Study Vars
-         end_study_date,
-         end_study_reason # Death
+  select(
+    infseq_id,
+    # Infusion Vars
+    infseq_number,
+    infusion_admin,
+    infusion_date,
+    # Disease Assessment Vars
+    dasmt_date,
+    dasmt_bcell_status, # BCR
+    dasmt_overall, # CR, CRi
+    # End of Study Vars
+    end_study_date,
+    end_study_reason # Death
   )
 
 # Manipulate Data ----
@@ -132,8 +136,8 @@ patient_data <- prodigy |>
   ) |>
   # Change time to months
   mutate(
-    delta_t0_months = round(delta_t0/30.417, digit=0), # average days in a month
-    delta_today = round(today/30.417, digit=0)
+    delta_t0_months = round(delta_t0 / 30.417, digit = 0), # average days in a month
+    delta_today = round(today / 30.417, digit = 0)
   ) |>
   filter(!is.na(delta_t0)) |>
   # Temporary method for handling reinfusions with no disease assessment data
@@ -162,7 +166,7 @@ patient_data <- prodigy |>
 end_study_events <- patient_data |>
   mutate(
     end_study_label = case_when(
-      end_study_reason == "Completed study follow-up" ~ "✅" ,
+      end_study_reason == "Completed study follow-up" ~ "✅",
       end_study_reason == "Death" ~ "❌",
       is.na(end_study_reason) ~ NA,
       TRUE ~ "⚠️"
@@ -196,7 +200,8 @@ infusion_events <- patient_data |>
 patient_data <- patient_data |>
   select(-c(
     contains("_date"),
-    today, infseq_id, end_study_reason)) |>
+    today, infseq_id, end_study_reason
+  )) |>
   relocate(pt_id, .before = dasmt_bcell_status) |>
   rename(
     "bcell_status" = dasmt_bcell_status,
@@ -249,3 +254,5 @@ ggswim(
   labs(title = "Prodigy Swimmer Plot") +
   xlab("Time (Months)") + ylab("Patient ID") +
   theme_ggswim()
+
+# nolint end

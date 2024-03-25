@@ -187,7 +187,7 @@ bind_layer_data <- function(ggswim_obj, layer_indices, layer_data, static_colour
 
 get_overrides <- function(ref_guide,
                           label_layer_data,
-                          point_layer_data){
+                          point_layer_data) {
   # TODO: Verify all acceptable column names
   accepted_colour_columns <- c(
     "colour", "label", "group", "fill", "size", "shape", "stroke", "colour_mapping"
