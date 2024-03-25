@@ -46,8 +46,6 @@ build_ggswim <- function(ggswim_obj) {
 
   # static_colours for static color manipulation and legend re-definition
   static_colours <- list()
-  # override for guides legend override
-  override <- list()
 
   # Determine indices of layers in ggplot object that contain labels, points, and static colors
   for (i in seq_along(ggswim_obj$layers)) {
@@ -99,40 +97,9 @@ build_ggswim <- function(ggswim_obj) {
     static_colours = static_colours
   )
 
-  # TODO: Verify all acceptable column names
-  accepted_colour_columns <- c(
-    "colour", "label", "group", "fill", "size", "shape", "stroke", "colour_mapping"
-  )
+  browser()
 
-  # Define override aesthetic guides
-  override$colour <- bind_rows(label_layer_data, point_layer_data) |>
-    select(any_of(accepted_colour_columns))
-
-  if ("colour_mapping" %in% names(override$colour)) {
-    # Convert to factor to handle issue with lowercase/uppercase arrange issues
-    override$colour$colour_mapping <- factor(override$colour$colour_mapping)
-    # Arrange necessary to follow order of ggplot legend outputs
-    # (i.e. alphabetical, numeric, etc.)
-
-    # Reference level ordering in underlying layers
-    ref_guide <- get_guide_data(ggswim_obj, "color") |>
-      mutate(.label = factor(.data$.label, ordered = TRUE))
-
-    override$colour <- override$colour |>
-      select(-dplyr::matches("group")) |> # Implemented due to NA vals with inherited add_marker() data
-      unique() |>
-      # Ensure proper level ordering in output
-      mutate(order_col = match(.data$colour_mapping, ref_guide$.label)) |>
-      arrange(.data$order_col) |>
-      select(-"order_col")
-  }
-
-  # Setup label coercion into color layer of legend
-  if ("label" %in% names(override$colour)) {
-    override$colour$label[is.na(override$colour$label)] <- ""
-  }
-
-  override$shape <- "none" # TODO: Determine if default should always be removal
+  override <- get_overrides(ggswim_obj, label_layer_data, point_layer_data)
 
   # Return fixed ggswim object and guide overrides -----
   (ggswim_obj +
@@ -201,4 +168,58 @@ bind_layer_data <- function(ggswim_obj, layer_indices, layer_data, static_colour
   }
 
   layer_data
+}
+
+#' @title Get overrides list for `guides()`
+#'
+#' @description
+#' Creates a list of override definitions to pass to `guides()` `override.aes`.
+#'
+#' @param ggswim_obj A ggswim object
+#' @param label_layer_data description
+#' @param point_layer_data description
+#'
+#' @returns a list
+
+get_overrides <- function(ggswim_obj,
+                          label_layer_data,
+                          point_layer_data){
+  # TODO: Verify all acceptable column names
+  accepted_colour_columns <- c(
+    "colour", "label", "group", "fill", "size", "shape", "stroke", "colour_mapping"
+  )
+
+  override <- list()
+
+  # Define override aesthetic guides
+  override$colour <- bind_rows(label_layer_data, point_layer_data) |>
+    select(any_of(accepted_colour_columns))
+
+  if ("colour_mapping" %in% names(override$colour)) {
+    # Convert to factor to handle issue with lowercase/uppercase arrange issues
+    override$colour$colour_mapping <- factor(override$colour$colour_mapping)
+    # Arrange necessary to follow order of ggplot legend outputs
+    # (i.e. alphabetical, numeric, etc.)
+
+    # Reference level ordering in underlying layers
+    ref_guide <- get_guide_data(ggswim_obj, "color") |>
+      mutate(.label = factor(.data$.label, ordered = TRUE))
+
+    override$colour <- override$colour |>
+      select(-dplyr::matches("group")) |> # Implemented due to NA vals with inherited add_marker() data
+      unique() |>
+      # Ensure proper level ordering in output
+      mutate(order_col = match(.data$colour_mapping, ref_guide$.label)) |>
+      arrange(.data$order_col) |>
+      select(-"order_col")
+  }
+
+  # Setup label coercion into color layer of legend
+  if ("label" %in% names(override$colour)) {
+    override$colour$label[is.na(override$colour$label)] <- ""
+  }
+
+  override$shape <- "none" # TODO: Determine if default should always be removal
+
+  override
 }
