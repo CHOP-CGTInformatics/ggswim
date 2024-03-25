@@ -19,3 +19,4 @@ a list
 \description{
 Creates a list of override definitions to pass to \code{guides()} \code{override.aes}.
 }
+\keyword{internal}

@@ -14,11 +14,11 @@
 #'
 #' @examples
 #' ggswim(
-#'   data = patient_status,
+#'   data = patient_data,
 #'   mapping = aes(
-#'     x = value,
-#'     y = subject_id,
-#'     fill = cohort
+#'     x = delta_t0_months,
+#'     y = pt_id,
+#'     fill = disease_assessment_status
 #'   )
 #' ) |>
 #'   grid.draw()

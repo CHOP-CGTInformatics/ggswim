@@ -3,27 +3,15 @@
 \docType{data}
 \name{patient_data}
 \alias{patient_data}
-\alias{patient_status}
-\alias{adverse_events}
-\alias{medication_administration}
-\title{Patient Dataset}
+\alias{infusion_events}
+\alias{end_study_events}
+\title{Patient Datasets}
 \format{
-A list containing three tibbles:
-\describe{
-\item{patient_status}{A tibble containing information about patient status
-including subject ID, cohort, status, name, value, and time sorting.}
-\item{adverse_events}{A tibble containing information about adverse
-events including subject ID, adverse event name, and time of event.}
-\item{medication_administration}{A tibble containing information about
-medication administration including subject ID, medication name, name,
-and time of event.}
-}
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 83 rows and 9 columns.
 
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 30 rows and 7 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 13 rows and 3 columns.
 
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 14 rows and 3 columns.
-
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 8 rows and 4 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 4 rows and 5 columns.
 }
 \source{
 This dataset is for demonstration purposes only.
@@ -31,25 +19,20 @@ This dataset is for demonstration purposes only.
 \usage{
 data(patient_data)
 
-patient_status
+data(infusion_events)
 
-adverse_events
-
-medication_administration
+data(end_study_events)
 }
 \description{
-This dataset provides information about patients, their status, adverse events,
-and medication administration.
+These datasets provide information about patients, infusion events, and end of
+study events.
 }
 \examples{
+
 patient_data
 
-patient_data$patient_status
+infusion_events
 
-patient_status
-
-adverse_events
-
-medication_administration
+end_study_events
 }
 \keyword{datasets}

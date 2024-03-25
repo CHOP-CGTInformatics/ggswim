@@ -24,11 +24,11 @@
 #'
 #' @examples
 #' ggswim_obj <- ggswim(
-#'   data = patient_status,
+#'   data = patient_data,
 #'   mapping = aes(
-#'     x = value,
-#'     y = subject_id,
-#'     fill = cohort
+#'     x = delta_t0_months,
+#'     y = pt_id,
+#'     fill = disease_assessment_status
 #'   )
 #' )
 #' build_ggswim(ggswim_obj)
@@ -96,8 +96,6 @@ build_ggswim <- function(ggswim_obj) {
     layer_data = point_layer_data,
     static_colours = static_colours
   )
-
-  browser()
 
   override <- get_overrides(ggswim_obj, label_layer_data, point_layer_data)
 
@@ -180,6 +178,8 @@ bind_layer_data <- function(ggswim_obj, layer_indices, layer_data, static_colour
 #' @param point_layer_data description
 #'
 #' @returns a list
+#'
+#' @keywords internal
 
 get_overrides <- function(ggswim_obj,
                           label_layer_data,

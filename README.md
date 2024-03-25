@@ -37,69 +37,55 @@ of the swimmer plot.
 Let’s dive right into a quick example to showcase the simplicity and
 effectiveness of ggswim!
 
-## Exploring the Sample Dataset
+## Exploring the Sample Dataset & Creating a Swimmer Plot
 
 To help you get started, ggswim includes a sample dataset named
-`patient_status`. This dataset comprises three tibbles:
+`patient_data` along with two related datasets called `infusion_events`
+and `end_study_events`. These de-identified datasets simulate real world
+data related to infusions, disease assessments, and study statuses for a
+clinical trial.
 
-- `patient_status`: Designed for ease of use with ggswim, it may not
-  perfectly mirror real-world data, but serves as an ideal starting
-  point. A 7 column tibble with subject cohorts, statuses, and start and
-  end times.
-- `adverse_events`: A 3 column tibble showcasing 3 kinds of adverse
-  events and the time when they occurred
-- `medication_administration`: A 4 column tibble showcasing 2 kinds of
-  medications and the time they were given
-
-You can also access each of these tibbles individually. Let’s load the
-data and dive into creating our swimmer plots!
+Let’s load the data and dive into creating our swimmer plots!
 
 ``` r
 library(ggswim)
+library(ggplot2)
 
 ggswim(
-  data = patient_status,
-  mapping = aes(
-    x = value,
-    y = subject_id,
-    fill = cohort
-  ),
-  arrow = alive
+  patient_data,
+  mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment_status),
+  arrow = arrow_status,
+  arrow_head_length = unit(.25, "inches"),
+  arrow_neck_length = delta_today,
+  width = 0.25
 ) +
   add_marker(
-    data = adverse_events,
-    mapping = aes(
-      x = time_of_event,
-      y = subject_id,
-      color = adverse_event_name,
-      shape = adverse_event_name
-    ),
-    size = 5
+    patient_data |> dplyr::rename("Status Markers" = bcell_status),
+    aes(x = delta_t0_months, y = pt_id, color = `Status Markers`, shape = `Status Markers`),
+    size = 5, position = "identity", alpha = 1
   ) +
   add_marker(
-    data = medication_administration,
-    mapping = aes(
-      x = time_of_event,
-      y = subject_id,
-      label = medication,
-      color = name
-    ),
+    end_study_events,
+    aes(x = delta_t0_months, y = pt_id, label = end_study_label, color = end_study_name),
     label.size = NA, fill = NA, size = 5
   ) +
-  ggplot2::labs(x = "Time", y = "Subject ID", color = "Markers") +
-  ggplot2::ggtitle("My Swim Plot") +
-  ggplot2::scale_color_manual(
-    name = "Markers",
-    values = c("firebrick", "forestgreen", NA, NA, "purple")
+  add_marker(
+    infusion_events,
+    aes(x = infusion_delta_t0, y = pt_id, color = infusion_type, shape = infusion_type),
+    size = 5, position = "identity", alpha = 1
   ) +
-  ggplot2::scale_shape_manual(
-    name = "Markers",
-    values = c(19, 18, 15)
+  scale_colour_manual(
+    values = c("firebrick", "#F5EB0A", "gray50", NA, NA, NA, "#25DA6D", "#25DA6D")
   ) +
-  ggplot2::scale_fill_manual(
-    name = "Lanes",
-    values = c("steelblue1", "goldenrod1")
+  scale_shape_manual(
+    values = c(19, 19, 15, 17, 18)
   ) +
+  scale_fill_manual(
+    name = "Overall Disease Assessment",
+    values = c("#6394F3", "#F3C363", "#EB792F")
+  ) +
+  labs(title = "Sample Swimmer Plot") +
+  xlab("Time (Months)") + ylab("Patient ID") +
   theme_ggswim()
 ```
 

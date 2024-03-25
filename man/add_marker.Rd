@@ -76,12 +76,12 @@ aesthetic mapping to render the legend correctly.
 
 \examples{
 add_marker(
-  data = adverse_events,
+  data = infusion_events,
   mapping = aes(
-    x = time_of_event,
-    y = subject_id,
-    color = adverse_event_name,
-    shape = adverse_event_name
+    x = delta_t0,
+    y = pt_id,
+    color = infusion_type,
+    shape = end_study_name
   ),
   size = 5
 )

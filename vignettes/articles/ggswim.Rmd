@@ -19,119 +19,122 @@ Let's dive in and explore the boundless possibilities that `ggswim` offers for e
 
 ### Building swimmer plots with aesthetic mapping
 
-To start, let's build a swimmer plot using `aes()` and dynamic mapping of data. As with the README, we will be using ggswim's internal `patient_data` list dataset. 
+To start, let's build a swimmer plot using `aes()` and dynamic mapping of data. As with the README, we will be using ggswim's internal dataseta: `patient_data`, `infusion_events`, and `end_study_events`. 
 
-As mentioned in the README, `patient_status` is built to reflect a typical dataset in the wild. To make this work well and appear nicely in our swimmer plot output, a little bit of preparation was required. Unlike what we provide for you out of the box, a more typical `patient_status` might look something like this:
+Let's start with observing the structure of each dataset:
 
-```{r load dplyr, include=FALSE}
-library(dplyr)
-```
-
-```{r prep patient_status, echo=FALSE, include=TRUE}
-set.seed(123)
-
-tibble::tibble(subject_id = rep(1:10, length.out = 15)) |>
-  sample_n(15) |>
-  arrange(subject_id) |>
-  mutate(
-    .by = subject_id,
-    cohort = rep(sample(c("Cohort A", "Cohort B"), 1), length.out = n(), each = length(unique(subject_id))),
-    cohort = factor(cohort, levels = c("Cohort B", "Cohort A")),
-    status = ifelse(duplicated(subject_id) | !duplicated(subject_id, fromLast = TRUE), "On Study", "Off Study"),
-    status = factor(status, levels = c("On Study", "Off Study"), ordered = TRUE),
-    time_end = ifelse(status == "On Study", runif(n(), 1, 10), runif(n(), 11, 20)),
-    time_start = ifelse(status == "On Study", 0, NA),
-    time_start = ifelse(is.na(time_start), lead(time_end), time_start)
-  ) |>
-  arrange(subject_id, status) |>
-  relocate(time_start, .before = time_end) |>
-  mutate(subject_id = factor(subject_id))
-```
-
-Therefore, when viewing the available `patient_status`, keep in mind it has undergone the following data cleaning steps:
-
-- A pivot that keeps `time_start` and `time_end` under one column
-- The addition of a sorting variable, `time_sorting`, to support arrangement using summed times
-- Arrangement of the data by cohort groups, time sorted values, and subject ID factor levels
-
-```{r}
+```{r patient_data , echo=FALSE, include=TRUE}
 library(ggswim)
 
-patient_status
+patient_data |> 
+  rmarkdown::paged_table()
 ```
+
+`patient_data` contains a long dataset where patient ID's (`pt_id`) can be repeated. These rows are differentiated by `event_marker`s and corresponding times. Together, these rows signify a patient trajectory with consideration for infusions and disease assessment time points. You'll notice several other columns that give more information:
+
+- `bcell_status`: The B-Cell status of a given patient at a particular time point, indicating aplasia or recovery
+- `disease_assessment_status`: The overall status at a disease assessment timepoint where:
+- CR = "Complete Response"
+- CRi = "Complete Response with Incomplete Blood Count Recovery"
+- RD = "Relapsed Disease"
 
 Now, let's make the plot using `ggswim()` and our first `add_marker()` call:
 
-```{r aes mapping plot}
+```{r ggswim plot}
 p <- ggswim(
-  data = patient_status,
-  mapping = aes(
-    x = value,
-    y = subject_id,
-    fill = cohort
-  )
-) +
+  patient_data,
+  mapping = aes(x = delta_t0_months,
+                y = pt_id, fill = 
+                  disease_assessment_status)
+)
+
+p
+```
+
+Here we have a simple bar chart, showing infusions grouped by patients with a given disease assessment status. `ggswim()` does the work of setting up a `geom_col()` and readying your plot layers for additional ggwim-specific features such as "markers." Let's add a marker layer next and reference `bcell_status` from the same `patient_data` dataset. Additionally, we'll add another marker layer from the `infusion_events` dataset:
+
+```{r infusion_events}
+infusion_events |> 
+  rmarkdown::paged_table()
+```
+
+This dataset is much simpler, having only 3 columns indicating infusions (considered `t0`) and reinfusions at some point beyond `t0` if a patient required any.
+
+```{r first marker plot}
+
+p <- p +
   add_marker(
-    data = adverse_events,
-    mapping = aes(
-      x = time_of_event,
-      y = subject_id,
-      color = adverse_event_name,
-      shape = adverse_event_name
-    ),
-    size = 5
+    patient_data |> dplyr::rename("Status Markers" = bcell_status),
+    aes(x = delta_t0_months, 
+        y = pt_id, 
+        color = `Status Markers`, 
+        shape = `Status Markers`),
+    size = 5, position = "identity", alpha = 1
+  ) +
+  add_marker(
+    infusion_events,
+    aes(x = infusion_delta_t0, 
+        y = pt_id, 
+        color = infusion_type, 
+        shape = infusion_type),
+    size = 5, position = "identity", alpha = 1
   )
 
 p
 ```
 
-In addition to shapes and symbols, ggswim supports the use of emojis when rendering swimmer plots. `add_marker()` allows users to specify shapes or emojis by using the appropriate argument callouts (`label` and `shape`). Let's add a layer using emojis via the `medication_administration` dataset:
+Now we can see shapes have been added to establish our markers... though some blend into the colors of the bar charts. We'll fix this soon enough! For now, we can see that a new legend has been added to articulate the markers we added for the b-cell disease assessment and infusion events.
 
-```{r label mapping}
+Our last dataset involved end of study events, i.e. events that indicate a patient has left the study for varying reasons.
+
+```{r end_study_events}
+end_study_events |> 
+  rmarkdown::paged_table()
+```
+
+You'll notice that this dataset includes use of emojis under `end_study_label`. In addition to shapes and symbols, ggswim supports the use of emojis when rendering swimmer plots. `add_marker()` allows users to specify shapes or emojis by using the appropriate argument callouts (`label` and `shape`). Let's add a layer using emojis via the `end_study_events` dataset:
+
+```{r second marker plot}
 p <- p +
   add_marker(
-    data = medication_administration,
-    mapping = aes(
-      x = time_of_event,
-      y = subject_id,
-      label = medication,
-      color = name
-    ),
+    end_study_events,
+    aes(x = delta_t0_months, 
+        y = pt_id, 
+        label = end_study_label, 
+        color = end_study_name),
     label.size = NA, fill = NA, size = 5
   )
 
 p
 ```
 
-At this point we have a working swimmer plot with lanes and two different kinds of marker layers. Recall that ggswim works within the ggplot2 framework, therefore customization can be done using the same ggplot2 theme and styling functions users may already be familiar with:
+At this point we have a working swimmer plot with lanes and two different kinds of marker layers. Recall that ggswim works within the ggplot2 framework, therefore customization can be done using the same ggplot2 theme and styling functions users may already be familiar with. Let's fix up this plot so it looks nicer on the eyes:
 
 ```{r mapping finalizing, message=FALSE, warning=FALSE}
 library(ggplot2)
 
-p +
-  labs(x = "Time", y = "Subject ID", color = "Markers") +
-  ggtitle("My Swim Plot") +
+p <- p +
   theme_minimal() +
-  scale_color_manual(
-    name = "Markers",
-    values = c("firebrick", "tomato", NA, NA, "chartreuse2")
+  scale_colour_manual(
+    values = c("firebrick", "#F5EB0A", "gray50", NA, NA, NA, "#25DA6D", "#25DA6D")
   ) +
   scale_shape_manual(
-    name = "Markers",
-    values = c(19, 15, 8, 18)
+    values = c(19, 19, 15, 17, 18)
   ) +
   scale_fill_manual(
-    name = "Lanes",
-    values = c("steelblue", "cyan")
-  )
+    name = "Overall Disease Assessment",
+    values = c("#6394F3", "#F3C363", "#EB792F")
+  ) +
+  labs(title = "Prodigy Swimmer Plot") +
+  xlab("Time (Months)") + ylab("Patient ID")
+
+p
 ```
 
-However, ggswim also provides a convenient theme function all of its own if desired:
+We also supply the `theme_ggswim()` function:
 
 ```{r mapping with theme_ggswim}
 p +
-  labs(x = "Time", y = "Subject ID", color = "Markers") +
-  ggtitle("My Swim Plot") +
   theme_ggswim()
 ```
 
@@ -139,59 +142,45 @@ p +
 
 In the world of data, one size rarely fits all. That's why ggswim caters to both dynamic and static marker assignments. But what does that mean exactly?
 
-Imagine you have a dataset where you want to manually define the color of a single, significant marker rather than relying on a mapped variable. By splitting up `adverse_events` into distinct data frames, you can achieve this customized effect.
+Imagine you have a dataset where you want to manually define the color of a single, significant marker rather than relying on a mapped variable. By splitting up `infusion_events` into distinct data frames, you can achieve this customized effect.
 
 To make it all come together, make sure to include an `aes()` `name` argument within `add_marker()`. This serves as a crucial anchor point for the legend, ensuring clarity in your visualization.
 
 
 ```{r static mapping}
-adverse_event_cardio <- adverse_events |>
-  dplyr::filter(adverse_event_name == "Cardiac Disorder")
+initial_infusions <- infusion_events |>
+  dplyr::filter(infusion_type == "Infusion")
 
-adverse_event_inf <- adverse_events |>
-  dplyr::filter(adverse_event_name == "Infection")
-
-adverse_event_psych <- adverse_events |>
-  dplyr::filter(adverse_event_name == "Psychiatric Disorder")
+reinfusions <- infusion_events |>
+  dplyr::filter(infusion_type == "Reinfusion")
 ```
 
 Now, let's plot it similarly to how we have previously:
 
 ```{r static plot, message=FALSE, warning=FALSE}
 ggswim(
-  data = patient_status,
-  mapping = aes(
-    x = value,
-    y = subject_id,
-    fill = cohort
-  )
+  data = patient_data,
+  mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment_status)
 ) +
+  # Same markers as before for Disease Assessment
   add_marker(
-    data = adverse_event_cardio,
-    mapping = aes(
-      x = time_of_event,
-      y = subject_id,
-      name = "AE: Cardiac Disorder"
-    ),
-    color = "red", size = 5
+    patient_data |> dplyr::rename("Status Markers" = bcell_status),
+    aes(x = delta_t0_months, 
+        y = pt_id, 
+        color = `Status Markers`, 
+        shape = `Status Markers`),
+    size = 5, position = "identity", alpha = 1
+  ) +
+  # New manual color markers for Infusions
+  add_marker(
+    initial_infusions,
+    aes(x = infusion_delta_t0, y = pt_id, name = "Initial Infusion"),
+    size = 5, position = "identity", color = "green"
   ) +
   add_marker(
-    data = adverse_event_inf,
-    mapping = aes(
-      x = time_of_event,
-      y = subject_id,
-      name = "AE: Infection"
-    ),
-    color = "blue", size = 5, shape = 12
-  ) +
-  add_marker(
-    data = adverse_event_psych,
-    mapping = aes(
-      x = time_of_event,
-      y = subject_id,
-      name = "AE: Psychiatric Disorder"
-    ),
-    color = "green", size = 5, shape = 2
+    reinfusions,
+    aes(x = infusion_delta_t0, y = pt_id, name = "Reinfusion"),
+    size = 5, position = "identity", color = "red"
   ) +
   theme_ggswim()
 ```

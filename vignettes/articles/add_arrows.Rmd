@@ -19,47 +19,43 @@ Let's dive into an example, similar to the one we've been using in the README, t
 library(ggswim)
 
 ggswim(
-  data = patient_status,
-  mapping = aes(
-    x = value,
-    y = subject_id,
-    fill = cohort
-  )
+  patient_data,
+  mapping = aes(x = delta_t0_months,
+                y = pt_id, fill = 
+                  disease_assessment_status)
 )
 ```
 
-Before we can incorporate arrows into our swimmer plot, we need to designate a boolean column that informs `ggswim()` when to append an arrow to a specific row. In our example using `patient_status`, this column is named `alive` and takes on `TRUE` or `FALSE` values to denote a patient's survival status at the time of plotting.
+Before we can incorporate arrows into our swimmer plot, we need to designate a boolean column that informs `ggswim()` when to append an arrow to a specific row. In our example using `patient_status`, this column is named `arrow_status` and takes on `TRUE` or `FALSE` values to denote a patient's study status at the time of plotting.
 
 ```{r}
-head(patient_status)
+patient_data |> 
+  rmarkdown::paged_table()
 ```
 
 Let's add the arrows onto the plot from before:
 
 ```{r}
 ggswim(
-  data = patient_status,
-  mapping = aes(
-    x = value,
-    y = subject_id,
-    fill = cohort
-  ),
-  arrow = alive
+  patient_data,
+  mapping = aes(x = delta_t0_months,
+                y = pt_id, fill = 
+                  disease_assessment_status),
+  arrow = arrow_status
 )
 ```
 
-Default values are set for arrows, but can be manipulated for different aesthetic preferences. Below we add color and fill specifiers:
+Default values are set for arrows, but can be manipulated for different aesthetic preferences. Below we add color and fill specifiers, as well as a specification for `arrow_neck_length`. `arrow_neck_length` sets a default proportional value, but can also accept numeric values or reference to a column of numeric values in the dataset. In this case, we use `delta_today` to specify that the neck length should be equivalent to the length of time from the last time point to "today."
 
 ```{r}
 ggswim(
-  data = patient_status,
-  mapping = aes(
-    x = value,
-    y = subject_id,
-    fill = cohort
-  ),
-  arrow = alive,
-  arrow_colour = "cyan4",
-  arrow_fill = "cyan2"
+  patient_data,
+  mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment_status),
+  arrow = arrow_status,
+  arrow_fill = "cyan",
+  arrow_colour = "slateblue",
+  arrow_head_length = grid::unit(.25, "inches"),
+  arrow_neck_length = delta_today,
+  width = 0.25
 )
 ```
