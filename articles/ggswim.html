@@ -148,7 +148,7 @@ disease assessment timepoint where:</li>
 <code><a href="../reference/add_marker.html">add_marker()</a></code> call:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span></span>
-<span>  <span class="va">patient_data</span>,</span>
+<span>  <span class="va">patient_data</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span><span class="st">"Status Markers"</span> <span class="op">=</span> <span class="va">bcell_status</span><span class="op">)</span>,</span>
 <span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta_t0_months</span>,</span>
 <span>                y <span class="op">=</span> <span class="va">pt_id</span>, fill <span class="op">=</span> </span>
 <span>                  <span class="va">disease_assessment_status</span><span class="op">)</span></span>
@@ -178,7 +178,6 @@ beyond <code>t0</code> if a patient required any.</p>
 <code class="sourceCode R"><span></span>
 <span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">p</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/add_marker.html">add_marker</a></span><span class="op">(</span></span>
-<span>    <span class="va">patient_data</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span><span class="st">"Status Markers"</span> <span class="op">=</span> <span class="va">bcell_status</span><span class="op">)</span>,</span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta_t0_months</span>, </span>
 <span>        y <span class="op">=</span> <span class="va">pt_id</span>, </span>
 <span>        color <span class="op">=</span> <span class="va">`Status Markers`</span>, </span>
@@ -186,7 +185,7 @@ beyond <code>t0</code> if a patient required any.</p>
 <span>    size <span class="op">=</span> <span class="fl">5</span>, position <span class="op">=</span> <span class="st">"identity"</span>, alpha <span class="op">=</span> <span class="fl">1</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/add_marker.html">add_marker</a></span><span class="op">(</span></span>
-<span>    <span class="va">infusion_events</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">infusion_events</span>,</span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">infusion_delta_t0</span>, </span>
 <span>        y <span class="op">=</span> <span class="va">pt_id</span>, </span>
 <span>        color <span class="op">=</span> <span class="va">infusion_type</span>, </span>
@@ -221,7 +220,7 @@ using the appropriate argument callouts (<code>label</code> and
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">p</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/add_marker.html">add_marker</a></span><span class="op">(</span></span>
-<span>    <span class="va">end_study_events</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">end_study_events</span>,</span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta_t0_months</span>, </span>
 <span>        y <span class="op">=</span> <span class="va">pt_id</span>, </span>
 <span>        label <span class="op">=</span> <span class="va">end_study_label</span>, </span>
@@ -251,7 +250,7 @@ Let’s fix up this plot so it looks nicer on the eyes:</p>
 <span>    name <span class="op">=</span> <span class="st">"Overall Disease Assessment"</span>,</span>
 <span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#6394F3"</span>, <span class="st">"#F3C363"</span>, <span class="st">"#EB792F"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Prodigy Swimmer Plot"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"My Swimmer Plot"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Time (Months)"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Patient ID"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
@@ -287,12 +286,11 @@ legend, ensuring clarity in your visualization.</p>
 <p>Now, let’s plot it similarly to how we have previously:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">patient_data</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">patient_data</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span><span class="st">"Status Markers"</span> <span class="op">=</span> <span class="va">bcell_status</span><span class="op">)</span>,</span>
 <span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta_t0_months</span>, y <span class="op">=</span> <span class="va">pt_id</span>, fill <span class="op">=</span> <span class="va">disease_assessment_status</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># Same markers as before for Disease Assessment</span></span>
 <span>  <span class="fu"><a href="../reference/add_marker.html">add_marker</a></span><span class="op">(</span></span>
-<span>    <span class="va">patient_data</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span><span class="st">"Status Markers"</span> <span class="op">=</span> <span class="va">bcell_status</span><span class="op">)</span>,</span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta_t0_months</span>, </span>
 <span>        y <span class="op">=</span> <span class="va">pt_id</span>, </span>
 <span>        color <span class="op">=</span> <span class="va">`Status Markers`</span>, </span>
@@ -301,12 +299,12 @@ legend, ensuring clarity in your visualization.</p>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># New manual color markers for Infusions</span></span>
 <span>  <span class="fu"><a href="../reference/add_marker.html">add_marker</a></span><span class="op">(</span></span>
-<span>    <span class="va">initial_infusions</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">initial_infusions</span>,</span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">infusion_delta_t0</span>, y <span class="op">=</span> <span class="va">pt_id</span>, name <span class="op">=</span> <span class="st">"Initial Infusion"</span><span class="op">)</span>,</span>
 <span>    size <span class="op">=</span> <span class="fl">5</span>, position <span class="op">=</span> <span class="st">"identity"</span>, color <span class="op">=</span> <span class="st">"green"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/add_marker.html">add_marker</a></span><span class="op">(</span></span>
-<span>    <span class="va">reinfusions</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">reinfusions</span>,</span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">infusion_delta_t0</span>, y <span class="op">=</span> <span class="va">pt_id</span>, name <span class="op">=</span> <span class="st">"Reinfusion"</span><span class="op">)</span>,</span>
 <span>    size <span class="op">=</span> <span class="fl">5</span>, position <span class="op">=</span> <span class="st">"identity"</span>, color <span class="op">=</span> <span class="st">"red"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
