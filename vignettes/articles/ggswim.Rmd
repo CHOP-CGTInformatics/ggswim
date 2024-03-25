@@ -124,7 +124,7 @@ p <- p +
     name = "Overall Disease Assessment",
     values = c("#6394F3", "#F3C363", "#EB792F")
   ) +
-  labs(title = "Prodigy Swimmer Plot") +
+  labs(title = "My Swimmer Plot") +
   xlab("Time (Months)") + ylab("Patient ID")
 
 p

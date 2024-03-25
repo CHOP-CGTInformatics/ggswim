@@ -74,7 +74,7 @@ ggswim(
     size = 5, position = "identity", alpha = 1
   ) +
   scale_colour_manual(
-    values = c("firebrick", "#F5EB0A", "gray50", NA, NA, NA, "#25DA6D", "#25DA6D")
+    values = c("#b22228", "#F5EB0A", "gray50", NA, NA, NA, "#25DA6D", "#25DA6D")
   ) +
   scale_shape_manual(
     values = c(19, 19, 15, 17, 18)

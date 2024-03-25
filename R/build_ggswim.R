@@ -97,7 +97,11 @@ build_ggswim <- function(ggswim_obj) {
     static_colours = static_colours
   )
 
-  override <- get_overrides(ggswim_obj, label_layer_data, point_layer_data)
+  # Reference level ordering in underlying layers
+  ref_guide <- get_guide_data(ggswim_obj, "color") |>
+    mutate(.label = factor(.data$.label, ordered = TRUE))
+
+  override <- get_overrides(ref_guide, label_layer_data, point_layer_data)
 
   # Return fixed ggswim object and guide overrides -----
   (ggswim_obj +
@@ -173,15 +177,15 @@ bind_layer_data <- function(ggswim_obj, layer_indices, layer_data, static_colour
 #' @description
 #' Creates a list of override definitions to pass to `guides()` `override.aes`.
 #'
-#' @param ggswim_obj A ggswim object
-#' @param label_layer_data description
-#' @param point_layer_data description
+#' @param ref_guide A reference object from `get_guide_data()` to assist with computation
+#' @param label_layer_data dataframe related to the label layer data for a ggswim_obj
+#' @param point_layer_data dataframe related to the point layer data for a ggswim_obj
 #'
 #' @returns a list
 #'
 #' @keywords internal
 
-get_overrides <- function(ggswim_obj,
+get_overrides <- function(ref_guide,
                           label_layer_data,
                           point_layer_data){
   # TODO: Verify all acceptable column names
@@ -200,10 +204,6 @@ get_overrides <- function(ggswim_obj,
     override$colour$colour_mapping <- factor(override$colour$colour_mapping)
     # Arrange necessary to follow order of ggplot legend outputs
     # (i.e. alphabetical, numeric, etc.)
-
-    # Reference level ordering in underlying layers
-    ref_guide <- get_guide_data(ggswim_obj, "color") |>
-      mutate(.label = factor(.data$.label, ordered = TRUE))
 
     override$colour <- override$colour |>
       select(-dplyr::matches("group")) |> # Implemented due to NA vals with inherited add_marker() data
