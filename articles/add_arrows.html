@@ -116,9 +116,11 @@ the README, to see this feature in action.</p>
 <span></span>
 <span><span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span></span>
 <span>  <span class="va">patient_data</span>,</span>
-<span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta_t0_months</span>,</span>
-<span>                y <span class="op">=</span> <span class="va">pt_id</span>, fill <span class="op">=</span> </span>
-<span>                  <span class="va">disease_assessment_status</span><span class="op">)</span></span>
+<span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="va">delta_t0_months</span>,</span>
+<span>    y <span class="op">=</span> <span class="va">pt_id</span>, fill <span class="op">=</span></span>
+<span>      <span class="va">disease_assessment_status</span></span>
+<span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="add_arrows_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 <p>Before we can incorporate arrows into our swimmer plot, we need to
@@ -129,7 +131,7 @@ append an arrow to a specific row. In our example using
 <code>FALSE</code> values to denote a patient’s study status at the time
 of plotting.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">patient_data</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="va">patient_data</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">rmarkdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgs.rstudio.com/rmarkdown/reference/paged_table.html" class="external-link">paged_table</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
@@ -140,9 +142,11 @@ of plotting.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span></span>
 <span>  <span class="va">patient_data</span>,</span>
-<span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta_t0_months</span>,</span>
-<span>                y <span class="op">=</span> <span class="va">pt_id</span>, fill <span class="op">=</span> </span>
-<span>                  <span class="va">disease_assessment_status</span><span class="op">)</span>,</span>
+<span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="va">delta_t0_months</span>,</span>
+<span>    y <span class="op">=</span> <span class="va">pt_id</span>, fill <span class="op">=</span></span>
+<span>      <span class="va">disease_assessment_status</span></span>
+<span>  <span class="op">)</span>,</span>
 <span>  arrow <span class="op">=</span> <span class="va">arrow_status</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="add_arrows_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
