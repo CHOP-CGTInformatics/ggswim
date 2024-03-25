@@ -4,17 +4,17 @@
 \alias{add_marker}
 \title{Add markers of interest to level response trajectories}
 \usage{
-add_marker(data = NULL, mapping = aes(), ...)
+add_marker(mapping = aes(), data = NULL, ...)
 }
 \arguments{
-\item{data}{a dataframe prepared for use with \code{ggswim()}, either coming from
-a parent \code{ggswim()} function, another \code{add_marker()} call, or a new dataframe
-prepared for use with \code{ggswim()}.}
-
 \item{mapping}{Set of aesthetic mappings created by \code{aes()}. If specified and
 \code{inherit.aes = TRUE} (the default), it is combined with the default mapping
 at the top level of the plot. You must supply mapping if there is no plot mapping.
 More information about accepted mapping arguments can be found in \strong{Aesthetics}.}
+
+\item{data}{a dataframe prepared for use with \code{ggswim()}, either coming from
+a parent \code{ggswim()} function, another \code{add_marker()} call, or a new dataframe
+prepared for use with \code{ggswim()}.}
 
 \item{...}{Other arguments passed to \code{add_marker()}, often aesthetic fixed values,
 i.e. \code{color = "red"} or \code{size = 3}.}

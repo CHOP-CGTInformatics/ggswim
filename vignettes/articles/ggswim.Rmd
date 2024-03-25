@@ -42,7 +42,7 @@ Now, let's make the plot using `ggswim()` and our first `add_marker()` call:
 
 ```{r ggswim plot}
 p <- ggswim(
-  patient_data,
+  patient_data |> dplyr::rename("Status Markers" = bcell_status),
   mapping = aes(x = delta_t0_months,
                 y = pt_id, fill = 
                   disease_assessment_status)
@@ -64,7 +64,6 @@ This dataset is much simpler, having only 3 columns indicating infusions (consid
 
 p <- p +
   add_marker(
-    patient_data |> dplyr::rename("Status Markers" = bcell_status),
     aes(x = delta_t0_months, 
         y = pt_id, 
         color = `Status Markers`, 
@@ -72,7 +71,7 @@ p <- p +
     size = 5, position = "identity", alpha = 1
   ) +
   add_marker(
-    infusion_events,
+    data = infusion_events,
     aes(x = infusion_delta_t0, 
         y = pt_id, 
         color = infusion_type, 
@@ -97,7 +96,7 @@ You'll notice that this dataset includes use of emojis under `end_study_label`. 
 ```{r second marker plot}
 p <- p +
   add_marker(
-    end_study_events,
+    data = end_study_events,
     aes(x = delta_t0_months, 
         y = pt_id, 
         label = end_study_label, 
@@ -159,12 +158,11 @@ Now, let's plot it similarly to how we have previously:
 
 ```{r static plot, message=FALSE, warning=FALSE}
 ggswim(
-  data = patient_data,
+  data = patient_data |> dplyr::rename("Status Markers" = bcell_status),
   mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment_status)
 ) +
   # Same markers as before for Disease Assessment
   add_marker(
-    patient_data |> dplyr::rename("Status Markers" = bcell_status),
     aes(x = delta_t0_months, 
         y = pt_id, 
         color = `Status Markers`, 
@@ -173,12 +171,12 @@ ggswim(
   ) +
   # New manual color markers for Infusions
   add_marker(
-    initial_infusions,
+    data = initial_infusions,
     aes(x = infusion_delta_t0, y = pt_id, name = "Initial Infusion"),
     size = 5, position = "identity", color = "green"
   ) +
   add_marker(
-    reinfusions,
+    data = reinfusions,
     aes(x = infusion_delta_t0, y = pt_id, name = "Reinfusion"),
     size = 5, position = "identity", color = "red"
   ) +

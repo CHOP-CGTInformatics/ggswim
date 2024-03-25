@@ -9,13 +9,13 @@
 #'
 #' @returns A ggswim object
 #'
-#' @param data a dataframe prepared for use with `ggswim()`, either coming from
-#' a parent `ggswim()` function, another `add_marker()` call, or a new dataframe
-#' prepared for use with `ggswim()`.
 #' @param mapping Set of aesthetic mappings created by `aes()`. If specified and
 #' `inherit.aes = TRUE` (the default), it is combined with the default mapping
 #' at the top level of the plot. You must supply mapping if there is no plot mapping.
 #' More information about accepted mapping arguments can be found in **Aesthetics**.
+#' @param data a dataframe prepared for use with `ggswim()`, either coming from
+#' a parent `ggswim()` function, another `add_marker()` call, or a new dataframe
+#' prepared for use with `ggswim()`.
 #' @param ... Other arguments passed to `add_marker()`, often aesthetic fixed values,
 #' i.e. `color = "red"` or `size = 3`.
 #'
@@ -74,8 +74,8 @@
 #' )
 #'
 add_marker <- function(
-    data = NULL,
     mapping = aes(),
+    data = NULL,
     ...) {
   # Enforce checks ----
   check_supported_mapping_aes(

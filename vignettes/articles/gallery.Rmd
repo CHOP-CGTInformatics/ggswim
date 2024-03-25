@@ -9,9 +9,4 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup, message=FALSE, warning=FALSE}
-library(ggswim)
-library(dplyr)
-```
-
 This gallery will explore and showcase different ways to use ggswim.

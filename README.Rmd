@@ -52,7 +52,7 @@ library(ggswim)
 library(ggplot2)
 
 ggswim(
-  patient_data,
+  patient_data |> dplyr::rename("Status Markers" = bcell_status),
   mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment_status),
   arrow = arrow_status,
   arrow_head_length = unit(.25, "inches"),
@@ -60,17 +60,16 @@ ggswim(
   width = 0.25
 ) +
   add_marker(
-    patient_data |> dplyr::rename("Status Markers" = bcell_status),
     aes(x = delta_t0_months, y = pt_id, color = `Status Markers`, shape = `Status Markers`),
     size = 5, position = "identity", alpha = 1
   ) +
   add_marker(
-    end_study_events,
+    data = end_study_events,
     aes(x = delta_t0_months, y = pt_id, label = end_study_label, color = end_study_name),
     label.size = NA, fill = NA, size = 5
   ) +
   add_marker(
-    infusion_events,
+    data = infusion_events,
     aes(x = infusion_delta_t0, y = pt_id, color = infusion_type, shape = infusion_type),
     size = 5, position = "identity", alpha = 1
   ) +
