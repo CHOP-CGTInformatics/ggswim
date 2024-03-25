@@ -85,8 +85,8 @@
 
 
 
-
-<div class="row">
+<link href="add_arrows_files/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="add_arrows_files/pagedtable-1.1/js/pagedtable.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Adding arrows to ggswim</h1>
             
@@ -115,57 +115,55 @@ the README, to see this feature in action.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://chop-cgtinformatics.github.io/ggswim/">ggswim</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">patient_status</span>,</span>
-<span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
-<span>    x <span class="op">=</span> <span class="va">value</span>,</span>
-<span>    y <span class="op">=</span> <span class="va">subject_id</span>,</span>
-<span>    fill <span class="op">=</span> <span class="va">cohort</span></span>
-<span>  <span class="op">)</span></span>
+<span>  <span class="va">patient_data</span>,</span>
+<span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta_t0_months</span>,</span>
+<span>                y <span class="op">=</span> <span class="va">pt_id</span>, fill <span class="op">=</span> </span>
+<span>                  <span class="va">disease_assessment_status</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="add_arrows_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 <p>Before we can incorporate arrows into our swimmer plot, we need to
 designate a boolean column that informs <code><a href="../reference/ggswim.html">ggswim()</a></code> when to
 append an arrow to a specific row. In our example using
-<code>patient_status</code>, this column is named <code>alive</code> and
-takes on <code>TRUE</code> or <code>FALSE</code> values to denote a
-patient’s survival status at the time of plotting.</p>
+<code>patient_status</code>, this column is named
+<code>arrow_status</code> and takes on <code>TRUE</code> or
+<code>FALSE</code> values to denote a patient’s study status at the time
+of plotting.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">patient_status</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
-<span><span class="co">#&gt;   subject_id cohort   status   alive name       value time_sorting</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 8          Cohort A On Study TRUE  time_start     0            2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 8          Cohort A On Study TRUE  time_end       2            2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 6          Cohort A On Study FALSE time_start     0            5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 6          Cohort A On Study FALSE time_end       5            5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 7          Cohort A On Study TRUE  time_start     0            8</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 7          Cohort A On Study TRUE  time_end       8            8</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">patient_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">rmarkdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgs.rstudio.com/rmarkdown/reference/paged_table.html" class="external-link">paged_table</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["pt_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["bcell_status"],"name":[2],"type":["fct"],"align":["left"]},{"label":["disease_assessment_status"],"name":[3],"type":["chr"],"align":["left"]},{"label":["infusion_type"],"name":[4],"type":["chr"],"align":["left"]},{"label":["event_marker"],"name":[5],"type":["chr"],"align":["left"]},{"label":["delta_t0"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["delta_t0_months"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["delta_today"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["arrow_status"],"name":[9],"type":["lgl"],"align":["right"]}],"data":[{"1":"01","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"-74","7":"-2","8":"16","9":"FALSE"},{"1":"01","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"16","9":"FALSE"},{"1":"01","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"-1","7":"0","8":"16","9":"FALSE"},{"1":"01","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"27","7":"1","8":"16","9":"FALSE"},{"1":"01","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"16","9":"FALSE"},{"1":"01","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"86","7":"3","8":"16","9":"FALSE"},{"1":"01","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"190","7":"6","8":"16","9":"FALSE"},{"1":"01","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"254","7":"8","8":"16","9":"FALSE"},{"1":"01","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"363","7":"12","8":"16","9":"FALSE"},{"1":"01","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"end_study_event","6":"363","7":"12","8":"16","9":"FALSE"},{"1":"01","2":"B-cell Recovery","3":"CR","4":"Reinfusion","5":"disease_assessment","6":"363","7":"12","8":"16","9":"FALSE"},{"1":"01","2":"B-cell Recovery","3":"CR","4":"Reinfusion","5":"infusion_event","6":"90","7":"3","8":"16","9":"FALSE"},{"1":"02","2":"Not Applicable","3":"RD","4":"Infusion","5":"disease_assessment","6":"-153","7":"-5","8":"13","9":"TRUE"},{"1":"02","2":"Not Applicable","3":"RD","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"13","9":"TRUE"},{"1":"02","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"-1","7":"0","8":"13","9":"TRUE"},{"1":"02","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"13","9":"TRUE"},{"1":"02","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"27","7":"1","8":"13","9":"TRUE"},{"1":"02","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"13","9":"TRUE"},{"1":"02","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"83","7":"3","8":"13","9":"TRUE"},{"1":"02","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"174","7":"6","8":"13","9":"TRUE"},{"1":"02","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"272","7":"9","8":"13","9":"TRUE"},{"1":"02","2":"B-cell Aplasia","3":"CR","4":"Reinfusion","5":"infusion_event","6":"132","7":"4","8":"13","9":"TRUE"},{"1":"03","2":"Not Applicable","3":"RD","4":"Infusion","5":"disease_assessment","6":"-193","7":"-6","8":"12","9":"TRUE"},{"1":"03","2":"Not Applicable","3":"RD","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"12","9":"TRUE"},{"1":"03","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"-5","7":"0","8":"12","9":"TRUE"},{"1":"03","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"12","9":"TRUE"},{"1":"03","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"disease_assessment","6":"27","7":"1","8":"12","9":"TRUE"},{"1":"03","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"12","9":"TRUE"},{"1":"03","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"disease_assessment","6":"99","7":"3","8":"12","9":"TRUE"},{"1":"03","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"disease_assessment","6":"174","7":"6","8":"12","9":"TRUE"},{"1":"03","2":"B-cell Recovery","3":"RD","4":"Infusion","5":"disease_assessment","6":"267","7":"9","8":"12","9":"TRUE"},{"1":"03","2":"B-cell Recovery","3":"RD","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"12","9":"TRUE"},{"1":"03","2":"B-cell Recovery","3":"RD","4":"Reinfusion","5":"infusion_event","6":"76","7":"2","8":"12","9":"TRUE"},{"1":"04","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"-63","7":"-2","8":"14","9":"FALSE"},{"1":"04","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"14","9":"FALSE"},{"1":"04","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"-5","7":"0","8":"14","9":"FALSE"},{"1":"04","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"27","7":"1","8":"14","9":"FALSE"},{"1":"04","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"14","9":"FALSE"},{"1":"04","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"85","7":"3","8":"14","9":"FALSE"},{"1":"04","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"end_study_event","6":"146","7":"5","8":"14","9":"FALSE"},{"1":"05","2":"B-cell Recovery","3":"RD","4":"Infusion","5":"disease_assessment","6":"-109","7":"-4","8":"11","9":"TRUE"},{"1":"05","2":"B-cell Recovery","3":"RD","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"11","9":"TRUE"},{"1":"05","2":"Not Applicable","3":"RD","4":"Infusion","5":"disease_assessment","6":"-1","7":"0","8":"11","9":"TRUE"},{"1":"05","2":"Not Applicable","3":"RD","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"11","9":"TRUE"},{"1":"05","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"disease_assessment","6":"27","7":"1","8":"11","9":"TRUE"},{"1":"05","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"11","9":"TRUE"},{"1":"05","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"disease_assessment","6":"92","7":"3","8":"11","9":"TRUE"},{"1":"05","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"disease_assessment","6":"188","7":"6","8":"11","9":"TRUE"},{"1":"05","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"disease_assessment","6":"240","7":"8","8":"11","9":"TRUE"},{"1":"06","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"-174","7":"-6","8":"10","9":"TRUE"},{"1":"06","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"10","9":"TRUE"},{"1":"06","2":"Not Applicable","3":"RD","4":"Infusion","5":"disease_assessment","6":"-1","7":"0","8":"10","9":"TRUE"},{"1":"06","2":"Not Applicable","3":"RD","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"10","9":"TRUE"},{"1":"06","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"disease_assessment","6":"27","7":"1","8":"10","9":"TRUE"},{"1":"06","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"10","9":"TRUE"},{"1":"06","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"99","7":"3","8":"10","9":"TRUE"},{"1":"06","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"10","9":"TRUE"},{"1":"06","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"disease_assessment","6":"176","7":"6","8":"10","9":"TRUE"},{"1":"07","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"-85","7":"-3","8":"10","9":"FALSE"},{"1":"07","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"10","9":"FALSE"},{"1":"07","2":"Not Applicable","3":"RD","4":"Infusion","5":"disease_assessment","6":"-1","7":"0","8":"10","9":"FALSE"},{"1":"07","2":"Not Applicable","3":"RD","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"10","9":"FALSE"},{"1":"07","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"27","7":"1","8":"10","9":"FALSE"},{"1":"07","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"10","9":"FALSE"},{"1":"07","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"55","7":"2","8":"10","9":"FALSE"},{"1":"07","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"end_study_event","6":"62","7":"2","8":"10","9":"FALSE"},{"1":"08","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"-116","7":"-4","8":"9","9":"TRUE"},{"1":"08","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"9","9":"TRUE"},{"1":"08","2":"B-cell Recovery","3":"CRi","4":"Infusion","5":"disease_assessment","6":"1","7":"0","8":"9","9":"TRUE"},{"1":"08","2":"B-cell Recovery","3":"CRi","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"9","9":"TRUE"},{"1":"08","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"disease_assessment","6":"27","7":"1","8":"9","9":"TRUE"},{"1":"08","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"9","9":"TRUE"},{"1":"08","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"90","7":"3","8":"9","9":"TRUE"},{"1":"08","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"9","9":"TRUE"},{"1":"08","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"190","7":"6","8":"9","9":"TRUE"},{"1":"09","2":"B-cell Recovery","3":"RD","4":"Infusion","5":"disease_assessment","6":"-85","7":"-3","8":"8","9":"FALSE"},{"1":"09","2":"B-cell Recovery","3":"RD","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"8","9":"FALSE"},{"1":"09","2":"Not Applicable","3":"CRi","4":"Infusion","5":"disease_assessment","6":"-1","7":"0","8":"8","9":"FALSE"},{"1":"09","2":"Not Applicable","3":"CRi","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"8","9":"FALSE"},{"1":"09","2":"Not Applicable","3":"CRi","4":"Infusion","5":"end_study_event","6":"6","7":"0","8":"8","9":"FALSE"},{"1":"12","2":"Not Applicable","3":"CR","4":"Infusion","5":"disease_assessment","6":"-62","7":"-2","8":"3","9":"TRUE"},{"1":"12","2":"Not Applicable","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"3","9":"TRUE"},{"1":"12","2":"Not Applicable","3":"CR","4":"Infusion","5":"disease_assessment","6":"-5","7":"0","8":"3","9":"TRUE"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <p>Let’s add the arrows onto the plot from before:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">patient_status</span>,</span>
-<span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
-<span>    x <span class="op">=</span> <span class="va">value</span>,</span>
-<span>    y <span class="op">=</span> <span class="va">subject_id</span>,</span>
-<span>    fill <span class="op">=</span> <span class="va">cohort</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  arrow <span class="op">=</span> <span class="va">alive</span></span>
+<span>  <span class="va">patient_data</span>,</span>
+<span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta_t0_months</span>,</span>
+<span>                y <span class="op">=</span> <span class="va">pt_id</span>, fill <span class="op">=</span> </span>
+<span>                  <span class="va">disease_assessment_status</span><span class="op">)</span>,</span>
+<span>  arrow <span class="op">=</span> <span class="va">arrow_status</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="add_arrows_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 <p>Default values are set for arrows, but can be manipulated for
-different aesthetic preferences. Below we add color and fill
-specifiers:</p>
+different aesthetic preferences. Below we add color and fill specifiers,
+as well as a specification for <code>arrow_neck_length</code>.
+<code>arrow_neck_length</code> sets a default proportional value, but
+can also accept numeric values or reference to a column of numeric
+values in the dataset. In this case, we use <code>delta_today</code> to
+specify that the neck length should be equivalent to the length of time
+from the last time point to “today.”</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">patient_status</span>,</span>
-<span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
-<span>    x <span class="op">=</span> <span class="va">value</span>,</span>
-<span>    y <span class="op">=</span> <span class="va">subject_id</span>,</span>
-<span>    fill <span class="op">=</span> <span class="va">cohort</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  arrow <span class="op">=</span> <span class="va">alive</span>,</span>
-<span>  arrow_colour <span class="op">=</span> <span class="st">"cyan4"</span>,</span>
-<span>  arrow_fill <span class="op">=</span> <span class="st">"cyan2"</span></span>
+<span>  <span class="va">patient_data</span>,</span>
+<span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta_t0_months</span>, y <span class="op">=</span> <span class="va">pt_id</span>, fill <span class="op">=</span> <span class="va">disease_assessment_status</span><span class="op">)</span>,</span>
+<span>  arrow <span class="op">=</span> <span class="va">arrow_status</span>,</span>
+<span>  arrow_fill <span class="op">=</span> <span class="st">"cyan"</span>,</span>
+<span>  arrow_colour <span class="op">=</span> <span class="st">"slateblue"</span>,</span>
+<span>  arrow_head_length <span class="op">=</span> <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">.25</span>, <span class="st">"inches"</span><span class="op">)</span>,</span>
+<span>  arrow_neck_length <span class="op">=</span> <span class="va">delta_today</span>,</span>
+<span>  width <span class="op">=</span> <span class="fl">0.25</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="add_arrows_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
   </main>

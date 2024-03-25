@@ -72,7 +72,7 @@
 <span>  position <span class="op">=</span> <span class="st">"identity"</span>,</span>
 <span>  arrow <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  arrow_colour <span class="op">=</span> <span class="st">"black"</span>,</span>
-<span>  arrow_head_length <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">0.25</span>, <span class="st">"inches"</span><span class="op">)</span>,</span>
+<span>  arrow_head_length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="st">"inches"</span><span class="op">)</span>,</span>
 <span>  arrow_neck_length <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  arrow_fill <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  arrow_type <span class="op">=</span> <span class="st">"closed"</span>,</span>
@@ -109,7 +109,7 @@ The column must be a logical data type (T/F).</p></dd>
 
 <dt>arrow_head_length</dt>
 <dd><p>A unit specifying the length of the arrow head (from tip to base).
-Must be a ggplot2 <code>unit()</code> object. Default <code>ggplot2::unit(0.25, "inches")</code>.</p></dd>
+Must be a ggplot2 <code><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit()</a></code> object. Default <code>ggplot2::unit(0.25, "inches")</code>.</p></dd>
 
 
 <dt>arrow_neck_length</dt>
@@ -156,13 +156,12 @@ identification.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">ggswim</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  data <span class="op">=</span> <span class="va">patient_status</span>,</span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="va">patient_data</span>,</span></span>
 <span class="r-in"><span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    x <span class="op">=</span> <span class="va">value</span>,</span></span>
-<span class="r-in"><span>    y <span class="op">=</span> <span class="va">subject_id</span>,</span></span>
-<span class="r-in"><span>    fill <span class="op">=</span> <span class="va">cohort</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span>,</span></span>
-<span class="r-in"><span>  position <span class="op">=</span> <span class="st">"identity"</span></span></span>
+<span class="r-in"><span>    x <span class="op">=</span> <span class="va">delta_t0_months</span>,</span></span>
+<span class="r-in"><span>    y <span class="op">=</span> <span class="va">pt_id</span>,</span></span>
+<span class="r-in"><span>    fill <span class="op">=</span> <span class="va">disease_assessment_status</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="ggswim-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>

@@ -97,11 +97,11 @@ on 'ggswim' figures.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="ggswim.html">ggswim</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  data <span class="op">=</span> <span class="va">patient_status</span>,</span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="va">patient_data</span>,</span></span>
 <span class="r-in"><span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    x <span class="op">=</span> <span class="va">value</span>,</span></span>
-<span class="r-in"><span>    y <span class="op">=</span> <span class="va">subject_id</span>,</span></span>
-<span class="r-in"><span>    fill <span class="op">=</span> <span class="va">cohort</span></span></span>
+<span class="r-in"><span>    x <span class="op">=</span> <span class="va">delta_t0_months</span>,</span></span>
+<span class="r-in"><span>    y <span class="op">=</span> <span class="va">pt_id</span>,</span></span>
+<span class="r-in"><span>    fill <span class="op">=</span> <span class="va">disease_assessment_status</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/grid/grid.draw.html" class="external-link">grid.draw</a></span><span class="op">(</span><span class="op">)</span></span></span>
