@@ -25,40 +25,46 @@ devtools::install_github("CHOP-CGTInformatics/ggswim")
 
 ## ggswim: Elegant Swimmer Plots with ggplot2
 
-ggswim simplifies the creation of stunning swimmer plots by seamlessly
-integrating with the familiar ggplot2 framework, allowing developers to
-effortlessly add layers and customize displays to their needs.
+ggswim helps create stunning swimmer plots by integrating with the
+familiar ggplot2 framework, allowing developers to effortlessly add
+layers and customize displays to their needs.
 
-One of ggswim’s key strengths is its ability to streamline the process
-of generating clear, reproducible legends. This ensures that crucial
-points of interest are effectively communicated, enhancing the narrative
-of the swimmer plot.
+ggswim streamlines the process of generating legends that clearly
+communicate layer data of added complexity when combining fill, point,
+and label layer types.
 
 Let’s dive right into a quick example to showcase the simplicity and
 effectiveness of ggswim!
 
 ## Exploring the Sample Dataset & Creating a Swimmer Plot
 
-To help you get started, ggswim includes a sample dataset named
-`patient_data` along with two related datasets called `infusion_events`
-and `end_study_events`. These de-identified datasets simulate real world
-data related to infusions, disease assessments, and study statuses for a
-clinical trial.
+To help you get started, ggswim includes three sample datasets:
+`patient_data`, `infusion_events`, and `end_study_events`. These
+de-identified datasets simulate real world data related to infusions,
+disease assessments, and study statuses for a clinical trial.
 
-Let’s load the data and dive into creating our swimmer plots!
+Let’s load the data and dive into creating our swimmer plots! The first
+step is to create a variant of a `geom_col()` using the `ggswim()`
+function. This makes the swimmer plot “lanes”:
 
 ``` r
 library(ggswim)
 library(ggplot2)
 
-ggswim(
+p <- ggswim(
   patient_data |> dplyr::rename("Status Markers" = bcell_status),
   mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment_status),
   arrow = arrow_status,
   arrow_head_length = unit(.25, "inches"),
   arrow_neck_length = delta_today,
   width = 0.25
-) +
+)
+```
+
+Next we’ll add on events of interest, what we’ll refer to as “markers”:
+
+``` r
+p <- p +
   add_marker(
     aes(x = delta_t0_months, y = pt_id, color = `Status Markers`, shape = `Status Markers`),
     size = 5, position = "identity", alpha = 1
@@ -72,7 +78,14 @@ ggswim(
     data = infusion_events,
     aes(x = infusion_delta_t0, y = pt_id, color = infusion_type, shape = infusion_type),
     size = 5, position = "identity", alpha = 1
-  ) +
+  ) 
+```
+
+And finally, we’ll spruce up our plot a bit to make it more
+aesthetically appealing:
+
+``` r
+p +
   scale_colour_manual(
     values = c("#b22228", "#F5EB0A", "gray50", NA, NA, NA, "#25DA6D", "#25DA6D")
   ) +
@@ -88,4 +101,4 @@ ggswim(
   theme_ggswim()
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />

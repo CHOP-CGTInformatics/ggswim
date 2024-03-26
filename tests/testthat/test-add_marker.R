@@ -61,7 +61,7 @@ test_that("add_marker works for aes mapping", {
 
   skip_on_ci()
   vdiffr::expect_doppelganger(
-    title = "Addition of labels layer, test for expeted legend",
+    title = "Addition of labels layer, test for expected legend",
     fig = p2
   )
 })

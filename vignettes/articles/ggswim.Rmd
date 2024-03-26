@@ -9,19 +9,17 @@ knitr::opts_chunk$set(
 )
 ```
 
-The ggswim package eases the development of swimmer plots in R by seamlessly integrating with the ggplot2 framework. In this vignette, we'll walk through how users can create visually striking swimmer plots.
+The ggswim package eases the development of swimmer plots in R through integration with the ggplot2 framework. In this vignette, we'll walk through how users can create visually striking swimmer plots.
 
-At the heart of ggswim are two pivotal functions: `ggswim()` and `add_marker()`. The former, an extension of `geom_col()`, allows users to construct the fundamental horizontal bars, often referred to as "lanes." Meanwhile, `add_marker()` leverages `geom_point()` and `geom_label()` to effortlessly embed key events or "markers" onto the plot. These can take the form of unicode shapes, symbols, or even emojis.
+At the heart of ggswim are two core functions: `ggswim()` and `add_marker()`. The former, an extension of `geom_col()`, allows users to construct the horizontal bars, often referred to as "lanes." Meanwhile, `add_marker()` leverages `geom_point()` and `geom_label()` to effortlessly embed key events, or "markers," onto the lanes. These can take the form of unicode shapes, symbols, or even emojis.
 
 Drawing from the well-established principles of ggplot2, ggswim allows users to apply familiar layer-building techniques, including the application of styles and themes.
 
-Let's dive in and explore the boundless possibilities that `ggswim` offers for expressive swimmer plots!
-
 ### Building swimmer plots with aesthetic mapping
 
-To start, let's build a swimmer plot using `aes()` and dynamic mapping of data. As with the README, we will be using ggswim's internal dataseta: `patient_data`, `infusion_events`, and `end_study_events`. 
+To start, let's build a swimmer plot using `aes()` and dynamic mapping of data. As with the README, we will be using ggswim's internal datasets: `patient_data`, `infusion_events`, and `end_study_events`. 
 
-Let's start with observing the structure of each dataset:
+Let's start with observing `patient_data`'s structure:
 
 ```{r patient_data , echo=FALSE, include=TRUE}
 library(ggswim)
@@ -30,13 +28,13 @@ patient_data |>
   rmarkdown::paged_table()
 ```
 
-`patient_data` contains a long dataset where patient ID's (`pt_id`) can be repeated. These rows are differentiated by `event_marker`s and corresponding times. Together, these rows signify a patient trajectory with consideration for infusions and disease assessment time points. You'll notice several other columns that give more information:
+`patient_data` contains a long dataset where patient ID's (`pt_id`) can be repeated. These rows are differentiated by `event_marker`s and corresponding times. Together, these rows signify a patient timeline with consideration for infusions and disease assessment time points. You'll notice several other columns that give more information:
 
-- `bcell_status`: The B-Cell status of a given patient at a particular time point, indicating aplasia or recovery
-- `disease_assessment_status`: The overall status at a disease assessment timepoint where:
-- CR = "Complete Response"
-- CRi = "Complete Response with Incomplete Blood Count Recovery"
-- RD = "Relapsed Disease"
+- `bcell_status`: The b-cell status of a given patient at a particular time point, indicating aplasia or recovery
+   - `disease_assessment_status`: The overall status at a disease assessment timepoint where:
+   - CR = "Complete Response"
+   - CRi = "Complete Response with Incomplete Blood Count Recovery"
+   - RD = "Relapsed Disease"
 
 Now, let's make the plot using `ggswim()` and our first `add_marker()` call:
 
@@ -53,14 +51,14 @@ p <- ggswim(
 p
 ```
 
-Here we have a simple bar chart, showing infusions grouped by patients with a given disease assessment status. `ggswim()` does the work of setting up a `geom_col()` and readying your plot layers for additional ggwim-specific features such as "markers." Let's add a marker layer next and reference `bcell_status` from the same `patient_data` dataset. Additionally, we'll add another marker layer from the `infusion_events` dataset:
+Here we have a simple bar chart, showing infusions grouped by patients with a given disease assessment status. `ggswim()` does the work of setting up a `geom_col()` and readying our plot layers for additional ggwim-specific features such as the "markers" mentioned earlier. Let's add a marker layer next and reference `bcell_status` from the same `patient_data` dataset. We'll also add another marker layer from the `infusion_events` dataset:
 
 ```{r infusion_events}
 infusion_events |>
   rmarkdown::paged_table()
 ```
 
-This dataset is much simpler, having only 3 columns indicating infusions (considered `t0`) and reinfusions at some point beyond `t0` if a patient required any.
+This dataset is much simpler, having only 3 columns indicating infusions (considered `t0`) and reinfusions at some point beyond `t0` (if a patient had any).
 
 ```{r first marker plot}
 p <- p +
@@ -89,14 +87,14 @@ p
 
 Now we can see shapes have been added to establish our markers... though some blend into the colors of the bar charts. We'll fix this soon enough! For now, we can see that a new legend has been added to articulate the markers we added for the b-cell disease assessment and infusion events.
 
-Our last dataset involved end of study events, i.e. events that indicate a patient has left the study for varying reasons.
+Our last dataset involves end of study events, i.e. events that indicate a patient has left the study for various reasons.
 
 ```{r end_study_events}
 end_study_events |>
   rmarkdown::paged_table()
 ```
 
-You'll notice that this dataset includes use of emojis under `end_study_label`. In addition to shapes and symbols, ggswim supports the use of emojis when rendering swimmer plots. `add_marker()` allows users to specify shapes or emojis by using the appropriate argument callouts (`label` and `shape`). Let's add a layer using emojis via the `end_study_events` dataset:
+You'll notice that this dataset includes use of emojis under `end_study_label`. In addition to shapes and symbols, ggswim supports the use of emojis when rendering swimmer plots. `add_marker()` allows users to specify shapes or emojis by using the appropriate argument callouts (`label` and `color`). Let's add a layer using emojis via the `end_study_events` dataset:
 
 ```{r second marker plot}
 p <- p +
@@ -137,7 +135,7 @@ p <- p +
 p
 ```
 
-We also supply the `theme_ggswim()` function:
+We can also aupply the `theme_ggswim()` function:
 
 ```{r mapping with theme_ggswim}
 p +
@@ -146,12 +144,11 @@ p +
 
 ### Customizing Markers: A Deeper Dive
 
-In the world of data, one size rarely fits all. That's why ggswim caters to both dynamic and static marker assignments. But what does that mean exactly?
+In the world of data, one size rarely fits all. That's why ggswim caters to both dynamic and static marker assignments.
 
-Imagine you have a dataset where you want to manually define the color of a single, significant marker rather than relying on a mapped variable. By splitting up `infusion_events` into distinct data frames, you can achieve this customized effect.
+Users can call `add_marker()` and manually define the color of a single, significant marker rather than relying on a mapped variable. Let's see how this works by splitting up `infusion_events` into distinct data frames.
 
 To make it all come together, make sure to include an `aes()` `name` argument within `add_marker()`. This serves as a crucial anchor point for the legend, ensuring clarity in your visualization.
-
 
 ```{r static mapping}
 initial_infusions <- infusion_events |>
@@ -192,11 +189,9 @@ ggswim(
   theme_ggswim()
 ```
 
-This example showcases ggswim's ability to handle different data structures from varying sources. Its adaptable framework lets users customize the output precisely to their unique requirements.
-
 ### Additional notes
 
-Here are some essential points to keep in mind when working with ggswim:
+Some additional considerations to keep in mind when working with ggswim:
 
 - **Handling Missing Data:** ggswim does not support missing data for mapping aesthetics. If any are detected, developers will receive a warning, and the missing data may appear as `NA` values in the display, but will be excluded from the legend.
 
@@ -205,5 +200,3 @@ Here are some essential points to keep in mind when working with ggswim:
 - **Filling Markers with `add_marker()`:** Similarly, `add_marker()` does not support mapping using the `fill` argument.
 
 - **Rendering Emojis and Custom Shapes:** To ensure emojis and other custom shapes display correctly, users may need to switch the graphics rendering device to AGG.
-
-These considerations will help you make the most of ggswim while building your visualizations.

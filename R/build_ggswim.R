@@ -85,7 +85,7 @@ build_ggswim <- function(ggswim_obj) {
     )
   }
 
-  # Create bound layer dataframes ----
+  # Create bound layer dataframes for additional layers ----
   label_layer_data <- bind_layer_data(ggswim_obj,
     layer_indices = label_layer_indices,
     layer_data = label_layer_data
