@@ -76,7 +76,7 @@ p <- p +
   ) +
   add_marker(
     data = infusion_events,
-    aes(x = infusion_delta_t0, y = pt_id, color = infusion_type, shape = infusion_type),
+    aes(x = infusion_delta_t0_months, y = pt_id, color = infusion_type, shape = infusion_type),
     size = 5, position = "identity", alpha = 1
   ) 
 ```

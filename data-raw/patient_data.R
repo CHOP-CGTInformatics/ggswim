@@ -214,6 +214,7 @@ patient_data <- prodigy_randomized |>
   mutate(
     arrow_status = is.na(end_study_reason)
   ) |>
+  arrange(pt_id) |>
   ungroup()
 
 end_study_events <- patient_data |>
@@ -234,13 +235,18 @@ end_study_events <- patient_data |>
   filter(event_marker == "end_study_event" & !is.na(end_study_label))
 
 infusion_events <- patient_data |>
-  select(pt_id, infusion_type, event_marker, delta_t0_months) |>
+  select(pt_id, infusion_type, event_marker, delta_t0, delta_t0_months) |>
   mutate(
     .keep = "none",
     .by = pt_id,
     pt_id,
     infusion_type,
     infusion_delta_t0 = case_when(
+      infusion_type == "Infusion" ~ 0,
+      event_marker == "infusion_event" ~ delta_t0,
+      TRUE ~ NA
+    ),
+    infusion_delta_t0_months = case_when(
       infusion_type == "Infusion" ~ 0,
       event_marker == "infusion_event" ~ delta_t0_months,
       TRUE ~ NA

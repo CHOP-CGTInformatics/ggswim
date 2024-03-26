@@ -58,7 +58,7 @@ infusion_events |>
   rmarkdown::paged_table()
 ```
 
-This dataset is much simpler, having only 3 columns indicating infusions (considered `t0`) and reinfusions at some point beyond `t0` (if a patient had any).
+This dataset is much simpler, having only 4 columns indicating infusions (considered `t0`) and reinfusions at some point beyond `t0` (if a patient had any).
 
 ```{r first marker plot}
 p <- p +
@@ -74,7 +74,7 @@ p <- p +
   add_marker(
     data = infusion_events,
     aes(
-      x = infusion_delta_t0,
+      x = infusion_delta_t0_months,
       y = pt_id,
       color = infusion_type,
       shape = infusion_type
@@ -178,12 +178,12 @@ ggswim(
   # New manual color markers for Infusions
   add_marker(
     data = initial_infusions,
-    aes(x = infusion_delta_t0, y = pt_id, name = "Initial Infusion"),
+    aes(x = infusion_delta_t0_months, y = pt_id, name = "Initial Infusion"),
     size = 5, position = "identity", color = "green"
   ) +
   add_marker(
     data = reinfusions,
-    aes(x = infusion_delta_t0, y = pt_id, name = "Reinfusion"),
+    aes(x = infusion_delta_t0_months, y = pt_id, name = "Reinfusion"),
     size = 5, position = "identity", color = "red"
   ) +
   theme_ggswim()
