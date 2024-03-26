@@ -135,7 +135,7 @@ p <- p +
 p
 ```
 
-We can also aupply the `theme_ggswim()` function:
+We can also supply the `theme_ggswim()` function:
 
 ```{r mapping with theme_ggswim}
 p +

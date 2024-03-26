@@ -1,13 +1,13 @@
 # nolint start
 # Load Libraries ----
 # Uncomment below to load libraries (avoids renv)
-# library(REDCapTidieR)
-# library(purrr)
-# library(dplyr)
-# library(lubridate)
-# library(tidyr)
-# library(ggplot2)
-# library(stringr)
+library(REDCapTidieR)
+library(purrr)
+library(dplyr)
+library(lubridate)
+library(tidyr)
+library(ggplot2)
+library(stringr)
 devtools::load_all(".")
 
 # Set Up CGTTrialsReporter Fnctns ----
@@ -94,19 +94,72 @@ prodigy <- db_tbls |>
     end_study_reason # Death
   )
 
+# Randomize Data ----
+# Define a function to shuffle dates within each group
+shuffle_dates <- function(x) {
+  if (is.Date(x)) {
+    return(sample(x))
+  } else {
+    return(x)
+  }
+}
+
+# Define a function to shift dates within each group while keeping the order
+shift_dates_within_group <- function(x) {
+  if (is.Date(x)) {
+    shift_amount <- sample(-max_shift:max_shift, size = 1)
+    return(x + shift_amount)
+  } else {
+    return(x)
+  }
+}
+
+# Define max_shift parameter
+max_shift <- 10  # You can adjust this value as needed
+
+# Apply transformations to each column
+prodigy_randomized <- prodigy %>%
+  group_by(infseq_id) %>%
+  mutate(across(where(is.Date), shuffle_dates)) %>%
+  ungroup() %>%
+  mutate(infusion_date = as.Date(infusion_date),
+         end_study_date = as.Date(end_study_date)) %>%
+  group_by(infseq_id) %>%
+  mutate(across(c(infusion_date, end_study_date), shift_dates_within_group)) %>%
+  ungroup()
+
 # Manipulate Data ----
-patient_data <- prodigy |>
+patient_data <- prodigy_randomized |>
   filter(infusion_admin) |>
+  # Shuffle IDs
+  mutate(
+    # Remove study ID
+    infseq_id = str_extract(infseq_id, "(?<=-).*$"),
+    infseq_id = case_when(
+      infseq_id == "01.0" ~ "03.0",
+      infseq_id == "01.1" ~ "03.1",
+      infseq_id == "02.0" ~ "05.0",
+      infseq_id == "02.1" ~ "05.1",
+      infseq_id == "03.0" ~ "08.0",
+      infseq_id == "03.1" ~ "08.1",
+      infseq_id == "04.0" ~ "06.0",
+      infseq_id == "05.0" ~ "12.0",
+      infseq_id == "06.0" ~ "09.0",
+      infseq_id == "07.0" ~ "01.0",
+      infseq_id == "08.0" ~ "04.0",
+      infseq_id == "09.0" ~ "02.0",
+      infseq_id == "12.0" ~ "07.0"
+    )
+  ) |>
   mutate(
     # Add patient ID to consolidate infusion/reinfusion
-    pt_id = str_extract(infseq_id, "(?<=-)\\d{2}")
+    pt_id = str_extract(infseq_id, "^\\d+")
   ) |>
   mutate(
     .by = pt_id,
     .keep = "none",
+    infseq_id,
     infusion_type = if_else(infseq_number > 0, "Reinfusion", "Infusion"),
-    # Remove study ID
-    infseq_id = str_extract(infseq_id, "(?<=-).*$"),
     infusion_date,
     initial_infusion_date = if_else(infusion_type == "Infusion", infusion_date, first(infusion_date, na_rm = TRUE)),
     # Data for arrow neck length
@@ -222,10 +275,10 @@ usethis::use_data(end_study_events, overwrite = TRUE)
 ggswim(
   patient_data |> dplyr::rename("Status Markers" = bcell_status),
   mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment_status),
-  # arrow = arrow_status,
-  # arrow_head_length = unit(.25, "inches"),
-  # arrow_neck_length = delta_today,
-  # width = 0.25
+  arrow = arrow_status,
+  arrow_head_length = unit(.25, "inches"),
+  arrow_neck_length = delta_today,
+  width = 0.25
 ) +
   add_marker(
     aes(x = delta_t0_months, y = pt_id, color = `Status Markers`, shape = `Status Markers`),
