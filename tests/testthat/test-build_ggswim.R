@@ -31,16 +31,16 @@ test_that("get_overrides works", {
 })
 
 
-test_that("bind_layer_data works", {
+test_that("bind_layer_data works for single layer", {
   ggswim_obj <- ggswim(patient_data,
                        aes(x = delta_t0, y = pt_id, fill = disease_assessment_status)) +
     add_marker(data = end_study_events,
                aes(x = delta_t0, y = pt_id, color = end_study_name, label = end_study_label))
 
-  label_layer_indices <- 2
-  label_layer_data <- data.frame()
+  layer_indices <- 2L
+  layer_data <- data.frame()
 
-  out <- bind_layer_data(ggswim_obj, label_layer_indices, label_layer_data)
+  out <- bind_layer_data(ggswim_obj, layer_indices, layer_data)
 
   # Check for important columns
   expected_cols <- c("colour", "x", "y", "group", "label", "size", "alpha", "colour_mapping")
@@ -52,4 +52,59 @@ test_that("bind_layer_data works", {
   expected_labels <- c("✅", "❌", "⚠️")
 
   expect_true(all(expected_labels %in% out$label))
+})
+
+test_that("bind_layer_data works for multiple layers", {
+  aplasia <- patient_data |>
+    dplyr::filter(bcell_status == "B-cell Aplasia")
+
+  recovery <- patient_data |>
+    dplyr::filter(bcell_status == "B-cell Recovery")
+
+  ggswim_obj <- ggswim(patient_data,
+                       aes(x = delta_t0, y = pt_id, fill = disease_assessment_status)) +
+    add_marker(aplasia,
+               mapping = aes(x = delta_t0, y = pt_id, color = bcell_status)) +
+    add_marker(recovery,
+               mapping = aes(x = delta_t0, y = pt_id, color = bcell_status))
+
+  layer_indices <- 3
+  layer_data <- data.frame()
+
+  out <- bind_layer_data(ggswim_obj, layer_indices, layer_data)
+
+  # Check for important columns
+  expected_cols <- c("colour", "x", "y", "group", "shape", "size", "alpha", "stroke", "colour_mapping")
+
+  expect_true(all(expected_cols %in% names(out)))
+  expect_true(nrow(out) > 0)
+})
+
+test_that("bind_layer_data works with static colors", {
+  aplasia <- patient_data |>
+    dplyr::filter(bcell_status == "B-cell Aplasia")
+
+  ggswim_obj <- ggswim(patient_data,
+                       aes(x = delta_t0, y = pt_id, fill = disease_assessment_status)) +
+    add_marker(aplasia,
+               mapping = aes(x = delta_t0, y = pt_id, name = "B-cell Aplasia"), color = "red") |>
+      suppressWarnings()
+
+  layer_indices <- 2L
+  layer_data <- data.frame()
+  static_colours <- tibble::tribble(
+    ~"indices", ~"colors", ~"name",
+    2, "red", "B-cell Aplasia"
+  )
+
+
+  out <- bind_layer_data(ggswim_obj, layer_indices, layer_data, static_colours)
+
+  # Check for important columns
+  expected_cols <- c("colour", "x", "y", "group", "shape", "size", "alpha", "stroke", "colour_mapping")
+
+  expect_true(all(expected_cols %in% names(out)))
+  expect_true(nrow(out) > 0)
+
+  expect_true(all(out$colour == "red"))
 })
