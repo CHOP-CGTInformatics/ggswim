@@ -219,8 +219,8 @@ indicate a patient has left the study for various reasons.</p>
 <code>end_study_label</code>. In addition to shapes and symbols, ggswim
 supports the use of emojis when rendering swimmer plots.
 <code><a href="../reference/add_marker.html">add_marker()</a></code> allows users to specify shapes or emojis by
-using the appropriate argument callouts (<code>label</code> and
-<code>color</code>). Let’s add a layer using emojis via the
+using the appropriate argument callouts (<code>label_vals</code> and
+<code>label_names</code>). Let’s add a layer using emojis via the
 <code>end_study_events</code> dataset:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">p</span> <span class="op">+</span></span>
@@ -229,8 +229,8 @@ using the appropriate argument callouts (<code>label</code> and
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
 <span>      x <span class="op">=</span> <span class="va">delta_t0_months</span>,</span>
 <span>      y <span class="op">=</span> <span class="va">pt_id</span>,</span>
-<span>      label <span class="op">=</span> <span class="va">end_study_label</span>,</span>
-<span>      color <span class="op">=</span> <span class="va">end_study_name</span></span>
+<span>      label_vals <span class="op">=</span> <span class="va">end_study_label</span>,</span>
+<span>      label_names <span class="op">=</span> <span class="va">end_study_name</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    label.size <span class="op">=</span> <span class="cn">NA</span>, fill <span class="op">=</span> <span class="cn">NA</span>, size <span class="op">=</span> <span class="fl">5</span></span>
 <span>  <span class="op">)</span></span>
@@ -248,7 +248,7 @@ Let’s fix up this plot so it looks nicer on the eyes:</p>
 <span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">p</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_colour_manual</a></span><span class="op">(</span></span>
-<span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"firebrick"</span>, <span class="st">"#F5EB0A"</span>, <span class="st">"gray50"</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="st">"#25DA6D"</span>, <span class="st">"#25DA6D"</span><span class="op">)</span></span>
+<span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"firebrick"</span>, <span class="st">"#F5EB0A"</span>, <span class="st">"gray50"</span>, <span class="st">"#25DA6D"</span>, <span class="st">"#25DA6D"</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_shape_manual</a></span><span class="op">(</span></span>
 <span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">19</span>, <span class="fl">19</span>, <span class="fl">15</span>, <span class="fl">17</span>, <span class="fl">18</span><span class="op">)</span></span>
@@ -265,9 +265,7 @@ Let’s fix up this plot so it looks nicer on the eyes:</p>
 <p>We can also supply the <code><a href="../reference/theme_ggswim.html">theme_ggswim()</a></code> function:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/theme_ggswim.html">theme_ggswim</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Scale for <span style="color: #00BB00;">colour</span> is already present.</span></span>
-<span><span class="co">#&gt; Adding another scale for <span style="color: #00BB00;">colour</span>, which will replace the existing scale.</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/theme_ggswim.html">theme_ggswim</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ggswim_files/figure-html/mapping%20with%20theme_ggswim-1.png" width="700"></p>
 </div>
 <div class="section level3">
