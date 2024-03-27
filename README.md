@@ -71,7 +71,7 @@ p <- p +
   ) +
   add_marker(
     data = end_study_events,
-    aes(x = delta_t0_months, y = pt_id, label = end_study_label, color = end_study_name),
+    aes(x = delta_t0_months, y = pt_id, label_vals = end_study_label, label_names = end_study_name),
     label.size = NA, fill = NA, size = 5
   ) +
   add_marker(

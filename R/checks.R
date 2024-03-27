@@ -108,12 +108,17 @@ check_supported_mapping_aes <- function(mapping,
   }
 }
 
-#' @title check add_markers for label and color arguments
+#' @title check add_markers for label arguments
 #'
 #' @description
-#' While not required, the legend will not display with label icons if users don't
-#' supply `color` or `colour` to `aes()` along with `label`. Since this doesn't
-#' break the app, a warning should be thrown.
+#' For proper display of label values in the legend, a `color`/`colour` mapping
+#' value along with a name specifier is typically needed. It is not mandatory to
+#' supply a naming parameter, and a warning will be displayed if labels are used
+#' but no naming param is detected.
+#'
+#' An error will be thrown if a label naming parameter is specified, but no
+#' label value parameter is included. Default ggplot2 behavior is to allow this
+#' and throw a warning, but we instead wish this to be an error.
 #'
 #' @param mapping Set of aesthetic mappings created by `aes()`. If specified and
 #' `inherit.aes = TRUE` (the default), it is combined with the default mapping
@@ -122,16 +127,32 @@ check_supported_mapping_aes <- function(mapping,
 #' @keywords internal
 
 check_marker_label_aes <- function(mapping) {
-  msg <- c(
-    "!" = "Label mapping detected but no colour aes supplied.",
-    "i" = "Label icons may not appear in the legend without a colour aesthetic."
+  msg_warn <- c(
+    "!" = "Optional label parameters missing.",
+    "i" = "Label icons may not appear in the legend without a `label_names` specification."
   )
+
+  msg_error <- c(
+    "x" = "Required label parameters missing.",
+    "i" = "`label_names` defined without a `label_vals` specification."
+  )
+
   cond_class <- c("ggswim_cond", "marker_label_aes")
 
-  if ("label" %in% names(mapping)) {
-    if (!any(c("color", "colour") %in% names(mapping))) {
+  if ("label_vals" %in% names(mapping)) {
+    if (!"label_names" %in% names(mapping)) {
       cli_warn(
-        message = msg,
+        message = msg_warn,
+        call = caller_env(),
+        class = cond_class
+      )
+    }
+  }
+
+  if ("label_names" %in% names(mapping)) {
+    if (!"label_vals" %in% names(mapping)) {
+      cli_abort(
+        message = msg_error,
         call = caller_env(),
         class = cond_class
       )

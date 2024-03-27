@@ -35,12 +35,14 @@ test_that("bind_layer_data works for single layer", {
   ggswim_obj <- ggswim(patient_data,
                        aes(x = delta_t0, y = pt_id, fill = disease_assessment_status)) +
     add_marker(data = end_study_events,
-               aes(x = delta_t0, y = pt_id, color = end_study_name, label = end_study_label))
+               aes(x = delta_t0, y = pt_id, color = end_study_name,
+                   label_vals = end_study_label, label_names = end_study_name))
 
   layer_indices <- 2L
   layer_data <- data.frame()
 
-  out <- bind_layer_data(ggswim_obj, layer_indices, layer_data)
+  out <- bind_layer_data(ggswim_obj, layer_indices, layer_data) |>
+    suppressWarnings() # Duplicates aesthetic warning
 
   # Check for important columns
   expected_cols <- c("colour", "x", "y", "group", "label", "size", "alpha", "colour_mapping")

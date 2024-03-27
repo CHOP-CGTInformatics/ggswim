@@ -4,7 +4,13 @@
 \alias{add_marker}
 \title{Add markers of interest to level response trajectories}
 \usage{
-add_marker(mapping = aes(), data = NULL, ...)
+add_marker(
+  mapping = aes(),
+  data = NULL,
+  label_vals = NULL,
+  label_names = NULL,
+  ...
+)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{aes()}. If specified and
@@ -15,6 +21,11 @@ More information about accepted mapping arguments can be found in \strong{Aesthe
 \item{data}{a dataframe prepared for use with \code{ggswim()}, either coming from
 a parent \code{ggswim()} function, another \code{add_marker()} call, or a new dataframe
 prepared for use with \code{ggswim()}.}
+
+\item{label_vals}{A column specifier for label values. Default \code{NULL}.}
+
+\item{label_names}{A column specifier that adds \code{label_vals} to the legend
+display. Default \code{NULL}, requires \code{label_vals}.}
 
 \item{...}{Other arguments passed to \code{add_marker()}, often aesthetic fixed values,
 i.e. \code{color = "red"} or \code{size = 3}.}
@@ -32,11 +43,12 @@ See \strong{Aesthetics} for more information.
 \section{Aesthetics}{
 
 \code{add_marker()} understands the following aesthetics (required aesthetics are in bold)
-when using \code{color}/\code{colour} akin to \code{geom_point()}
+when using \code{color}/\code{colour} similar to \code{geom_point()}
 \itemize{
 \item \strong{\code{x}}
 \item \strong{\code{y}}
 \item \strong{\code{color}}/\strong{\code{colour}}
+\item \code{name} *
 \item \code{alpha}
 \item \code{group}
 \item \code{shape}
@@ -45,14 +57,13 @@ when using \code{color}/\code{colour} akin to \code{geom_point()}
 }
 
 \code{add_marker()} understands the following aesthetics (required aesthetics are in bold)
-when using \code{label} akin to \code{geom_label()}. See "Notes" below for additional
+when using \code{label} similar to \code{geom_label()}. See "Notes" below for additional
 considerations and requirements.
 \itemize{
 \item \strong{\code{x}}
 \item \strong{\code{y}}
-\item \strong{\code{color}}/\strong{\code{colour}}
-\item \strong{\code{label}} *
-\item \code{name} **
+\item \strong{label_vals}
+\item \strong{\code{label_names}} *
 \item \code{alpha}
 \item \code{angle}
 \item \code{family}
@@ -67,14 +78,17 @@ considerations and requirements.
 \strong{Notes}:
 \itemize{
 \item \code{add_marker()} \strong{does not} support mapping using \code{fill}.
-\item *If using \code{label}, a secondary \code{color} reference is required to make
-the label appear in the color layer of the legend.
-\item **If using a dynamic \code{color} call, a specifying \code{name} is required for
-aesthetic mapping to render the legend correctly.
+\item If using a static/non-mapping \code{color} specifier, a mapping \code{name} is required
+for aesthetic mapping to render the legend correctly.
+\item If using labels, both \code{label_vals} and \code{label_names} are required for
+proper legend population. At minimum, \code{label_vals} is needed for data
+display.
 }
 }
 
 \examples{
+
+# markers with points and aesthetic mapping params
 add_marker(
   data = infusion_events,
   mapping = aes(
@@ -86,4 +100,28 @@ add_marker(
   size = 5
 )
 
+# markers with points and static params
+
+initial_infusions <- infusion_events[infusion_events$infusion_type == "Infusion", ]
+
+add_marker(
+  data = initial_infusions,
+  mapping = aes(
+    x = delta_t0,
+    y = pt_id,
+    name = "Initial"
+  ),
+  color = "red",
+  size = 5
+)
+
+# markers with labels
+add_marker(
+  data = end_study_events,
+  mapping = aes(y = pt_id, x = delta_t0_months,
+      label_names = end_study_name,
+      label_vals = end_study_label
+  ),
+  label.size = NA, fill = NA, size = 5
+)
 }

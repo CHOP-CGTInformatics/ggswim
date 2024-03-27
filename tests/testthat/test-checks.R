@@ -71,17 +71,25 @@ test_that("check_marker_label_aes works", {
   mapping_pass <- data.frame(
     "x" = "xvals",
     "y" = "yvals",
-    "label" = "labelvals",
-    "colour" = "colourvals"
+    "label_vals" = "labelvals",
+    "label_names" = "colourvals"
   )
 
   mapping_warn <- data.frame(
     "x" = "xvals",
     "y" = "yvals",
-    "label" = "labelvals"
+    "label_vals" = "labelvals"
   )
+
+  mapping_error <- data.frame(
+    "x" = "xvals",
+    "y" = "yvals",
+    "label_names" = "label_names"
+  )
+
   expect_no_condition(check_marker_label_aes(mapping = mapping_pass))
   expect_warning(check_marker_label_aes(mapping = mapping_warn), class = "marker_label_aes")
+  expect_error(check_marker_label_aes(mapping = mapping_error), class = "marker_label_aes")
 })
 
 test_that("check_arrow_fill_type works", {

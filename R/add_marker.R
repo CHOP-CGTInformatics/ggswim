@@ -16,16 +16,20 @@
 #' @param data a dataframe prepared for use with `ggswim()`, either coming from
 #' a parent `ggswim()` function, another `add_marker()` call, or a new dataframe
 #' prepared for use with `ggswim()`.
+#' @param label_vals A column specifier for label values. Default `NULL`.
+#' @param label_names A column specifier that adds `label_vals` to the legend
+#' display. Default `NULL`, requires `label_vals`.
 #' @param ... Other arguments passed to `add_marker()`, often aesthetic fixed values,
 #' i.e. `color = "red"` or `size = 3`.
 #'
 #' @section Aesthetics:
 #' `add_marker()` understands the following aesthetics (required aesthetics are in bold)
-#' when using `color`/`colour` akin to `geom_point()`
+#' when using `color`/`colour` similar to `geom_point()`
 #'
 #' - **`x`**
 #' - **`y`**
 #' - **`color`**/**`colour`**
+#' - `name` *
 #' - `alpha`
 #' - `group`
 #' - `shape`
@@ -33,14 +37,13 @@
 #' - `stroke`
 #'
 #' `add_marker()` understands the following aesthetics (required aesthetics are in bold)
-#' when using `label` akin to `geom_label()`. See "Notes" below for additional
+#' when using `label` similar to `geom_label()`. See "Notes" below for additional
 #' considerations and requirements.
 #'
 #' - **`x`**
 #' - **`y`**
-#' - **`color`**/**`colour`**
-#' - **`label`** *
-#' - `name` **
+#' - **label_vals**
+#' - **`label_names`** *
 #' - `alpha`
 #' - `angle`
 #' - `family`
@@ -54,14 +57,17 @@
 #' **Notes**:
 #'
 #' - `add_marker()` **does not** support mapping using `fill`.
-#' - *If using `label`, a secondary `color` reference is required to make
-#' the label appear in the color layer of the legend.
-#' - **If using a dynamic `color` call, a specifying `name` is required for
-#' aesthetic mapping to render the legend correctly.
+#' - If using a static/non-mapping `color` specifier, a mapping `name` is required
+#' for aesthetic mapping to render the legend correctly.
+#' - If using labels, both `label_vals` and `label_names` are required for
+#' proper legend population. At minimum, `label_vals` is needed for data
+#' display.
 #'
 #' @export
 #'
 #' @examples
+#'
+#' # markers with points and aesthetic mapping params
 #' add_marker(
 #'   data = infusion_events,
 #'   mapping = aes(
@@ -73,9 +79,36 @@
 #'   size = 5
 #' )
 #'
+#' # markers with points and static params
+#'
+#' initial_infusions <- infusion_events[infusion_events$infusion_type == "Infusion", ]
+#'
+#' add_marker(
+#'   data = initial_infusions,
+#'   mapping = aes(
+#'     x = delta_t0,
+#'     y = pt_id,
+#'     name = "Initial"
+#'   ),
+#'   color = "red",
+#'   size = 5
+#' )
+#'
+#' # markers with labels
+#' add_marker(
+#'   data = end_study_events,
+#'   mapping = aes(y = pt_id, x = delta_t0_months,
+#'       label_names = end_study_name,
+#'       label_vals = end_study_label
+#'   ),
+#'   label.size = NA, fill = NA, size = 5
+#' )
+
 add_marker <- function(
     mapping = aes(),
     data = NULL,
+    label_vals = NULL,
+    label_names = NULL,
     ...) {
   # Enforce checks ----
   check_supported_mapping_aes(
@@ -87,10 +120,14 @@ add_marker <- function(
   check_marker_label_aes(mapping = mapping)
 
   # Identify labels ----
-  has_labels <- "label" %in% names(mapping)
+  has_labels <- "label_vals" %in% names(mapping)
 
   # Apply geom_label() or geom_point() ----
   if (has_labels) {
+    # Convert label mapping params to linked standard params for intuitive API
+    names(mapping)[names(mapping) == "label_vals"] <-  "label"
+    names(mapping)[names(mapping) == "label_names"] <-  "colour"
+
     out <- geom_label(
       data = data,
       mapping = mapping,

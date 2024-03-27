@@ -57,7 +57,7 @@ test_that("add_marker works for aes mapping", {
   # Emoji layer aesthetic mapping ----
   p2 <- ggswim_layer +
     mk1_layer +
-    add_marker(data = mk2_data, aes(x = time, y = id, label = label, colour = name))
+    add_marker(data = mk2_data, aes(x = time, y = id, label_vals = label, label_names = name))
 
   skip_on_ci()
   vdiffr::expect_doppelganger(
@@ -93,7 +93,7 @@ test_that("error on fill argument", {
 
 test_that("warn on label without color argument", {
   expect_warning(
-    add_marker(data = mk2_data, aes(x = time, y = id, label = trt)),
+    add_marker(data = mk2_data, aes(x = time, y = id, label_vals = trt)),
     class = "marker_label_aes"
   )
 })

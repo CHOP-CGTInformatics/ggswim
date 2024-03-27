@@ -2,7 +2,7 @@
 % Please edit documentation in R/checks.R
 \name{check_marker_label_aes}
 \alias{check_marker_label_aes}
-\title{check add_markers for label and color arguments}
+\title{check add_markers for label arguments}
 \usage{
 check_marker_label_aes(mapping)
 }
@@ -12,8 +12,13 @@ check_marker_label_aes(mapping)
 at the top level of the plot. You must supply mapping if there is no plot mapping.}
 }
 \description{
-While not required, the legend will not display with label icons if users don't
-supply \code{color} or \code{colour} to \code{aes()} along with \code{label}. Since this doesn't
-break the app, a warning should be thrown.
+For proper display of label values in the legend, a \code{color}/\code{colour} mapping
+value along with a name specifier is typically needed. It is not mandatory to
+supply a naming parameter, and a warning will be displayed if labels are used
+but no naming param is detected.
+
+An error will be thrown if a label naming parameter is specified, but no
+label value parameter is included. Default ggplot2 behavior is to allow this
+and throw a warning, but we instead wish this to be an error.
 }
 \keyword{internal}
