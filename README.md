@@ -81,8 +81,7 @@ p <- p +
   ) 
 ```
 
-And finally, we’ll spruce up our plot a bit to make it more
-aesthetically appealing:
+And finally, we’ll spruce up our plot a bit:
 
 ``` r
 p +

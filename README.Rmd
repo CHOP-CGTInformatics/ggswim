@@ -11,7 +11,8 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%",
   dev = "ragg_png",
-  dpi = 400
+  dpi = 400, 
+  fig.width=12, fig.height=6
 )
 ```
 
@@ -81,7 +82,7 @@ p <- p +
   ) 
 ```
 
-And finally, we'll spruce up our plot a bit to make it more aesthetically appealing:
+And finally, we'll spruce up our plot a bit:
 
 ```{r, message=FALSE}
 p +

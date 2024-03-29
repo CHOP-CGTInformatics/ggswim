@@ -5,7 +5,9 @@ title: "Adding arrows to ggswim"
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 12,
+  fig.height = 6
 )
 ```
 
