@@ -71,7 +71,7 @@ test_that("bind_layer_data works for multiple layers", {
     add_marker(recovery,
                mapping = aes(x = delta_t0, y = pt_id, color = bcell_status))
 
-  layer_indices <- c(2,3)
+  layer_indices <- c(2, 3)
   layer_data <- data.frame()
 
   out <- bind_layer_data(ggswim_obj, layer_indices, layer_data)
@@ -170,5 +170,3 @@ test_that("ggswim_obj is appropriate class type", {
   expect_setequal(class(ggswim_obj), expected)
   expect_setequal(class(ggswim_obj_markers), expected)
 })
-
-
