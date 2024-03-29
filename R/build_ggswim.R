@@ -36,48 +36,12 @@ build_ggswim <- function(ggswim_obj) {
   # Checks ----
   check_ggswim_obj(ggswim_obj)
 
-  # Set up initial capture variables ----
-  # Indices for layer positions in ggswim_obj
-  label_layer_indices <- c()
-  point_layer_indices <- c()
-  # Layer data for ggswim_obj data layer capture
-  label_layer_data <- data.frame()
-  point_layer_data <- data.frame()
+  # Populate reference layer info ---
+  ref_layer_info <- get_ref_layer_info(ggswim_obj)
 
-  # static_colours for static color manipulation and legend re-definition
-  static_colours <- list()
-
-  # Determine indices of layers in ggplot object that contain labels, points, and static colors
-  for (i in seq_along(ggswim_obj$layers)) {
-    # Check for swim_class attrs, required to allow for other types of layer additions (ex: geom_vline)
-    if ("swim_class" %in% names(attributes(ggswim_obj$layers[[i]]))) {
-      if (attributes(ggswim_obj$layers[[i]])$swim_class == "marker_label") {
-        label_layer_indices <- c(label_layer_indices, i)
-      }
-
-      if (attributes(ggswim_obj$layers[[i]])$swim_class == "marker_point") {
-        point_layer_indices <- c(point_layer_indices, i)
-      }
-    }
-
-    if (!is.null(ggswim_obj$layers[[i]]$static_colours)) {
-      static_colours$indices <- c(static_colours$indices, i)
-      static_colours$colors <- c(static_colours$colors, ggswim_obj$layers[[i]]$static_colours)
-      static_colours$name <- c(
-        static_colours$name,
-        ggswim_obj$layers[[i]]$mapping$colour |>
-          get_expr() |>
-          as.character()
-      )
-    }
-  }
-
-  # Convert static_colours to a dataframe (will always have equal col lengths)
-  static_colours <- data.frame(static_colours)
-
-  # If no `add_marker()` calls, then no need to build legend, exiting early ----
-  # requires indices to be built first for determination
-  if (rlang::is_empty(label_layer_indices) && rlang::is_empty(point_layer_indices)) {
+  # If no `add_marker()` calls, then no need to build legend, exiting early* ----
+  # *requires indices to be built first for determination
+  if (rlang::is_empty(ref_layer_info$label_layer_indices) && rlang::is_empty(ref_layer_info$point_layer_indices)) {
     # remove ggswim class, so default ggplot2 print methods will take over
     return(
       ggswim_obj |>
@@ -87,14 +51,14 @@ build_ggswim <- function(ggswim_obj) {
 
   # Create bound layer dataframes for additional layers ----
   label_layer_data <- bind_layer_data(ggswim_obj,
-    layer_indices = label_layer_indices,
-    layer_data = label_layer_data
+    layer_indices = ref_layer_info$label_layer_indices,
+    layer_data = ref_layer_info$label_layer_data
   )
 
   point_layer_data <- bind_layer_data(ggswim_obj,
-    layer_indices = point_layer_indices,
-    layer_data = point_layer_data,
-    static_colours = static_colours
+    layer_indices = ref_layer_info$point_layer_indices,
+    layer_data = ref_layer_info$point_layer_data,
+    static_colours = ref_layer_info$static_colours
   )
 
   # Reference level ordering in underlying layers
@@ -222,4 +186,60 @@ get_overrides <- function(ref_guide,
   override$shape <- "none" # TODO: Determine if default should always be removal
 
   override
+}
+
+#' @title Populate reference layer information list
+#'
+#' @description
+#' The reference layer information list is used for location of layer type indices
+#' and static color definitions.
+#'
+#' @param ggswim_obj A ggswim object
+#'
+#' @returns a list
+#'
+#' @keywords internal
+
+get_ref_layer_info <- function(ggswim_obj) {
+
+  # Set up initial capture variables ----
+  # Indices for layer positions in ggswim_obj
+  label_layer_indices <- c()
+  point_layer_indices <- c()
+  # static_colours for static color manipulation and legend re-definition
+  static_colours <- list()
+
+  # Determine indices of layers in ggplot object that contain labels, points, and static colors
+  for (i in seq_along(ggswim_obj$layers)) {
+    # Check for swim_class attrs, required to allow for other types of layer additions (ex: geom_vline)
+    if ("swim_class" %in% names(attributes(ggswim_obj$layers[[i]]))) {
+      if (attributes(ggswim_obj$layers[[i]])$swim_class == "marker_label") {
+        label_layer_indices <- c(label_layer_indices, i)
+      }
+
+      if (attributes(ggswim_obj$layers[[i]])$swim_class == "marker_point") {
+        point_layer_indices <- c(point_layer_indices, i)
+      }
+    }
+
+    if (!is.null(ggswim_obj$layers[[i]]$static_colours)) {
+      static_colours$indices <- c(static_colours$indices, i)
+      static_colours$colors <- c(static_colours$colors, ggswim_obj$layers[[i]]$static_colours)
+      static_colours$name <- c(
+        static_colours$name,
+        ggswim_obj$layers[[i]]$mapping$colour |>
+          get_expr() |>
+          as.character()
+      )
+    }
+  }
+
+  # Convert static_colours to a dataframe (will always have equal col lengths)
+  static_colours <- data.frame(static_colours)
+
+  list(
+    label_layer_indices = label_layer_indices,
+    point_layer_indices = point_layer_indices,
+    static_colours = static_colours
+  )
 }

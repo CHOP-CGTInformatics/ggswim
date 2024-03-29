@@ -110,3 +110,48 @@ test_that("bind_layer_data works with static colors", {
 
   expect_true(all(out$colour == "red"))
 })
+
+test_that("get_ref_layer_info works for static colors", {
+  aplasia <- patient_data |>
+    dplyr::filter(bcell_status == "B-cell Aplasia")
+
+  ggswim_obj <- ggswim(patient_data, aes(x = delta_t0, y = pt_id, fill = disease_assessment_status)) +
+    add_marker(aplasia,
+               mapping = aes(x = delta_t0, y = pt_id, name = "B-cell Aplasia"), color = "red") |>
+      suppressWarnings()
+
+  expected_static <- list(
+    label_layer_indices = NULL,
+    point_layer_indices = 2,
+    static_colours = data.frame(
+      indices = 2,
+      colors = "red",
+      name = "B-cell Aplasia"
+    )
+  )
+
+  out_static <- get_ref_layer_info(ggswim_obj)
+
+  expect_equal(out_static, expected_static)
+})
+
+
+test_that("get_ref_layer_info works for point and label layers", {
+
+  ggswim_obj <- ggswim(patient_data, aes(x = delta_t0, y = pt_id, fill = disease_assessment_status)) +
+    add_marker(infusion_events,
+               mapping = aes(x = infusion_delta_t0, y = pt_id, color = infusion_type, shape = infusion_type)) +
+    add_marker(end_study_events,
+               mapping = aes(x = delta_t0, y = pt_id, label_vals = end_study_label, label_names = end_study_name)) |>
+      suppressWarnings()
+
+  expected <- list(
+    label_layer_indices = 3,
+    point_layer_indices = 2,
+    static_colours = data.frame()
+  )
+
+  out <- get_ref_layer_info(ggswim_obj)
+
+  expect_equal(out, expected)
+})
