@@ -16,9 +16,6 @@
 #' @param data a dataframe prepared for use with `ggswim()`, either coming from
 #' a parent `ggswim()` function, another `add_marker()` call, or a new dataframe
 #' prepared for use with `ggswim()`.
-#' @param label_vals A column specifier for label values. Default `NULL`.
-#' @param label_names A column specifier that adds `label_vals` to the legend
-#' display. Default `NULL`, requires `label_vals`.
 #' @param ... Other arguments passed to `add_marker()`, often aesthetic fixed values,
 #' i.e. `color = "red"` or `size = 3`.
 #'
@@ -61,7 +58,7 @@
 #' for aesthetic mapping to render the legend correctly.
 #' - If using labels, both `label_vals` and `label_names` are required for
 #' proper legend population. At minimum, `label_vals` is needed for data
-#' display.
+#' display. These are unique parameter options for `aes()` to ggswim.
 #'
 #' @export
 #'
@@ -107,8 +104,6 @@
 add_marker <- function(
     mapping = aes(),
     data = NULL,
-    label_vals = NULL,
-    label_names = NULL,
     ...) {
   # Enforce checks ----
   check_supported_mapping_aes(

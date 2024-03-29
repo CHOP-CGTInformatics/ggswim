@@ -4,13 +4,7 @@
 \alias{add_marker}
 \title{Add markers of interest to level response trajectories}
 \usage{
-add_marker(
-  mapping = aes(),
-  data = NULL,
-  label_vals = NULL,
-  label_names = NULL,
-  ...
-)
+add_marker(mapping = aes(), data = NULL, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{aes()}. If specified and
@@ -21,11 +15,6 @@ More information about accepted mapping arguments can be found in \strong{Aesthe
 \item{data}{a dataframe prepared for use with \code{ggswim()}, either coming from
 a parent \code{ggswim()} function, another \code{add_marker()} call, or a new dataframe
 prepared for use with \code{ggswim()}.}
-
-\item{label_vals}{A column specifier for label values. Default \code{NULL}.}
-
-\item{label_names}{A column specifier that adds \code{label_vals} to the legend
-display. Default \code{NULL}, requires \code{label_vals}.}
 
 \item{...}{Other arguments passed to \code{add_marker()}, often aesthetic fixed values,
 i.e. \code{color = "red"} or \code{size = 3}.}
@@ -82,7 +71,7 @@ considerations and requirements.
 for aesthetic mapping to render the legend correctly.
 \item If using labels, both \code{label_vals} and \code{label_names} are required for
 proper legend population. At minimum, \code{label_vals} is needed for data
-display.
+display. These are unique parameter options for \code{aes()} to ggswim.
 }
 }
 

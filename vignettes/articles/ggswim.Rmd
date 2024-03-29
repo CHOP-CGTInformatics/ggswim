@@ -96,7 +96,7 @@ end_study_events |>
   rmarkdown::paged_table()
 ```
 
-You'll notice that this dataset includes use of emojis under `end_study_label`. In addition to shapes and symbols, ggswim supports the use of emojis when rendering swimmer plots. `add_marker()` allows users to specify shapes or emojis by using the appropriate argument callouts (`label_vals` and `label_names`). Let's add a layer using emojis via the `end_study_events` dataset:
+You'll notice that this dataset includes use of emojis under `end_study_label`. In addition to shapes and symbols, ggswim supports the use of emojis when rendering swimmer plots. `add_marker()` allows users to specify shapes or emojis by using the appropriate `aes()` argument callouts: `label_vals` and `label_names`. These are unique mapping parameters to ggswim. Let's add a layer using emojis via the `end_study_events` dataset:
 
 ```{r second marker plot, message=FALSE, warning=FALSE}
 p <- p +
