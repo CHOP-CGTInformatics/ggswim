@@ -41,8 +41,9 @@ test_that("bind_layer_data works for single layer", {
   layer_indices <- 2L
   layer_data <- data.frame()
 
-  out <- bind_layer_data(ggswim_obj, layer_indices, layer_data) |>
-    suppressWarnings() # Duplicates aesthetic warning
+  out <- suppressWarnings({
+    bind_layer_data(ggswim_obj, layer_indices, layer_data)
+  })
 
   # Check for important columns
   expected_cols <- c("colour", "x", "y", "group", "label", "size", "alpha", "colour_mapping")
@@ -70,7 +71,7 @@ test_that("bind_layer_data works for multiple layers", {
     add_marker(recovery,
                mapping = aes(x = delta_t0, y = pt_id, color = bcell_status))
 
-  layer_indices <- 3
+  layer_indices <- c(2,3)
   layer_data <- data.frame()
 
   out <- bind_layer_data(ggswim_obj, layer_indices, layer_data)
@@ -86,11 +87,12 @@ test_that("bind_layer_data works with static colors", {
   aplasia <- patient_data |>
     dplyr::filter(bcell_status == "B-cell Aplasia")
 
-  ggswim_obj <- ggswim(patient_data,
-                       aes(x = delta_t0, y = pt_id, fill = disease_assessment_status)) +
-    add_marker(aplasia,
-               mapping = aes(x = delta_t0, y = pt_id, name = "B-cell Aplasia"), color = "red") |>
-      suppressWarnings()
+  ggswim_obj <- suppressWarnings({
+    ggswim(patient_data,
+           aes(x = delta_t0, y = pt_id, fill = disease_assessment_status)) +
+      add_marker(aplasia,
+                 mapping = aes(x = delta_t0, y = pt_id, name = "B-cell Aplasia"), color = "red")
+  })
 
   layer_indices <- 2L
   layer_data <- data.frame()
@@ -115,10 +117,11 @@ test_that("get_ref_layer_info works for static colors", {
   aplasia <- patient_data |>
     dplyr::filter(bcell_status == "B-cell Aplasia")
 
-  ggswim_obj <- ggswim(patient_data, aes(x = delta_t0, y = pt_id, fill = disease_assessment_status)) +
-    add_marker(aplasia,
-               mapping = aes(x = delta_t0, y = pt_id, name = "B-cell Aplasia"), color = "red") |>
-      suppressWarnings()
+  ggswim_obj <- suppressWarnings({
+    ggswim(patient_data, aes(x = delta_t0, y = pt_id, fill = disease_assessment_status)) +
+      add_marker(aplasia,
+                 mapping = aes(x = delta_t0, y = pt_id, name = "B-cell Aplasia"), color = "red")
+  })
 
   expected_static <- list(
     label_layer_indices = NULL,
@@ -142,8 +145,7 @@ test_that("get_ref_layer_info works for point and label layers", {
     add_marker(infusion_events,
                mapping = aes(x = infusion_delta_t0, y = pt_id, color = infusion_type, shape = infusion_type)) +
     add_marker(end_study_events,
-               mapping = aes(x = delta_t0, y = pt_id, label_vals = end_study_label, label_names = end_study_name)) |>
-      suppressWarnings()
+               mapping = aes(x = delta_t0, y = pt_id, label_vals = end_study_label, label_names = end_study_name))
 
   expected <- list(
     label_layer_indices = 3,
@@ -155,3 +157,18 @@ test_that("get_ref_layer_info works for point and label layers", {
 
   expect_equal(out, expected)
 })
+
+test_that("ggswim_obj is appropriate class type", {
+  ggswim_obj <- ggswim(patient_data, aes(x = delta_t0, y = pt_id, fill = disease_assessment_status))
+
+  ggswim_obj_markers <- ggswim(patient_data, aes(x = delta_t0, y = pt_id, fill = disease_assessment_status)) +
+    add_marker(infusion_events,
+               mapping = aes(x = infusion_delta_t0, y = pt_id, color = infusion_type, shape = infusion_type))
+
+  expected <- c("gg", "ggplot", "ggswim_obj")
+
+  expect_setequal(class(ggswim_obj), expected)
+  expect_setequal(class(ggswim_obj_markers), expected)
+})
+
+
