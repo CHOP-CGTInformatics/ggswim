@@ -156,7 +156,7 @@ disease assessment timepoint where:</li>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
-<p><img src="ggswim_files/figure-html/ggswim%20plot-1.png" width="700"></p>
+<p><img src="ggswim_files/figure-html/ggswim%20plot-1.png" width="1152"></p>
 <p>Here we have a simple bar chart, showing infusions grouped by
 patients with a given disease assessment status. <code><a href="../reference/ggswim.html">ggswim()</a></code>
 does the work of setting up a <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col()</a></code> and readying our
@@ -199,7 +199,7 @@ beyond <code>t0</code> (if a patient had any).</p>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
-<p><img src="ggswim_files/figure-html/first%20marker%20plot-1.png" width="700"></p>
+<p><img src="ggswim_files/figure-html/first%20marker%20plot-1.png" width="1152"></p>
 <p>Now we can see shapes have been added to establish our markers…
 though some blend into the colors of the bar charts. We’ll fix this soon
 enough! For now, we can see that a new legend has been added to
@@ -236,7 +236,7 @@ using the appropriate argument callouts (<code>label_vals</code> and
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
-<p><img src="ggswim_files/figure-html/second%20marker%20plot-1.png" width="700"></p>
+<p><img src="ggswim_files/figure-html/second%20marker%20plot-1.png" width="1152"></p>
 <p>At this point we have a working swimmer plot with lanes and two
 different kinds of marker layers. Recall that ggswim works within the
 ggplot2 framework, therefore customization can be done using the same
@@ -261,12 +261,12 @@ Let’s fix up this plot so it looks nicer on the eyes:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Time (Months)"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Patient ID"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
-<p><img src="ggswim_files/figure-html/mapping%20finalizing-1.png" width="700"></p>
+<p><img src="ggswim_files/figure-html/mapping%20finalizing-1.png" width="1152"></p>
 <p>We can also supply the <code><a href="../reference/theme_ggswim.html">theme_ggswim()</a></code> function:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/theme_ggswim.html">theme_ggswim</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggswim_files/figure-html/mapping%20with%20theme_ggswim-1.png" width="700"></p>
+<p><img src="ggswim_files/figure-html/mapping%20with%20theme_ggswim-1.png" width="1152"></p>
 </div>
 <div class="section level3">
 <h3 id="customizing-markers-a-deeper-dive">Customizing Markers: A Deeper Dive<a class="anchor" aria-label="anchor" href="#customizing-markers-a-deeper-dive"></a>
@@ -315,7 +315,7 @@ legend, ensuring clarity in your visualization.</p>
 <span>    size <span class="op">=</span> <span class="fl">5</span>, position <span class="op">=</span> <span class="st">"identity"</span>, color <span class="op">=</span> <span class="st">"red"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/theme_ggswim.html">theme_ggswim</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggswim_files/figure-html/static%20plot-1.png" width="700"></p>
+<p><img src="ggswim_files/figure-html/static%20plot-1.png" width="1152"></p>
 </div>
 <div class="section level3">
 <h3 id="additional-notes">Additional notes<a class="anchor" aria-label="anchor" href="#additional-notes"></a>
