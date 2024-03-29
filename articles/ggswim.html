@@ -219,8 +219,9 @@ indicate a patient has left the study for various reasons.</p>
 <code>end_study_label</code>. In addition to shapes and symbols, ggswim
 supports the use of emojis when rendering swimmer plots.
 <code><a href="../reference/add_marker.html">add_marker()</a></code> allows users to specify shapes or emojis by
-using the appropriate argument callouts (<code>label_vals</code> and
-<code>label_names</code>). Let’s add a layer using emojis via the
+using the appropriate <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> argument callouts:
+<code>label_vals</code> and <code>label_names</code>. These are unique
+mapping parameters to ggswim. Let’s add a layer using emojis via the
 <code>end_study_events</code> dataset:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">p</span> <span class="op">+</span></span>

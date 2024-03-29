@@ -75,13 +75,7 @@ depending on the users designation of <code>color</code>/<code>colour</code> and
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">add_marker</span><span class="op">(</span></span>
-<span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  data <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  label_vals <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  label_names <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">add_marker</span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="op">)</span>, data <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -97,15 +91,6 @@ More information about accepted mapping arguments can be found in <strong>Aesthe
 <dd><p>a dataframe prepared for use with <code><a href="ggswim.html">ggswim()</a></code>, either coming from
 a parent <code><a href="ggswim.html">ggswim()</a></code> function, another <code>add_marker()</code> call, or a new dataframe
 prepared for use with <code><a href="ggswim.html">ggswim()</a></code>.</p></dd>
-
-
-<dt>label_vals</dt>
-<dd><p>A column specifier for label values. Default <code>NULL</code>.</p></dd>
-
-
-<dt>label_names</dt>
-<dd><p>A column specifier that adds <code>label_vals</code> to the legend
-display. Default <code>NULL</code>, requires <code>label_vals</code>.</p></dd>
 
 
 <dt>...</dt>
@@ -153,7 +138,7 @@ considerations and requirements.</p><ul><li><p><strong><code>x</code></strong></
 for aesthetic mapping to render the legend correctly.</p></li>
 <li><p>If using labels, both <code>label_vals</code> and <code>label_names</code> are required for
 proper legend population. At minimum, <code>label_vals</code> is needed for data
-display.</p></li>
+display. These are unique parameter options for <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> to ggswim.</p></li>
 </ul></div>
 
     <div class="section level2">
