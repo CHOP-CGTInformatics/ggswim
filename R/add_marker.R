@@ -109,6 +109,10 @@ add_marker <- function(
 
   check_marker_label_aes(mapping = mapping)
 
+  check_missing_params(mapping = mapping,
+                       params = c("x", "y"),
+                       parent_func = "add_marker()")
+
   # Identify labels ----
   has_labels <- "label_vals" %in% names(mapping)
 
