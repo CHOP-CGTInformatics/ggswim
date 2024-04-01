@@ -312,3 +312,36 @@ check_supported_position_args <- function(position,
     cli_abort(message = msg, call = caller_env(), class = cond_class)
   }
 }
+
+#' @title check for missing params
+#'
+#' @description
+#' Utility check to block users from submitting functions that are missing key
+#' parameters.
+#'
+#' @details
+#' A key use of this check is a stopgap for missing `x` and `y` aes parameters
+#' which should be valid but don't currently work with our setup.
+#'
+#' @param mapping Set of aesthetic mappings created by `aes()`. If specified and
+#' `inherit.aes = TRUE` (the default), it is combined with the default mapping
+#' at the top level of the plot. You must supply mapping if there is no plot mapping.
+#' @param params a vector of params to check for in string format
+#' @param parent_func The function in which this is being called, to be
+#' referenced in the message output
+#'
+#' @keywords internal
+
+check_missing_params <- function(mapping,
+                                 params,
+                                 parent_func) {
+  msg <- c(
+    "x" = "Missing parameters in {.code {parent_func}}",
+    "i" = "{params} parameter{?s} are required for {.code {parent_func}}."
+  )
+  cond_class <- c("ggswim_cond", "missing_params")
+
+  if (!all(params %in% names(mapping))) {
+    cli_abort(message = msg, call = caller_env(), class = cond_class)
+  }
+}

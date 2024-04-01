@@ -171,3 +171,18 @@ test_that("check_supported_position_args works", {
     check_supported_position_args(position = "identity", parent_func)
   )
 })
+
+test_that("check_missing_params works", {
+  mapping <- tibble(test = "test", x = "x")
+  params <- c("x", "y")
+  parent_func <- "test_function()"
+
+  expect_error(
+    check_missing_params(mapping, params, parent_func),
+    class = "missing_params"
+  )
+
+  expect_no_error(
+    check_missing_params(mapping, params = "x", parent_func)
+  )
+})
