@@ -61,7 +61,7 @@
 #'   ),
 #'   arrow = arrow_status,
 #'   arrow_fill = "cyan",
-#'   arrow_head_length = unit(.25, "inches"),
+#'   arrow_head_length = ggplot2::unit(.25, "inches"),
 #'   arrow_neck_length = delta_today
 #' )
 
