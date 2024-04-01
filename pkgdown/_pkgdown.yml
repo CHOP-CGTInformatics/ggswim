@@ -20,8 +20,6 @@ navbar:
       href: index.html
     - text: Get Started
       href: articles/ggswim.html
-    - text: Gallery
-      href: articles/gallery.html
     - text: Reference
       href: reference/index.html
     - text: Articles
@@ -46,9 +44,5 @@ reference:
     Internal datasets for use in testing.
   contents:
   - patient_data
-- title: "Internals"
-  descr: >
-    Internal helpers for ggswim.
-  contents:
-  - grid.draw.ggswim_obj
-  - print.ggswim_obj
+  - infusion_events
+  - end_study_events

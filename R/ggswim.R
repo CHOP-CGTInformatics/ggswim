@@ -10,14 +10,9 @@
 #' identification.
 #'
 #' @param data a dataframe prepared for use with `ggswim()`
-#' @param mapping Set of aesthetic mappings created by `aes()`. If specified and
-#' `inherit.aes = TRUE` (the default), it is combined with the default mapping
-#' at the top level of the plot. You must supply mapping if there is no plot mapping.
-#' More information about accepted mapping arguments can be found in **Aesthetics**.
+#' @inheritParams ggplot2::geom_col
 #' @param position Position adjustment. ggswim accepts either "stack", or "identity"
 #' depending on the use case. Default "identity".
-#' @param ... Other arguments passed to `ggswim()`, often aesthetic fixed values,
-#' i.e. `color = "red"` or `size = 3`.
 #' @param arrow A column indicating what swim lanes should have arrows applied.
 #' The column must be a logical data type (T/F).
 #' @param arrow_colour Border/line color to use for the arrow. Default "black".
@@ -46,6 +41,7 @@
 #' @export
 #'
 #' @examples
+#' # Simple ggswim call
 #' ggswim(
 #'   data = patient_data,
 #'   mapping = aes(
@@ -54,6 +50,21 @@
 #'     fill = disease_assessment_status
 #'   )
 #' )
+#'
+#' # ggswim call with arrows
+#' ggswim(
+#'   data = patient_data,
+#'   mapping = aes(
+#'     x = delta_t0_months,
+#'     y = pt_id,
+#'     fill = disease_assessment_status
+#'   ),
+#'   arrow = arrow_status,
+#'   arrow_fill = "cyan",
+#'   arrow_head_length = unit(.25, "inches"),
+#'   arrow_neck_length = delta_today
+#' )
+
 ggswim <- function(
     data,
     mapping = aes(),

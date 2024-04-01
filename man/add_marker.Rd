@@ -7,17 +7,19 @@
 add_marker(mapping = aes(), data = NULL, ...)
 }
 \arguments{
-\item{mapping}{Set of aesthetic mappings created by \code{aes()}. If specified and
+\item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}}. If specified and
 \code{inherit.aes = TRUE} (the default), it is combined with the default mapping
-at the top level of the plot. You must supply mapping if there is no plot mapping.
-More information about accepted mapping arguments can be found in \strong{Aesthetics}.}
+at the top level of the plot. You must supply \code{mapping} if there is no plot
+mapping.}
 
 \item{data}{a dataframe prepared for use with \code{ggswim()}, either coming from
 a parent \code{ggswim()} function, another \code{add_marker()} call, or a new dataframe
 prepared for use with \code{ggswim()}.}
 
-\item{...}{Other arguments passed to \code{add_marker()}, often aesthetic fixed values,
-i.e. \code{color = "red"} or \code{size = 3}.}
+\item{...}{Other arguments passed on to \code{\link[ggplot2:layer]{layer()}}. These are
+often aesthetics, used to set an aesthetic to a fixed value, like
+\code{colour = "red"} or \code{size = 3}. They may also be parameters
+to the paired geom/stat.}
 }
 \value{
 A ggswim object

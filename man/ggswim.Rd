@@ -20,10 +20,10 @@ ggswim(
 \arguments{
 \item{data}{a dataframe prepared for use with \code{ggswim()}}
 
-\item{mapping}{Set of aesthetic mappings created by \code{aes()}. If specified and
+\item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}}. If specified and
 \code{inherit.aes = TRUE} (the default), it is combined with the default mapping
-at the top level of the plot. You must supply mapping if there is no plot mapping.
-More information about accepted mapping arguments can be found in \strong{Aesthetics}.}
+at the top level of the plot. You must supply \code{mapping} if there is no plot
+mapping.}
 
 \item{position}{Position adjustment. ggswim accepts either "stack", or "identity"
 depending on the use case. Default "identity".}
@@ -45,8 +45,10 @@ specifier. The default, \code{NULL}, sets a value proportional to the max lane v
 \item{arrow_type}{One of "open" or "closed" indicating whether the arrow head should
 be a closed triangle. Default "closed."}
 
-\item{...}{Other arguments passed to \code{ggswim()}, often aesthetic fixed values,
-i.e. \code{color = "red"} or \code{size = 3}.}
+\item{...}{Other arguments passed on to \code{\link[ggplot2:layer]{layer()}}. These are
+often aesthetics, used to set an aesthetic to a fixed value, like
+\code{colour = "red"} or \code{size = 3}. They may also be parameters
+to the paired geom/stat.}
 }
 \description{
 Visualize individual record response trajectories over time using a swimmer plot.
@@ -74,6 +76,7 @@ identification.
 }
 
 \examples{
+# Simple ggswim call
 ggswim(
   data = patient_data,
   mapping = aes(
@@ -81,5 +84,19 @@ ggswim(
     y = pt_id,
     fill = disease_assessment_status
   )
+)
+
+# ggswim call with arrows
+ggswim(
+  data = patient_data,
+  mapping = aes(
+    x = delta_t0_months,
+    y = pt_id,
+    fill = disease_assessment_status
+  ),
+  arrow = arrow_status,
+  arrow_fill = "cyan",
+  arrow_head_length = unit(.25, "inches"),
+  arrow_neck_length = delta_today
 )
 }

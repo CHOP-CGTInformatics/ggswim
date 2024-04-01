@@ -22,10 +22,10 @@ add_arrows(
 
 \item{ggswim_obj}{A ggswim object}
 
-\item{mapping}{Set of aesthetic mappings created by \code{aes()}. If specified and
+\item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}}. If specified and
 \code{inherit.aes = TRUE} (the default), it is combined with the default mapping
-at the top level of the plot. You must supply mapping if there is no plot mapping.
-More information about accepted mapping arguments can be found in \strong{Aesthetics}.}
+at the top level of the plot. You must supply \code{mapping} if there is no plot
+mapping.}
 
 \item{position}{Position adjustment. ggswim accepts either "stack", or "identity"
 depending on the use case. Default "identity".}

@@ -3,36 +3,26 @@
 \docType{data}
 \name{patient_data}
 \alias{patient_data}
-\alias{infusion_events}
-\alias{end_study_events}
-\title{Patient Datasets}
+\title{Patient Data dataset}
 \format{
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 83 rows and 9 columns.
-
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 13 rows and 4 columns.
-
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 4 rows and 5 columns.
 }
 \source{
 This dataset is for demonstration purposes only.
 }
 \usage{
 data(patient_data)
-
-data(infusion_events)
-
-data(end_study_events)
 }
 \description{
 These datasets provide information about patients, infusion events, and end of
-study events.
+study events. Trial data has been de-identified and randomized for general use.
+}
+\details{
+\code{patient_data} contains pre-formatted time series data related to disease status
+markers and status markers that can support arrows. This dataset is most
+applicable for use with \code{ggswim()} and \code{add_marker()}.
 }
 \examples{
-
 patient_data
-
-infusion_events
-
-end_study_events
 }
 \keyword{datasets}
