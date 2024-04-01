@@ -39,10 +39,9 @@ test_that("bind_layer_data works for single layer", {
                    label_vals = end_study_label, label_names = end_study_name))
 
   layer_indices <- 2L
-  layer_data <- data.frame()
 
   out <- suppressWarnings({
-    bind_layer_data(ggswim_obj, layer_indices, layer_data)
+    bind_layer_data(ggswim_obj, layer_indices)
   })
 
   # Check for important columns
@@ -72,9 +71,8 @@ test_that("bind_layer_data works for multiple layers", {
                mapping = aes(x = delta_t0, y = pt_id, color = bcell_status))
 
   layer_indices <- c(2, 3)
-  layer_data <- data.frame()
 
-  out <- bind_layer_data(ggswim_obj, layer_indices, layer_data)
+  out <- bind_layer_data(ggswim_obj, layer_indices)
 
   # Check for important columns
   expected_cols <- c("colour", "x", "y", "group", "shape", "size", "alpha", "stroke", "colour_mapping")
@@ -95,14 +93,13 @@ test_that("bind_layer_data works with static colors", {
   })
 
   layer_indices <- 2L
-  layer_data <- data.frame()
   static_colours <- tibble::tribble(
     ~"indices", ~"colors", ~"name",
     2, "red", "B-cell Aplasia"
   )
 
 
-  out <- bind_layer_data(ggswim_obj, layer_indices, layer_data, static_colours)
+  out <- bind_layer_data(ggswim_obj, layer_indices, static_colours)
 
   # Check for important columns
   expected_cols <- c("colour", "x", "y", "group", "shape", "size", "alpha", "stroke", "colour_mapping")

@@ -51,13 +51,11 @@ build_ggswim <- function(ggswim_obj) {
 
   # Create bound layer dataframes for additional layers ----
   label_layer_data <- bind_layer_data(ggswim_obj,
-    layer_indices = ref_layer_info$label_layer_indices,
-    layer_data = ref_layer_info$label_layer_data
+    layer_indices = ref_layer_info$label_layer_indices
   )
 
   point_layer_data <- bind_layer_data(ggswim_obj,
     layer_indices = ref_layer_info$point_layer_indices,
-    layer_data = ref_layer_info$point_layer_data,
     static_colours = ref_layer_info$static_colours
   )
 
@@ -97,14 +95,14 @@ build_ggswim <- function(ggswim_obj) {
 #'
 #' @returns A dataframe
 #'
-#' @param ggswim_obj description
-#' @param layer_indices description
-#' @param layer_data description
-#' @param static_colours description
+#' @param ggswim_obj A ggswim object
+#' @param layer_indices Layer indexes
+#' @param static_colours Dataframe of static colour callouts
 #'
 #' @keywords internal
 
-bind_layer_data <- function(ggswim_obj, layer_indices, layer_data, static_colours = NULL) {
+bind_layer_data <- function(ggswim_obj, layer_indices, static_colours = NULL) {
+  layer_data <- NULL
   for (i in layer_indices) {
     # If first layer, overwrite empty variable
     if (is_empty(layer_data)) {
