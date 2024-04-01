@@ -33,9 +33,6 @@ See Aesthetics for more information.'><meta property="og:image" content="https:/
 <li class="nav-item">
   <a class="nav-link" href="../articles/ggswim.html">Get Started</a>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../articles/gallery.html">Gallery</a>
-</li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
@@ -83,8 +80,8 @@ depending on the users designation of <code>color</code>/<code>colour</code> and
     <dl><dt>mapping</dt>
 <dd><p>Set of aesthetic mappings created by <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code>. If specified and
 <code>inherit.aes = TRUE</code> (the default), it is combined with the default mapping
-at the top level of the plot. You must supply mapping if there is no plot mapping.
-More information about accepted mapping arguments can be found in <strong>Aesthetics</strong>.</p></dd>
+at the top level of the plot. You must supply <code>mapping</code> if there is no plot
+mapping.</p></dd>
 
 
 <dt>data</dt>
@@ -94,8 +91,10 @@ prepared for use with <code><a href="ggswim.html">ggswim()</a></code>.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>Other arguments passed to <code>add_marker()</code>, often aesthetic fixed values,
-i.e. <code>color = "red"</code> or <code>size = 3</code>.</p></dd>
+<dd><p>Other arguments passed on to <code><a href="https://ggplot2.tidyverse.org/reference/layer.html" class="external-link">layer()</a></code>. These are
+often aesthetics, used to set an aesthetic to a fixed value, like
+<code>colour = "red"</code> or <code>size = 3</code>. They may also be parameters
+to the paired geom/stat.</p></dd>
 
 </dl></div>
     <div class="section level2">

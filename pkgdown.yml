@@ -3,9 +3,8 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   add_arrows: add_arrows.html
-  gallery: gallery.html
   ggswim: ggswim.html
-last_built: 2024-03-29T14:52Z
+last_built: 2024-04-01T20:05Z
 urls:
   reference: https://chop-cgtinformatics.github.io/ggswim/reference
   article: https://chop-cgtinformatics.github.io/ggswim/articles

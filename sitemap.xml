@@ -13,9 +13,6 @@
     <loc>https://chop-cgtinformatics.github.io/ggswim/articles/add_arrows.html</loc>
   </url>
   <url>
-    <loc>https://chop-cgtinformatics.github.io/ggswim/articles/gallery.html</loc>
-  </url>
-  <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/articles/ggswim.html</loc>
   </url>
   <url>
@@ -67,6 +64,9 @@
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/checkmate.html</loc>
   </url>
   <url>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/end_study_events.html</loc>
+  </url>
+  <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/format_error_val.html</loc>
   </url>
   <url>
@@ -89,6 +89,9 @@
   </url>
   <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/infusion_events.html</loc>
   </url>
   <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/patient_data.html</loc>
