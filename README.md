@@ -97,7 +97,7 @@ p +
 We invite you to give feedback and collaborate with us! If you are
 familiar with GitHub and R packages, please feel free to submit a [pull
 request](https://github.com/CHOP-CGTInformatics/ggswim/pulls). Please do
-let us know if ggswim fails for whatever reason with your database and
+let us know if ggswim fails for whatever reason and
 submit a bug report by creating a GitHub
 [issue](https://github.com/CHOP-CGTInformatics/ggswim/issues).
 
