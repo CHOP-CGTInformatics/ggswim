@@ -59,6 +59,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/add_arrows.html">Adding Arrows</a>
+    <a class="dropdown-item" href="../articles/static_markers.html">Static Mapping with Markers</a>
   </div>
 </li>
       </ul>
@@ -100,10 +101,11 @@ walk through how users can create visually striking swimmer plots.</p>
 <p>At the heart of ggswim are two core functions: <code><a href="../reference/ggswim.html">ggswim()</a></code>
 and <code><a href="../reference/add_marker.html">add_marker()</a></code>. The former, an extension of
 <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col()</a></code>, allows users to construct the horizontal bars,
-often referred to as “lanes.” Meanwhile, <code><a href="../reference/add_marker.html">add_marker()</a></code>
-leverages <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_label()</a></code> to
-effortlessly embed key events, or “markers,” onto the lanes. These can
-take the form of unicode shapes, symbols, or even emojis.</p>
+what we’ll sometimes refer to as “lanes.” Meanwhile,
+<code><a href="../reference/add_marker.html">add_marker()</a></code> leverages <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point()</a></code> and
+<code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_label()</a></code> to effortlessly embed key events, or
+“markers,” onto the lanes. These can take the form of unicode shapes,
+symbols, or even emojis.</p>
 <p>Drawing from the well-established principles of ggplot2, ggswim
 allows users to apply familiar layer-building techniques, including the
 application of styles and themes.</p>
@@ -111,7 +113,8 @@ application of styles and themes.</p>
 <h3 id="building-swimmer-plots-with-aesthetic-mapping">Building swimmer plots with aesthetic mapping<a class="anchor" aria-label="anchor" href="#building-swimmer-plots-with-aesthetic-mapping"></a>
 </h3>
 <p>To start, let’s build a swimmer plot using <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> and
-dynamic mapping of data. As with the README, we will be using ggswim’s
+dynamically mapped data (for static mapping, see <a href="https://chop-cgtinformatics.github.io/ggswim/articles/add_arrows.html">Static
+Mapping with Markers</a>). As with the README, we will be using ggswim’s
 internal datasets: <code>patient_data</code>,
 <code>infusion_events</code>, and <code>end_study_events</code>.</p>
 <p>Let’s start with observing <code>patient_data</code>’s structure:</p>
@@ -120,20 +123,22 @@ internal datasets: <code>patient_data</code>,
 {"columns":[{"label":["pt_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["bcell_status"],"name":[2],"type":["fct"],"align":["left"]},{"label":["disease_assessment_status"],"name":[3],"type":["chr"],"align":["left"]},{"label":["infusion_type"],"name":[4],"type":["chr"],"align":["left"]},{"label":["event_marker"],"name":[5],"type":["chr"],"align":["left"]},{"label":["delta_t0"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["delta_t0_months"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["delta_today"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["arrow_status"],"name":[9],"type":["lgl"],"align":["right"]}],"data":[{"1":"01","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"-85","7":"-3","8":"10","9":"FALSE"},{"1":"01","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"10","9":"FALSE"},{"1":"01","2":"Not Applicable","3":"RD","4":"Infusion","5":"disease_assessment","6":"-1","7":"0","8":"10","9":"FALSE"},{"1":"01","2":"Not Applicable","3":"RD","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"10","9":"FALSE"},{"1":"01","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"27","7":"1","8":"10","9":"FALSE"},{"1":"01","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"10","9":"FALSE"},{"1":"01","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"55","7":"2","8":"10","9":"FALSE"},{"1":"01","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"end_study_event","6":"63","7":"2","8":"10","9":"FALSE"},{"1":"02","2":"B-cell Recovery","3":"RD","4":"Infusion","5":"disease_assessment","6":"-86","7":"-3","8":"8","9":"FALSE"},{"1":"02","2":"B-cell Recovery","3":"RD","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"8","9":"FALSE"},{"1":"02","2":"Not Applicable","3":"CRi","4":"Infusion","5":"disease_assessment","6":"-2","7":"0","8":"8","9":"FALSE"},{"1":"02","2":"Not Applicable","3":"CRi","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"8","9":"FALSE"},{"1":"02","2":"Not Applicable","3":"CRi","4":"Infusion","5":"end_study_event","6":"-1","7":"0","8":"8","9":"FALSE"},{"1":"03","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"27","7":"1","8":"16","9":"FALSE"},{"1":"03","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"16","9":"FALSE"},{"1":"03","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"86","7":"3","8":"16","9":"FALSE"},{"1":"03","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"190","7":"6","8":"16","9":"FALSE"},{"1":"03","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"16","9":"FALSE"},{"1":"03","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"363","7":"12","8":"16","9":"FALSE"},{"1":"03","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"-1","7":"0","8":"16","9":"FALSE"},{"1":"03","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"-74","7":"-2","8":"16","9":"FALSE"},{"1":"03","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"254","7":"8","8":"16","9":"FALSE"},{"1":"03","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"end_study_event","6":"368","7":"12","8":"16","9":"FALSE"},{"1":"03","2":"B-cell Recovery","3":"CR","4":"Reinfusion","5":"disease_assessment","6":"363","7":"12","8":"16","9":"FALSE"},{"1":"03","2":"B-cell Recovery","3":"CR","4":"Reinfusion","5":"infusion_event","6":"100","7":"3","8":"16","9":"FALSE"},{"1":"04","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"-109","7":"-4","8":"9","9":"TRUE"},{"1":"04","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"9","9":"TRUE"},{"1":"04","2":"B-cell Recovery","3":"CRi","4":"Infusion","5":"disease_assessment","6":"34","7":"1","8":"9","9":"TRUE"},{"1":"04","2":"B-cell Recovery","3":"CRi","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"9","9":"TRUE"},{"1":"04","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"disease_assessment","6":"97","7":"3","8":"9","9":"TRUE"},{"1":"04","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"9","9":"TRUE"},{"1":"04","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"8","7":"0","8":"9","9":"TRUE"},{"1":"04","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"9","9":"TRUE"},{"1":"04","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"197","7":"6","8":"9","9":"TRUE"},{"1":"05","2":"Not Applicable","3":"RD","4":"Infusion","5":"disease_assessment","6":"279","7":"9","8":"14","9":"TRUE"},{"1":"05","2":"Not Applicable","3":"RD","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"14","9":"TRUE"},{"1":"05","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"-146","7":"-5","8":"14","9":"TRUE"},{"1":"05","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"14","9":"TRUE"},{"1":"05","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"34","7":"1","8":"14","9":"TRUE"},{"1":"05","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"14","9":"TRUE"},{"1":"05","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"90","7":"3","8":"14","9":"TRUE"},{"1":"05","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"181","7":"6","8":"14","9":"TRUE"},{"1":"05","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"6","7":"0","8":"14","9":"TRUE"},{"1":"05","2":"B-cell Aplasia","3":"CR","4":"Reinfusion","5":"infusion_event","6":"135","7":"4","8":"14","9":"TRUE"},{"1":"06","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"77","7":"3","8":"14","9":"FALSE"},{"1":"06","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"14","9":"FALSE"},{"1":"06","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"-13","7":"0","8":"14","9":"FALSE"},{"1":"06","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"-71","7":"-2","8":"14","9":"FALSE"},{"1":"06","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"14","9":"FALSE"},{"1":"06","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"19","7":"1","8":"14","9":"FALSE"},{"1":"06","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"end_study_event","6":"132","7":"4","8":"14","9":"FALSE"},{"1":"07","2":"Not Applicable","3":"CR","4":"Infusion","5":"disease_assessment","6":"-53","7":"-2","8":"3","9":"TRUE"},{"1":"07","2":"Not Applicable","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"3","9":"TRUE"},{"1":"07","2":"Not Applicable","3":"CR","4":"Infusion","5":"disease_assessment","6":"4","7":"0","8":"3","9":"TRUE"},{"1":"08","2":"Not Applicable","3":"RD","4":"Infusion","5":"disease_assessment","6":"260","7":"9","8":"12","9":"TRUE"},{"1":"08","2":"Not Applicable","3":"RD","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"12","9":"TRUE"},{"1":"08","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"-200","7":"-7","8":"12","9":"TRUE"},{"1":"08","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"12","9":"TRUE"},{"1":"08","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"disease_assessment","6":"167","7":"5","8":"12","9":"TRUE"},{"1":"08","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"12","9":"TRUE"},{"1":"08","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"disease_assessment","6":"20","7":"1","8":"12","9":"TRUE"},{"1":"08","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"disease_assessment","6":"92","7":"3","8":"12","9":"TRUE"},{"1":"08","2":"B-cell Recovery","3":"RD","4":"Infusion","5":"disease_assessment","6":"-12","7":"0","8":"12","9":"TRUE"},{"1":"08","2":"B-cell Recovery","3":"RD","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"12","9":"TRUE"},{"1":"08","2":"B-cell Recovery","3":"RD","4":"Reinfusion","5":"infusion_event","6":"63","7":"2","8":"12","9":"TRUE"},{"1":"09","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"disease_assessment","6":"-181","7":"-6","8":"10","9":"TRUE"},{"1":"09","2":"B-cell Recovery","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"10","9":"TRUE"},{"1":"09","2":"Not Applicable","3":"RD","4":"Infusion","5":"disease_assessment","6":"-8","7":"0","8":"10","9":"TRUE"},{"1":"09","2":"Not Applicable","3":"RD","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"10","9":"TRUE"},{"1":"09","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"disease_assessment","6":"20","7":"1","8":"10","9":"TRUE"},{"1":"09","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"10","9":"TRUE"},{"1":"09","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"disease_assessment","6":"169","7":"6","8":"10","9":"TRUE"},{"1":"09","2":"B-cell Aplasia","3":"CR","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"10","9":"TRUE"},{"1":"09","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"disease_assessment","6":"92","7":"3","8":"10","9":"TRUE"},{"1":"12","2":"B-cell Recovery","3":"RD","4":"Infusion","5":"disease_assessment","6":"96","7":"3","8":"11","9":"TRUE"},{"1":"12","2":"B-cell Recovery","3":"RD","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"11","9":"TRUE"},{"1":"12","2":"Not Applicable","3":"RD","4":"Infusion","5":"disease_assessment","6":"3","7":"0","8":"11","9":"TRUE"},{"1":"12","2":"Not Applicable","3":"RD","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"11","9":"TRUE"},{"1":"12","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"disease_assessment","6":"192","7":"6","8":"11","9":"TRUE"},{"1":"12","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"infusion_event","6":"0","7":"0","8":"11","9":"TRUE"},{"1":"12","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"disease_assessment","6":"244","7":"8","8":"11","9":"TRUE"},{"1":"12","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"disease_assessment","6":"31","7":"1","8":"11","9":"TRUE"},{"1":"12","2":"B-cell Aplasia","3":"CRi","4":"Infusion","5":"disease_assessment","6":"-105","7":"-3","8":"11","9":"TRUE"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<p><code>patient_data</code> contains a long dataset where patient ID’s
-(<code>pt_id</code>) can be repeated. These rows are differentiated by
-<code>event_marker</code>s and corresponding times. Together, these rows
-signify a patient timeline with consideration for infusions and disease
-assessment time points. You’ll notice several other columns that give
-more information:</p>
+<p><code>patient_data</code> contains a long pivoted dataset where
+patient ID’s (<code>pt_id</code>) can be repeated. These rows are
+differentiated by <code>event_marker</code>s combined with corresponding
+times where <code>delta_t0</code> is the change in time (in days) from
+an infusion. Together, these rows signify a patient timeline with
+consideration for infusions, disease assessments, and B-cell status
+changes. You’ll notice several other columns that give more
+information:</p>
 <ul>
 <li>
 <code>bcell_status</code>: The b-cell status of a given patient at a
-particular time point, indicating aplasia or recovery
-<ul>
+particular time point, indicating aplasia or recovery</li>
 <li>
 <code>disease_assessment_status</code>: The overall status at a
-disease assessment timepoint where:</li>
+disease assessment timepoint where:
+<ul>
 <li>CR = “Complete Response”</li>
 <li>CRi = “Complete Response with Incomplete Blood Count Recovery”</li>
 <li>RD = “Relapsed Disease”</li>
@@ -157,8 +162,8 @@ disease assessment timepoint where:</li>
 <p>Here we have a simple bar chart, showing infusions grouped by
 patients with a given disease assessment status. <code><a href="../reference/ggswim.html">ggswim()</a></code>
 does the work of setting up a <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col()</a></code> and readying our
-plot layers for additional ggwim-specific features such as the “markers”
-mentioned earlier. Let’s add a marker layer next and reference
+plot layers for additional ggswim-specific features such as the
+“markers” mentioned earlier. Let’s add a marker layer next and reference
 <code>bcell_status</code> from the same <code>patient_data</code>
 dataset. We’ll also add another marker layer from the
 <code>infusion_events</code> dataset:</p>
@@ -199,9 +204,8 @@ beyond <code>t0</code> (if a patient had any).</p>
 <p><img src="ggswim_files/figure-html/first%20marker%20plot-1.png" width="1152"></p>
 <p>Now we can see shapes have been added to establish our markers…
 though some blend into the colors of the bar charts. We’ll fix this soon
-enough! For now, we can see that a new legend has been added to
-articulate the markers we added for the b-cell disease assessment and
-infusion events.</p>
+enough! For now, we can see that a new legend has been added to display
+the markers for the b-cell disease assessment and infusion events.</p>
 <p>Our last dataset involves end of study events, i.e. events that
 indicate a patient has left the study for various reasons.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -235,11 +239,11 @@ mapping parameters to ggswim. Let’s add a layer using emojis via the
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
 <p><img src="ggswim_files/figure-html/second%20marker%20plot-1.png" width="1152"></p>
-<p>At this point we have a working swimmer plot with lanes and two
-different kinds of marker layers. Recall that ggswim works within the
-ggplot2 framework, therefore customization can be done using the same
-ggplot2 theme and styling functions users may already be familiar with.
-Let’s fix up this plot so it looks nicer on the eyes:</p>
+<p>We’ve successfully made a swimmer plot with lanes and three different
+kinds of marker layers. Recall that ggswim works within the ggplot2
+framework, therefore customization can be done using the same ggplot2
+theme and styling functions users may already be familiar with. Let’s
+fix up this plot so it looks nicer on the eyes:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
@@ -267,55 +271,6 @@ Let’s fix up this plot so it looks nicer on the eyes:</p>
 <p><img src="ggswim_files/figure-html/mapping%20with%20theme_ggswim-1.png" width="1152"></p>
 </div>
 <div class="section level3">
-<h3 id="customizing-markers-a-deeper-dive">Customizing Markers: A Deeper Dive<a class="anchor" aria-label="anchor" href="#customizing-markers-a-deeper-dive"></a>
-</h3>
-<p>In the world of data, one size rarely fits all. That’s why ggswim
-caters to both dynamic and static marker assignments.</p>
-<p>Users can call <code><a href="../reference/add_marker.html">add_marker()</a></code> and manually define the
-color of a single, significant marker rather than relying on a mapped
-variable. Let’s see how this works by splitting up
-<code>infusion_events</code> into distinct data frames.</p>
-<p>To make it all come together, make sure to include an
-<code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> <code>name</code> argument within
-<code><a href="../reference/add_marker.html">add_marker()</a></code>. This serves as a crucial anchor point for the
-legend, ensuring clarity in your visualization.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">initial_infusions</span> <span class="op">&lt;-</span> <span class="va">infusion_events</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">infusion_type</span> <span class="op">==</span> <span class="st">"Infusion"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">reinfusions</span> <span class="op">&lt;-</span> <span class="va">infusion_events</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">infusion_type</span> <span class="op">==</span> <span class="st">"Reinfusion"</span><span class="op">)</span></span></code></pre></div>
-<p>Now, let’s plot it similarly to how we have previously:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">patient_data</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span><span class="st">"Status Markers"</span> <span class="op">=</span> <span class="va">bcell_status</span><span class="op">)</span>,</span>
-<span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta_t0_months</span>, y <span class="op">=</span> <span class="va">pt_id</span>, fill <span class="op">=</span> <span class="va">disease_assessment_status</span><span class="op">)</span></span>
-<span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="co"># Same markers as before for Disease Assessment</span></span>
-<span>  <span class="fu"><a href="../reference/add_marker.html">add_marker</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
-<span>      x <span class="op">=</span> <span class="va">delta_t0_months</span>,</span>
-<span>      y <span class="op">=</span> <span class="va">pt_id</span>,</span>
-<span>      color <span class="op">=</span> <span class="va">`Status Markers`</span>,</span>
-<span>      shape <span class="op">=</span> <span class="va">`Status Markers`</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    size <span class="op">=</span> <span class="fl">5</span>, position <span class="op">=</span> <span class="st">"identity"</span>, alpha <span class="op">=</span> <span class="fl">1</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="co"># New manual color markers for Infusions</span></span>
-<span>  <span class="fu"><a href="../reference/add_marker.html">add_marker</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">initial_infusions</span>,</span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">infusion_delta_t0_months</span>, y <span class="op">=</span> <span class="va">pt_id</span>, name <span class="op">=</span> <span class="st">"Initial Infusion"</span><span class="op">)</span>,</span>
-<span>    size <span class="op">=</span> <span class="fl">5</span>, position <span class="op">=</span> <span class="st">"identity"</span>, color <span class="op">=</span> <span class="st">"green"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/add_marker.html">add_marker</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">reinfusions</span>,</span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">infusion_delta_t0_months</span>, y <span class="op">=</span> <span class="va">pt_id</span>, name <span class="op">=</span> <span class="st">"Reinfusion"</span><span class="op">)</span>,</span>
-<span>    size <span class="op">=</span> <span class="fl">5</span>, position <span class="op">=</span> <span class="st">"identity"</span>, color <span class="op">=</span> <span class="st">"red"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/theme_ggswim.html">theme_ggswim</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggswim_files/figure-html/static%20plot-1.png" width="1152"></p>
-</div>
-<div class="section level3">
 <h3 id="additional-notes">Additional notes<a class="anchor" aria-label="anchor" href="#additional-notes"></a>
 </h3>
 <p>Some additional considerations to keep in mind when working with
@@ -333,8 +288,8 @@ note that <code><a href="../reference/ggswim.html">ggswim()</a></code> does not 
 Similarly, <code><a href="../reference/add_marker.html">add_marker()</a></code> does not support mapping using the
 <code>fill</code> argument.</p></li>
 <li><p><strong>Rendering Emojis and Custom Shapes:</strong> To ensure
-emojis and other custom shapes display correctly, users may need to
-switch the graphics rendering device to AGG.</p></li>
+emojis and other custom shapes display correctly, users may need to <a href="https://support.posit.co/hc/en-us/articles/360017886674-Troubleshooting-RStudio-Rendering-Errors" class="external-link">switch
+their graphics rendering device</a> to AGG.</p></li>
 </ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -59,6 +59,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/add_arrows.html">Adding Arrows</a>
+    <a class="dropdown-item" href="../articles/static_markers.html">Static Mapping with Markers</a>
   </div>
 </li>
       </ul>
@@ -94,20 +95,18 @@
 
     
     
-<p>In certain scenarios, it can be useful to visually indicate the
-continuation of specific records in a swimmer plot. This is where the
-optional feature of adding arrows to the tail ends of swimmer plot lanes
-in ggswim comes in handy. Example use cases include illustrating the
-ongoing care of patients or highlighting record “survival” statuses.</p>
+<p>It can be useful to visually indicate the continuation of specific
+records in a swimmer plot. Optionally adding arrows to the tail ends of
+swimmer plot lanes in ggswim can help communicate subject survival
+status, such as whether or not a subject is still on a given study.</p>
 <p>Behind the scenes, the inclusion of arrows is facilitated by a call
-to <code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">ggplot2::geom_segment()</a></code>, coupled with some fine-tuning.
-While the segments themselves have zero length, the arrows are made
-possible with a defined length parameter. Within <code><a href="../reference/ggswim.html">ggswim()</a></code>,
-users have full control over this length, along with options for color,
+to <code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">ggplot2::geom_segment()</a></code>. ggswim sets the segment length
+to 0, so that assigned arrows are always placed on the right side of
+indicated subjects. Within <code><a href="../reference/ggswim.html">ggswim()</a></code>, users have full
+control over arrow neck and head length, along with options for color,
 fill, and type (refer to <code><a href="../reference/ggswim.html">?ggswim</a></code> for detailed
 information).</p>
-<p>Let’s dive into an example, similar to the one we’ve been using in
-the README, to see this feature in action.</p>
+<p>Let’s dive into an example similar to that in the README:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://chop-cgtinformatics.github.io/ggswim/">ggswim</a></span><span class="op">)</span></span>
 <span></span>
