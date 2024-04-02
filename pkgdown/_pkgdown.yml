@@ -26,6 +26,8 @@ navbar:
       menu:
         - text: "Adding Arrows"
           href: articles/add_arrows.html
+        - text: "Static Mapping with Markers"
+          href: articles/static_markers.html
 
 search:
   exclude: ['news/index.html']

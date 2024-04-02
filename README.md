@@ -13,7 +13,9 @@ coverage](https://codecov.io/gh/CHOP-CGTInformatics/ggswim/branch/main/graph/bad
 <!-- badges: end -->
 
 The ggswim package provides a convenient set of commands to easily
-create “swimmer” plots.
+create swimmer plots. It integrates with the familiar ggplot2 framework
+and streamlines the process of generating legends that effectively
+communicate events of interest along individual subject trajectories.
 
 ## Installation
 
@@ -23,29 +25,15 @@ You can install the development version of ggswim like so:
 devtools::install_github("CHOP-CGTInformatics/ggswim")
 ```
 
-## ggswim: Elegant Swimmer Plots with ggplot2
-
-ggswim helps create stunning swimmer plots by integrating with the
-familiar ggplot2 framework, allowing developers to effortlessly add
-layers and customize displays to their needs.
-
-ggswim streamlines the process of generating legends that clearly
-communicate layer data of added complexity when combining fill, point,
-and label layer types.
-
-Let’s dive right into a quick example to showcase the simplicity and
-effectiveness of ggswim!
-
-## Exploring the Sample Dataset & Creating a Swimmer Plot
+## Usage
 
 To help you get started, ggswim includes three sample datasets:
 `patient_data`, `infusion_events`, and `end_study_events`. These
 de-identified datasets simulate real world data related to infusions,
 disease assessments, and study statuses for a clinical trial.
 
-Let’s load the data and dive into creating our swimmer plots! The first
-step is to create a variant of a `geom_col()` using the `ggswim()`
-function. This makes the swimmer plot “lanes”:
+By first calling the `ggswim()` function, we can set up the horizontal
+survival bars of our swimmer plot, i.e. the “lanes:”
 
 ``` r
 library(ggswim)
@@ -61,7 +49,8 @@ p <- ggswim(
 )
 ```
 
-Next we’ll add on events of interest, what we’ll refer to as “markers”:
+Next we’ll add on events of interest: B-cell status changes, end of
+study updates, and infusions. These we’ll refer to as “markers”:
 
 ``` r
 p <- p +
@@ -81,7 +70,8 @@ p <- p +
   ) 
 ```
 
-And finally, we’ll spruce up our plot a bit:
+Finally, we’ll beautify the plot with familiar ggplot2 techniques and a
+last finishing touch with `theme_ggswim()`:
 
 ``` r
 p +
@@ -101,3 +91,15 @@ p +
 ```
 
 <img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+
+## Collaboration
+
+We invite you to give feedback and collaborate with us! If you are
+familiar with GitHub and R packages, please feel free to submit a [pull
+request](https://github.com/CHOP-CGTInformatics/ggswim/pulls). Please do
+let us know if ggswim fails for whatever reason with your database and
+submit a bug report by creating a GitHub
+[issue](https://github.com/CHOP-CGTInformatics/ggswim/issues).
+
+Please note that this project is released with a Contributor Code of
+Conduct. By participating you agree to abide by its terms.
