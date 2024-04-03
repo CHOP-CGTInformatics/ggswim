@@ -107,52 +107,43 @@
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ggswim.html">ggswim</a></span><span class="op">(</span></span>
-<span>  <span class="va">patient_data</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span><span class="st">"Status Markers"</span> <span class="op">=</span> <span class="va">bcell_status</span><span class="op">)</span>,</span>
-<span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta_t0_months</span>, y <span class="op">=</span> <span class="va">pt_id</span>, fill <span class="op">=</span> <span class="va">disease_assessment_status</span><span class="op">)</span>,</span>
+<span>  <span class="va">patient_data</span>,</span>
+<span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta_t0_months</span>, y <span class="op">=</span> <span class="va">pt_id</span>, fill <span class="op">=</span> <span class="va">disease_assessment</span><span class="op">)</span>,</span>
 <span>  arrow <span class="op">=</span> <span class="va">arrow_status</span>,</span>
 <span>  arrow_head_length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">.25</span>, <span class="st">"inches"</span><span class="op">)</span>,</span>
 <span>  arrow_neck_length <span class="op">=</span> <span class="va">delta_today</span>,</span>
 <span>  width <span class="op">=</span> <span class="fl">0.25</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Next we’ll add on events of interest: B-cell status changes, end of study updates, and infusions. These we’ll refer to as “markers”:</p>
+<p>Next we’ll add on events of interest: end of study updates, and infusions. These we’ll refer to as “markers”:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">p</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/add_marker.html">add_marker</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta_t0_months</span>, y <span class="op">=</span> <span class="va">pt_id</span>, color <span class="op">=</span> <span class="va">`Status Markers`</span>, shape <span class="op">=</span> <span class="va">`Status Markers`</span><span class="op">)</span>,</span>
-<span>    size <span class="op">=</span> <span class="fl">5</span>, position <span class="op">=</span> <span class="st">"identity"</span>, alpha <span class="op">=</span> <span class="fl">1</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/add_marker.html">add_marker</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">end_study_events</span>,</span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta_t0_months</span>, y <span class="op">=</span> <span class="va">pt_id</span>, label_vals <span class="op">=</span> <span class="va">end_study_label</span>, label_names <span class="op">=</span> <span class="va">end_study_name</span><span class="op">)</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">end_study_events</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span><span class="st">"Status Markers"</span> <span class="op">=</span> <span class="va">end_study_name</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta_t0_months</span>, y <span class="op">=</span> <span class="va">pt_id</span>, label_vals <span class="op">=</span> <span class="va">end_study_label</span>, label_names <span class="op">=</span> <span class="va">`Status Markers`</span><span class="op">)</span>,</span>
 <span>    label.size <span class="op">=</span> <span class="cn">NA</span>, fill <span class="op">=</span> <span class="cn">NA</span>, size <span class="op">=</span> <span class="fl">5</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/add_marker.html">add_marker</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">infusion_events</span>,</span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">infusion_delta_t0_months</span>, y <span class="op">=</span> <span class="va">pt_id</span>, color <span class="op">=</span> <span class="va">infusion_type</span>, shape <span class="op">=</span> <span class="va">infusion_type</span><span class="op">)</span>,</span>
-<span>    size <span class="op">=</span> <span class="fl">5</span>, position <span class="op">=</span> <span class="st">"identity"</span>, alpha <span class="op">=</span> <span class="fl">1</span></span>
-<span>  <span class="op">)</span> </span></code></pre></div>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta_t0_months</span>, y <span class="op">=</span> <span class="va">pt_id</span>, name <span class="op">=</span> <span class="st">"Infusion"</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"#25DA6D"</span>,</span>
+<span>    size <span class="op">=</span> <span class="fl">5</span>, position <span class="op">=</span> <span class="st">"identity"</span>, alpha <span class="op">=</span> <span class="fl">.75</span></span>
+<span>  <span class="op">)</span> </span>
+<span><span class="co">#&gt; Warning: Duplicated aesthetics after name standardisation: colour</span></span></code></pre></div>
 <p>Finally, we’ll beautify the plot with familiar ggplot2 techniques and a last finishing touch with <code><a href="reference/theme_ggswim.html">theme_ggswim()</a></code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_colour_manual</a></span><span class="op">(</span></span>
-<span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#b22228"</span>, <span class="st">"#F5EB0A"</span>, <span class="st">"gray50"</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="st">"#25DA6D"</span>, <span class="st">"#25DA6D"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_shape_manual</a></span><span class="op">(</span></span>
-<span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">19</span>, <span class="fl">19</span>, <span class="fl">15</span>, <span class="fl">17</span>, <span class="fl">18</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span></span>
 <span>    name <span class="op">=</span> <span class="st">"Overall Disease Assessment"</span>,</span>
 <span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#6394F3"</span>, <span class="st">"#F3C363"</span>, <span class="st">"#EB792F"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Sample Swimmer Plot"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Time (Months)"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Patient ID"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"My Swimmer Plot"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Time Since Infusion (Months)"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Patient ID"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/theme_ggswim.html">theme_ggswim</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-4-1.png" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="collaboration">Collaboration<a class="anchor" aria-label="anchor" href="#collaboration"></a>
 </h2>
-<p>We invite you to give feedback and collaborate with us! If you are familiar with GitHub and R packages, please feel free to submit a <a href="https://github.com/CHOP-CGTInformatics/ggswim/pulls" class="external-link">pull request</a>. Please do let us know if ggswim fails for whatever reason and submit a bug report by creating a GitHub <a href="https://github.com/CHOP-CGTInformatics/ggswim/issues" class="external-link">issue</a>.</p>
+<p>We invite you to give feedback and collaborate with us! If you are familiar with GitHub and R packages, please feel free to submit a <a href="https://github.com/CHOP-CGTInformatics/ggswim/pulls" class="external-link">pull request</a>. Please do let us know if ggswim fails for whatever reason with your database and submit a bug report by creating a GitHub <a href="https://github.com/CHOP-CGTInformatics/ggswim/issues" class="external-link">issue</a>.</p>
 <p>Please note that this project is released with a Contributor Code of Conduct. By participating you agree to abide by its terms.</p>
 </div>
 </div>

@@ -109,43 +109,33 @@ mapped column of values. Let’s see how this works by splitting up
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://chop-cgtinformatics.github.io/ggswim/">ggswim</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">initial_infusions</span> <span class="op">&lt;-</span> <span class="va">infusion_events</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">infusion_type</span> <span class="op">==</span> <span class="st">"Infusion"</span><span class="op">)</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">delta_t0</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">initial_infusions</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">rmarkdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgs.rstudio.com/rmarkdown/reference/paged_table.html" class="external-link">paged_table</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["pt_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["infusion_type"],"name":[2],"type":["chr"],"align":["left"]},{"label":["infusion_delta_t0"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["infusion_delta_t0_months"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"01","2":"Infusion","3":"0","4":"0"},{"1":"02","2":"Infusion","3":"0","4":"0"},{"1":"03","2":"Infusion","3":"0","4":"0"},{"1":"04","2":"Infusion","3":"0","4":"0"},{"1":"05","2":"Infusion","3":"0","4":"0"},{"1":"06","2":"Infusion","3":"0","4":"0"},{"1":"07","2":"Infusion","3":"0","4":"0"},{"1":"08","2":"Infusion","3":"0","4":"0"},{"1":"09","2":"Infusion","3":"0","4":"0"},{"1":"12","2":"Infusion","3":"0","4":"0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["pt_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["delta_t0"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["delta_t0_months"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"01","2":"0","3":"0"},{"1":"02","2":"0","3":"0"},{"1":"03","2":"0","3":"0"},{"1":"04","2":"0","3":"0"},{"1":"05","2":"0","3":"0"},{"1":"06","2":"0","3":"0"},{"1":"07","2":"0","3":"0"},{"1":"08","2":"0","3":"0"},{"1":"09","2":"0","3":"0"},{"1":"12","2":"0","3":"0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">reinfusions</span> <span class="op">&lt;-</span> <span class="va">infusion_events</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">infusion_type</span> <span class="op">==</span> <span class="st">"Reinfusion"</span><span class="op">)</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">delta_t0</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">reinfusions</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">rmarkdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgs.rstudio.com/rmarkdown/reference/paged_table.html" class="external-link">paged_table</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["pt_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["infusion_type"],"name":[2],"type":["chr"],"align":["left"]},{"label":["infusion_delta_t0"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["infusion_delta_t0_months"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"03","2":"Reinfusion","3":"100","4":"3"},{"1":"05","2":"Reinfusion","3":"135","4":"4"},{"1":"08","2":"Reinfusion","3":"63","4":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["pt_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["delta_t0"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["delta_t0_months"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"03","2":"95","3":"3"},{"1":"05","2":"134","3":"4"},{"1":"08","2":"71","3":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>We’ll start by setting up the same swimmer plot we’ve made from
 previous examples:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">patient_data</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span><span class="st">"Status Markers"</span> <span class="op">=</span> <span class="va">bcell_status</span><span class="op">)</span>,</span>
-<span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta_t0_months</span>, y <span class="op">=</span> <span class="va">pt_id</span>, fill <span class="op">=</span> <span class="va">disease_assessment_status</span><span class="op">)</span></span>
-<span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="co"># Same markers as before for Disease Assessment</span></span>
-<span>  <span class="fu"><a href="../reference/add_marker.html">add_marker</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
-<span>      x <span class="op">=</span> <span class="va">delta_t0_months</span>,</span>
-<span>      y <span class="op">=</span> <span class="va">pt_id</span>,</span>
-<span>      color <span class="op">=</span> <span class="va">`Status Markers`</span>,</span>
-<span>      shape <span class="op">=</span> <span class="va">`Status Markers`</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    size <span class="op">=</span> <span class="fl">5</span>, position <span class="op">=</span> <span class="st">"identity"</span>, alpha <span class="op">=</span> <span class="fl">1</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
+<span>  data <span class="op">=</span> <span class="va">patient_data</span>,</span>
+<span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta_t0_months</span>, y <span class="op">=</span> <span class="va">pt_id</span>, fill <span class="op">=</span> <span class="va">disease_assessment</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>Now, building off of this, lets add out
 <code>initial_infusions</code> and <code>reinfusions</code> markers as
 separate calls to <code><a href="../reference/add_marker.html">add_marker()</a></code>:</p>
@@ -154,36 +144,21 @@ separate calls to <code><a href="../reference/add_marker.html">add_marker()</a><
 <span>  <span class="co"># New manual color markers for Infusions</span></span>
 <span>  <span class="fu"><a href="../reference/add_marker.html">add_marker</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">initial_infusions</span>,</span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">infusion_delta_t0_months</span>, y <span class="op">=</span> <span class="va">pt_id</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta_t0_months</span>, y <span class="op">=</span> <span class="va">pt_id</span>, name <span class="op">=</span> <span class="st">"Infusion"</span><span class="op">)</span>,</span>
 <span>    size <span class="op">=</span> <span class="fl">5</span>, position <span class="op">=</span> <span class="st">"identity"</span>, color <span class="op">=</span> <span class="st">"green"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/add_marker.html">add_marker</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">reinfusions</span>,</span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">infusion_delta_t0_months</span>, y <span class="op">=</span> <span class="va">pt_id</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">delta_t0_months</span>, y <span class="op">=</span> <span class="va">pt_id</span>, name <span class="op">=</span> <span class="st">"Reinfusion"</span><span class="op">)</span>,</span>
 <span>    size <span class="op">=</span> <span class="fl">5</span>, position <span class="op">=</span> <span class="st">"identity"</span>, color <span class="op">=</span> <span class="st">"red"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/theme_ggswim.html">theme_ggswim</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="static_markers_files/figure-html/static%20plot%20no%20name-1.png" width="1152"></p>
 <p>Notice here how we specified a <code>color</code> outside of
-<code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code>, but something’s not right… Our infusions don’t
-appear in the legend. In order to support static assignments in the
-legend, we also need to give a static name to the new data via a special
-<code>name</code> parameter.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p</span> <span class="op">+</span></span>
-<span>  <span class="co"># New manual color markers for Infusions</span></span>
-<span>  <span class="fu"><a href="../reference/add_marker.html">add_marker</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">initial_infusions</span>,</span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">infusion_delta_t0_months</span>, y <span class="op">=</span> <span class="va">pt_id</span>, name <span class="op">=</span> <span class="st">"Initial Infusion"</span><span class="op">)</span>,</span>
-<span>    size <span class="op">=</span> <span class="fl">5</span>, position <span class="op">=</span> <span class="st">"identity"</span>, color <span class="op">=</span> <span class="st">"green"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/add_marker.html">add_marker</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">reinfusions</span>,</span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">infusion_delta_t0_months</span>, y <span class="op">=</span> <span class="va">pt_id</span>, name <span class="op">=</span> <span class="st">"Reinfusion"</span><span class="op">)</span>,</span>
-<span>    size <span class="op">=</span> <span class="fl">5</span>, position <span class="op">=</span> <span class="st">"identity"</span>, color <span class="op">=</span> <span class="st">"red"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/theme_ggswim.html">theme_ggswim</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="static_markers_files/figure-html/static%20plot%20name-1.png" width="1152"></p>
+<code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code>, along with a unique <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> param:
+<code>name</code>. <code>name</code> is required to show static layers
+in the legend, and also for proper display in cases where a static
+marker is the first one added.</p>
   </main>
 </div>
 
