@@ -1,11 +1,19 @@
-#' @title ggswim Theme
+#' @title
+#' Apply custom theme styling for ggplot2 plots
 #'
 #' @description
-#' Alternative themes for ggswim plots:
+#' This function applies custom styling to various elements of ggplot2 plots,
+#' including title, subtitle, caption, axis text, axis titles, and legend text
+#' and legend titles.
 #'
-#' - `theme_ggswim()`: Builds on `theme_minimal()` with removal of grid lines and some aesthetic updates.
+#' @details
+#' This function builds upon the `theme_minimal()` function in ggplot2 but overrides
+#' specific theme elements to provide a customized look and feel for plots.
 #'
-#' @returns a ggplot2 theme
+#' @param base_size The base font size to use for the plot elements. Default is 12.
+#' @param base_family The base font family to use for the plot elements. Default is "".
+#'
+#' @return A ggplot2 theme object.
 #'
 #' @export
 #'
@@ -19,67 +27,34 @@
 #'   )
 #' ) +
 #'   theme_ggswim()
-theme_ggswim <- function() {
-  font <- "serif"
-
-  theme_minimal() %+replace%
-
+theme_ggswim <- function(base_size = 12, base_family = "") {
+  theme_minimal(base_size = base_size, base_family = base_family) +
     theme(
-      # Grid Elements ----
-      axis.ticks = element_line(color = "steelblue3", linewidth = 1),
-      panel.grid.major.x = element_blank(),
-      panel.grid.minor.x = element_blank(),
-      panel.grid.major.y = element_blank(),
-      panel.grid.minor.y = element_blank(),
-      axis.line = element_line(
-        color = "steelblue3", linewidth = 1,
-        arrow = arrow(
-          type = "closed",
-          length = unit(0.08, "inches")
-        )
-      ),
+      # Title and subtitle
+      plot.title = element_text(size = 18, face = "bold", hjust = 0, margin = margin(b = 10)),
+      plot.subtitle = element_text(size = 14, hjust = 0, margin = margin(b = 10)),
 
+      # Caption
+      plot.caption = element_text(size = 10, hjust = 1),
 
-      # Text Elements ----
-      plot.title = element_text(
-        family = font,
-        size = 16,
-        face = "bold",
-        hjust = .5,
-        vjust = 2
-      ),
-      plot.subtitle = element_text(
-        family = font,
-        size = 12
-      ),
-      plot.caption = element_text(
-        family = font,
-        size = 9,
-        hjust = 1
-      ),
-      axis.title = element_text(
-        face = "bold",
-        family = font,
-        size = 12
-      ),
-      axis.text = element_text(
-        family = font,
-        size = 9
-      ),
+      # Axis text
+      axis.text = element_text(size = 10),
 
-      # Legend Elements ----
-      legend.background = element_rect(
-        fill = "white",
-        linewidth = 4,
-        colour = "white"
-      ),
-      legend.text = element_text(
-        family = font
-      ),
-      legend.title = element_text(
-        hjust = 0,
-        family = font,
-        face = "bold"
-      )
+      # Axis titles
+      axis.title = element_text(size = 12, face = "bold"),
+
+      # Legend
+      legend.text = element_text(size = 10),
+      legend.title = element_text(size = 12, face = "bold"),
+
+      # Axis line
+      axis.line = element_line(color = "steelblue",
+                               size = .5,
+                               arrow = arrow(type = "closed",
+                                             length = unit(0.2, "inches"))),
+
+      # Remove grid lines
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank()
     )
 }

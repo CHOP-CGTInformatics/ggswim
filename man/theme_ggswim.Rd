@@ -2,18 +2,26 @@
 % Please edit documentation in R/theme_ggswim.R
 \name{theme_ggswim}
 \alias{theme_ggswim}
-\title{ggswim Theme}
+\title{Apply custom theme styling for ggplot2 plots}
 \usage{
-theme_ggswim()
+theme_ggswim(base_size = 12, base_family = "")
+}
+\arguments{
+\item{base_size}{The base font size to use for the plot elements. Default is 12.}
+
+\item{base_family}{The base font family to use for the plot elements. Default is "".}
 }
 \value{
-a ggplot2 theme
+A ggplot2 theme object.
 }
 \description{
-Alternative themes for ggswim plots:
-\itemize{
-\item \code{theme_ggswim()}: Builds on \code{theme_minimal()} with removal of grid lines and some aesthetic updates.
+This function applies custom styling to various elements of ggplot2 plots,
+including title, subtitle, caption, axis text, axis titles, and legend text
+and legend titles.
 }
+\details{
+This function builds upon the \code{theme_minimal()} function in ggplot2 but overrides
+specific theme elements to provide a customized look and feel for plots.
 }
 \examples{
 ggswim(

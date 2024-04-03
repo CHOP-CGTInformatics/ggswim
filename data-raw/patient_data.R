@@ -294,30 +294,30 @@ usethis::use_data(end_study_events, overwrite = TRUE)
 
 # ggswim ----
 # Uncomment for testing
-ggswim(
-  patient_data,
-  mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment),
-  arrow = arrow_status,
-  arrow_head_length = unit(.25, "inches"),
-  arrow_neck_length = delta_today,
-  width = 0.25
-) +
-  add_marker(
-    data = end_study_events |> rename("Status Markers" = end_study_name),
-    aes(x = delta_t0_months, y = pt_id, label_vals = end_study_label, label_names = `Status Markers`),
-    label.size = NA, fill = NA, size = 5
-  )  +
-  add_marker(
-    data = infusion_events,
-    aes(x = delta_t0_months, y = pt_id, name = "Infusion"), color = "#25DA6D",
-    size = 5, position = "identity", alpha = .75
-  ) +
-  scale_fill_manual(
-    name = "Overall Disease Assessment",
-    values = c("#6394F3", "#F3C363", "#EB792F")
-  ) +
-  labs(title = "Prodigy Swimmer Plot") +
-  xlab("Time Since Infusion (Months)") + ylab("Patient ID") +
-  theme_ggswim()
+# ggswim(
+#   patient_data,
+#   mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment),
+#   arrow = arrow_status,
+#   arrow_head_length = unit(.25, "inches"),
+#   arrow_neck_length = delta_today,
+#   width = 0.25
+# ) +
+#   add_marker(
+#     data = end_study_events |> dplyr::rename("Status Markers" = end_study_name),
+#     aes(x = delta_t0_months, y = pt_id, label_vals = end_study_label, label_names = `Status Markers`),
+#     label.size = NA, fill = NA, size = 5
+#   )  +
+#   add_marker(
+#     data = infusion_events,
+#     aes(x = delta_t0_months, y = pt_id, name = "Infusion"), color = "#25DA6D",
+#     size = 5, position = "identity", alpha = .75
+#   ) +
+#   scale_fill_manual(
+#     name = "Overall Disease Assessment",
+#     values = c("#6394F3", "#F3C363", "#EB792F")
+#   ) +
+#   labs(title = "Prodigy Swimmer Plot", subtitle = "Test", caption = "Test") +
+#   xlab("Time Since Infusion (Months)") + ylab("Patient ID") +
+#   theme_ggswim()
 
 # nolint end
