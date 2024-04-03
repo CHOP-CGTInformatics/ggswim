@@ -47,7 +47,7 @@
 #'   mapping = aes(
 #'     x = delta_t0_months,
 #'     y = pt_id,
-#'     fill = disease_assessment_status
+#'     fill = disease_assessment
 #'   )
 #' )
 #'
@@ -57,7 +57,7 @@
 #'   mapping = aes(
 #'     x = delta_t0_months,
 #'     y = pt_id,
-#'     fill = disease_assessment_status
+#'     fill = disease_assessment
 #'   ),
 #'   arrow = arrow_status,
 #'   arrow_fill = "cyan",

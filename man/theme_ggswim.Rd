@@ -21,7 +21,7 @@ ggswim(
   mapping = aes(
     x = delta_t0_months,
     y = pt_id,
-    fill = disease_assessment_status
+    fill = disease_assessment
   )
 ) +
   theme_ggswim()

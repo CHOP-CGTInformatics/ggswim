@@ -32,7 +32,7 @@ patient_data |>
 
 `patient_data` contains a long pivoted dataset where patient ID's (`pt_id`) can be repeated. These rows are differentiated by `event_marker`s combined with corresponding times where `delta_t0` is the change in time (in days) from an infusion. Together, these rows signify a patient timeline with consideration for infusions, disease assessments, and B-cell status changes.
 
-- `disease_assessment_status`: The overall status at a disease assessment coupled with B-cell status changes where:
+- `disease_assessment`: The overall status at a disease assessment coupled with B-cell status changes where:
    - CR = "Complete Response"
    - CRi = "Complete Response with Incomplete Blood Count Recovery"
    - RD = "Relapsed Disease"

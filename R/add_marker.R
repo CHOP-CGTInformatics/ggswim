@@ -73,7 +73,7 @@
 #'
 #' # markers with points and static params
 #'
-#' initial_infusions <- infusion_events[infusion_events$infusion_type == "Infusion", ]
+#' initial_infusions <- infusion_events[infusion_events$delta_t0 == 0, ]
 #'
 #' add_marker(
 #'   data = initial_infusions,

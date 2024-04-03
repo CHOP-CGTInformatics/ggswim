@@ -33,7 +33,7 @@ test_that("get_overrides works", {
 
 test_that("bind_layer_data works for single layer", {
   ggswim_obj <- ggswim(patient_data,
-                       aes(x = delta_t0, y = pt_id, fill = disease_assessment_status)) +
+                       aes(x = delta_t0, y = pt_id, fill = disease_assessment)) +
     add_marker(data = end_study_events,
                aes(x = delta_t0, y = pt_id, color = end_study_name,
                    label_vals = end_study_label, label_names = end_study_name))
@@ -58,17 +58,17 @@ test_that("bind_layer_data works for single layer", {
 
 test_that("bind_layer_data works for multiple layers", {
   aplasia <- patient_data |>
-    dplyr::filter(bcell_status == "B-cell Aplasia")
+    dplyr::filter(disease_assessment == "CR/CRi + B Cell Aplasia")
 
   recovery <- patient_data |>
-    dplyr::filter(bcell_status == "B-cell Recovery")
+    dplyr::filter(disease_assessment == "CR/CRi + B Cell Recovery")
 
   ggswim_obj <- ggswim(patient_data,
-                       aes(x = delta_t0, y = pt_id, fill = disease_assessment_status)) +
+                       aes(x = delta_t0, y = pt_id)) +
     add_marker(aplasia,
-               mapping = aes(x = delta_t0, y = pt_id, color = bcell_status)) +
+               mapping = aes(x = delta_t0, y = pt_id, color = disease_assessment)) +
     add_marker(recovery,
-               mapping = aes(x = delta_t0, y = pt_id, color = bcell_status))
+               mapping = aes(x = delta_t0, y = pt_id, color = disease_assessment))
 
   layer_indices <- c(2, 3)
 
@@ -83,11 +83,11 @@ test_that("bind_layer_data works for multiple layers", {
 
 test_that("bind_layer_data works with static colors", {
   aplasia <- patient_data |>
-    dplyr::filter(bcell_status == "B-cell Aplasia")
+    dplyr::filter(disease_assessment == "CR/CRi + B Cell Aplasia")
 
   ggswim_obj <- suppressWarnings({
-    ggswim(patient_data,
-           aes(x = delta_t0, y = pt_id, fill = disease_assessment_status)) +
+    ggswim(patient_data |> dplyr::filter(disease_assessment != "CR/CRi + B Cell Aplasia"),
+           aes(x = delta_t0, y = pt_id, fill = disease_assessment)) +
       add_marker(aplasia,
                  mapping = aes(x = delta_t0, y = pt_id, name = "B-cell Aplasia"), color = "red")
   })
@@ -112,10 +112,11 @@ test_that("bind_layer_data works with static colors", {
 
 test_that("get_ref_layer_info works for static colors", {
   aplasia <- patient_data |>
-    dplyr::filter(bcell_status == "B-cell Aplasia")
+    dplyr::filter(disease_assessment == "CR/CRi + B Cell Aplasia")
 
   ggswim_obj <- suppressWarnings({
-    ggswim(patient_data, aes(x = delta_t0, y = pt_id, fill = disease_assessment_status)) +
+    ggswim(patient_data |> dplyr::filter(disease_assessment != "CR/CRi + B Cell Aplasia"),
+           aes(x = delta_t0, y = pt_id, fill = disease_assessment)) +
       add_marker(aplasia,
                  mapping = aes(x = delta_t0, y = pt_id, name = "B-cell Aplasia"), color = "red")
   })
@@ -138,9 +139,9 @@ test_that("get_ref_layer_info works for static colors", {
 
 test_that("get_ref_layer_info works for point and label layers", {
 
-  ggswim_obj <- ggswim(patient_data, aes(x = delta_t0, y = pt_id, fill = disease_assessment_status)) +
+  ggswim_obj <- ggswim(patient_data, aes(x = delta_t0, y = pt_id, fill = disease_assessment)) +
     add_marker(infusion_events,
-               mapping = aes(x = infusion_delta_t0, y = pt_id, color = infusion_type, shape = infusion_type)) +
+               mapping = aes(x = delta_t0, y = pt_id)) +
     add_marker(end_study_events,
                mapping = aes(x = delta_t0, y = pt_id, label_vals = end_study_label, label_names = end_study_name))
 
@@ -156,9 +157,9 @@ test_that("get_ref_layer_info works for point and label layers", {
 })
 
 test_that("ggswim_obj is appropriate class type", {
-  ggswim_obj <- ggswim(patient_data, aes(x = delta_t0, y = pt_id, fill = disease_assessment_status))
+  ggswim_obj <- ggswim(patient_data, aes(x = delta_t0, y = pt_id, fill = disease_assessment))
 
-  ggswim_obj_markers <- ggswim(patient_data, aes(x = delta_t0, y = pt_id, fill = disease_assessment_status)) +
+  ggswim_obj_markers <- ggswim(patient_data, aes(x = delta_t0, y = pt_id, fill = disease_assessment)) +
     add_marker(infusion_events,
                mapping = aes(x = infusion_delta_t0, y = pt_id, color = infusion_type, shape = infusion_type))
 

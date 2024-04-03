@@ -280,7 +280,7 @@ patient_data <- patient_data |>
   filter(!dasmt_bcell_status == "Not Applicable") |>
   select(-c(
     contains("_date"),
-    today, infseq_id, end_study_reason, dasmt_bcell_status, dasmt_overall
+    today, infseq_id, infusion_type, end_study_reason, dasmt_bcell_status, dasmt_overall
   )) |>
   unique()
 

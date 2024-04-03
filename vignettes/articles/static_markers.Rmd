@@ -39,7 +39,7 @@ We'll start by setting up the same swimmer plot we've made from previous example
 p <- ggswim(
   data = patient_data,
   mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment)
-) 
+)
 ```
 
 Now, building off of this, lets add out `initial_infusions` and `reinfusions` markers as separate calls to `add_marker()`:
