@@ -167,7 +167,7 @@ patient_data <- prodigy_randomized |>
     # Zero out infusion time
     infusion_event = if_else(infusion_type == "Infusion", 0, interval(initial_infusion_date, infusion_date) %/% days(1)),
     # Set dasmt interval from zero time
-    dasmt_date,
+    "disease_assessment_date" = dasmt_date,
     disease_assessment = interval(initial_infusion_date, dasmt_date) %/% days(1),
     dasmt_bcell_status,
     # Extract abbrev from ()
@@ -195,9 +195,9 @@ patient_data <- prodigy_randomized |>
   filter(!is.na(delta_t0)) |>
   # Temporary method for handling reinfusions with no disease assessment data
   mutate(
-    dasmt_date = case_when(
-      is.na(dasmt_date) & infusion_type != "Infusion" ~ lag(dasmt_date),
-      TRUE ~ dasmt_date
+    disease_assessment_date = case_when(
+      is.na(disease_assessment_date) & infusion_type != "Infusion" ~ lag(disease_assessment_date),
+      TRUE ~ disease_assessment_date
     ),
     dasmt_bcell_status = case_when(
       is.na(dasmt_bcell_status) & infusion_type != "Infusion" ~ lag(dasmt_bcell_status),
@@ -215,7 +215,26 @@ patient_data <- prodigy_randomized |>
     arrow_status = is.na(end_study_reason)
   ) |>
   arrange(pt_id) |>
-  ungroup()
+  ungroup() |>
+  filter(!is.na(pt_id))
+
+# Apply feedback requests from 2024-04-03
+# 1) No need for "Not Applicable" B-Cell status
+# 2) CR or CRi + B Cell Aplasia = green, CR or CRi + B Cells Present = yellow,
+#    RD (regardless of B cell status) = red
+patient_data <- patient_data |>
+  mutate(
+    disease_assessment = case_when(
+      (dasmt_overall == "CR" | dasmt_overall == "CRi") &
+        dasmt_bcell_status == "B-cell Aplasia" ~ "CR/CRi + B Cell Aplasia",
+      (dasmt_overall == "CR" | dasmt_overall == "CRi") &
+        dasmt_bcell_status == "B-cell Recovery" ~ "CR/CRi + B Cell Recovery",
+      dasmt_overall == "RD" ~ "RD",
+      TRUE ~ dasmt_overall
+    )
+  ) |>
+  # select(-c(dasmt_bcell_status, dasmt_overall)) |>
+  relocate(disease_assessment, .after = disease_assessment_date)
 
 end_study_events <- patient_data |>
   mutate(
@@ -241,31 +260,28 @@ infusion_events <- patient_data |>
     .by = pt_id,
     pt_id,
     infusion_type,
-    infusion_delta_t0 = case_when(
+    delta_t0 = case_when(
       infusion_type == "Infusion" ~ 0,
       event_marker == "infusion_event" ~ delta_t0,
       TRUE ~ NA
     ),
-    infusion_delta_t0_months = case_when(
+    delta_t0_months = case_when(
       infusion_type == "Infusion" ~ 0,
       event_marker == "infusion_event" ~ delta_t0_months,
       TRUE ~ NA
     )
   ) |>
-  filter(!is.na(infusion_delta_t0)) |>
+  filter(!is.na(delta_t0)) |>
+  select(-infusion_type) |>
   unique()
 
 # Clean Data for Display ----
 patient_data <- patient_data |>
+  filter(!dasmt_bcell_status == "Not Applicable") |>
   select(-c(
     contains("_date"),
-    today, infseq_id, end_study_reason
+    today, infseq_id, end_study_reason, dasmt_bcell_status, dasmt_overall
   )) |>
-  relocate(pt_id, .before = dasmt_bcell_status) |>
-  rename(
-    "bcell_status" = dasmt_bcell_status,
-    disease_assessment_status = dasmt_overall
-  ) |>
   unique()
 
 end_study_events <- end_study_events |>
@@ -278,40 +294,30 @@ usethis::use_data(end_study_events, overwrite = TRUE)
 
 # ggswim ----
 # Uncomment for testing
-# ggswim(
-#   patient_data |> dplyr::rename("Status Markers" = bcell_status),
-#   mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment_status),
-#   arrow = arrow_status,
-#   arrow_head_length = unit(.25, "inches"),
-#   arrow_neck_length = delta_today,
-#   width = 0.25
-# ) +
-#   add_marker(
-#     aes(x = delta_t0_months, y = pt_id, color = `Status Markers`, shape = `Status Markers`),
-#     size = 5, position = "identity", alpha = 1
-#   ) +
-#   add_marker(
-#     data = end_study_events,
-#     aes(x = delta_t0_months, y = pt_id, label = end_study_label, color = end_study_name),
-#     label.size = NA, fill = NA, size = 5
-#   ) +
-#   add_marker(
-#     data = infusion_events,
-#     aes(x = infusion_delta_t0, y = pt_id, color = infusion_type, shape = infusion_type),
-#     size = 5, position = "identity", alpha = 1
-#   ) +
-#   scale_colour_manual(
-#     values = c("firebrick", "#F5EB0A", "gray50", NA, NA, NA, "#25DA6D", "#25DA6D")
-#   ) +
-#   scale_shape_manual(
-#     values = c(19, 19, 15, 17, 18)
-#   ) +
-#   scale_fill_manual(
-#     name = "Overall Disease Assessment",
-#     values = c("#6394F3", "#F3C363", "#EB792F")
-#   ) +
-#   labs(title = "Prodigy Swimmer Plot") +
-#   xlab("Time (Months)") + ylab("Patient ID") +
-#   theme_ggswim()
+ggswim(
+  patient_data,
+  mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment),
+  arrow = arrow_status,
+  arrow_head_length = unit(.25, "inches"),
+  arrow_neck_length = delta_today,
+  width = 0.25
+) +
+  add_marker(
+    data = end_study_events |> rename("Status Markers" = end_study_name),
+    aes(x = delta_t0_months, y = pt_id, label_vals = end_study_label, label_names = `Status Markers`),
+    label.size = NA, fill = NA, size = 5
+  )  +
+  add_marker(
+    data = infusion_events,
+    aes(x = delta_t0_months, y = pt_id, name = "Infusion"), color = "#25DA6D",
+    size = 5, position = "identity", alpha = .75
+  ) +
+  scale_fill_manual(
+    name = "Overall Disease Assessment",
+    values = c("#6394F3", "#F3C363", "#EB792F")
+  ) +
+  labs(title = "Prodigy Swimmer Plot") +
+  xlab("Time Since Infusion (Months)") + ylab("Patient ID") +
+  theme_ggswim()
 
 # nolint end

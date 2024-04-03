@@ -40,8 +40,8 @@ library(ggswim)
 library(ggplot2)
 
 p <- ggswim(
-  patient_data |> dplyr::rename("Status Markers" = bcell_status),
-  mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment_status),
+  patient_data,
+  mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment),
   arrow = arrow_status,
   arrow_head_length = unit(.25, "inches"),
   arrow_neck_length = delta_today,
@@ -49,25 +49,22 @@ p <- ggswim(
 )
 ```
 
-Next we’ll add on events of interest: B-cell status changes, end of
-study updates, and infusions. These we’ll refer to as “markers”:
+Next we’ll add on events of interest: end of study updates, and
+infusions. These we’ll refer to as “markers”:
 
 ``` r
 p <- p +
   add_marker(
-    aes(x = delta_t0_months, y = pt_id, color = `Status Markers`, shape = `Status Markers`),
-    size = 5, position = "identity", alpha = 1
-  ) +
-  add_marker(
-    data = end_study_events,
-    aes(x = delta_t0_months, y = pt_id, label_vals = end_study_label, label_names = end_study_name),
+    data = end_study_events |> dplyr::rename("Status Markers" = end_study_name),
+    aes(x = delta_t0_months, y = pt_id, label_vals = end_study_label, label_names = `Status Markers`),
     label.size = NA, fill = NA, size = 5
   ) +
   add_marker(
     data = infusion_events,
-    aes(x = infusion_delta_t0_months, y = pt_id, color = infusion_type, shape = infusion_type),
-    size = 5, position = "identity", alpha = 1
+    aes(x = delta_t0_months, y = pt_id, name = "Infusion"), color = "#25DA6D",
+    size = 5, position = "identity", alpha = .75
   ) 
+#> Warning: Duplicated aesthetics after name standardisation: colour
 ```
 
 Finally, we’ll beautify the plot with familiar ggplot2 techniques and a
@@ -75,18 +72,12 @@ last finishing touch with `theme_ggswim()`:
 
 ``` r
 p +
-  scale_colour_manual(
-    values = c("#b22228", "#F5EB0A", "gray50", NA, NA, NA, "#25DA6D", "#25DA6D")
-  ) +
-  scale_shape_manual(
-    values = c(19, 19, 15, 17, 18)
-  ) +
   scale_fill_manual(
     name = "Overall Disease Assessment",
     values = c("#6394F3", "#F3C363", "#EB792F")
   ) +
-  labs(title = "Sample Swimmer Plot") +
-  xlab("Time (Months)") + ylab("Patient ID") +
+  labs(title = "My Swimmer Plot") +
+  xlab("Time Since Infusion (Months)") + ylab("Patient ID") +
   theme_ggswim()
 ```
 
@@ -97,7 +88,7 @@ p +
 We invite you to give feedback and collaborate with us! If you are
 familiar with GitHub and R packages, please feel free to submit a [pull
 request](https://github.com/CHOP-CGTInformatics/ggswim/pulls). Please do
-let us know if ggswim fails for whatever reason and
+let us know if ggswim fails for whatever reason with your database and
 submit a bug report by creating a GitHub
 [issue](https://github.com/CHOP-CGTInformatics/ggswim/issues).
 

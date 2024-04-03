@@ -25,7 +25,7 @@ ggswim(
   mapping = aes(
     x = delta_t0_months,
     y = pt_id, fill =
-      disease_assessment_status
+      disease_assessment
   )
 )
 ```
@@ -45,7 +45,7 @@ ggswim(
   mapping = aes(
     x = delta_t0_months,
     y = pt_id, fill =
-      disease_assessment_status
+      disease_assessment
   ),
   arrow = arrow_status
 )
@@ -56,7 +56,7 @@ Default values are set for arrows, but can be manipulated for different aestheti
 ```{r}
 ggswim(
   patient_data,
-  mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment_status),
+  mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment),
   arrow = arrow_status,
   arrow_fill = "cyan",
   arrow_colour = "slateblue",

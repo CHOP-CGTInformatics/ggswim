@@ -30,10 +30,9 @@ patient_data |>
   rmarkdown::paged_table()
 ```
 
-`patient_data` contains a long pivoted dataset where patient ID's (`pt_id`) can be repeated. These rows are differentiated by `event_marker`s combined with corresponding times where `delta_t0` is the change in time (in days) from an infusion. Together, these rows signify a patient timeline with consideration for infusions, disease assessments, and B-cell status changes. You'll notice several other columns that give more information:
+`patient_data` contains a long pivoted dataset where patient ID's (`pt_id`) can be repeated. These rows are differentiated by `event_marker`s combined with corresponding times where `delta_t0` is the change in time (in days) from an infusion. Together, these rows signify a patient timeline with consideration for infusions, disease assessments, and B-cell status changes.
 
-- `bcell_status`: The b-cell status of a given patient at a particular time point, indicating aplasia or recovery
-- `disease_assessment_status`: The overall status at a disease assessment timepoint where:
+- `disease_assessment_status`: The overall status at a disease assessment coupled with B-cell status changes where:
    - CR = "Complete Response"
    - CRi = "Complete Response with Incomplete Blood Count Recovery"
    - RD = "Relapsed Disease"
@@ -42,52 +41,41 @@ Now, let's make the plot using `ggswim()` and our first `add_marker()` call:
 
 ```{r ggswim plot}
 p <- ggswim(
-  patient_data |> dplyr::rename("Status Markers" = bcell_status),
+  patient_data,
   mapping = aes(
     x = delta_t0_months,
-    y = pt_id, fill =
-      disease_assessment_status
+    y = pt_id, fill = disease_assessment
   )
 )
 
 p
 ```
 
-Here we have a simple bar chart, showing infusions grouped by patients with a given disease assessment status. `ggswim()` does the work of setting up a `geom_col()` and readying our plot layers for additional ggswim-specific features such as the "markers" mentioned earlier. Let's add a marker layer next and reference `bcell_status` from the same `patient_data` dataset. We'll also add another marker layer from the `infusion_events` dataset:
+Here we have a simple bar chart, showing infusions grouped by patients with a given disease assessment status. `ggswim()` does the work of setting up a `geom_col()` and readying our plot layers for additional ggswim-specific features such as the "markers" mentioned earlier. Let's add a marker layer next from the `infusion_events` dataset:
 
 ```{r infusion_events}
 infusion_events |>
   rmarkdown::paged_table()
 ```
 
-This dataset is much simpler, having only 4 columns indicating infusions (considered `t0`) and reinfusions at some point beyond `t0` (if a patient had any).
+This dataset is much simpler, having only 3 columns indicating infusions (considered `t0`) and reinfusions at some point beyond `t0` (if a patient had any).
 
-```{r first marker plot}
+```{r first marker plot, message=FALSE}
 p <- p +
-  add_marker(
-    aes(
-      x = delta_t0_months,
-      y = pt_id,
-      color = `Status Markers`,
-      shape = `Status Markers`
-    ),
-    size = 5, position = "identity", alpha = 1
-  ) +
   add_marker(
     data = infusion_events,
     aes(
-      x = infusion_delta_t0_months,
+      x = delta_t0_months,
       y = pt_id,
-      color = infusion_type,
-      shape = infusion_type
+      name = "Infusion"
     ),
-    size = 5, position = "identity", alpha = 1
+    size = 5, position = "identity", alpha = .75, color = "green"
   )
 
 p
 ```
 
-Now we can see shapes have been added to establish our markers... though some blend into the colors of the bar charts. We'll fix this soon enough! For now, we can see that a new legend has been added to display the markers for the b-cell disease assessment and infusion events.
+Now we can see shapes have been added to establish our markers for infusions.
 
 Our last dataset involves end of study events, i.e. events that indicate a patient has left the study for various reasons.
 
@@ -114,7 +102,7 @@ p <- p +
 p
 ```
 
-We've successfully made a swimmer plot with lanes and three different kinds of marker layers. Recall that ggswim works within the ggplot2 framework, therefore customization can be done using the same ggplot2 theme and styling functions users may already be familiar with. Let's fix up this plot so it looks nicer on the eyes:
+We've successfully made a swimmer plot with lanes and two different kinds of marker layers. Recall that ggswim works within the ggplot2 framework, therefore customization can be done using the same ggplot2 theme and styling functions users may already be familiar with. Let's fix up this plot so it looks nicer on the eyes:
 
 ```{r mapping finalizing, message=FALSE, warning=FALSE}
 library(ggplot2)

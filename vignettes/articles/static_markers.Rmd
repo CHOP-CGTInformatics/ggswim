@@ -19,7 +19,7 @@ In this case, static marker assignment lets users call `add_marker()` and pass a
 library(ggswim)
 
 initial_infusions <- infusion_events |>
-  dplyr::filter(infusion_type == "Infusion")
+  dplyr::filter(delta_t0 == 0)
 
 initial_infusions |>
   rmarkdown::paged_table()
@@ -27,7 +27,7 @@ initial_infusions |>
 
 ```{r static mapping reinfusions}
 reinfusions <- infusion_events |>
-  dplyr::filter(infusion_type == "Reinfusion")
+  dplyr::filter(delta_t0 > 0)
 
 reinfusions |>
   rmarkdown::paged_table()
@@ -37,19 +37,9 @@ We'll start by setting up the same swimmer plot we've made from previous example
 
 ```{r initial plot, message=FALSE, warning=FALSE}
 p <- ggswim(
-  data = patient_data |> dplyr::rename("Status Markers" = bcell_status),
-  mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment_status)
-) +
-  # Same markers as before for Disease Assessment
-  add_marker(
-    aes(
-      x = delta_t0_months,
-      y = pt_id,
-      color = `Status Markers`,
-      shape = `Status Markers`
-    ),
-    size = 5, position = "identity", alpha = 1
-  )
+  data = patient_data,
+  mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment)
+) 
 ```
 
 Now, building off of this, lets add out `initial_infusions` and `reinfusions` markers as separate calls to `add_marker()`:
@@ -59,31 +49,15 @@ p +
   # New manual color markers for Infusions
   add_marker(
     data = initial_infusions,
-    aes(x = infusion_delta_t0_months, y = pt_id),
+    aes(x = delta_t0_months, y = pt_id, name = "Infusion"),
     size = 5, position = "identity", color = "green"
   ) +
   add_marker(
     data = reinfusions,
-    aes(x = infusion_delta_t0_months, y = pt_id),
+    aes(x = delta_t0_months, y = pt_id, name = "Reinfusion"),
     size = 5, position = "identity", color = "red"
   ) +
   theme_ggswim()
 ```
 
-Notice here how we specified a `color` outside of `aes()`, but something's not right... Our infusions don't appear in the legend. In order to support static assignments in the legend, we also need to give a static name to the new data via a special `name` parameter.
-
-```{r static plot name, message=FALSE, warning=FALSE}
-p +
-  # New manual color markers for Infusions
-  add_marker(
-    data = initial_infusions,
-    aes(x = infusion_delta_t0_months, y = pt_id, name = "Initial Infusion"),
-    size = 5, position = "identity", color = "green"
-  ) +
-  add_marker(
-    data = reinfusions,
-    aes(x = infusion_delta_t0_months, y = pt_id, name = "Reinfusion"),
-    size = 5, position = "identity", color = "red"
-  ) +
-  theme_ggswim()
-```
+Notice here how we specified a `color` outside of `aes()`, along with a unique `aes()` param: `name`. `name` is required to show static layers in the legend, and also for proper display in cases where a static marker is the first one added.
