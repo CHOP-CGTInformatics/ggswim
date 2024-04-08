@@ -1,13 +1,13 @@
 # nolint start
 # Load Libraries ----
 # Uncomment below to load libraries (avoids renv)
-# library(REDCapTidieR)
-# library(purrr)
-# library(dplyr)
-# library(lubridate)
-# library(tidyr)
-# library(ggplot2)
-# library(stringr)
+library(REDCapTidieR)
+library(purrr)
+library(dplyr)
+library(lubridate)
+library(tidyr)
+library(ggplot2)
+library(stringr)
 devtools::load_all(".")
 
 # Set Up CGTTrialsReporter Fnctns ----
@@ -92,138 +92,48 @@ prodigy <- db_tbls |>
     # End of Study Vars
     end_study_date,
     end_study_reason # Death
-  )
+  ) |>
+  # Randomize
+  mutate(
+    infseq_id = case_when(
+      infseq_id == "22CT011-01.0" ~ "22CT011-03.0",
+      infseq_id == "22CT011-01.1" ~ "22CT011-03.1",
+      infseq_id == "22CT011-02.0" ~ "22CT011-05.0",
+      infseq_id == "22CT011-02.1" ~ "22CT011-05.1",
+      infseq_id == "22CT011-03.0" ~ "22CT011-08.0",
+      infseq_id == "22CT011-03.1" ~ "22CT011-08.1",
+      infseq_id == "22CT011-04.0" ~ "22CT011-06.0",
+      infseq_id == "22CT011-05.0" ~ "22CT011-12.0",
+      infseq_id == "22CT011-06.0" ~ "22CT011-09.0",
+      infseq_id == "22CT011-07.0" ~ "22CT011-01.0",
+      infseq_id == "22CT011-08.0" ~ "22CT011-04.0",
+      infseq_id == "22CT011-09.0" ~ "22CT011-02.0",
+      infseq_id == "22CT011-10.0" ~ "22CT011-07.0",
+      infseq_id == "22CT011-11.0" ~ "22CT011-20.0",
+      infseq_id == "22CT011-12.0" ~ "22CT011-19.0",
+      infseq_id == "22CT011-13.0" ~ "22CT011-18.0",
+      infseq_id == "22CT011-14.0" ~ "22CT011-16.0",
+      infseq_id == "22CT011-15.0" ~ "22CT011-17.0",
+      infseq_id == "22CT011-16.0" ~ "22CT011-11.0",
+      infseq_id == "22CT011-17.0" ~ "22CT011-13.0",
+      infseq_id == "22CT011-18.0" ~ "22CT011-13.0",
+      infseq_id == "22CT011-19.0" ~ "22CT011-15.0",
+      infseq_id == "22CT011-20.0" ~ "22CT011-14.0"
+    )
+  ) |>
+  arrange(infseq_id)
 
-# Randomize Data ----
-# Define a function to shuffle dates within each group
-shuffle_dates <- function(x) {
-  if (is.Date(x)) {
-    return(sample(x))
-  } else {
-    return(x)
-  }
-}
-
-# Define a function to shift dates within each group while keeping the order
-shift_dates_within_group <- function(x) {
-  if (is.Date(x)) {
-    shift_amount <- sample(-max_shift:max_shift, size = 1)
-    return(x + shift_amount)
-  } else {
-    return(x)
-  }
-}
-
-# Define max_shift parameter
-max_shift <- 10  # You can adjust this value as needed
-
-# Apply transformations to each column
-prodigy_randomized <- prodigy %>%
-  group_by(infseq_id) %>%
-  mutate(across(where(is.Date), shuffle_dates)) %>%
-  ungroup() %>%
-  mutate(infusion_date = as.Date(infusion_date),
-         end_study_date = as.Date(end_study_date)) %>%
-  group_by(infseq_id) %>%
-  mutate(across(c(infusion_date, end_study_date), shift_dates_within_group)) %>%
-  ungroup()
-
-# Manipulate Data ----
-patient_data <- prodigy_randomized |>
+# patient_data ----
+patient_data <- prodigy |>
+  arrange(infseq_id, infusion_date) %>%
   filter(infusion_admin) |>
-  # Shuffle IDs
   mutate(
     # Remove study ID
     infseq_id = str_extract(infseq_id, "(?<=-).*$"),
-    infseq_id = case_when(
-      infseq_id == "01.0" ~ "03.0",
-      infseq_id == "01.1" ~ "03.1",
-      infseq_id == "02.0" ~ "05.0",
-      infseq_id == "02.1" ~ "05.1",
-      infseq_id == "03.0" ~ "08.0",
-      infseq_id == "03.1" ~ "08.1",
-      infseq_id == "04.0" ~ "06.0",
-      infseq_id == "05.0" ~ "12.0",
-      infseq_id == "06.0" ~ "09.0",
-      infseq_id == "07.0" ~ "01.0",
-      infseq_id == "08.0" ~ "04.0",
-      infseq_id == "09.0" ~ "02.0",
-      infseq_id == "12.0" ~ "07.0"
-    )
-  ) |>
-  mutate(
     # Add patient ID to consolidate infusion/reinfusion
-    pt_id = str_extract(infseq_id, "^\\d+")
-  ) |>
-  mutate(
-    .by = pt_id,
-    .keep = "none",
-    infseq_id,
-    infusion_type = if_else(infseq_number > 0, "Reinfusion", "Infusion"),
-    infusion_date,
-    initial_infusion_date = if_else(infusion_type == "Infusion", infusion_date, first(infusion_date, na_rm = TRUE)),
-    # Data for arrow neck length
-    today = interval(initial_infusion_date, Sys.Date()) %/% days(1),
-    # Zero out infusion time
-    infusion_event = if_else(infusion_type == "Infusion", 0, interval(initial_infusion_date, infusion_date) %/% days(1)),
-    # Set dasmt interval from zero time
-    "disease_assessment_date" = dasmt_date,
-    disease_assessment = interval(initial_infusion_date, dasmt_date) %/% days(1),
-    dasmt_bcell_status,
-    # Extract abbrev from ()
+    pt_id = str_extract(infseq_id, "^\\d+"),
     dasmt_overall = str_extract(dasmt_overall, "(?<=\\()[^\\)]+"),
-    # Set end study time interval from zero time
-    end_study_date,
-    end_study_event = interval(initial_infusion_date, end_study_date) %/% days(1),
-    end_study_reason
-  ) |>
-  mutate(
-    .by = infseq_id,
-    # Remove duplicated end_study_events
-    end_study_event = ifelse(row_number() == n(), end_study_event, NA)
-  ) |>
-  pivot_longer(
-    cols = c(disease_assessment, infusion_event, end_study_event),
-    names_to = "event_marker",
-    values_to = "delta_t0"
-  ) |>
-  # Change time to months
-  mutate(
-    delta_t0_months = round(delta_t0 / 30.417, digit = 0), # average days in a month
-    delta_today = round(today / 30.417, digit = 0)
-  ) |>
-  filter(!is.na(delta_t0)) |>
-  # Temporary method for handling reinfusions with no disease assessment data
-  mutate(
-    disease_assessment_date = case_when(
-      is.na(disease_assessment_date) & infusion_type != "Infusion" ~ lag(disease_assessment_date),
-      TRUE ~ disease_assessment_date
-    ),
-    dasmt_bcell_status = case_when(
-      is.na(dasmt_bcell_status) & infusion_type != "Infusion" ~ lag(dasmt_bcell_status),
-      TRUE ~ dasmt_bcell_status
-    ),
-    dasmt_overall = case_when(
-      is.na(dasmt_overall) & infusion_type != "Infusion" ~ lag(dasmt_overall),
-      TRUE ~ dasmt_overall
-    )
-  ) |>
-  # Fill end study reasons for reinfusions to help arrow_status
-  group_by(pt_id) |>
-  fill(end_study_reason) |>
-  mutate(
-    arrow_status = is.na(end_study_reason)
-  ) |>
-  arrange(pt_id) |>
-  ungroup() |>
-  filter(!is.na(pt_id))
-
-# Apply feedback requests from 2024-04-03
-# 1) No need for "Not Applicable" B-Cell status
-# 2) CR or CRi + B Cell Aplasia = green, CR or CRi + B Cells Present = yellow,
-#    RD (regardless of B cell status) = red
-patient_data <- patient_data |>
-  mutate(
+    # Combine b-cell and dasmt overall
     disease_assessment = case_when(
       (dasmt_overall == "CR" | dasmt_overall == "CRi") &
         dasmt_bcell_status == "B-cell Aplasia" ~ "CR/CRi + B Cell Aplasia",
@@ -233,11 +143,89 @@ patient_data <- patient_data |>
       TRUE ~ dasmt_overall
     )
   ) |>
-  # select(-c(dasmt_bcell_status, dasmt_overall)) |>
-  relocate(disease_assessment, .after = disease_assessment_date)
-
-end_study_events <- patient_data |>
   mutate(
+    # Establish an initial infusion time so that reinfusions can also be mapped chronologically
+    # Group by pt_id
+    .by = pt_id,
+    # Initial infusion date used for some downstream logic
+    initial_infusion_date = if_else(infseq_number == 0, infusion_date, first(infusion_date, na_rm = TRUE)),
+    # For cases where there has been a reinfusion and no disease assessment yet
+    # Use reinfusion date as placeholder with previous disease assessment
+    dasmt_date = case_when(
+      is.na(dasmt_date) & is.na(disease_assessment) ~ infusion_date,
+      TRUE ~ dasmt_date
+    ),
+    disease_assessment = case_when(
+      is.na(disease_assessment) & dasmt_date == infusion_date ~ lag(disease_assessment),
+      TRUE ~ disease_assessment
+    )
+  ) |>
+  mutate(
+    .by = infseq_id,
+    time_from_initial_infusion = interval(initial_infusion_date, dasmt_date) %/% days(1),
+    start_time = time_from_initial_infusion,
+    end_time = case_when(
+      # If end study reason and last value, tdiff between initial and end study date
+      !is.na(end_study_reason) & row_number() == n() ~
+        interval(initial_infusion_date, end_study_date) %/% days(1),
+      TRUE ~ lead(time_from_initial_infusion)
+    )
+  ) |>
+  # Debatable: removing rows that have no timespan because there is no end date
+  # to the status. Only status changes or end study markers can give a range end
+  dplyr::filter(!is.na(end_time)) |>
+  select(-c(infseq_id, infseq_number, dasmt_bcell_status, dasmt_overall, infusion_admin,
+            contains("end_study"),
+            initial_infusion_date, time_from_initial_infusion, contains("date"))) |>
+  dplyr::relocate(pt_id, .before = everything()) |>
+  # Convert to months
+  mutate(
+    start_time = round(start_time / 30.417, digit = 1), # average days in a month.
+    end_time = round(end_time / 30.417, digit = 1)
+  )
+
+# infusion_events ----
+
+infusion_events <- prodigy |>
+  mutate(
+    # Remove study ID
+    infseq_id = str_extract(infseq_id, "(?<=-).*$"),
+    # Add patient ID to consolidate infusion/reinfusion
+    pt_id = str_extract(infseq_id, "^\\d+"),
+    infseq_number,
+    infusion_date
+  ) |>
+  mutate(
+    .by = pt_id,
+    pt_id,
+    initial_infusion_date = if_else(infseq_number == 0, infusion_date, first(infusion_date, na_rm = TRUE)),
+    today = interval(infusion_date, Sys.Date()) %/% days(1),
+    time_from_initial_infusion = case_when(
+      infseq_number == 0 ~ 0,
+      TRUE ~ interval(initial_infusion_date, infusion_date) %/% days(1)
+    ),
+    # Convert to months
+    time_from_initial_infusion = round(time_from_initial_infusion / 30.417, digit = 1), # average days in a month
+    time_from_today = round(today / 30.417, digit = 1)
+  ) |>
+  select(pt_id, time_from_initial_infusion, time_from_today) |>
+  unique() |>
+  dplyr::filter(pt_id %in% patient_data$pt_id &
+                  !is.na(time_from_today))
+
+# end_study_events ----
+
+end_study_events <- prodigy |>
+  mutate(
+    .keep = "none",
+    # Remove study ID
+    infseq_id = str_extract(infseq_id, "(?<=-).*$"),
+    # Add patient ID to consolidate infusion/reinfusion
+    pt_id = str_extract(infseq_id, "^\\d+"),
+    initial_infusion_date = if_else(infseq_number == 0, infusion_date, first(infusion_date, na_rm = TRUE)),
+    time_from_initial_infusion = interval(initial_infusion_date, end_study_date) %/% days(1),
+    # Convert to months
+    time_from_initial_infusion = round(time_from_initial_infusion / 30.417, digit = 1), # average days in a month
     end_study_label = case_when(
       end_study_reason == "Completed study follow-up" ~ "✅",
       end_study_reason == "Death" ~ "❌",
@@ -251,56 +239,39 @@ end_study_events <- patient_data |>
       TRUE ~ "Other End Study Reason"
     )
   ) |>
-  filter(event_marker == "end_study_event" & !is.na(end_study_label))
-
-infusion_events <- patient_data |>
-  select(pt_id, infusion_type, event_marker, delta_t0, delta_t0_months) |>
-  mutate(
-    .keep = "none",
-    .by = pt_id,
-    pt_id,
-    infusion_type,
-    delta_t0 = case_when(
-      infusion_type == "Infusion" ~ 0,
-      event_marker == "infusion_event" ~ delta_t0,
-      TRUE ~ NA
-    ),
-    delta_t0_months = case_when(
-      infusion_type == "Infusion" ~ 0,
-      event_marker == "infusion_event" ~ delta_t0_months,
-      TRUE ~ NA
-    )
-  ) |>
-  filter(!is.na(delta_t0)) |>
-  select(-infusion_type) |>
-  unique()
-
-# Clean Data for Display ----
-patient_data <- patient_data |>
-  filter(!dasmt_bcell_status == "Not Applicable") |>
-  select(-c(
-    contains("_date"),
-    today, infseq_id, infusion_type, end_study_reason, dasmt_bcell_status, dasmt_overall
-  )) |>
-  unique()
-
-end_study_events <- end_study_events |>
-  select(pt_id, delta_t0, delta_t0_months, end_study_label, end_study_name)
+  filter(!is.na(end_study_label) &
+           !is.na(initial_infusion_date)) |> # Remove Screen Fail
+  unique() |>
+  dplyr::filter(pt_id %in% patient_data$pt_id)
 
 # Save data ----
 usethis::use_data(patient_data, overwrite = TRUE)
 usethis::use_data(infusion_events, overwrite = TRUE)
 usethis::use_data(end_study_events, overwrite = TRUE)
 
+# Uncomment below for proofing and testing
+# POC: geom_segment ----
+# Cant work with legend because shares layer type with color, not fill
+# p <- patient_data |>
+#   # ggswim(aes(x = final_time, y = pt_id, fill = disease_assessment), position = "identity")
+#   ggplot() +
+#   geom_segment(aes(x = start_time, xend = end_time,  y = pt_id, colour = disease_assessment), linewidth = 10) +
+#   geom_point(data = infusion_events,
+#              aes(x = time_from_initial_infusion, y = pt_id)) +
+#   geom_label(data = end_study_events,
+#              aes(x = time_from_initial_infusion, y = pt_id, label = end_study_label), show.legend = TRUE)
+#
+# p
+
 # ggswim ----
 # Uncomment for testing
 # ggswim(
-#   patient_data,
+#   patient_data |> arrange(desc(delta_t0)),
 #   mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment),
 #   arrow = arrow_status,
 #   arrow_head_length = unit(.25, "inches"),
 #   arrow_neck_length = delta_today,
-#   width = 0.25
+#   width = 0.25, position = "identity"
 # ) +
 #   add_marker(
 #     data = end_study_events |> dplyr::rename("Status Markers" = end_study_name),
