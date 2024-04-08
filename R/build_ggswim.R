@@ -51,12 +51,12 @@ build_ggswim <- function(ggswim_obj) {
 
   # Create bound layer dataframes for additional layers ----
   label_layer_data <- bind_layer_data(ggswim_obj,
-    layer_indices = ref_layer_info$label_layer_indices
+                                      layer_indices = ref_layer_info$label_layer_indices
   )
 
   point_layer_data <- bind_layer_data(ggswim_obj,
-    layer_indices = ref_layer_info$point_layer_indices,
-    static_colours = ref_layer_info$static_colours
+                                      layer_indices = ref_layer_info$point_layer_indices,
+                                      static_colours = ref_layer_info$static_colours
   )
 
   # Reference level ordering in underlying layers
@@ -67,21 +67,18 @@ build_ggswim <- function(ggswim_obj) {
 
   # Return fixed ggswim object and guide overrides -----
   (ggswim_obj +
-    scale_color_manual(values = setNames(
-      override$colour$colour,
-      override$colour$colour_mapping
-    )) +
-    guides(
-      shape = override$shape,
-      colour = guide_legend(
-        override.aes = list(
-          label = override$colour$label,
-          fill = override$colour$fill,
-          color = override$colour$colour,
-          shape = override$colour$shape
-        )
-      )
-    )) |>
+     guides(
+       shape = override$shape,
+       colour = guide_legend(
+         override.aes = list(
+           label = override$colour$label,
+           fill = override$colour$fill,
+           color = override$colour$colour,
+           shape = override$colour$shape
+         )
+       )
+     )
+   ) |>
     # remove ggswim class, so default ggplot2 print methods will take over
     structure(class = class(ggswim_obj) |> setdiff("ggswim_obj"))
 }
@@ -176,6 +173,7 @@ get_overrides <- function(ref_guide,
       select(-"order_col")
   }
 
+
   # Setup label coercion into color layer of legend
   if ("label" %in% names(override$colour)) {
     override$colour$label[is.na(override$colour$label)] <- ""
@@ -211,6 +209,7 @@ get_ref_layer_info <- function(ggswim_obj) {
   for (i in seq_along(ggswim_obj$layers)) {
     # Check for swim_class attrs, required to allow for other types of layer additions (ex: geom_vline)
     if ("swim_class" %in% names(attributes(ggswim_obj$layers[[i]]))) {
+
       if (attributes(ggswim_obj$layers[[i]])$swim_class == "marker_label") {
         label_layer_indices <- c(label_layer_indices, i)
       }

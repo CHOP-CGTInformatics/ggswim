@@ -136,7 +136,7 @@ ggswim <- function(
   }
 
   # Return object
-  out
+  out + ggnewscale::new_scale_color()
 }
 
 #' @title Add arrows to plot using geom_segment
