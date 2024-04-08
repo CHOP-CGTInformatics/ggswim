@@ -246,7 +246,8 @@ end_study_events <- prodigy |>
   filter(!is.na(end_study_label) &
            !is.na(initial_infusion_date)) |> # Remove Screen Fail
   unique() |>
-  dplyr::filter(pt_id %in% patient_data$pt_id)
+  dplyr::filter(pt_id %in% patient_data$pt_id) |>
+  select(pt_id, time_from_initial_infusion, end_study_label, end_study_name)
 
 # Save data ----
 usethis::use_data(patient_data, overwrite = TRUE)
