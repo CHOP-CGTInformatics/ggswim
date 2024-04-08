@@ -77,11 +77,11 @@ ggswim <- function(
     arrow_type = "closed",
     ...) {
   # Enforce checks ----
-  check_supported_mapping_aes(
-    mapping = mapping,
-    unsupported_aes = c("color", "colour"),
-    parent_func = "ggswim()"
-  )
+  # check_supported_mapping_aes(
+  #   mapping = mapping,
+  #   unsupported_aes = c("color", "colour"),
+  #   parent_func = "ggswim()"
+  # )
 
   check_supported_position_args(
     position = position,
@@ -93,10 +93,10 @@ ggswim <- function(
   original_y_var <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "y")
   data[[original_y_var]] <- data[[original_y_var]] |> as.factor()
 
-  # Create ggplot and geom_col layers ----
+  # Create ggplot and geom_segment layers ----
   out <- data |>
     ggplot() +
-    geom_col(
+    geom_segment(
       mapping,
       position = position,
       ...
@@ -112,7 +112,7 @@ ggswim <- function(
   # Add a reference class to the layer attributes
   attributes(out$layers[[current_layer]])$swim_class <- "ggswim"
 
-  # Handle arrows ----
+  # # Handle arrows ----
   arrow <- enquo(arrow) |> get_expr()
   arrow_neck_length <- if (quo_is_symbolic(quo(arrow_neck_length))) {
     enquo(arrow_neck_length) |> get_expr()
@@ -164,13 +164,14 @@ add_arrows <- function(data,
                        arrow_neck_length,
                        arrow_fill,
                        arrow_type) {
+
   # Implement UI checks ----
   # Check that warning supplied if `arrow_fill` !NULL and `arrow_type` "open"
   check_arg_is_logical(data[[arrow]])
   check_arrow_fill_type(arrow_type, arrow_fill)
   check_arrow_neck_length(arrow_neck_length)
 
-  x_val <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "x") # nolint: object_usage_linter
+  x_val <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "xend") # nolint: object_usage_linter
   y_val <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "y")
 
   xend <- NULL # define to avoid global variable note
@@ -214,7 +215,7 @@ add_arrows <- function(data,
   current_layer <- length(out$layers) # The max length can be considered the current working layer
 
   # Add a reference class to the layer attributes
-  attributes(out$layers[[current_layer]])$swim_class <- "ggswim"
+  attributes(out$layers[[current_layer]])$swim_class <- "ggswim_arrows"
 
   out
 }

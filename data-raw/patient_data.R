@@ -1,13 +1,13 @@
 # nolint start
 # Load Libraries ----
 # Uncomment below to load libraries (avoids renv)
-library(REDCapTidieR)
-library(purrr)
-library(dplyr)
-library(lubridate)
-library(tidyr)
-library(ggplot2)
-library(stringr)
+# library(REDCapTidieR)
+# library(purrr)
+# library(dplyr)
+# library(lubridate)
+# library(tidyr)
+# library(ggplot2)
+# library(stringr)
 devtools::load_all(".")
 
 # Set Up CGTTrialsReporter Fnctns ----
@@ -141,7 +141,9 @@ patient_data <- prodigy |>
         dasmt_bcell_status == "B-cell Recovery" ~ "CR/CRi + B Cell Recovery",
       dasmt_overall == "RD" ~ "RD",
       TRUE ~ dasmt_overall
-    )
+    ),
+    # Add arrow status
+    status = if_else(is.na(end_study_reason), TRUE, FALSE)
   ) |>
   mutate(
     # Establish an initial infusion time so that reinfusions can also be mapped chronologically
@@ -163,6 +165,8 @@ patient_data <- prodigy |>
   mutate(
     .by = infseq_id,
     time_from_initial_infusion = interval(initial_infusion_date, dasmt_date) %/% days(1),
+    today = interval(infusion_date, Sys.Date()) %/% days(1),
+    time_from_today = round(today / 30.417, digit = 1),
     start_time = time_from_initial_infusion,
     end_time = case_when(
       # If end study reason and last value, tdiff between initial and end study date
@@ -175,9 +179,11 @@ patient_data <- prodigy |>
   # to the status. Only status changes or end study markers can give a range end
   dplyr::filter(!is.na(end_time)) |>
   select(-c(infseq_id, infseq_number, dasmt_bcell_status, dasmt_overall, infusion_admin,
-            contains("end_study"),
+            contains("end_study"), today,
             initial_infusion_date, time_from_initial_infusion, contains("date"))) |>
   dplyr::relocate(pt_id, .before = everything()) |>
+  dplyr::relocate(c(status, time_from_today), .after = everything()) |>
+  dplyr::rename("status_length" = time_from_today) |>
   # Convert to months
   mutate(
     start_time = round(start_time / 30.417, digit = 1), # average days in a month.
@@ -199,19 +205,17 @@ infusion_events <- prodigy |>
     .by = pt_id,
     pt_id,
     initial_infusion_date = if_else(infseq_number == 0, infusion_date, first(infusion_date, na_rm = TRUE)),
-    today = interval(infusion_date, Sys.Date()) %/% days(1),
     time_from_initial_infusion = case_when(
       infseq_number == 0 ~ 0,
       TRUE ~ interval(initial_infusion_date, infusion_date) %/% days(1)
     ),
     # Convert to months
-    time_from_initial_infusion = round(time_from_initial_infusion / 30.417, digit = 1), # average days in a month
-    time_from_today = round(today / 30.417, digit = 1)
+    time_from_initial_infusion = round(time_from_initial_infusion / 30.417, digit = 1) # average days in a month
   ) |>
-  select(pt_id, time_from_initial_infusion, time_from_today) |>
-  unique() |>
   dplyr::filter(pt_id %in% patient_data$pt_id &
-                  !is.na(time_from_today))
+                  !is.na(initial_infusion_date)) |>
+  select(pt_id, time_from_initial_infusion) |>
+  unique()
 
 # end_study_events ----
 
