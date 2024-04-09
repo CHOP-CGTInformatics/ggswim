@@ -150,12 +150,14 @@ add_marker <- function(
       } else {
         rlang::dots_list(...)$colour
       }
+
+      dots[names(dots) %in% c("color", "colour")] <- c()
     }
 
     out <- geom_point(
       data = data,
       mapping = mapping,
-      colour = static_colours,
+      colour = dots[names(dots) %in% c("color", "colour")],
       na.rm = TRUE,
       ...
     )

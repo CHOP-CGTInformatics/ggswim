@@ -3,6 +3,7 @@
 S3method(grid.draw,ggswim_obj)
 S3method(print,ggswim_obj)
 export("%+%")
+export(add_arrows)
 export(add_marker)
 export(aes)
 export(build_ggswim)

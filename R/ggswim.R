@@ -77,12 +77,6 @@ ggswim <- function(
     arrow_type = "closed",
     ...) {
   # Enforce checks ----
-  # check_supported_mapping_aes(
-  #   mapping = mapping,
-  #   unsupported_aes = c("color", "colour"),
-  #   parent_func = "ggswim()"
-  # )
-
   check_supported_position_args(
     position = position,
     parent_func = "ggswim()"
@@ -112,26 +106,27 @@ ggswim <- function(
   # Add a reference class to the layer attributes
   attributes(out$layers[[current_layer]])$swim_class <- "ggswim"
 
-  # # Handle arrows ----
+  # Detect arrows ----
   arrow <- enquo(arrow) |> get_expr()
   arrow_neck_length <- if (quo_is_symbolic(quo(arrow_neck_length))) {
     enquo(arrow_neck_length) |> get_expr()
   } else {
     arrow_neck_length
   }
+  has_arrows <- !is.null(arrow)
 
-  if (!is.null(arrow)) {
-    out <- add_arrows(
-      data = data,
-      ggswim_obj = out,
-      mapping = mapping,
-      position = position,
-      arrow = arrow,
-      arrow_colour = arrow_colour,
-      arrow_type = arrow_type,
-      arrow_fill = arrow_fill,
-      arrow_head_length = arrow_head_length,
-      arrow_neck_length = arrow_neck_length
+  if (has_arrows) {
+    out <- out +
+      add_arrows(
+        data = data,
+        mapping = mapping,
+        position = position,
+        arrow = {{arrow}},
+        arrow_colour = arrow_colour,
+        arrow_type = arrow_type,
+        arrow_fill = arrow_fill,
+        arrow_head_length = arrow_head_length,
+        arrow_neck_length = {{arrow_neck_length}}
     )
   }
 
@@ -147,23 +142,28 @@ ggswim <- function(
 #' arrows using the `arrow` argument.
 #'
 #' @param data a dataframe prepared for use with `ggswim()`
-#' @param ggswim_obj A ggswim object
 #' @inheritParams ggswim
 #' @param ... Other arguments passed to `ggswim()`, often aesthetic fixed values,
 #' i.e. `color = "red"` or `size = 3`.
 #'
-#' @keywords internal
+#' @export
 
-add_arrows <- function(data,
-                       ggswim_obj,
-                       mapping,
-                       position,
-                       arrow,
-                       arrow_colour,
-                       arrow_head_length,
-                       arrow_neck_length,
-                       arrow_fill,
-                       arrow_type) {
+add_arrows <- function(data = NULL,
+                       mapping = NULL,
+                       position = "identity",
+                       arrow = NULL,
+                       arrow_colour = "black",
+                       arrow_head_length = unit(0.25, "inches"),
+                       arrow_neck_length = NULL,
+                       arrow_fill = NULL,
+                       arrow_type = "closed") {
+  # Handle dynamic arrow vars ----
+  arrow <- enquo(arrow) |> get_expr()
+  arrow_neck_length <- if (quo_is_symbolic(quo(arrow_neck_length))) {
+    enquo(arrow_neck_length) |> get_expr()
+  } else {
+    arrow_neck_length
+  }
 
   # Implement UI checks ----
   # Check that warning supplied if `arrow_fill` !NULL and `arrow_type` "open"
@@ -192,9 +192,7 @@ add_arrows <- function(data,
   if (is.null(arrow_neck_length)) {
     arrow_neck_length <- max(true_arrow_data$xend) * 0.15
   }
-
-  out <- ggswim_obj +
-    geom_segment(true_arrow_data,
+  out <- geom_segment(true_arrow_data,
       mapping = aes(
         x = xend,
         y = .data[[y_val]],
@@ -212,10 +210,8 @@ add_arrows <- function(data,
       arrow.fill = arrow_fill
     )
 
-  current_layer <- length(out$layers) # The max length can be considered the current working layer
-
   # Add a reference class to the layer attributes
-  attributes(out$layers[[current_layer]])$swim_class <- "ggswim_arrows"
+  attributes(out)$swim_class <- "ggswim_arrows"
 
   out
 }

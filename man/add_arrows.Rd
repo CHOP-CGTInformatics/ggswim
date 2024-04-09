@@ -5,22 +5,19 @@
 \title{Add arrows to plot using geom_segment}
 \usage{
 add_arrows(
-  data,
-  ggswim_obj,
-  mapping,
-  position,
-  arrow,
-  arrow_colour,
-  arrow_head_length,
-  arrow_neck_length,
-  arrow_fill,
-  arrow_type
+  data = NULL,
+  mapping = NULL,
+  position = "identity",
+  arrow = NULL,
+  arrow_colour = "black",
+  arrow_head_length = unit(0.25, "inches"),
+  arrow_neck_length = NULL,
+  arrow_fill = NULL,
+  arrow_type = "closed"
 )
 }
 \arguments{
 \item{data}{a dataframe prepared for use with \code{ggswim()}}
-
-\item{ggswim_obj}{A ggswim object}
 
 \item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}}. If specified and
 \code{inherit.aes = TRUE} (the default), it is combined with the default mapping
@@ -56,4 +53,3 @@ appear in \code{ggswim()}. It uses the \code{geom_segment()} function to supply 
 Adding a 0-length segment at the end of the swim lanes and then tacking on
 arrows using the \code{arrow} argument.
 }
-\keyword{internal}
