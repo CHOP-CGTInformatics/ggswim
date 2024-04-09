@@ -2,18 +2,18 @@
 #'
 #' @description
 #' This function seeks to correct the output of manual overrides introduced by
-#' `add_marker()` depending on the combination of layer types the user provides.
+#' [add_marker()] depending on the combination of layer types the user provides.
 #'
 #' It is to be run automatically in the background as a print method via
-#' `print.ggswim_obj()`.
+#' [print.ggswim_obj()].
 #'
 #' @details
 #' In its current state, `build_ggswim()` can only work with a pre-rendered
 #' ggswim plot object, therefore it cannot be added to the `+` operator chain.
 #'
-#' `build_ggswim()` makes use of `ggplot2::guides()` to dynamically override
+#' `build_ggswim()` makes use of [ggplot2::guides()] to dynamically override
 #' displays in the layers of the ggswim legend. It also applies a call to
-#' `ggplot2::scale_color_manual()` in applicable cases where a user calls out
+#' [ggplot2::scale_color_manual()] in applicable cases where a user calls out
 #' a static `color`/`colour` argument in addition to the required `color`
 #' mapping aesthetic (handled by arg: `name`).
 #'
@@ -26,10 +26,11 @@
 #' ggswim_obj <- ggswim(
 #'   data = patient_data,
 #'   mapping = aes(
-#'     x = delta_t0_months,
+#'     x = start_time,
+#'     xend = end_time,
 #'     y = pt_id,
-#'     fill = disease_assessment
-#'   )
+#'     color = disease_assessment
+#'   ), linewidth = 5
 #' )
 #' build_ggswim(ggswim_obj)
 build_ggswim <- function(ggswim_obj) {

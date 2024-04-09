@@ -14,18 +14,18 @@ A ggswim object
 }
 \description{
 This function seeks to correct the output of manual overrides introduced by
-\code{add_marker()} depending on the combination of layer types the user provides.
+\code{\link[=add_marker]{add_marker()}} depending on the combination of layer types the user provides.
 
 It is to be run automatically in the background as a print method via
-\code{print.ggswim_obj()}.
+\code{\link[=print.ggswim_obj]{print.ggswim_obj()}}.
 }
 \details{
 In its current state, \code{build_ggswim()} can only work with a pre-rendered
 ggswim plot object, therefore it cannot be added to the \code{+} operator chain.
 
-\code{build_ggswim()} makes use of \code{ggplot2::guides()} to dynamically override
+\code{build_ggswim()} makes use of \code{\link[ggplot2:guides]{ggplot2::guides()}} to dynamically override
 displays in the layers of the ggswim legend. It also applies a call to
-\code{ggplot2::scale_color_manual()} in applicable cases where a user calls out
+\code{\link[ggplot2:scale_manual]{ggplot2::scale_color_manual()}} in applicable cases where a user calls out
 a static \code{color}/\code{colour} argument in addition to the required \code{color}
 mapping aesthetic (handled by arg: \code{name}).
 }
@@ -33,10 +33,11 @@ mapping aesthetic (handled by arg: \code{name}).
 ggswim_obj <- ggswim(
   data = patient_data,
   mapping = aes(
-    x = delta_t0_months,
+    x = start_time,
+    xend = end_time,
     y = pt_id,
-    fill = disease_assessment
-  )
+    color = disease_assessment
+  ), linewidth = 5
 )
 build_ggswim(ggswim_obj)
 }

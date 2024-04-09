@@ -1,22 +1,21 @@
-#' @title Add markers of interest to level response trajectories
+#' @title Add markers of interest swimmer plots
 #'
 #' @description
 #' "Markers" are used to specify events of interest along response trajectories
-#' across individual lanes. `add_marker()` wraps `geom_point()` or `geom_label()`
-#' depending on the users designation of `color`/`colour` and `label` arguments.
+#' across individual lanes. [add_marker()] wraps [geom_point()] or [geom_label()]
+#' depending on the users designation of `color`/`colour` and
+#' `label_vals`/`label_names` arguments.
 #'
 #' See **Aesthetics** for more information.
 #'
 #' @returns A ggswim object
 #'
 #' @inheritParams ggplot2::geom_point
-#' @param data a dataframe prepared for use with `ggswim()`, either coming from
-#' a parent `ggswim()` function, another `add_marker()` call, or a new dataframe
-#' prepared for use with `ggswim()`.
+#' @param data a dataframe prepared for use with [ggswim()]
 #'
 #' @section Aesthetics:
-#' `add_marker()` understands the following aesthetics (required aesthetics are in bold)
-#' when using `color`/`colour` similar to `geom_point()`
+#' [add_marker()] understands the following aesthetics (required aesthetics are in bold)
+#' when using `color`/`colour` similar to [geom_point()].
 #'
 #' - **`x`**
 #' - **`y`**
@@ -28,9 +27,9 @@
 #' - `size`
 #' - `stroke`
 #'
-#' `add_marker()` understands the following aesthetics (required aesthetics are in bold)
-#' when using `label` similar to `geom_label()`. See "Notes" below for additional
-#' considerations and requirements.
+#' [add_marker()] understands the following aesthetics (required aesthetics are in bold)
+#' when using `label_vals`/`label_names` similar to [geom_label()]. See "Notes" below for
+#' additional considerations and requirements.
 #'
 #' - **`x`**
 #' - **`y`**
@@ -53,7 +52,7 @@
 #' for aesthetic mapping to render the legend correctly.
 #' - If using labels, both `label_vals` and `label_names` are required for
 #' proper legend population. At minimum, `label_vals` is needed for data
-#' display. These are unique parameter options for `aes()` to ggswim.
+#' display. These are unique parameter options for [aes()] to ggswim.
 #'
 #' @export
 #'
@@ -61,26 +60,26 @@
 #'
 #' # markers with points and aesthetic mapping params
 #' add_marker(
-#'   data = infusion_events,
+#'   data = infusion_events |> dplyr::mutate(infusion = "Infusion"),
 #'   mapping = aes(
-#'     x = delta_t0,
+#'     x = time_from_initial_infusion,
 #'     y = pt_id,
-#'     color = infusion_type,
-#'     shape = end_study_name
+#'     color = infusion
 #'   ),
 #'   size = 5
 #' )
 #'
 #' # markers with points and static params
 #'
-#' initial_infusions <- infusion_events[infusion_events$delta_t0 == 0, ]
+#' initial_infusions <- infusion_events |>
+#'   dplyr::filter(time_from_initial_infusion == 0)
 #'
 #' add_marker(
 #'   data = initial_infusions,
 #'   mapping = aes(
-#'     x = delta_t0,
+#'     x = time_from_initial_infusion,
 #'     y = pt_id,
-#'     name = "Initial"
+#'     name = "Initial Infusion"
 #'   ),
 #'   color = "red",
 #'   size = 5
@@ -89,7 +88,7 @@
 #' # markers with labels
 #' add_marker(
 #'   data = end_study_events,
-#'   mapping = aes(y = pt_id, x = delta_t0_months,
+#'   mapping = aes(y = pt_id, x = time_from_initial_infusion,
 #'       label_names = end_study_name,
 #'       label_vals = end_study_label
 #'   ),

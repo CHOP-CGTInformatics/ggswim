@@ -39,6 +39,7 @@ reference:
   contents:
   - ggswim
   - add_marker
+  - add_arrows
   - build_ggswim
   - theme_ggswim
 - title: "Datasets"

@@ -1,7 +1,8 @@
-#' @title Plot individual level response trajectories
+#' @title Create swimmer survival plots
 #'
 #' @description
-#' Visualize individual record response trajectories over time using a swimmer plot.
+#' Use ggplot2 architecture to create a swimmer plot showing subject survival
+#' timelines.
 #'
 #' @details
 #' A swimmer plot is a data visualization used to display individual
@@ -9,8 +10,8 @@
 #' horizontal line for each subject, allowing easy comparison and pattern
 #' identification.
 #'
-#' @param data a dataframe prepared for use with `ggswim()`
-#' @inheritParams ggplot2::geom_col
+#' @param data a dataframe prepared for use with [ggswim()]
+#' @inheritParams ggplot2::geom_segment
 #' @param position Position adjustment. ggswim accepts either "stack", or "identity"
 #' depending on the use case. Default "identity".
 #' @param arrow A column indicating what swim lanes should have arrows applied.
@@ -30,13 +31,19 @@
 #'
 #' - **`x`**
 #' - **`y`**
+#' - **xend _or_ yend**
 #' - `alpha`
-#' - `fill`
+#' - `colour`
 #' - `group`
 #' - `linetype`
 #' - `linewidth`
 #'
-#' **Note**: `ggswim()` **does not** support mapping using `color`/`colour`.
+#' `ggswim()` is a wrapper for [geom_segment()] and can support much of the same
+#' functionality.
+#'
+#' @section Arrows:
+#' Arrows can be specified in `ggswim()` as well as via the separate function,
+#' [add_arrows()].
 #'
 #' @export
 #'
@@ -45,9 +52,10 @@
 #' ggswim(
 #'   data = patient_data,
 #'   mapping = aes(
-#'     x = delta_t0_months,
+#'     x = start_time,
+#'     xend = end_time,
 #'     y = pt_id,
-#'     fill = disease_assessment
+#'     color = disease_assessment
 #'   )
 #' )
 #'
@@ -55,14 +63,16 @@
 #' ggswim(
 #'   data = patient_data,
 #'   mapping = aes(
-#'     x = delta_t0_months,
+#'     x = start_time,
+#'     xend = end_time,
 #'     y = pt_id,
-#'     fill = disease_assessment
+#'     color = disease_assessment
 #'   ),
-#'   arrow = arrow_status,
-#'   arrow_fill = "cyan",
+#'   arrow = status,
+#'   arrow_fill = "forestgreen",
+#'   arrow_colour = "cyan",
 #'   arrow_head_length = ggplot2::unit(.25, "inches"),
-#'   arrow_neck_length = delta_today
+#'   arrow_neck_length = status_length
 #' )
 
 ggswim <- function(
@@ -134,17 +144,30 @@ ggswim <- function(
   out + new_scale_color()
 }
 
-#' @title Add arrows to plot using geom_segment
+#' @title Add arrows to a swimmer plot
 #'
-#' @description This helper function is triggered when a user requests arrows to
-#' appear in `ggswim()`. It uses the `geom_segment()` function to supply them by
-#' Adding a 0-length segment at the end of the swim lanes and then tacking on
-#' arrows using the `arrow` argument.
+#' @description
+#' Add arrows to the ends of swimmer plot lanes to indicate unknown statuses
+#' or continued record-level trajectories.
 #'
-#' @param data a dataframe prepared for use with `ggswim()`
+#' @details
+#' `add_arrows()` wraps a new [geom_segment()] layer by adding a zero-length
+#' segment at the right end of swimmer lanes. This approach allows users to
+#' specify `arrow_neck_length` which can be useful for tracking and visualizaing
+#' time in between markers
+#'
+#' @param data a dataframe prepared for use with [ggswim()]
 #' @inheritParams ggswim
 #' @param ... Other arguments passed to `ggswim()`, often aesthetic fixed values,
 #' i.e. `color = "red"` or `size = 3`.
+#'
+#' @examples
+#' add_arrows(data = patient_status,
+#'            mapping = aes(xend = end_time, y = pt_id),
+#'            arrow = arrow,
+#'            arrow_neck_length = time_from_today,
+#'            arrow_colour = "forestgreen",
+#'            arrow_fill = "forestgreen")
 #'
 #' @export
 

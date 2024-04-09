@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggswim.R
 \name{add_arrows}
 \alias{add_arrows}
-\title{Add arrows to plot using geom_segment}
+\title{Add arrows to a swimmer plot}
 \usage{
 add_arrows(
   data = NULL,
@@ -17,7 +17,7 @@ add_arrows(
 )
 }
 \arguments{
-\item{data}{a dataframe prepared for use with \code{ggswim()}}
+\item{data}{a dataframe prepared for use with \code{\link[=ggswim]{ggswim()}}}
 
 \item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}}. If specified and
 \code{inherit.aes = TRUE} (the default), it is combined with the default mapping
@@ -48,8 +48,21 @@ be a closed triangle. Default "closed."}
 i.e. \code{color = "red"} or \code{size = 3}.}
 }
 \description{
-This helper function is triggered when a user requests arrows to
-appear in \code{ggswim()}. It uses the \code{geom_segment()} function to supply them by
-Adding a 0-length segment at the end of the swim lanes and then tacking on
-arrows using the \code{arrow} argument.
+Add arrows to the ends of swimmer plot lanes to indicate unknown statuses
+or continued record-level trajectories.
+}
+\details{
+\code{add_arrows()} wraps a new \code{\link[=geom_segment]{geom_segment()}} layer by adding a zero-length
+segment at the right end of swimmer lanes. This approach allows users to
+specify \code{arrow_neck_length} which can be useful for tracking and visualizaing
+time in between markers
+}
+\examples{
+add_arrows(data = patient_status,
+           mapping = aes(xend = end_time, y = pt_id),
+           arrow = arrow,
+           arrow_neck_length = time_from_today,
+           arrow_colour = "forestgreen",
+           arrow_fill = "forestgreen")
+
 }
