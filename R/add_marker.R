@@ -131,6 +131,7 @@ add_marker <- function(
     # Tag the layer with a reference attribute
     attributes(out)$swim_class <- "marker_label"
   } else {
+    # browser()
     dots <- rlang::dots_list(...)
     static_colours <- NULL
     name_detected <- "name" %in% names(mapping)
@@ -149,14 +150,12 @@ add_marker <- function(
       } else {
         rlang::dots_list(...)$colour
       }
-
-      dots[names(dots) %in% c("color", "colour")] <- c()
     }
 
     out <- geom_point(
       data = data,
       mapping = mapping,
-      colour = dots[names(dots) %in% c("color", "colour")],
+      colour = static_colours,
       na.rm = TRUE,
       ...
     )

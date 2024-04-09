@@ -67,6 +67,10 @@ build_ggswim <- function(ggswim_obj) {
 
   # Return fixed ggswim object and guide overrides -----
   (ggswim_obj +
+     scale_color_manual(values = setNames(
+       override$colour$colour,
+       override$colour$colour_mapping
+     )) +
      guides(
        shape = override$shape,
        colour = guide_legend(

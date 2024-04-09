@@ -21,6 +21,7 @@ Imports:
     checkmate,
     cli,
     dplyr,
+    ggnewscale,
     ggplot2,
     grid,
     rlang,
