@@ -132,7 +132,15 @@ test_that("check_arrow_neck_length works", {
 })
 
 test_that("check_ggswim_obj works", {
-  ggswim_obj <- ggswim(pt_data, aes(x = time, y = id, fill = trt))
+  ggswim_obj <- ggswim(
+    patient_data,
+    aes(
+      x = start_time,
+      xend = end_time,
+      y = pt_id,
+      color = disease_assessment
+    )
+  )
   non_ggswim_obj <- ggplot(mtcars) +
     geom_point(aes(x = cyl, y = hp))
 

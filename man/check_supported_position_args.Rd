@@ -7,14 +7,13 @@
 check_supported_position_args(position, parent_func)
 }
 \arguments{
-\item{position}{Position adjustment. ggswim accepts either "stack", or "identity"
-depending on the use case. Default "identity".}
+\item{position}{Position adjustment. ggswim accepts "identity".  Default "identity".}
 
 \item{parent_func}{The function in which this is being called, to be
 referenced in the message output}
 }
 \description{
-\code{ggswim()} accepts \code{position} arguments of either \code{stack} or \code{identity}.
+\code{ggswim()} accepts \code{position} argument \code{identity} only.
 Others such as \code{dodge} and \code{jitter} are not supported.
 }
 \keyword{internal}

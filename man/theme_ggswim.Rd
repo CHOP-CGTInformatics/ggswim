@@ -32,6 +32,6 @@ ggswim(
     y = pt_id,
     color = disease_assessment
   )
-)  +
+) +
   theme_ggswim()
 }

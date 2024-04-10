@@ -11,8 +11,8 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%",
   dev = "ragg_png",
-  dpi = 400, 
-  fig.width=12, fig.height=6
+  dpi = 400,
+  fig.width = 12, fig.height = 6
 )
 ```
 
@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/CHOP-CGTInformatics/ggswim/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CHOP-CGTInformatics/ggswim/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/CHOP-CGTInformatics/ggswim/branch/main/graph/badge.svg)](https://app.codecov.io/gh/CHOP-CGTInformatics/ggswim?branch=main)
 <!-- badges: end -->
- 
+
 The ggswim package provides a convenient set of commands to easily create swimmer plots. It integrates with the familiar ggplot2 framework and streamlines the process of generating legends that effectively communicate events of interest along individual subject trajectories.  
 
 ## Installation
@@ -44,13 +44,14 @@ By first calling the `ggswim()` function, we can set up the horizontal survival 
 library(ggswim)
 library(ggplot2)
 
-p <- ggswim(
-  patient_data,
-  mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment),
-  arrow = arrow_status,
-  arrow_head_length = unit(.25, "inches"),
-  arrow_neck_length = delta_today,
-  width = 0.25
+p <- ggswim(patient_data,
+            mapping = aes(x = start_time, 
+                          xend = end_time, 
+                          y = pt_id,
+                          color = disease_assessment),
+            arrow = status,
+            arrow_neck_length = status_length, 
+            linewidth = 5
 )
 ```
 
@@ -59,14 +60,17 @@ Next we'll add on events of interest: end of study updates, and infusions. These
 ```{r, message=FALSE}
 p <- p +
   add_marker(
-    data = end_study_events |> dplyr::rename("Status Markers" = end_study_name),
-    aes(x = delta_t0_months, y = pt_id, label_vals = end_study_label, label_names = `Status Markers`),
-    label.size = NA, fill = NA, size = 5
+    data = infusion_events |> dplyr::mutate(infusion = "Infusion"),
+    aes(x = time_from_initial_infusion, y = pt_id, color = infusion),
+    size = 5
   ) +
   add_marker(
-    data = infusion_events,
-    aes(x = delta_t0_months, y = pt_id, name = "Infusion"), color = "#25DA6D",
-    size = 5, position = "identity", alpha = .75
+    data = end_study_events,
+    aes(x = time_from_initial_infusion, 
+        y = pt_id, 
+        label_vals = end_study_label, 
+        label_names = end_study_name),
+    label.size = NA, fill = NA, size = 5
   ) 
 ```
 
@@ -74,9 +78,9 @@ Finally, we'll beautify the plot with familiar ggplot2 techniques and a last fin
 
 ```{r, message=FALSE}
 p +
-  scale_fill_manual(
+  scale_color_manual(
     name = "Overall Disease Assessment",
-    values = c("#6394F3", "#F3C363", "#EB792F")
+    values = c("#6394F3", "#F3C363", "#EB792F", "red", "green")
   ) +
   labs(title = "My Swimmer Plot") +
   xlab("Time Since Infusion (Months)") + ylab("Patient ID") +

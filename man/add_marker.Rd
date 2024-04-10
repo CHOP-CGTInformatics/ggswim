@@ -108,9 +108,10 @@ add_marker(
 # markers with labels
 add_marker(
   data = end_study_events,
-  mapping = aes(y = pt_id, x = time_from_initial_infusion,
-      label_names = end_study_name,
-      label_vals = end_study_label
+  mapping = aes(
+    y = pt_id, x = time_from_initial_infusion,
+    label_names = end_study_name,
+    label_vals = end_study_label
   ),
   label.size = NA, fill = NA, size = 5
 )

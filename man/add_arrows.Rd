@@ -43,9 +43,6 @@ specifier. The default, \code{NULL}, sets a value proportional to the max lane v
 
 \item{arrow_type}{One of "open" or "closed" indicating whether the arrow head should
 be a closed triangle. Default "closed."}
-
-\item{...}{Other arguments passed to \code{ggswim()}, often aesthetic fixed values,
-i.e. \code{color = "red"} or \code{size = 3}.}
 }
 \description{
 Add arrows to the ends of swimmer plot lanes to indicate unknown statuses
@@ -58,11 +55,18 @@ specify \code{arrow_neck_length} which can be useful for tracking and visualizai
 time in between markers
 }
 \examples{
-add_arrows(data = patient_status,
-           mapping = aes(xend = end_time, y = pt_id),
-           arrow = arrow,
-           arrow_neck_length = time_from_today,
-           arrow_colour = "forestgreen",
-           arrow_fill = "forestgreen")
+patient_status <- patient_data |>
+  dplyr::select(pt_id, end_time, status, status_length) |>
+  unique() |>
+  dplyr::rename("arrow" = status, "time_from_today" = status_length)
+
+add_arrows(
+  data = patient_status,
+  mapping = aes(xend = end_time, y = pt_id),
+  arrow = arrow,
+  arrow_neck_length = time_from_today,
+  arrow_colour = "forestgreen",
+  arrow_fill = "forestgreen"
+)
 
 }

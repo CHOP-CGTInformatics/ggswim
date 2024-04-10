@@ -25,8 +25,13 @@ get_layer_data <- function(data, mapping, i = 1L, static_colours = NULL) {
   aes_mapping <- unlist(mapping)
 
   # TODO: Currently functionality is limited to and requires a color or fill aesthetic
-  if (any(c("color", "colour") %in% names(aes_mapping))) {
-    colour_or_color <- ifelse("colour" %in% names(aes_mapping), "colour", "color")
+  if (any(c("color", "colour", "color_new", "colour_new") %in% names(aes_mapping))) {
+    colour_or_color <- case_when(
+      "color" %in% names(aes_mapping) ~ "color",
+      "color_new" %in% names(aes_mapping) ~ "color_new",
+      "colour_new" %in% names(aes_mapping) ~ "colour_new",
+      TRUE ~ "colour"
+    )
     colour_mapping_var <- retrieve_original_aes(data, aes_mapping, aes_var = colour_or_color)
     colour_mapping <- data[[colour_mapping_var]]
   } else {

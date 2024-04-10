@@ -76,6 +76,11 @@ identification.
 
 \code{ggswim()} is a wrapper for \code{\link[=geom_segment]{geom_segment()}} and can support much of the same
 functionality.
+
+\strong{Notes}:
+\itemize{
+\item \code{ggswim()} \strong{does not} support mapping using \code{fill}.
+}
 }
 
 \section{Arrows}{

@@ -1,13 +1,13 @@
 # nolint start
 # Load Libraries ----
 # Uncomment below to load libraries (avoids renv)
-library(REDCapTidieR)
-library(purrr)
-library(dplyr)
-library(lubridate)
-library(tidyr)
-library(ggplot2)
-library(stringr)
+# library(REDCapTidieR)
+# library(purrr)
+# library(dplyr)
+# library(lubridate)
+# library(tidyr)
+# library(ggplot2)
+# library(stringr)
 devtools::load_all(".")
 
 # Set Up CGTTrialsReporter Fnctns ----
@@ -178,9 +178,11 @@ patient_data <- prodigy |>
   # Debatable: removing rows that have no timespan because there is no end date
   # to the status. Only status changes or end study markers can give a range end
   dplyr::filter(!is.na(end_time)) |>
-  select(-c(infseq_id, infseq_number, dasmt_bcell_status, dasmt_overall, infusion_admin,
-            contains("end_study"), today,
-            initial_infusion_date, time_from_initial_infusion, contains("date"))) |>
+  select(-c(
+    infseq_id, infseq_number, dasmt_bcell_status, dasmt_overall, infusion_admin,
+    contains("end_study"), today,
+    initial_infusion_date, time_from_initial_infusion, contains("date")
+  )) |>
   dplyr::relocate(pt_id, .before = everything()) |>
   dplyr::relocate(c(status, time_from_today), .after = everything()) |>
   dplyr::rename("status_length" = time_from_today) |>
@@ -218,7 +220,7 @@ infusion_events <- prodigy |>
     time_from_initial_infusion = round(time_from_initial_infusion / 30.417, digit = 1) # average days in a month
   ) |>
   dplyr::filter(pt_id %in% patient_data$pt_id &
-                  !is.na(initial_infusion_date)) |>
+    !is.na(initial_infusion_date)) |>
   select(pt_id, time_from_initial_infusion) |>
   unique()
 
@@ -249,7 +251,7 @@ end_study_events <- prodigy |>
     )
   ) |>
   filter(!is.na(end_study_label) &
-           !is.na(initial_infusion_date)) |> # Remove Screen Fail
+    !is.na(initial_infusion_date)) |> # Remove Screen Fail
   unique() |>
   dplyr::filter(pt_id %in% patient_data$pt_id) |>
   select(pt_id, time_from_initial_infusion, end_study_label, end_study_name)

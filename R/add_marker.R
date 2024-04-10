@@ -88,13 +88,13 @@
 #' # markers with labels
 #' add_marker(
 #'   data = end_study_events,
-#'   mapping = aes(y = pt_id, x = time_from_initial_infusion,
-#'       label_names = end_study_name,
-#'       label_vals = end_study_label
+#'   mapping = aes(
+#'     y = pt_id, x = time_from_initial_infusion,
+#'     label_names = end_study_name,
+#'     label_vals = end_study_label
 #'   ),
 #'   label.size = NA, fill = NA, size = 5
 #' )
-
 add_marker <- function(
     mapping = aes(),
     data = NULL,
@@ -108,9 +108,11 @@ add_marker <- function(
 
   check_marker_label_aes(mapping = mapping)
 
-  check_missing_params(mapping = mapping,
-                       params = c("x", "y"),
-                       parent_func = "add_marker()")
+  check_missing_params(
+    mapping = mapping,
+    params = c("x", "y"),
+    parent_func = "add_marker()"
+  )
 
   # Identify labels ----
   has_labels <- "label_vals" %in% names(mapping)
@@ -118,8 +120,8 @@ add_marker <- function(
   # Apply geom_label() or geom_point() ----
   if (has_labels) {
     # Convert label mapping params to linked standard params for intuitive API
-    names(mapping)[names(mapping) == "label_vals"] <-  "label"
-    names(mapping)[names(mapping) == "label_names"] <-  "colour"
+    names(mapping)[names(mapping) == "label_vals"] <- "label"
+    names(mapping)[names(mapping) == "label_names"] <- "colour"
 
     out <- geom_label(
       data = data,
@@ -130,7 +132,6 @@ add_marker <- function(
     # Tag the layer with a reference attribute
     attributes(out)$swim_class <- "marker_label"
   } else {
-    # browser()
     dots <- rlang::dots_list(...)
     static_colours <- NULL
     name_detected <- "name" %in% names(mapping)

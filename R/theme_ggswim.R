@@ -26,7 +26,7 @@
 #'     y = pt_id,
 #'     color = disease_assessment
 #'   )
-#' )  +
+#' ) +
 #'   theme_ggswim()
 theme_ggswim <- function(base_size = 12, base_family = "") {
   theme_minimal(base_size = base_size, base_family = base_family) +
@@ -49,10 +49,14 @@ theme_ggswim <- function(base_size = 12, base_family = "") {
       legend.title = element_text(size = 12, face = "bold"),
 
       # Axis line
-      axis.line = element_line(color = "steelblue",
-                               size = .5,
-                               arrow = arrow(type = "closed",
-                                             length = unit(0.2, "inches"))),
+      axis.line = element_line(
+        color = "steelblue",
+        linewidth = .5,
+        arrow = arrow(
+          type = "closed",
+          length = unit(0.2, "inches")
+        )
+      ),
 
       # Remove grid lines
       panel.grid.major = element_blank(),

@@ -39,13 +39,14 @@ survival bars of our swimmer plot, i.e. the “lanes:”
 library(ggswim)
 library(ggplot2)
 
-p <- ggswim(
-  patient_data,
-  mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment),
-  arrow = arrow_status,
-  arrow_head_length = unit(.25, "inches"),
-  arrow_neck_length = delta_today,
-  width = 0.25
+p <- ggswim(patient_data,
+            mapping = aes(x = start_time, 
+                          xend = end_time, 
+                          y = pt_id,
+                          color = disease_assessment),
+            arrow = status,
+            arrow_neck_length = status_length, 
+            linewidth = 5
 )
 ```
 
@@ -55,16 +56,18 @@ infusions. These we’ll refer to as “markers”:
 ``` r
 p <- p +
   add_marker(
-    data = end_study_events |> dplyr::rename("Status Markers" = end_study_name),
-    aes(x = delta_t0_months, y = pt_id, label_vals = end_study_label, label_names = `Status Markers`),
-    label.size = NA, fill = NA, size = 5
+    data = infusion_events |> dplyr::mutate(infusion = "Infusion"),
+    aes(x = time_from_initial_infusion, y = pt_id, color = infusion),
+    size = 5
   ) +
   add_marker(
-    data = infusion_events,
-    aes(x = delta_t0_months, y = pt_id, name = "Infusion"), color = "#25DA6D",
-    size = 5, position = "identity", alpha = .75
+    data = end_study_events,
+    aes(x = time_from_initial_infusion, 
+        y = pt_id, 
+        label_vals = end_study_label, 
+        label_names = end_study_name),
+    label.size = NA, fill = NA, size = 5
   ) 
-#> Warning: Duplicated aesthetics after name standardisation: colour
 ```
 
 Finally, we’ll beautify the plot with familiar ggplot2 techniques and a
@@ -72,9 +75,9 @@ last finishing touch with `theme_ggswim()`:
 
 ``` r
 p +
-  scale_fill_manual(
+  scale_color_manual(
     name = "Overall Disease Assessment",
-    values = c("#6394F3", "#F3C363", "#EB792F")
+    values = c("#6394F3", "#F3C363", "#EB792F", "red", "green")
   ) +
   labs(title = "My Swimmer Plot") +
   xlab("Time Since Infusion (Months)") + ylab("Patient ID") +

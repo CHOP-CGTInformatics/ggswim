@@ -78,7 +78,6 @@
 #'   arrow_head_length = ggplot2::unit(.25, "inches"),
 #'   arrow_neck_length = status_length
 #' )
-
 ggswim <- function(
     data,
     mapping = aes(),
@@ -97,9 +96,11 @@ ggswim <- function(
     parent_func = "ggswim()"
   )
 
-  check_missing_params(mapping = mapping,
-                       params = c("x", "xend", "y"),
-                       parent_func = "ggswim()")
+  check_missing_params(
+    mapping = mapping,
+    params = c("x", "xend", "y"),
+    parent_func = "ggswim()"
+  )
 
   check_supported_position_args(
     position = position,
@@ -120,16 +121,6 @@ ggswim <- function(
       ...
     )
 
-  # Define new class 'ggswim_obj'
-  class(out) <- c("ggswim_obj", class(out))
-  # The max length can be considered the current working layer
-  # TODO: Determine if necessary, ggswim currently does not work with an existing
-  # ggplot. We may want to make this available in the future.
-  current_layer <- length(out$layers)
-
-  # Add a reference class to the layer attributes
-  attributes(out$layers[[current_layer]])$swim_class <- "ggswim"
-
   # Detect arrows ----
   arrow <- enquo(arrow) |> get_expr()
   arrow_neck_length <- if (quo_is_symbolic(quo(arrow_neck_length))) {
@@ -145,17 +136,31 @@ ggswim <- function(
         data = data,
         mapping = mapping,
         position = position,
-        arrow = {{arrow}},
+        arrow = {{ arrow }},
         arrow_colour = arrow_colour,
         arrow_type = arrow_type,
         arrow_fill = arrow_fill,
         arrow_head_length = arrow_head_length,
-        arrow_neck_length = {{arrow_neck_length}}
-    )
+        arrow_neck_length = {{ arrow_neck_length }}
+      )
   }
 
-  # Return object
-  out + new_scale_color()
+  # Define new color scale
+  # Note: This changes an aes param from "colour" to "colour_new"
+  out <- out + new_scale_color()
+
+  # Define new class 'ggswim_obj' (after new color scale)
+  class(out) <- c("ggswim_obj", class(out))
+  # The max length can be considered the current working layer
+  # TODO: Determine if necessary, ggswim currently does not work with an existing
+  # ggplot. We may want to make this available in the future.
+  current_layer <- length(out$layers)
+
+  # Add a reference class to the layer attributes
+  attributes(out$layers[[current_layer]])$swim_class <- "ggswim"
+
+  # Return
+  out
 }
 
 #' @title Add arrows to a swimmer plot
@@ -172,16 +177,21 @@ ggswim <- function(
 #'
 #' @param data a dataframe prepared for use with [ggswim()]
 #' @inheritParams ggswim
-#' @param ... Other arguments passed to `ggswim()`, often aesthetic fixed values,
-#' i.e. `color = "red"` or `size = 3`.
 #'
 #' @examples
-#' add_arrows(data = patient_status,
-#'            mapping = aes(xend = end_time, y = pt_id),
-#'            arrow = arrow,
-#'            arrow_neck_length = time_from_today,
-#'            arrow_colour = "forestgreen",
-#'            arrow_fill = "forestgreen")
+#' patient_status <- patient_data |>
+#'   dplyr::select(pt_id, end_time, status, status_length) |>
+#'   unique() |>
+#'   dplyr::rename("arrow" = status, "time_from_today" = status_length)
+#'
+#' add_arrows(
+#'   data = patient_status,
+#'   mapping = aes(xend = end_time, y = pt_id),
+#'   arrow = arrow,
+#'   arrow_neck_length = time_from_today,
+#'   arrow_colour = "forestgreen",
+#'   arrow_fill = "forestgreen"
+#' )
 #'
 #' @export
 
@@ -230,22 +240,26 @@ add_arrows <- function(data = NULL,
     arrow_neck_length <- max(true_arrow_data$xend) * 0.15
   }
   out <- geom_segment(true_arrow_data,
-      mapping = aes(
-        x = xend,
-        y = .data[[y_val]],
-        yend = .data[[y_val]],
-        xend = if (is.name(arrow_neck_length)) {
-          xend + .data[[arrow_neck_length]]
-        } else {
-          xend + arrow_neck_length
-        },
-      ), colour = arrow_colour,
-      arrow = arrow(
-        type = arrow_type,
-        length = arrow_head_length
-      ),
-      arrow.fill = arrow_fill
-    )
+    mapping = aes(
+      x = xend,
+      y = .data[[y_val]],
+      yend = .data[[y_val]],
+      xend = if (is.name(arrow_neck_length)) {
+        xend + .data[[arrow_neck_length]]
+      } else {
+        xend + arrow_neck_length
+      },
+    ), colour = arrow_colour,
+    arrow = arrow(
+      type = arrow_type,
+      length = arrow_head_length
+    ),
+    arrow.fill = arrow_fill
+  )
+
+  # Add ggswim_obj class if none exists due to separate call
+  # Define new class 'ggswim_obj' (after new color scale)
+  class(out) <- c("ggswim_obj", class(out))
 
   # Add a reference class to the layer attributes
   attributes(out)$swim_class <- "ggswim_arrows"
