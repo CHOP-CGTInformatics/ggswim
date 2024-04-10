@@ -34,12 +34,20 @@ get_layer_data <- function(data, mapping, i = 1L, static_colours = NULL) {
     colour_mapping <- NULL
   }
 
+  # TODO: Artifact of old setup, currently fill is not used but we likely will undo
+  # this and reapply in the future
   if ("fill" %in% names(aes_mapping)) {
     fill_mapping_var <- retrieve_original_aes(data, aes_mapping, aes_var = "fill")
     fill_mapping <- data[[fill_mapping_var]]
   } else {
     fill_mapping <- NULL
   }
+
+  if (!is.null(fill_mapping)) {
+    layer_data <- cbind(layer_data(i = i), fill_mapping) |>
+      arrange(fill_mapping) # Assume correct since ggplot legend is arranged this way
+  }
+
 
   if (!is.null(colour_mapping)) {
     layer_data <- cbind(layer_data(i = i), colour_mapping) |>
@@ -51,11 +59,6 @@ get_layer_data <- function(data, mapping, i = 1L, static_colours = NULL) {
         layer_data$colour <- static_colours$colors[static_colours$indices == i]
       }
     }
-  }
-
-  if (!is.null(fill_mapping)) {
-    layer_data <- cbind(layer_data(i = i), fill_mapping) |>
-      arrange(fill_mapping) # Assume correct since ggplot legend is arranged this way
   }
 
   layer_data

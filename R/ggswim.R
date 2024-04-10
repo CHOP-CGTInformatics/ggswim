@@ -41,6 +41,10 @@
 #' `ggswim()` is a wrapper for [geom_segment()] and can support much of the same
 #' functionality.
 #'
+#' **Notes**:
+#'
+#' - `ggswim()` **does not** support mapping using `fill`.
+#'
 #' @section Arrows:
 #' Arrows can be specified in `ggswim()` as well as via the separate function,
 #' [add_arrows()].
@@ -87,6 +91,16 @@ ggswim <- function(
     arrow_type = "closed",
     ...) {
   # Enforce checks ----
+  check_supported_mapping_aes(
+    mapping = mapping,
+    unsupported_aes = "fill",
+    parent_func = "ggswim()"
+  )
+
+  check_missing_params(mapping = mapping,
+                       params = c("x", "xend", "y"),
+                       parent_func = "ggswim()")
+
   check_supported_position_args(
     position = position,
     parent_func = "ggswim()"
@@ -109,8 +123,8 @@ ggswim <- function(
   # Define new class 'ggswim_obj'
   class(out) <- c("ggswim_obj", class(out))
   # The max length can be considered the current working layer
-  # TODO: Determine if holds true, or should hold true, when adding ggswim layer
-  # onto an existing ggplot
+  # TODO: Determine if necessary, ggswim currently does not work with an existing
+  # ggplot. We may want to make this available in the future.
   current_layer <- length(out$layers)
 
   # Add a reference class to the layer attributes
