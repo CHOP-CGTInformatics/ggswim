@@ -1,13 +1,13 @@
 # nolint start
 # Load Libraries ----
 # Uncomment below to load libraries (avoids renv)
-# library(REDCapTidieR)
-# library(purrr)
-# library(dplyr)
-# library(lubridate)
-# library(tidyr)
-# library(ggplot2)
-# library(stringr)
+library(REDCapTidieR)
+library(purrr)
+library(dplyr)
+library(lubridate)
+library(tidyr)
+library(ggplot2)
+library(stringr)
 devtools::load_all(".")
 
 # Set Up CGTTrialsReporter Fnctns ----
@@ -188,6 +188,11 @@ patient_data <- prodigy |>
   mutate(
     start_time = round(start_time / 30.417, digit = 1), # average days in a month.
     end_time = round(end_time / 30.417, digit = 1)
+  ) |>
+  mutate(
+    .by = pt_id,
+    # Add arrow status, then correct for only last val to be TRUE
+    status = ifelse(row_number() == n() & status, TRUE, FALSE)
   )
 
 # infusion_events ----
