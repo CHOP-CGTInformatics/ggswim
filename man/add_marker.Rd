@@ -68,7 +68,7 @@ additional considerations and requirements.
 \strong{Notes}:
 \itemize{
 \item \code{add_marker()} \strong{does not} support mapping using \code{fill}.
-\item If using a static/non-mapping \code{color} specifier, a mapping \code{name} is required
+\item If using a fixed/non-mapping \code{color} specifier, a mapping \code{name} is required
 for aesthetic mapping to render the legend correctly.
 \item If using labels, both \code{label_vals} and \code{label_names} are required for
 proper legend population. At minimum, \code{label_vals} is needed for data
@@ -89,7 +89,7 @@ add_marker(
   size = 5
 )
 
-# markers with points and static params
+# markers with points and fixed params
 
 initial_infusions <- infusion_events |>
   dplyr::filter(time_from_initial_infusion == 0)

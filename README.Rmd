@@ -26,6 +26,8 @@ knitr::opts_chunk$set(
 
 The ggswim package provides a convenient set of commands to easily create swimmer plots. It integrates with the familiar ggplot2 framework and streamlines the process of generating legends that effectively communicate events of interest along individual subject trajectories.  
 
+ggswim solves some of the headaches associated with layer management in ggplot2 by leveraging the [ggnewscale](https://eliocamp.github.io/ggnewscale/) package and presenting an optimized workflow to get a swimmer plot.
+
 ## Installation
 
 You can install the development version of ggswim like so:
@@ -44,44 +46,41 @@ By first calling the `ggswim()` function, we can set up the horizontal survival 
 library(ggswim)
 library(ggplot2)
 
-p <- ggswim(patient_data,
-            mapping = aes(x = start_time, 
-                          xend = end_time, 
-                          y = pt_id,
-                          color = disease_assessment),
-            arrow = status,
-            arrow_neck_length = status_length, 
-            linewidth = 5
-)
+p <- patient_data |> 
+  ggswim(mapping = aes(x = start_time, xend = end_time, y = pt_id,
+                       color = disease_assessment),
+         arrow = status,
+         linewidth = 5
+  )  +
+  scale_color_manual(name = "Overall Disease Assessment",
+                     values = c("#6394F3", "#F3C363", "#EB792F", "#d73a76", "#85a31e"))
+
+p
 ```
 
 Next we'll add on events of interest: end of study updates, and infusions. These we'll refer to as "markers":
 
 ```{r, message=FALSE}
 p <- p +
-  add_marker(
-    data = infusion_events |> dplyr::mutate(infusion = "Infusion"),
-    aes(x = time_from_initial_infusion, y = pt_id, color = infusion),
-    size = 5
-  ) +
+  new_scale_color() +
   add_marker(
     data = end_study_events,
-    aes(x = time_from_initial_infusion, 
-        y = pt_id, 
-        label_vals = end_study_label, 
-        label_names = end_study_name),
+    aes(x = time_from_initial_infusion, y = pt_id, label_vals = end_study_label, label_names = end_study_name),
     label.size = NA, fill = NA, size = 5
-  ) 
+  ) +
+  add_marker(
+    data = infusion_events ,
+    aes(x = time_from_initial_infusion, y = pt_id, color = infusion_type)
+  )
+
+p
 ```
 
 Finally, we'll beautify the plot with familiar ggplot2 techniques and a last finishing touch with `theme_ggswim()`:
 
 ```{r, message=FALSE}
 p +
-  scale_color_manual(
-    name = "Overall Disease Assessment",
-    values = c("#6394F3", "#F3C363", "#EB792F", "red", "green")
-  ) +
+  scale_color_manual(name = "Markers", values = c(NA, NA, "green", NA, "red")) +
   labs(title = "My Swimmer Plot") +
   xlab("Time Since Infusion (Months)") + ylab("Patient ID") +
   theme_ggswim()

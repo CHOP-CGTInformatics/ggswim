@@ -5,7 +5,7 @@
 \alias{infusion_events}
 \title{Infusion Events dataset}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 16 rows and 2 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 16 rows and 3 columns.
 }
 \source{
 This dataset is for demonstration purposes only.

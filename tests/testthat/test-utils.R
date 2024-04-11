@@ -3,8 +3,8 @@ df$names <- rownames(mtcars)
 rownames(df) <- NULL
 df$cyl <- factor(df$cyl)
 
-# Static colour df representative of above ggswim_plot
-static_colour_df <- data.frame(
+# Fixed colour df representative of above ggswim_plot
+fixed_colour_df <- data.frame(
   "indices" = 3, "colors" = "firebrick", "name" = "test"
 )
 
@@ -39,12 +39,12 @@ test_that("get_layer_data works with swim framework and aes color mapping", {
     i = 1L
   )
 
-  expect_true(all(c("colour_mapping", "colour_new") %in% names(layer_data)))
+  expect_true(all(c("colour_mapping", "colour") %in% names(layer_data)))
   expect_equal(class(layer_data), "data.frame")
 })
 
 
-test_that("get_layer_data works with a swim framework and static colour mapping", {
+test_that("get_layer_data works with a swim framework and fixed colour mapping", {
   suppressWarnings({
     ggswim_plot <- ggswim(
       patient_data,
@@ -71,7 +71,7 @@ test_that("get_layer_data works with a swim framework and static colour mapping"
 
   expect_true(all(c("colour", "colour_mapping") %in% names(layer_data)))
   expect_equal(class(layer_data), "data.frame")
-  # Ensure that using static colour results in a single value for colour
+  # Ensure that using fixed colour results in a single value for colour
   # and colour mapping
   expect_true(length(unique(layer_data$colour)) == 1)
   expect_true(length(unique(layer_data$colour_mapping)) == 1)

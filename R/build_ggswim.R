@@ -14,7 +14,7 @@
 #' `build_ggswim()` makes use of [ggplot2::guides()] to dynamically override
 #' displays in the layers of the ggswim legend. It also applies a call to
 #' [ggplot2::scale_color_manual()] in applicable cases where a user calls out
-#' a static `color`/`colour` argument in addition to the required `color`
+#' a fixed `color`/`colour` argument in addition to the required `color`
 #' mapping aesthetic (handled by arg: `name`).
 #'
 #' @param ggswim_obj A ggswim object
@@ -57,7 +57,7 @@ build_ggswim <- function(ggswim_obj) {
 
   point_layer_data <- bind_layer_data(ggswim_obj,
     layer_indices = ref_layer_info$point_layer_indices,
-    static_colours = ref_layer_info$static_colours
+    fixed_colours = ref_layer_info$fixed_colours
   )
 
   # Reference level ordering in underlying layers
@@ -66,12 +66,8 @@ build_ggswim <- function(ggswim_obj) {
 
   override <- get_overrides(ref_guide, label_layer_data, point_layer_data)
 
-  # Return fixed ggswim object and guide overrides -----
-  (ggswim_obj +
-    scale_color_manual(values = setNames(
-      override$colour$colour,
-      override$colour$colour_mapping
-    )) +
+  # Return fixed ggswim object and guide and scale overrides -----
+  ggswim_obj <- ggswim_obj +
     guides(
       shape = override$shape,
       colour = guide_legend(
@@ -83,7 +79,20 @@ build_ggswim <- function(ggswim_obj) {
         )
       )
     )
-  ) |>
+
+  # If using fixed markers, apply manual color scale so colors appear in plot
+  # TODO: Address that this cannot be mixed with dynamic markers
+  # TODO: Address that fixed markers have to be renamed on first call internal
+  #       to add_marker
+  if (nrow(ref_layer_info$fixed_colours > 0)) {
+    ggswim_obj <- ggswim_obj +
+      scale_color_manual(values = setNames(
+        override$colour$colour,
+        override$colour$colour_mapping
+      ))
+  }
+
+  ggswim_obj |>
     # remove ggswim class, so default ggplot2 print methods will take over
     structure(class = class(ggswim_obj) |> setdiff("ggswim_obj"))
 }
@@ -99,11 +108,11 @@ build_ggswim <- function(ggswim_obj) {
 #'
 #' @param ggswim_obj A ggswim object
 #' @param layer_indices Layer indexes
-#' @param static_colours Dataframe of static colour callouts
+#' @param fixed_colours Dataframe of fixed colour callouts
 #'
 #' @keywords internal
 
-bind_layer_data <- function(ggswim_obj, layer_indices, static_colours = NULL) {
+bind_layer_data <- function(ggswim_obj, layer_indices, fixed_colours = NULL) {
   layer_data <- NULL
   for (i in layer_indices) {
     # If first layer, overwrite empty variable
@@ -119,14 +128,14 @@ bind_layer_data <- function(ggswim_obj, layer_indices, static_colours = NULL) {
         },
         mapping = ggswim_obj$layers[[i]]$mapping,
         i = i,
-        static_colours = static_colours
+        fixed_colours = fixed_colours
       )
     } else {
       added_layer_data <- get_layer_data(
         data = ggswim_obj$layers[[i]]$data,
         mapping = ggswim_obj$layers[[i]]$mapping,
         i = i,
-        static_colours = static_colours
+        fixed_colours = fixed_colours
       )
 
       layer_data <- bind_rows(layer_data, added_layer_data)
@@ -193,7 +202,7 @@ get_overrides <- function(ref_guide,
 #'
 #' @description
 #' The reference layer information list is used for location of layer type indices
-#' and static color definitions.
+#' and fixed color definitions.
 #'
 #' @param ggswim_obj A ggswim object
 #'
@@ -206,10 +215,10 @@ get_ref_layer_info <- function(ggswim_obj) {
   # Indices for layer positions in ggswim_obj
   label_layer_indices <- c()
   point_layer_indices <- c()
-  # static_colours for static color manipulation and legend re-definition
-  static_colours <- list()
+  # fixed_colours for fixed color manipulation and legend re-definition
+  fixed_colours <- list()
 
-  # Determine indices of layers in ggplot object that contain labels, points, and static colors
+  # Determine indices of layers in ggplot object that contain labels, points, and fixed colors
   for (i in seq_along(ggswim_obj$layers)) {
     # Check for swim_class attrs, required to allow for other types of layer additions (ex: geom_vline)
     if ("swim_class" %in% names(attributes(ggswim_obj$layers[[i]]))) {
@@ -222,11 +231,11 @@ get_ref_layer_info <- function(ggswim_obj) {
       }
     }
 
-    if (!is.null(ggswim_obj$layers[[i]]$static_colours)) {
-      static_colours$indices <- c(static_colours$indices, i)
-      static_colours$colors <- c(static_colours$colors, ggswim_obj$layers[[i]]$static_colours)
-      static_colours$name <- c(
-        static_colours$name,
+    if (!is.null(ggswim_obj$layers[[i]]$fixed_colours)) {
+      fixed_colours$indices <- c(fixed_colours$indices, i)
+      fixed_colours$colors <- c(fixed_colours$colors, ggswim_obj$layers[[i]]$fixed_colours)
+      fixed_colours$name <- c(
+        fixed_colours$name,
         ggswim_obj$layers[[i]]$mapping$colour |>
           get_expr() |>
           as.character()
@@ -234,12 +243,12 @@ get_ref_layer_info <- function(ggswim_obj) {
     }
   }
 
-  # Convert static_colours to a dataframe (will always have equal col lengths)
-  static_colours <- data.frame(static_colours)
+  # Convert fixed_colours to a dataframe (will always have equal col lengths)
+  fixed_colours <- data.frame(fixed_colours)
 
   list(
     label_layer_indices = label_layer_indices,
     point_layer_indices = point_layer_indices,
-    static_colours = static_colours
+    fixed_colours = fixed_colours
   )
 }

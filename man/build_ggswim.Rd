@@ -26,7 +26,7 @@ ggswim plot object, therefore it cannot be added to the \code{+} operator chain.
 \code{build_ggswim()} makes use of \code{\link[ggplot2:guides]{ggplot2::guides()}} to dynamically override
 displays in the layers of the ggswim legend. It also applies a call to
 \code{\link[ggplot2:scale_manual]{ggplot2::scale_color_manual()}} in applicable cases where a user calls out
-a static \code{color}/\code{colour} argument in addition to the required \code{color}
+a fixed \code{color}/\code{colour} argument in addition to the required \code{color}
 mapping aesthetic (handled by arg: \code{name}).
 }
 \examples{

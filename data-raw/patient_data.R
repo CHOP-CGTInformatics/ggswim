@@ -222,7 +222,8 @@ infusion_events <- prodigy |>
   dplyr::filter(pt_id %in% patient_data$pt_id &
     !is.na(initial_infusion_date)) |>
   select(pt_id, time_from_initial_infusion) |>
-  unique()
+  unique() |>
+  mutate(infusion_type = dplyr::if_else(time_from_initial_infusion == 0, "Initial Infusion", "Reinfusion"))
 
 # end_study_events ----
 

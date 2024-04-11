@@ -13,11 +13,11 @@
 #' at the top level of the plot. You must supply mapping if there is no plot mapping.
 #' @param i An integer to supply for the layer to retrieve. If none given, defaults
 #' to `1L`.
-#' @param static_colours an inherited dataframe from add_marker that captures
-#' and defines static color indices
+#' @param fixed_colours an inherited dataframe from add_marker that captures
+#' and defines fixed color indices
 #'
 #' @keywords internal
-get_layer_data <- function(data, mapping, i = 1L, static_colours = NULL) {
+get_layer_data <- function(data, mapping, i = 1L, fixed_colours = NULL) {
   layer_data <- NULL
 
   # Starting with color/colour, since that will always need to be given to result
@@ -58,10 +58,10 @@ get_layer_data <- function(data, mapping, i = 1L, static_colours = NULL) {
     layer_data <- cbind(layer_data(i = i), colour_mapping) |>
       arrange(colour_mapping) # Assume correct since ggplot legend is arranged this way
 
-    # Handle static_colours
-    if (!is.null(static_colours)) {
-      if (i %in% static_colours$indices) {
-        layer_data$colour <- static_colours$colors[static_colours$indices == i]
+    # Handle fixed_colours
+    if (!is.null(fixed_colours)) {
+      if (i %in% fixed_colours$indices) {
+        layer_data$colour <- fixed_colours$colors[fixed_colours$indices == i]
       }
     }
   }

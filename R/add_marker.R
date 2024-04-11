@@ -48,7 +48,7 @@
 #' **Notes**:
 #'
 #' - `add_marker()` **does not** support mapping using `fill`.
-#' - If using a static/non-mapping `color` specifier, a mapping `name` is required
+#' - If using a fixed/non-mapping `color` specifier, a mapping `name` is required
 #' for aesthetic mapping to render the legend correctly.
 #' - If using labels, both `label_vals` and `label_names` are required for
 #' proper legend population. At minimum, `label_vals` is needed for data
@@ -69,7 +69,7 @@
 #'   size = 5
 #' )
 #'
-#' # markers with points and static params
+#' # markers with points and fixed params
 #'
 #' initial_infusions <- infusion_events |>
 #'   dplyr::filter(time_from_initial_infusion == 0)
@@ -133,7 +133,7 @@ add_marker <- function(
     attributes(out)$swim_class <- "marker_label"
   } else {
     dots <- rlang::dots_list(...)
-    static_colours <- NULL
+    fixed_colours <- NULL
     name_detected <- "name" %in% names(mapping)
 
     # Artificially create a column that will serve as the aes mapping "color" column
@@ -145,7 +145,7 @@ add_marker <- function(
       mapping$colour <- rlang::sym(mapping$name)
       mapping <- mapping[names(mapping) != "name"] # remove name
 
-      static_colours <- if ("color" %in% names(rlang::dots_list(...))) {
+      fixed_colours <- if ("color" %in% names(rlang::dots_list(...))) {
         rlang::dots_list(...)$color
       } else {
         rlang::dots_list(...)$colour
@@ -166,7 +166,7 @@ add_marker <- function(
       out$aes_params$colour <- NULL
     }
 
-    out$static_colours <- static_colours
+    out$fixed_colours <- fixed_colours
 
     # Tag the layer with a reference attribute
     attributes(out)$swim_class <- "marker_point"

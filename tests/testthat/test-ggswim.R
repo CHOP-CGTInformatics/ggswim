@@ -156,6 +156,7 @@ test_that("ggswim works for various and combined use cases", {
       x = start_time, xend = end_time, y = pt_id,
       color = disease_assessment
     )) +
+    new_scale_color() +
     add_marker(
       data = end_study_events,
       aes(x = time_from_initial_infusion, y = pt_id, label_vals = end_study_label, label_names = end_study_name)
@@ -168,7 +169,7 @@ test_that("ggswim works for various and combined use cases", {
   )
 
   suppressWarnings({
-    p_static_points <- patient_data |>
+    p_fixed_points <- patient_data |>
       ggswim(mapping = aes(
         x = start_time, xend = end_time, y = pt_id,
         color = disease_assessment
@@ -187,8 +188,8 @@ test_that("ggswim works for various and combined use cases", {
 
   skip_on_ci()
   vdiffr::expect_doppelganger(
-    title = "Case #4: ggswim with static marker points",
-    fig = p_static_points
+    title = "Case #4: ggswim with fixed marker points",
+    fig = p_fixed_points
   )
 
   p_dynamic_points <- patient_data |>
@@ -203,7 +204,7 @@ test_that("ggswim works for various and combined use cases", {
 
   skip_on_ci()
   vdiffr::expect_doppelganger(
-    title = "Case #5: ggswim with static marker points",
+    title = "Case #5: ggswim with dynamic marker points",
     fig = p_dynamic_points
   )
 })

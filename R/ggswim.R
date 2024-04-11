@@ -145,10 +145,6 @@ ggswim <- function(
       )
   }
 
-  # Define new color scale
-  # Note: This changes an aes param from "colour" to "colour_new"
-  out <- out + new_scale_color()
-
   # Define new class 'ggswim_obj' (after new color scale)
   class(out) <- c("ggswim_obj", class(out))
   # The max length can be considered the current working layer

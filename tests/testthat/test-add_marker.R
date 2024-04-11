@@ -26,6 +26,7 @@ test_that("add_marker works for aes mapping", {
 
   # Simple layer with aesthetic mapping ----
   p1 <- ggswim_layer +
+    new_scale_color() +
     mk1_layer
 
   skip_on_ci()
@@ -41,6 +42,7 @@ test_that("add_marker works for aes mapping", {
   )
 
   p2 <- ggswim_layer +
+    new_scale_color() +
     mk1_layer +
     mk2_layer
 
@@ -51,7 +53,7 @@ test_that("add_marker works for aes mapping", {
   )
 })
 
-test_that("add_marker works for static aesthetics", {
+test_that("add_marker works for fixed aesthetics", {
   mk1_layer <- add_marker(
     data = initial_infusions,
     mapping = aes(x = time_from_initial_infusion, y = pt_id, name = "Infusion"),
@@ -60,11 +62,12 @@ test_that("add_marker works for static aesthetics", {
     suppressWarnings()
 
   p1 <- ggswim_layer +
+    new_scale_color() +
     mk1_layer
 
   skip_on_ci()
   vdiffr::expect_doppelganger(
-    title = "Single marker with static color callout",
+    title = "Single marker with fixed color callout",
     fig = p1
   )
 })

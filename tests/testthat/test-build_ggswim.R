@@ -117,7 +117,7 @@ test_that("bind_layer_data works for multiple layers", {
   expect_true(nrow(out) > 0)
 })
 
-test_that("bind_layer_data works with static colors", {
+test_that("bind_layer_data works with fixed colors", {
   initial_infusions <- infusion_events |>
     mutate(infusion = dplyr::if_else(
       time_from_initial_infusion == 0, "Infusion", "Reinfusion"
@@ -145,13 +145,13 @@ test_that("bind_layer_data works with static colors", {
   })
 
   layer_indices <- 2L
-  static_colours <- tibble::tribble(
+  fixed_colours <- tibble::tribble(
     ~"indices", ~"colors", ~"name",
     2, "red", "Initial Infusion"
   )
 
 
-  out <- bind_layer_data(ggswim_obj, layer_indices, static_colours)
+  out <- bind_layer_data(ggswim_obj, layer_indices, fixed_colours)
 
   # Check for important columns
   expected_cols <- c("colour", "x", "y", "group", "shape", "size", "alpha", "stroke", "colour_mapping")
@@ -162,7 +162,7 @@ test_that("bind_layer_data works with static colors", {
   expect_true(all(out$colour == "red"))
 })
 
-test_that("get_ref_layer_info works for static colors", {
+test_that("get_ref_layer_info works for fixed colors", {
   initial_infusions <- infusion_events |>
     mutate(infusion = dplyr::if_else(
       time_from_initial_infusion == 0, "Infusion", "Reinfusion"
@@ -189,19 +189,19 @@ test_that("get_ref_layer_info works for static colors", {
       )
   })
 
-  expected_static <- list(
+  expected_fixed <- list(
     label_layer_indices = NULL,
     point_layer_indices = 2,
-    static_colours = data.frame(
+    fixed_colours = data.frame(
       indices = 2,
       colors = "red",
       name = "Initial Infusion"
     )
   )
 
-  out_static <- get_ref_layer_info(ggswim_obj)
+  out_fixed <- get_ref_layer_info(ggswim_obj)
 
-  expect_equal(out_static, expected_static)
+  expect_equal(out_fixed, expected_fixed)
 })
 
 
@@ -235,7 +235,7 @@ test_that("get_ref_layer_info works for point and label layers", {
   expected <- list(
     label_layer_indices = 3,
     point_layer_indices = 2,
-    static_colours = data.frame()
+    fixed_colours = data.frame()
   )
 
   out <- get_ref_layer_info(ggswim_obj)

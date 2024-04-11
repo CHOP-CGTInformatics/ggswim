@@ -14,6 +14,6 @@ a list
 }
 \description{
 The reference layer information list is used for location of layer type indices
-and static color definitions.
+and fixed color definitions.
 }
 \keyword{internal}
