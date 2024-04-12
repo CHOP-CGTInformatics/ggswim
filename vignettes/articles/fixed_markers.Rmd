@@ -1,5 +1,5 @@
 ---
-title: "Static Mapping with Markers"
+title: "Fixed Marker Mapping"
 ---
 
 ```{r, include = FALSE}

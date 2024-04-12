@@ -60,7 +60,8 @@
 #'     xend = end_time,
 #'     y = pt_id,
 #'     color = disease_assessment
-#'   )
+#'   ),
+#'   linewidth = 5
 #' )
 #'
 #' # ggswim call with arrows
@@ -72,9 +73,8 @@
 #'     y = pt_id,
 #'     color = disease_assessment
 #'   ),
+#'   linewidth = 5,
 #'   arrow = status,
-#'   arrow_fill = "forestgreen",
-#'   arrow_colour = "cyan",
 #'   arrow_head_length = ggplot2::unit(.25, "inches"),
 #'   arrow_neck_length = status_length
 #' )

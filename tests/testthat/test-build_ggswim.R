@@ -1,3 +1,9 @@
+initial_infusions <- infusion_events |>
+  dplyr::filter(time_from_initial_infusion == 0)
+
+reinfusions <- infusion_events |>
+  dplyr::filter(time_from_initial_infusion > 0)
+
 test_that("get_overrides works", {
   ref_guide <- tibble::tribble(
     ~"colour", ~".value", ~".label", ~"shape",
@@ -275,4 +281,59 @@ test_that("ggswim_obj is appropriate class type", {
 
   expect_setequal(class(ggswim_obj), expected)
   expect_setequal(class(ggswim_obj_markers), expected)
+})
+
+test_that("build_ggswim errors on expected validation checks", {
+  suppressWarnings({
+    # Case 1: Multiple fixed_marker_names supplied
+    ggswim_obj <- ggswim(
+      data = patient_data,
+      mapping = aes(
+        x = start_time, xend = end_time, y = pt_id,
+        color = disease_assessment
+      ),
+    ) +
+      new_scale_color() +
+      add_marker(
+        data = initial_infusions,
+        aes(x = time_from_initial_infusion, y = pt_id, name = "Initial Infusion"),
+        color = "green", size = 5, fixed_marker_name = "Title 1"
+      ) +
+      add_marker(
+        data = reinfusions,
+        aes(x = time_from_initial_infusion + 2, y = pt_id, name = "Reinfusion"),
+        color = "red", size = 5, fixed_marker_name = "Title 2"
+      )
+  })
+
+  expect_error(build_ggswim(ggswim_obj),
+    class = "multi_fixed_marker_scales"
+  )
+
+  suppressWarnings({
+    # Case 2: Multiple new_scale_color()s supplied
+    ggswim_obj <- ggswim(
+      data = patient_data,
+      mapping = aes(
+        x = start_time, xend = end_time, y = pt_id,
+        color = disease_assessment
+      ),
+    ) +
+      new_scale_color() +
+      add_marker(
+        data = initial_infusions,
+        aes(x = time_from_initial_infusion, y = pt_id, name = "Initial Infusion"),
+        color = "green", size = 5, fixed_marker_name = "Title 1"
+      ) +
+      new_scale_color() +
+      add_marker(
+        data = reinfusions,
+        aes(x = time_from_initial_infusion + 2, y = pt_id, name = "Reinfusion"),
+        color = "red", size = 5, fixed_marker_name = "Title 1"
+      )
+  })
+
+  expect_error(build_ggswim(ggswim_obj),
+    class = "multi_fixed_marker_scales"
+  )
 })

@@ -19,7 +19,7 @@ Drawing from the well-established principles of ggplot2, ggswim allows users to 
 
 ### Building swimmer plots with aesthetic mapping
 
-To start, let's build a swimmer plot using `aes()` and aesthetic mapped data (for fixed mapping, see [Fixed Mapping with Markers](https://chop-cgtinformatics.github.io/ggswim/articles/fixed_markers.html)). As with the README, we will be using ggswim's internal datasets: `patient_data`, `infusion_events`, and `end_study_events`. 
+To start, let's build a swimmer plot using `aes()` and aesthetic mapped data (for fixed mapping, see [Fixed Marker Mapping](https://chop-cgtinformatics.github.io/ggswim/articles/fixed_markers.html)). As with the README, we will be using ggswim's internal datasets: `patient_data`, `infusion_events`, and `end_study_events`. 
 
 Let's start with observing `patient_data`'s structure:
 

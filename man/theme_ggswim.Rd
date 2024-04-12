@@ -31,7 +31,8 @@ ggswim(
     xend = end_time,
     y = pt_id,
     color = disease_assessment
-  )
+  ),
+  linewidth = 5
 ) +
   theme_ggswim()
 }

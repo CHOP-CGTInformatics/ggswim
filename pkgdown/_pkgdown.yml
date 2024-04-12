@@ -40,6 +40,8 @@ reference:
   - ggswim
   - add_marker
   - add_arrows
+  - new_scale_color
+  - new_scale_colour
   - build_ggswim
   - theme_ggswim
 - title: "Datasets"

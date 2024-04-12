@@ -25,7 +25,8 @@
 #'     xend = end_time,
 #'     y = pt_id,
 #'     color = disease_assessment
-#'   )
+#'   ),
+#'   linewidth = 5
 #' ) +
 #'   theme_ggswim()
 theme_ggswim <- function(base_size = 12, base_family = "") {
