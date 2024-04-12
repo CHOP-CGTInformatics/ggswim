@@ -8,7 +8,7 @@ as a bound dataframe to help with legend guide definitions."><meta property="og:
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary" data-bs-theme="dark"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">ggswim</a>
 
@@ -36,7 +36,7 @@ as a bound dataframe to help with legend guide definitions."><meta property="og:
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/add_arrows.html">Adding Arrows</a>
-    <a class="dropdown-item" href="../articles/static_markers.html">Static Mapping with Markers</a>
+    <a class="dropdown-item" href="../articles/fixed_markers.html">Fixed Mapping with Markers</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -67,7 +67,7 @@ as a bound dataframe to help with legend guide definitions.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bind_layer_data</span><span class="op">(</span><span class="va">ggswim_obj</span>, <span class="va">layer_indices</span>, static_colours <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bind_layer_data</span><span class="op">(</span><span class="va">ggswim_obj</span>, <span class="va">layer_indices</span>, fixed_colours <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -80,8 +80,8 @@ as a bound dataframe to help with legend guide definitions.</p>
 <dd><p>Layer indexes</p></dd>
 
 
-<dt>static_colours</dt>
-<dd><p>Dataframe of static colour callouts</p></dd>
+<dt>fixed_colours</dt>
+<dd><p>Dataframe of fixed colour callouts</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -100,7 +100,7 @@ as a bound dataframe to help with legend guide definitions.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
     </footer></div>

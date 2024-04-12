@@ -16,13 +16,13 @@
     <loc>https://chop-cgtinformatics.github.io/ggswim/articles/add_arrows.html</loc>
   </url>
   <url>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/articles/fixed_markers.html</loc>
+  </url>
+  <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/articles/ggswim.html</loc>
   </url>
   <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://chop-cgtinformatics.github.io/ggswim/articles/static_markers.html</loc>
   </url>
   <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/authors.html</loc>
@@ -68,6 +68,9 @@
   </url>
   <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/check_supported_position_args.html</loc>
+  </url>
+  <url>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/check_valid_fixed_maker_scales.html</loc>
   </url>
   <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/checkmate.html</loc>

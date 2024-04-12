@@ -10,7 +10,7 @@ the parent data frame."><meta property="og:image" content="https://chop-cgtinfor
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary" data-bs-theme="dark"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">ggswim</a>
 
@@ -38,7 +38,7 @@ the parent data frame."><meta property="og:image" content="https://chop-cgtinfor
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/add_arrows.html">Adding Arrows</a>
-    <a class="dropdown-item" href="../articles/static_markers.html">Static Mapping with Markers</a>
+    <a class="dropdown-item" href="../articles/fixed_markers.html">Fixed Mapping with Markers</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -70,7 +70,7 @@ the parent data frame.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_layer_data</span><span class="op">(</span><span class="va">data</span>, <span class="va">mapping</span>, i <span class="op">=</span> <span class="fl">1L</span>, static_colours <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_layer_data</span><span class="op">(</span><span class="va">data</span>, <span class="va">mapping</span>, i <span class="op">=</span> <span class="fl">1L</span>, fixed_colours <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -90,9 +90,9 @@ at the top level of the plot. You must supply mapping if there is no plot mappin
 to <code>1L</code>.</p></dd>
 
 
-<dt>static_colours</dt>
+<dt>fixed_colours</dt>
 <dd><p>an inherited dataframe from add_marker that captures
-and defines static color indices</p></dd>
+and defines fixed color indices</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -111,7 +111,7 @@ and defines static color indices</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
     </footer></div>
