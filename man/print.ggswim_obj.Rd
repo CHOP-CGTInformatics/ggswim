@@ -21,9 +21,10 @@ Print ggswim object
 ggswim(
   data = patient_data,
   mapping = aes(
-    x = delta_t0_months,
+    x = start_time,
+    xend = end_time,
     y = pt_id,
-    fill = disease_assessment
+    color = disease_assessment
   )
 ) |>
   print()

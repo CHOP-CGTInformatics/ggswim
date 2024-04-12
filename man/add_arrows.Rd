@@ -2,25 +2,22 @@
 % Please edit documentation in R/ggswim.R
 \name{add_arrows}
 \alias{add_arrows}
-\title{Add arrows to plot using geom_segment}
+\title{Add arrows to a swimmer plot}
 \usage{
 add_arrows(
-  data,
-  ggswim_obj,
-  mapping,
-  position,
-  arrow,
-  arrow_colour,
-  arrow_head_length,
-  arrow_neck_length,
-  arrow_fill,
-  arrow_type
+  data = NULL,
+  mapping = NULL,
+  position = "identity",
+  arrow = NULL,
+  arrow_colour = "black",
+  arrow_head_length = unit(0.25, "inches"),
+  arrow_neck_length = NULL,
+  arrow_fill = NULL,
+  arrow_type = "closed"
 )
 }
 \arguments{
-\item{data}{a dataframe prepared for use with \code{ggswim()}}
-
-\item{ggswim_obj}{A ggswim object}
+\item{data}{a dataframe prepared for use with \code{\link[=ggswim]{ggswim()}}}
 
 \item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}}. If specified and
 \code{inherit.aes = TRUE} (the default), it is combined with the default mapping
@@ -46,14 +43,30 @@ specifier. The default, \code{NULL}, sets a value proportional to the max lane v
 
 \item{arrow_type}{One of "open" or "closed" indicating whether the arrow head should
 be a closed triangle. Default "closed."}
-
-\item{...}{Other arguments passed to \code{ggswim()}, often aesthetic fixed values,
-i.e. \code{color = "red"} or \code{size = 3}.}
 }
 \description{
-This helper function is triggered when a user requests arrows to
-appear in \code{ggswim()}. It uses the \code{geom_segment()} function to supply them by
-Adding a 0-length segment at the end of the swim lanes and then tacking on
-arrows using the \code{arrow} argument.
+Add arrows to the ends of swimmer plot lanes to indicate unknown statuses
+or continued record-level trajectories.
 }
-\keyword{internal}
+\details{
+\code{add_arrows()} wraps a new \code{\link[=geom_segment]{geom_segment()}} layer by adding a zero-length
+segment at the right end of swimmer lanes. This approach allows users to
+specify \code{arrow_neck_length} which can be useful for tracking and visualizaing
+time in between markers
+}
+\examples{
+patient_status <- patient_data |>
+  dplyr::select(pt_id, end_time, status, status_length) |>
+  unique() |>
+  dplyr::rename("arrow" = status, "time_from_today" = status_length)
+
+add_arrows(
+  data = patient_status,
+  mapping = aes(xend = end_time, y = pt_id),
+  arrow = arrow,
+  arrow_neck_length = time_from_today,
+  arrow_colour = "forestgreen",
+  arrow_fill = "forestgreen"
+)
+
+}

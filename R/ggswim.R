@@ -1,7 +1,8 @@
-#' @title Plot individual level response trajectories
+#' @title Create swimmer survival plots
 #'
 #' @description
-#' Visualize individual record response trajectories over time using a swimmer plot.
+#' Use ggplot2 architecture to create a swimmer plot showing subject survival
+#' timelines.
 #'
 #' @details
 #' A swimmer plot is a data visualization used to display individual
@@ -9,8 +10,8 @@
 #' horizontal line for each subject, allowing easy comparison and pattern
 #' identification.
 #'
-#' @param data a dataframe prepared for use with `ggswim()`
-#' @inheritParams ggplot2::geom_col
+#' @param data a dataframe prepared for use with [ggswim()]
+#' @inheritParams ggplot2::geom_segment
 #' @param position Position adjustment. ggswim accepts either "stack", or "identity"
 #' depending on the use case. Default "identity".
 #' @param arrow A column indicating what swim lanes should have arrows applied.
@@ -30,13 +31,23 @@
 #'
 #' - **`x`**
 #' - **`y`**
+#' - **xend _or_ yend**
 #' - `alpha`
-#' - `fill`
+#' - `colour`
 #' - `group`
 #' - `linetype`
 #' - `linewidth`
 #'
-#' **Note**: `ggswim()` **does not** support mapping using `color`/`colour`.
+#' `ggswim()` is a wrapper for [geom_segment()] and can support much of the same
+#' functionality.
+#'
+#' **Notes**:
+#'
+#' - `ggswim()` **does not** support mapping using `fill`.
+#'
+#' @section Arrows:
+#' Arrows can be specified in `ggswim()` as well as via the separate function,
+#' [add_arrows()].
 #'
 #' @export
 #'
@@ -45,9 +56,10 @@
 #' ggswim(
 #'   data = patient_data,
 #'   mapping = aes(
-#'     x = delta_t0_months,
+#'     x = start_time,
+#'     xend = end_time,
 #'     y = pt_id,
-#'     fill = disease_assessment
+#'     color = disease_assessment
 #'   )
 #' )
 #'
@@ -55,16 +67,17 @@
 #' ggswim(
 #'   data = patient_data,
 #'   mapping = aes(
-#'     x = delta_t0_months,
+#'     x = start_time,
+#'     xend = end_time,
 #'     y = pt_id,
-#'     fill = disease_assessment
+#'     color = disease_assessment
 #'   ),
-#'   arrow = arrow_status,
-#'   arrow_fill = "cyan",
+#'   arrow = status,
+#'   arrow_fill = "forestgreen",
+#'   arrow_colour = "cyan",
 #'   arrow_head_length = ggplot2::unit(.25, "inches"),
-#'   arrow_neck_length = delta_today
+#'   arrow_neck_length = status_length
 #' )
-
 ggswim <- function(
     data,
     mapping = aes(),
@@ -79,7 +92,13 @@ ggswim <- function(
   # Enforce checks ----
   check_supported_mapping_aes(
     mapping = mapping,
-    unsupported_aes = c("color", "colour"),
+    unsupported_aes = "fill",
+    parent_func = "ggswim()"
+  )
+
+  check_missing_params(
+    mapping = mapping,
+    params = c("x", "xend", "y"),
     parent_func = "ggswim()"
   )
 
@@ -93,26 +112,95 @@ ggswim <- function(
   original_y_var <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "y")
   data[[original_y_var]] <- data[[original_y_var]] |> as.factor()
 
-  # Create ggplot and geom_col layers ----
+  # Create ggplot and geom_segment layers ----
   out <- data |>
     ggplot() +
-    geom_col(
+    geom_segment(
       mapping,
       position = position,
       ...
     )
 
-  # Define new class 'ggswim_obj'
+  # Detect arrows ----
+  arrow <- enquo(arrow) |> get_expr()
+  arrow_neck_length <- if (quo_is_symbolic(quo(arrow_neck_length))) {
+    enquo(arrow_neck_length) |> get_expr()
+  } else {
+    arrow_neck_length
+  }
+  has_arrows <- !is.null(arrow)
+
+  if (has_arrows) {
+    out <- out +
+      add_arrows(
+        data = data,
+        mapping = mapping,
+        position = position,
+        arrow = {{ arrow }},
+        arrow_colour = arrow_colour,
+        arrow_type = arrow_type,
+        arrow_fill = arrow_fill,
+        arrow_head_length = arrow_head_length,
+        arrow_neck_length = {{ arrow_neck_length }}
+      )
+  }
+
+  # Define new class 'ggswim_obj' (after new color scale)
   class(out) <- c("ggswim_obj", class(out))
   # The max length can be considered the current working layer
-  # TODO: Determine if holds true, or should hold true, when adding ggswim layer
-  # onto an existing ggplot
+  # TODO: Determine if necessary, ggswim currently does not work with an existing
+  # ggplot. We may want to make this available in the future.
   current_layer <- length(out$layers)
 
   # Add a reference class to the layer attributes
   attributes(out$layers[[current_layer]])$swim_class <- "ggswim"
 
-  # Handle arrows ----
+  # Return
+  out
+}
+
+#' @title Add arrows to a swimmer plot
+#'
+#' @description
+#' Add arrows to the ends of swimmer plot lanes to indicate unknown statuses
+#' or continued record-level trajectories.
+#'
+#' @details
+#' `add_arrows()` wraps a new [geom_segment()] layer by adding a zero-length
+#' segment at the right end of swimmer lanes. This approach allows users to
+#' specify `arrow_neck_length` which can be useful for tracking and visualizaing
+#' time in between markers
+#'
+#' @param data a dataframe prepared for use with [ggswim()]
+#' @inheritParams ggswim
+#'
+#' @examples
+#' patient_status <- patient_data |>
+#'   dplyr::select(pt_id, end_time, status, status_length) |>
+#'   unique() |>
+#'   dplyr::rename("arrow" = status, "time_from_today" = status_length)
+#'
+#' add_arrows(
+#'   data = patient_status,
+#'   mapping = aes(xend = end_time, y = pt_id),
+#'   arrow = arrow,
+#'   arrow_neck_length = time_from_today,
+#'   arrow_colour = "forestgreen",
+#'   arrow_fill = "forestgreen"
+#' )
+#'
+#' @export
+
+add_arrows <- function(data = NULL,
+                       mapping = NULL,
+                       position = "identity",
+                       arrow = NULL,
+                       arrow_colour = "black",
+                       arrow_head_length = unit(0.25, "inches"),
+                       arrow_neck_length = NULL,
+                       arrow_fill = NULL,
+                       arrow_type = "closed") {
+  # Handle dynamic arrow vars ----
   arrow <- enquo(arrow) |> get_expr()
   arrow_neck_length <- if (quo_is_symbolic(quo(arrow_neck_length))) {
     enquo(arrow_neck_length) |> get_expr()
@@ -120,57 +208,13 @@ ggswim <- function(
     arrow_neck_length
   }
 
-  if (!is.null(arrow)) {
-    out <- add_arrows(
-      data = data,
-      ggswim_obj = out,
-      mapping = mapping,
-      position = position,
-      arrow = arrow,
-      arrow_colour = arrow_colour,
-      arrow_type = arrow_type,
-      arrow_fill = arrow_fill,
-      arrow_head_length = arrow_head_length,
-      arrow_neck_length = arrow_neck_length
-    )
-  }
-
-  # Return object
-  out
-}
-
-#' @title Add arrows to plot using geom_segment
-#'
-#' @description This helper function is triggered when a user requests arrows to
-#' appear in `ggswim()`. It uses the `geom_segment()` function to supply them by
-#' Adding a 0-length segment at the end of the swim lanes and then tacking on
-#' arrows using the `arrow` argument.
-#'
-#' @param data a dataframe prepared for use with `ggswim()`
-#' @param ggswim_obj A ggswim object
-#' @inheritParams ggswim
-#' @param ... Other arguments passed to `ggswim()`, often aesthetic fixed values,
-#' i.e. `color = "red"` or `size = 3`.
-#'
-#' @keywords internal
-
-add_arrows <- function(data,
-                       ggswim_obj,
-                       mapping,
-                       position,
-                       arrow,
-                       arrow_colour,
-                       arrow_head_length,
-                       arrow_neck_length,
-                       arrow_fill,
-                       arrow_type) {
   # Implement UI checks ----
   # Check that warning supplied if `arrow_fill` !NULL and `arrow_type` "open"
   check_arg_is_logical(data[[arrow]])
   check_arrow_fill_type(arrow_type, arrow_fill)
   check_arrow_neck_length(arrow_neck_length)
 
-  x_val <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "x") # nolint: object_usage_linter
+  x_val <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "xend") # nolint: object_usage_linter
   y_val <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "y")
 
   xend <- NULL # define to avoid global variable note
@@ -191,30 +235,30 @@ add_arrows <- function(data,
   if (is.null(arrow_neck_length)) {
     arrow_neck_length <- max(true_arrow_data$xend) * 0.15
   }
+  out <- geom_segment(true_arrow_data,
+    mapping = aes(
+      x = xend,
+      y = .data[[y_val]],
+      yend = .data[[y_val]],
+      xend = if (is.name(arrow_neck_length)) {
+        xend + .data[[arrow_neck_length]]
+      } else {
+        xend + arrow_neck_length
+      },
+    ), colour = arrow_colour,
+    arrow = arrow(
+      type = arrow_type,
+      length = arrow_head_length
+    ),
+    arrow.fill = arrow_fill
+  )
 
-  out <- ggswim_obj +
-    geom_segment(true_arrow_data,
-      mapping = aes(
-        x = xend,
-        y = .data[[y_val]],
-        yend = .data[[y_val]],
-        xend = if (is.name(arrow_neck_length)) {
-          xend + .data[[arrow_neck_length]]
-        } else {
-          xend + arrow_neck_length
-        },
-      ), colour = arrow_colour,
-      arrow = arrow(
-        type = arrow_type,
-        length = arrow_head_length
-      ),
-      arrow.fill = arrow_fill
-    )
-
-  current_layer <- length(out$layers) # The max length can be considered the current working layer
+  # Add ggswim_obj class if none exists due to separate call
+  # Define new class 'ggswim_obj' (after new color scale)
+  class(out) <- c("ggswim_obj", class(out))
 
   # Add a reference class to the layer attributes
-  attributes(out$layers[[current_layer]])$swim_class <- "ggswim"
+  attributes(out)$swim_class <- "ggswim_arrows"
 
   out
 }

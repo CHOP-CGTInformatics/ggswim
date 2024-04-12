@@ -2,9 +2,9 @@
 % Please edit documentation in R/add_marker.R
 \name{add_marker}
 \alias{add_marker}
-\title{Add markers of interest to level response trajectories}
+\title{Add markers of interest swimmer plots}
 \usage{
-add_marker(mapping = aes(), data = NULL, ...)
+add_marker(mapping = aes(), data = NULL, fixed_marker_name = NULL, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}}. If specified and
@@ -12,9 +12,10 @@ add_marker(mapping = aes(), data = NULL, ...)
 at the top level of the plot. You must supply \code{mapping} if there is no plot
 mapping.}
 
-\item{data}{a dataframe prepared for use with \code{ggswim()}, either coming from
-a parent \code{ggswim()} function, another \code{add_marker()} call, or a new dataframe
-prepared for use with \code{ggswim()}.}
+\item{data}{a dataframe prepared for use with \code{\link[=ggswim]{ggswim()}}}
+
+\item{fixed_marker_name}{A character string for the name of a fixed marker
+scale}
 
 \item{...}{Other arguments passed on to \code{\link[ggplot2:layer]{layer()}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
@@ -26,15 +27,16 @@ A ggswim object
 }
 \description{
 "Markers" are used to specify events of interest along response trajectories
-across individual lanes. \code{add_marker()} wraps \code{geom_point()} or \code{geom_label()}
-depending on the users designation of \code{color}/\code{colour} and \code{label} arguments.
+across individual lanes. \code{\link[=add_marker]{add_marker()}} wraps \code{\link[=geom_point]{geom_point()}} or \code{\link[=geom_label]{geom_label()}}
+depending on the users designation of \code{color}/\code{colour} and
+\code{label_vals}/\code{label_names} arguments.
 
 See \strong{Aesthetics} for more information.
 }
 \section{Aesthetics}{
 
-\code{add_marker()} understands the following aesthetics (required aesthetics are in bold)
-when using \code{color}/\code{colour} similar to \code{geom_point()}
+\code{\link[=add_marker]{add_marker()}} understands the following aesthetics (required aesthetics are in bold)
+when using \code{color}/\code{colour} similar to \code{\link[=geom_point]{geom_point()}}.
 \itemize{
 \item \strong{\code{x}}
 \item \strong{\code{y}}
@@ -47,9 +49,9 @@ when using \code{color}/\code{colour} similar to \code{geom_point()}
 \item \code{stroke}
 }
 
-\code{add_marker()} understands the following aesthetics (required aesthetics are in bold)
-when using \code{label} similar to \code{geom_label()}. See "Notes" below for additional
-considerations and requirements.
+\code{\link[=add_marker]{add_marker()}} understands the following aesthetics (required aesthetics are in bold)
+when using \code{label_vals}/\code{label_names} similar to \code{\link[=geom_label]{geom_label()}}. See "Notes" below for
+additional considerations and requirements.
 \itemize{
 \item \strong{\code{x}}
 \item \strong{\code{y}}
@@ -69,11 +71,13 @@ considerations and requirements.
 \strong{Notes}:
 \itemize{
 \item \code{add_marker()} \strong{does not} support mapping using \code{fill}.
-\item If using a static/non-mapping \code{color} specifier, a mapping \code{name} is required
-for aesthetic mapping to render the legend correctly.
+\item If using a fixed/non-mapping \code{color} specifier, a mapping \code{name} is required
+for aesthetic mapping to render the legend value label correctly.
+\item If using a fixed/non-mapping \code{color} specifier, a \code{fixed_marker_name} must
+be set for the \emph{first} marker in a given new scale.
 \item If using labels, both \code{label_vals} and \code{label_names} are required for
 proper legend population. At minimum, \code{label_vals} is needed for data
-display. These are unique parameter options for \code{aes()} to ggswim.
+display. These are unique parameter options for \code{\link[=aes]{aes()}} to ggswim.
 }
 }
 
@@ -81,26 +85,26 @@ display. These are unique parameter options for \code{aes()} to ggswim.
 
 # markers with points and aesthetic mapping params
 add_marker(
-  data = infusion_events,
+  data = infusion_events |> dplyr::mutate(infusion = "Infusion"),
   mapping = aes(
-    x = delta_t0,
+    x = time_from_initial_infusion,
     y = pt_id,
-    color = infusion_type,
-    shape = end_study_name
+    color = infusion
   ),
   size = 5
 )
 
-# markers with points and static params
+# markers with points and fixed params
 
-initial_infusions <- infusion_events[infusion_events$delta_t0 == 0, ]
+initial_infusions <- infusion_events |>
+  dplyr::filter(time_from_initial_infusion == 0)
 
 add_marker(
   data = initial_infusions,
   mapping = aes(
-    x = delta_t0,
+    x = time_from_initial_infusion,
     y = pt_id,
-    name = "Initial"
+    name = "Initial Infusion"
   ),
   color = "red",
   size = 5
@@ -109,9 +113,10 @@ add_marker(
 # markers with labels
 add_marker(
   data = end_study_events,
-  mapping = aes(y = pt_id, x = delta_t0_months,
-      label_names = end_study_name,
-      label_vals = end_study_label
+  mapping = aes(
+    y = pt_id, x = time_from_initial_infusion,
+    label_names = end_study_name,
+    label_vals = end_study_label
   ),
   label.size = NA, fill = NA, size = 5
 )

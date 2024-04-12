@@ -26,8 +26,8 @@ navbar:
       menu:
         - text: "Adding Arrows"
           href: articles/add_arrows.html
-        - text: "Static Mapping with Markers"
-          href: articles/static_markers.html
+        - text: "Fixed Mapping with Markers"
+          href: articles/fixed_markers.html
 
 search:
   exclude: ['news/index.html']
@@ -39,6 +39,7 @@ reference:
   contents:
   - ggswim
   - add_marker
+  - add_arrows
   - build_ggswim
   - theme_ggswim
 - title: "Datasets"

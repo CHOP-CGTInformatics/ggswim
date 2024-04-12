@@ -17,6 +17,11 @@ create swimmer plots. It integrates with the familiar ggplot2 framework
 and streamlines the process of generating legends that effectively
 communicate events of interest along individual subject trajectories.
 
+ggswim solves some of the headaches associated with layer management in
+ggplot2 by leveraging the
+[ggnewscale](https://eliocamp.github.io/ggnewscale/) package and
+presenting an optimized workflow to get a swimmer plot.
+
 ## Installation
 
 You can install the development version of ggswim like so:
@@ -39,43 +44,52 @@ survival bars of our swimmer plot, i.e. the “lanes:”
 library(ggswim)
 library(ggplot2)
 
-p <- ggswim(
-  patient_data,
-  mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment),
-  arrow = arrow_status,
-  arrow_head_length = unit(.25, "inches"),
-  arrow_neck_length = delta_today,
-  width = 0.25
-)
+p <- patient_data |>
+  ggswim(
+    mapping = aes(
+      x = start_time, xend = end_time, y = pt_id,
+      color = disease_assessment
+    ),
+    arrow = status,
+    linewidth = 5
+  ) +
+  scale_color_manual(
+    name = "Overall Disease Assessment",
+    values = c("#6394F3", "#F3C363", "#EB792F", "#d73a76", "#85a31e")
+  )
+
+p
 ```
+
+<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
 Next we’ll add on events of interest: end of study updates, and
 infusions. These we’ll refer to as “markers”:
 
 ``` r
 p <- p +
+  new_scale_color() +
   add_marker(
-    data = end_study_events |> dplyr::rename("Status Markers" = end_study_name),
-    aes(x = delta_t0_months, y = pt_id, label_vals = end_study_label, label_names = `Status Markers`),
+    data = end_study_events,
+    aes(x = time_from_initial_infusion, y = pt_id, label_vals = end_study_label, label_names = end_study_name),
     label.size = NA, fill = NA, size = 5
   ) +
   add_marker(
     data = infusion_events,
-    aes(x = delta_t0_months, y = pt_id, name = "Infusion"), color = "#25DA6D",
-    size = 5, position = "identity", alpha = .75
-  ) 
-#> Warning: Duplicated aesthetics after name standardisation: colour
+    aes(x = time_from_initial_infusion, y = pt_id, color = infusion_type)
+  )
+
+p
 ```
+
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
 
 Finally, we’ll beautify the plot with familiar ggplot2 techniques and a
 last finishing touch with `theme_ggswim()`:
 
 ``` r
 p +
-  scale_fill_manual(
-    name = "Overall Disease Assessment",
-    values = c("#6394F3", "#F3C363", "#EB792F")
-  ) +
+  scale_color_manual(name = "Markers", values = c(NA, NA, "green", NA, "red")) +
   labs(title = "My Swimmer Plot") +
   xlab("Time Since Infusion (Months)") + ylab("Patient ID") +
   theme_ggswim()

@@ -287,13 +287,12 @@ check_coerced_data <- function(expr) {
 #' @title check for unsupported position args
 #'
 #' @description
-#' `ggswim()` accepts `position` arguments of either `stack` or `identity`.
+#' `ggswim()` accepts `position` argument `identity` only.
 #' Others such as `dodge` and `jitter` are not supported.
 #'
 #' @keywords internal
 #'
-#' @param position Position adjustment. ggswim accepts either "stack", or "identity"
-#' depending on the use case. Default "identity".
+#' @param position Position adjustment. ggswim accepts "identity".  Default "identity".
 #' @param parent_func The function in which this is being called, to be
 #' referenced in the message output
 
@@ -302,11 +301,11 @@ check_supported_position_args <- function(position,
   msg <- c(
     "x" = "Unsupported position param detected: {.code {position}}",
     "i" = "{.code {parent_func}} does not support {.code {position}} position
-    args. Please use one of 'identity' or 'stack' instead."
+    args. Please use one of 'identity' instead."
   )
   cond_class <- c("ggswim_cond", "unsupported_position")
 
-  supported_vals <- c("stack", "identity")
+  supported_vals <- c("identity")
 
   if (!position %in% supported_vals) {
     cli_abort(message = msg, call = caller_env(), class = cond_class)
@@ -343,5 +342,71 @@ check_missing_params <- function(mapping,
 
   if (!all(params %in% names(mapping))) {
     cli_abort(message = msg, call = caller_env(), class = cond_class)
+  }
+}
+
+#' @title Fixed Marker Scale Validation
+#'
+#' @description
+#' Check fixed markers for single scale use and for single title assignment.
+#'
+#' @details
+#' ggswim cannot currently support fixed markers with multiple scales or titles,
+#' this causes the legend to display incorrectly and for titles to be
+#' misattributed. Instead, we wish to catch this early and enforce behavior.
+#'
+#' @param ggswim_obj A ggswim object
+#' @param ref_layer_info internal reference layer list created in `build_ggswim()`
+#'
+#' @keywords internal
+
+check_valid_fixed_maker_scales <- function(ggswim_obj,
+                                           ref_layer_info) {
+  # Case 1: Multiple fixed_marker_name's supplied ------------------------------
+  fixed_marker_name <- unique(ref_layer_info$fixed_colours$fixed_marker_name)
+
+  if (length(fixed_marker_name) > 1) {
+    cli_abort(
+      message = c(
+        "x" = "Multiple legend titles applied to fixed markers.",
+        "i" = "ggswim cannot support multiple scales for fixed markers,
+                  please consider using a single `fixed_marker_name`."
+      ),
+      call = caller_env(),
+      class = c("ggswim_cond", "multi_fixed_marker_scales")
+    )
+  }
+
+  # Case 2: Multiple new_scale_color()s supplied -------------------------------
+  # Initialize an empty list to store the results
+  scale_list <- list()
+
+  # Iterate over each element i in ggswim_obj$scales$scales
+  for (i in seq_along(ggswim_obj$scales$scales)) {
+    # Extract the aesthetics value from the i-th element
+    aesthetics <- ggswim_obj$scales$scales[[i]]$aesthetics
+
+    # Extract other desired values and construct a data frame
+    # In this example, I assume you want the value and the index i
+    data <- data.frame(value = aesthetics, index = i)
+
+    # Store the data frame in the result list
+    scale_list[[i]] <- data
+  }
+
+  # Combine all data frames in the result list into a single data frame
+  scale_list_result <- do.call(rbind, scale_list)
+  has_multiple_colour_new <- sum(grepl("^colour_new", scale_list_result$value)) > 1
+
+  if (has_multiple_colour_new) {
+    cli_abort(
+      message = c(
+        "x" = "Multiple legend scales applied to fixed markers.",
+        "i" = "ggswim cannot support multiple scales for fixed markers,
+                  please consider reducing to a single `new_scale_color()` call."
+      ),
+      call = caller_env(),
+      class = c("ggswim_cond", "multi_fixed_marker_scales")
+    )
   }
 }

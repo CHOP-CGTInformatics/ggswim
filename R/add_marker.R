@@ -1,22 +1,23 @@
-#' @title Add markers of interest to level response trajectories
+#' @title Add markers of interest swimmer plots
 #'
 #' @description
 #' "Markers" are used to specify events of interest along response trajectories
-#' across individual lanes. `add_marker()` wraps `geom_point()` or `geom_label()`
-#' depending on the users designation of `color`/`colour` and `label` arguments.
+#' across individual lanes. [add_marker()] wraps [geom_point()] or [geom_label()]
+#' depending on the users designation of `color`/`colour` and
+#' `label_vals`/`label_names` arguments.
 #'
 #' See **Aesthetics** for more information.
 #'
 #' @returns A ggswim object
 #'
 #' @inheritParams ggplot2::geom_point
-#' @param data a dataframe prepared for use with `ggswim()`, either coming from
-#' a parent `ggswim()` function, another `add_marker()` call, or a new dataframe
-#' prepared for use with `ggswim()`.
+#' @param data a dataframe prepared for use with [ggswim()]
+#' @param fixed_marker_name A character string for the name of a fixed marker
+#' scale
 #'
 #' @section Aesthetics:
-#' `add_marker()` understands the following aesthetics (required aesthetics are in bold)
-#' when using `color`/`colour` similar to `geom_point()`
+#' [add_marker()] understands the following aesthetics (required aesthetics are in bold)
+#' when using `color`/`colour` similar to [geom_point()].
 #'
 #' - **`x`**
 #' - **`y`**
@@ -28,9 +29,9 @@
 #' - `size`
 #' - `stroke`
 #'
-#' `add_marker()` understands the following aesthetics (required aesthetics are in bold)
-#' when using `label` similar to `geom_label()`. See "Notes" below for additional
-#' considerations and requirements.
+#' [add_marker()] understands the following aesthetics (required aesthetics are in bold)
+#' when using `label_vals`/`label_names` similar to [geom_label()]. See "Notes" below for
+#' additional considerations and requirements.
 #'
 #' - **`x`**
 #' - **`y`**
@@ -49,11 +50,13 @@
 #' **Notes**:
 #'
 #' - `add_marker()` **does not** support mapping using `fill`.
-#' - If using a static/non-mapping `color` specifier, a mapping `name` is required
-#' for aesthetic mapping to render the legend correctly.
+#' - If using a fixed/non-mapping `color` specifier, a mapping `name` is required
+#' for aesthetic mapping to render the legend value label correctly.
+#' - If using a fixed/non-mapping `color` specifier, a `fixed_marker_name` must
+#' be set for the _first_ marker in a given new scale.
 #' - If using labels, both `label_vals` and `label_names` are required for
 #' proper legend population. At minimum, `label_vals` is needed for data
-#' display. These are unique parameter options for `aes()` to ggswim.
+#' display. These are unique parameter options for [aes()] to ggswim.
 #'
 #' @export
 #'
@@ -61,26 +64,26 @@
 #'
 #' # markers with points and aesthetic mapping params
 #' add_marker(
-#'   data = infusion_events,
+#'   data = infusion_events |> dplyr::mutate(infusion = "Infusion"),
 #'   mapping = aes(
-#'     x = delta_t0,
+#'     x = time_from_initial_infusion,
 #'     y = pt_id,
-#'     color = infusion_type,
-#'     shape = end_study_name
+#'     color = infusion
 #'   ),
 #'   size = 5
 #' )
 #'
-#' # markers with points and static params
+#' # markers with points and fixed params
 #'
-#' initial_infusions <- infusion_events[infusion_events$delta_t0 == 0, ]
+#' initial_infusions <- infusion_events |>
+#'   dplyr::filter(time_from_initial_infusion == 0)
 #'
 #' add_marker(
 #'   data = initial_infusions,
 #'   mapping = aes(
-#'     x = delta_t0,
+#'     x = time_from_initial_infusion,
 #'     y = pt_id,
-#'     name = "Initial"
+#'     name = "Initial Infusion"
 #'   ),
 #'   color = "red",
 #'   size = 5
@@ -89,16 +92,17 @@
 #' # markers with labels
 #' add_marker(
 #'   data = end_study_events,
-#'   mapping = aes(y = pt_id, x = delta_t0_months,
-#'       label_names = end_study_name,
-#'       label_vals = end_study_label
+#'   mapping = aes(
+#'     y = pt_id, x = time_from_initial_infusion,
+#'     label_names = end_study_name,
+#'     label_vals = end_study_label
 #'   ),
 #'   label.size = NA, fill = NA, size = 5
 #' )
-
 add_marker <- function(
     mapping = aes(),
     data = NULL,
+    fixed_marker_name = NULL,
     ...) {
   # Enforce checks ----
   check_supported_mapping_aes(
@@ -109,9 +113,15 @@ add_marker <- function(
 
   check_marker_label_aes(mapping = mapping)
 
-  check_missing_params(mapping = mapping,
-                       params = c("x", "y"),
-                       parent_func = "add_marker()")
+  check_missing_params(
+    mapping = mapping,
+    params = c("x", "y"),
+    parent_func = "add_marker()"
+  )
+
+  if (!is.null(fixed_marker_name)) {
+    check_arg_is_character(fixed_marker_name)
+  }
 
   # Identify labels ----
   has_labels <- "label_vals" %in% names(mapping)
@@ -119,8 +129,8 @@ add_marker <- function(
   # Apply geom_label() or geom_point() ----
   if (has_labels) {
     # Convert label mapping params to linked standard params for intuitive API
-    names(mapping)[names(mapping) == "label_vals"] <-  "label"
-    names(mapping)[names(mapping) == "label_names"] <-  "colour"
+    names(mapping)[names(mapping) == "label_vals"] <- "label"
+    names(mapping)[names(mapping) == "label_names"] <- "colour"
 
     out <- geom_label(
       data = data,
@@ -132,7 +142,7 @@ add_marker <- function(
     attributes(out)$swim_class <- "marker_label"
   } else {
     dots <- rlang::dots_list(...)
-    static_colours <- NULL
+    fixed_colours <- NULL
     name_detected <- "name" %in% names(mapping)
 
     # Artificially create a column that will serve as the aes mapping "color" column
@@ -144,7 +154,7 @@ add_marker <- function(
       mapping$colour <- rlang::sym(mapping$name)
       mapping <- mapping[names(mapping) != "name"] # remove name
 
-      static_colours <- if ("color" %in% names(rlang::dots_list(...))) {
+      fixed_colours <- if ("color" %in% names(rlang::dots_list(...))) {
         rlang::dots_list(...)$color
       } else {
         rlang::dots_list(...)$colour
@@ -165,7 +175,8 @@ add_marker <- function(
       out$aes_params$colour <- NULL
     }
 
-    out$static_colours <- static_colours
+    out$fixed_colours <- fixed_colours
+    out$fixed_marker_name <- fixed_marker_name
 
     # Tag the layer with a reference attribute
     attributes(out)$swim_class <- "marker_point"

@@ -21,9 +21,10 @@
 #' ggswim(
 #'   data = patient_data,
 #'   mapping = aes(
-#'     x = delta_t0_months,
+#'     x = start_time,
+#'     xend = end_time,
 #'     y = pt_id,
-#'     fill = disease_assessment
+#'     color = disease_assessment
 #'   )
 #' ) +
 #'   theme_ggswim()
@@ -48,10 +49,14 @@ theme_ggswim <- function(base_size = 12, base_family = "") {
       legend.title = element_text(size = 12, face = "bold"),
 
       # Axis line
-      axis.line = element_line(color = "steelblue",
-                               size = .5,
-                               arrow = arrow(type = "closed",
-                                             length = unit(0.2, "inches"))),
+      axis.line = element_line(
+        color = "steelblue",
+        linewidth = .5,
+        arrow = arrow(
+          type = "closed",
+          length = unit(0.2, "inches")
+        )
+      ),
 
       # Remove grid lines
       panel.grid.major = element_blank(),

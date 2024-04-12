@@ -13,63 +13,79 @@ knitr::opts_chunk$set(
 
 The ggswim package eases the development of swimmer plots in R through integration with the ggplot2 framework. In this vignette, we'll walk through how users can create visually striking swimmer plots.
 
-At the heart of ggswim are two core functions: `ggswim()` and `add_marker()`. The former, an extension of `geom_col()`, allows users to construct the horizontal bars, what we'll sometimes refer to as "lanes." Meanwhile, `add_marker()` leverages `geom_point()` and `geom_label()` to effortlessly embed key events, or "markers," onto the lanes. These can take the form of unicode shapes, symbols, or even emojis.
+At the heart of ggswim are two core functions: `ggswim()` and `add_marker()`. The former, an extension of `geom_segment()`, allows users to construct the horizontal bars, what we'll sometimes refer to as "lanes." Meanwhile, `add_marker()` wraps both `geom_point()` and `geom_label()` to effortlessly embed key events, or "markers," onto the lanes. These can take the form of unicode shapes, symbols, or even emojis.
 
 Drawing from the well-established principles of ggplot2, ggswim allows users to apply familiar layer-building techniques, including the application of styles and themes.
 
 ### Building swimmer plots with aesthetic mapping
 
-To start, let's build a swimmer plot using `aes()` and dynamically mapped data (for static mapping, see [Static Mapping with Markers](https://chop-cgtinformatics.github.io/ggswim/articles/add_arrows.html)). As with the README, we will be using ggswim's internal datasets: `patient_data`, `infusion_events`, and `end_study_events`. 
+To start, let's build a swimmer plot using `aes()` and aesthetic mapped data (for fixed mapping, see [Fixed Mapping with Markers](https://chop-cgtinformatics.github.io/ggswim/articles/fixed_markers.html)). As with the README, we will be using ggswim's internal datasets: `patient_data`, `infusion_events`, and `end_study_events`. 
 
 Let's start with observing `patient_data`'s structure:
 
 ```{r patient_data , echo=FALSE, include=TRUE}
 library(ggswim)
+library(ggplot2)
 
 patient_data |>
   rmarkdown::paged_table()
 ```
 
-`patient_data` contains a long pivoted dataset where patient ID's (`pt_id`) can be repeated. These rows are differentiated by `event_marker`s combined with corresponding times where `delta_t0` is the change in time (in days) from an infusion. Together, these rows signify a patient timeline with consideration for infusions, disease assessments, and B-cell status changes.
+`patient_data` contains a long pivoted dataset where patient ID's (`pt_id`) can be repeated. These rows are differentiated by `disease_assessments`s combined with corresponding start and end times, representing months. Together, these rows signify a patient survival timeline.
 
-- `disease_assessment`: The overall status at a disease assessment coupled with B-cell status changes where:
+- `disease_assessment` is broken down by the following nomenclature along with some indiciator of B-cell status (if applicable):
    - CR = "Complete Response"
    - CRi = "Complete Response with Incomplete Blood Count Recovery"
    - RD = "Relapsed Disease"
 
-Now, let's make the plot using `ggswim()` and our first `add_marker()` call:
+The columns `status` and `status_length` are indicator columns for arrow support, and discussed in greater detail in [Adding arrows to ggswim](https://chop-cgtinformatics.github.io/ggswim/articles/add_arrows.html)
+
+Now, let's make the plot using `ggswim()`:
 
 ```{r ggswim plot}
 p <- ggswim(
   patient_data,
   mapping = aes(
-    x = delta_t0_months,
-    y = pt_id, fill = disease_assessment
-  )
+    x = start_time,
+    xend = end_time,
+    y = pt_id,
+    color = disease_assessment
+  ),
+  linewidth = 5
 )
 
 p
 ```
 
-Here we have a simple bar chart, showing infusions grouped by patients with a given disease assessment status. `ggswim()` does the work of setting up a `geom_col()` and readying our plot layers for additional ggswim-specific features such as the "markers" mentioned earlier. Let's add a marker layer next from the `infusion_events` dataset:
+Here we have a simple line graph, showing infusions grouped by patients with a given disease assessment status. `ggswim()` does the work of setting up a `geom_segment()` and readying our plot layers for additional ggswim-specific features such as the "markers" mentioned earlier. Let's add a marker layer next from the `infusion_events` dataset:
 
 ```{r infusion_events}
 infusion_events |>
   rmarkdown::paged_table()
 ```
 
-This dataset is much simpler, having only 3 columns indicating infusions (considered `t0`) and reinfusions at some point beyond `t0` (if a patient had any).
+This dataset is much simpler, having only 3 columns indicating the time from the initial infusion, where 0 is an initial infusion and reinfusions at some point beyond 0 (if a patient had any). These are also categorized under `infusion_type`. 
+
+In order to separate layers of identical types, in this case `color`s, we need a way to separate out the legend by lanes and markers. By default, ggplot2 will group these together, but by using `new_scale_color()` from the ggnewscale package we can specify that we want to actually keep these in their own scales. `new_scale_color()` can be used to make any number of separations you need, just be sure to call a separation at the top of each marker call and include any additional scale changes before moving on to the next one.
+
+Because `new_scale_color()` establishes the start of a new scale, it is important to define any scale changes we want before calling it and moving on to the next one. It is a common workflow to use `scale_color_manual()` to change and update the colors and names of the visible elements in both the plot and the legend, so we'll apply it here, just after our swim lane layer but before moving on to adding the markers.
 
 ```{r first marker plot, message=FALSE}
 p <- p +
+  scale_color_manual(
+    name = "Overall Disease Assessment",
+    values = c("#6394F3", "#F3C363", "#EB792F", "#d73a76", "#85a31e")
+  ) +
+  new_scale_color() +
   add_marker(
     data = infusion_events,
     aes(
-      x = delta_t0_months,
+      x = time_from_initial_infusion,
       y = pt_id,
-      name = "Infusion"
+      color = infusion_type,
+      shape = infusion_type
     ),
-    size = 5, position = "identity", alpha = .75, color = "green"
+    size = 5
   )
 
 p
@@ -84,14 +100,14 @@ end_study_events |>
   rmarkdown::paged_table()
 ```
 
-You'll notice that this dataset includes use of emojis under `end_study_label`. In addition to shapes and symbols, ggswim supports the use of emojis when rendering swimmer plots. `add_marker()` allows users to specify shapes or emojis by using the appropriate `aes()` argument callouts: `label_vals` and `label_names`. These are unique mapping parameters to ggswim. Let's add a layer using emojis via the `end_study_events` dataset:
+You'll notice that this dataset includes use of emojis under `end_study_label`. In addition to shapes and symbols, ggswim supports the use of emojis when rendering swimmer plots. `add_marker()` allows users to specify shapes or emojis by using the appropriate `aes()` argument callouts: `label_vals` and `label_names`. These are unique mapping parameters to ggswim, letting it support and wrap both `geom_point()` and `geom_label()` at the same time. Let's add a layer using emojis via the `end_study_events` dataset:
 
 ```{r second marker plot, message=FALSE, warning=FALSE}
 p <- p +
   add_marker(
     data = end_study_events,
     aes(
-      x = delta_t0_months,
+      x = time_from_initial_infusion,
       y = pt_id,
       label_vals = end_study_label,
       label_names = end_study_name
@@ -102,7 +118,9 @@ p <- p +
 p
 ```
 
-We've successfully made a swimmer plot with lanes and two different kinds of marker layers. Recall that ggswim works within the ggplot2 framework, therefore customization can be done using the same ggplot2 theme and styling functions users may already be familiar with. Let's fix up this plot so it looks nicer on the eyes:
+We've successfully made a swimmer plot with lanes and two different kinds of marker layers. Recall that ggswim works within the ggplot2 framework, therefore customization can be done using the same ggplot2 theme and styling functions users may already be familiar with. It is typical in this workflow to call `scale_color_manual()` to fix up the names and colors of the plot, but be sure to do so in the proper order with the use of `new_scale_color()` mentioned earlier!
+
+Let's fix up this plot so it looks nicer on the eyes:
 
 ```{r mapping finalizing, message=FALSE, warning=FALSE}
 library(ggplot2)
@@ -110,14 +128,8 @@ library(ggplot2)
 p <- p +
   theme_minimal() +
   scale_colour_manual(
-    values = c("firebrick", "#F5EB0A", "gray50", "#25DA6D", "#25DA6D", NA, NA, NA)
-  ) +
-  scale_shape_manual(
-    values = c(19, 19, 15, 17, 18)
-  ) +
-  scale_fill_manual(
-    name = "Overall Disease Assessment",
-    values = c("#6394F3", "#F3C363", "#EB792F")
+    name = "Markers",
+    values = c(NA, NA, "#25DA6D", NA, "firebrick")
   ) +
   labs(title = "My Swimmer Plot") +
   xlab("Time (Months)") + ylab("Patient ID")
@@ -125,7 +137,7 @@ p <- p +
 p
 ```
 
-We can also supply the `theme_ggswim()` function:
+We can also apply the `theme_ggswim()` function:
 
 ```{r mapping with theme_ggswim, message=FALSE, warning=FALSE}
 p +
@@ -137,9 +149,5 @@ p +
 Some additional considerations to keep in mind when working with ggswim:
 
 - **Handling Missing Data:** ggswim does not support missing data for mapping aesthetics. If any are detected, developers will receive a warning, and the missing data may appear as `NA` values in the display, but will be excluded from the legend.
-
-- **Color Mapping with `ggswim()`:** Please note that `ggswim()` does not support mapping using the `colour` argument.
-
-- **Filling Markers with `add_marker()`:** Similarly, `add_marker()` does not support mapping using the `fill` argument.
 
 - **Rendering Emojis and Custom Shapes:** To ensure emojis and other custom shapes display correctly, users may need to [switch their graphics rendering device](https://support.posit.co/hc/en-us/articles/360017886674-Troubleshooting-RStudio-Rendering-Errors) to AGG.

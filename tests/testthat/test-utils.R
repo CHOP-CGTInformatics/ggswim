@@ -3,23 +3,15 @@ df$names <- rownames(mtcars)
 rownames(df) <- NULL
 df$cyl <- factor(df$cyl)
 
-simple_ggplot <- ggplot() +
-  geom_point(df, mapping = aes(x = hp, y = mpg, color = names))
-
-ggswim_plot <- ggswim(df, aes(x = hp, y = mpg, fill = cyl)) +
-  add_marker(mapping = aes(x = hp, y = mpg, color = names)) +
-  add_marker(df[c("hp", "mpg", "wt")],
-    mapping = aes(x = hp, y = mpg, name = "test"),
-    color = "firebrick"
-  ) |>
-    suppressWarnings()
-
-# Static colour df representative of above ggswim_plot
-static_colour_df <- data.frame(
+# Fixed colour df representative of above ggswim_plot
+fixed_colour_df <- data.frame(
   "indices" = 3, "colors" = "firebrick", "name" = "test"
 )
 
 test_that("get_layer_data works with simple dataset and aes colour mapping", {
+  simple_ggplot <- ggplot() +
+    geom_point(df, mapping = aes(x = hp, y = mpg, color = names))
+
   layer_data <- get_layer_data(
     data = simple_ggplot$layers[[1]]$data,
     mapping = simple_ggplot$layers[[1]]$mapping,
@@ -30,44 +22,59 @@ test_that("get_layer_data works with simple dataset and aes colour mapping", {
   expect_equal(class(layer_data), "data.frame")
 })
 
-test_that("get_layer_data works with swim framework and aes fill mapping", {
+test_that("get_layer_data works with swim framework and aes color mapping", {
+  ggswim_plot <- ggswim(
+    patient_data,
+    aes(
+      x = start_time,
+      xend = end_time,
+      y = pt_id,
+      color = disease_assessment
+    )
+  )
+
   layer_data <- get_layer_data(
-    data = df,
+    data = patient_data,
     mapping = ggswim_plot$layers[[1]]$mapping,
     i = 1L
   )
 
-  expect_true(all(c("fill_mapping", "fill") %in% names(layer_data)))
+  expect_true(all(c("colour_mapping", "colour") %in% names(layer_data)))
   expect_equal(class(layer_data), "data.frame")
 })
 
 
-test_that("get_layer_data works with a swim framework and static colour mapping", {
+test_that("get_layer_data works with a swim framework and fixed colour mapping", {
+  suppressWarnings({
+    ggswim_plot <- ggswim(
+      patient_data,
+      aes(
+        x = start_time,
+        xend = end_time,
+        y = pt_id,
+        color = disease_assessment
+      )
+    ) +
+      add_marker(
+        data = infusion_events |> mutate(infusion = "Infusion"),
+        aes(x = time_from_initial_infusion, y = pt_id, name = "Initial Infusion"),
+        color = "red"
+      )
+  })
+
+
   layer_data <- get_layer_data(
-    data = ggswim_plot$layers[[3]]$data,
-    mapping = ggswim_plot$layers[[3]]$mapping,
-    i = 3L
+    data = ggswim_plot$layers[[2]]$data,
+    mapping = ggswim_plot$layers[[2]]$mapping,
+    i = 2L
   )
 
   expect_true(all(c("colour", "colour_mapping") %in% names(layer_data)))
   expect_equal(class(layer_data), "data.frame")
-  # Ensure that using static colour results in a single value for colour
+  # Ensure that using fixed colour results in a single value for colour
   # and colour mapping
   expect_true(length(unique(layer_data$colour)) == 1)
   expect_true(length(unique(layer_data$colour_mapping)) == 1)
-})
-
-test_that("get_layer_data works with a swim framework and coerced mapping", {
-  ggswim_plot_coercions <- ggswim(df, aes(x = hp, y = mpg, fill = cyl)) +
-    add_marker(mapping = aes(x = hp, y = mpg, color = factor(names)))
-
-  expect_no_error(
-    get_layer_data(
-      data = ggswim_plot_coercions$data,
-      mapping = ggswim_plot_coercions$layers[[2]]$mapping,
-      i = 2L
-    )
-  )
 })
 
 test_that("retrieve_original_aes works", {

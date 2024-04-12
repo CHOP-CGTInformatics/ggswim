@@ -4,7 +4,7 @@
 \alias{get_layer_data}
 \title{Build Layer Data}
 \usage{
-get_layer_data(data, mapping, i = 1L, static_colours = NULL)
+get_layer_data(data, mapping, i = 1L, fixed_colours = NULL)
 }
 \arguments{
 \item{data}{The data responsible for the current layer}
@@ -16,8 +16,8 @@ at the top level of the plot. You must supply mapping if there is no plot mappin
 \item{i}{An integer to supply for the layer to retrieve. If none given, defaults
 to \code{1L}.}
 
-\item{static_colours}{an inherited dataframe from add_marker that captures
-and defines static color indices}
+\item{fixed_colours}{an inherited dataframe from add_marker that captures
+and defines fixed color indices}
 }
 \value{
 A dataframe

@@ -10,6 +10,12 @@ pt_data <- tibble::tribble(
   4, "Drug B", 7, 7, TRUE
 )
 
+initial_infusions <- infusion_events |>
+  dplyr::filter(time_from_initial_infusion == 0)
+
+reinfusions <- infusion_events |>
+  dplyr::filter(time_from_initial_infusion > 0)
+
 test_that("wrap_checkmate works", {
   out <- wrap_checkmate(checkmate::check_character)
   expect_equal(class(out), "function")
@@ -132,7 +138,15 @@ test_that("check_arrow_neck_length works", {
 })
 
 test_that("check_ggswim_obj works", {
-  ggswim_obj <- ggswim(pt_data, aes(x = time, y = id, fill = trt))
+  ggswim_obj <- ggswim(
+    patient_data,
+    aes(
+      x = start_time,
+      xend = end_time,
+      y = pt_id,
+      color = disease_assessment
+    )
+  )
   non_ggswim_obj <- ggplot(mtcars) +
     geom_point(aes(x = cyl, y = hp))
 
@@ -184,5 +198,94 @@ test_that("check_missing_params works", {
 
   expect_no_error(
     check_missing_params(mapping, params = "x", parent_func)
+  )
+})
+
+test_that("check_valid_fixed_marker_scales works for valid usage", {
+  suppressWarnings({
+    ggswim_obj <- ggswim(
+      data = patient_data,
+      mapping = aes(
+        x = start_time, xend = end_time, y = pt_id,
+        color = disease_assessment
+      )
+    ) +
+      new_scale_color() +
+      add_marker(
+        data = initial_infusions,
+        aes(x = time_from_initial_infusion, y = pt_id, name = "Initial Infusion"),
+        color = "green", size = 5, fixed_marker_name = "Markers"
+      ) +
+      add_marker(
+        data = reinfusions,
+        aes(x = time_from_initial_infusion + 2, y = pt_id, name = "Reinfusion"),
+        color = "red", size = 5, fixed_marker_name = "Markers"
+      )
+  })
+
+  ref_layer_info <- get_ref_layer_info(ggswim_obj)
+
+  expect_no_error(check_valid_fixed_maker_scales(ggswim_obj, ref_layer_info))
+})
+
+
+test_that("check_valid_fixed_marker_scales works for Case 1", {
+  suppressWarnings({
+    # Case 1: Multiple fixed_marker_names supplied
+    ggswim_obj <- ggswim(
+      data = patient_data,
+      mapping = aes(
+        x = start_time, xend = end_time, y = pt_id,
+        color = disease_assessment
+      ),
+    ) +
+      new_scale_color() +
+      add_marker(
+        data = initial_infusions,
+        aes(x = time_from_initial_infusion, y = pt_id, name = "Initial Infusion"),
+        color = "green", size = 5, fixed_marker_name = "Title 1"
+      ) +
+      add_marker(
+        data = reinfusions,
+        aes(x = time_from_initial_infusion + 2, y = pt_id, name = "Reinfusion"),
+        color = "red", size = 5, fixed_marker_name = "Title 2"
+      )
+  })
+
+  ref_layer_info <- get_ref_layer_info(ggswim_obj)
+
+  expect_error(check_valid_fixed_maker_scales(ggswim_obj, ref_layer_info),
+    class = "multi_fixed_marker_scales"
+  )
+})
+
+test_that("check_valid_fixed_maker_scales works for Case 2", {
+  suppressWarnings({
+    # Case 2: Multiple new_scale_color()s supplied
+    ggswim_obj <- ggswim(
+      data = patient_data,
+      mapping = aes(
+        x = start_time, xend = end_time, y = pt_id,
+        color = disease_assessment
+      ),
+    ) +
+      new_scale_color() +
+      add_marker(
+        data = initial_infusions,
+        aes(x = time_from_initial_infusion, y = pt_id, name = "Initial Infusion"),
+        color = "green", size = 5, fixed_marker_name = "Title 1"
+      ) +
+      new_scale_color() +
+      add_marker(
+        data = reinfusions,
+        aes(x = time_from_initial_infusion + 2, y = pt_id, name = "Reinfusion"),
+        color = "red", size = 5, fixed_marker_name = "Title 1"
+      )
+  })
+
+  ref_layer_info <- get_ref_layer_info(ggswim_obj)
+
+  expect_error(check_valid_fixed_maker_scales(ggswim_obj, ref_layer_info),
+    class = "multi_fixed_marker_scales"
   )
 })

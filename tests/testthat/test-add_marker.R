@@ -1,43 +1,23 @@
-pt_data <- tibble::tribble(
-  ~"id", ~"trt", ~"end_time", ~"time",
-  1, "Drug A", 5, 0,
-  1, "Drug A", 5, 5,
-  2, "Drug B", 2, 0,
-  2, "Drug B", 2, 2,
-  3, "Drug A", 4, 0,
-  3, "Drug A", 4, 4,
-  4, "Drug B", 7, 0,
-  4, "Drug B", 7, 7
-)
+infusions <- infusion_events |>
+  mutate(infusion = dplyr::if_else(
+    time_from_initial_infusion == 0, "Infusion", "Reinfusion"
+  ))
 
-mk1_data <- tibble::tribble(
-  ~"id", ~"type", ~"time",
-  1, "Dose II", 0,
-  1, "Dose II", 1.5,
-  2, "Dose II", 2,
-  3, "Dose I", 0,
-  3, "Dose II", 0.5,
-  3, "Dose II", 1,
-  3, "Dose I", 1.25,
-  4, "Dose II", 2,
-  4, "Dose I", 3,
-  4, "Dose I", 7
-)
+initial_infusions <- infusions |>
+  dplyr::filter(infusion == "Infusion")
 
-mk2_data <- tibble::tribble(
-  ~"id", ~"label", ~"name", ~"time",
-  1, "💊", "A", 1,
-  1, "💉", "B", 2,
-  2, "💉", "B", 3,
-  4, "💉", "B", 6
-)
+reinfusions <- infusions |>
+  dplyr::filter(infusion == "Reinfusion")
 
-ggswim_layer <- ggswim(data = pt_data, aes(x = time, y = id, fill = "trt"))
+ggswim_layer <- ggswim(
+  data = patient_data,
+  aes(x = start_time, xend = end_time, y = pt_id, color = disease_assessment)
+)
 
 test_that("add_marker works for aes mapping", {
   mk1_layer <- add_marker(
-    data = mk1_data,
-    mapping = aes(x = time, y = id, color = type)
+    data = infusions,
+    mapping = aes(x = time_from_initial_infusion, y = pt_id, color = infusion)
   )
 
   expect_setequal(class(mk1_layer), c("LayerInstance", "Layer", "ggproto", "gg"))
@@ -45,7 +25,8 @@ test_that("add_marker works for aes mapping", {
   expect_true(attributes(mk1_layer)$swim_class == "marker_point")
 
   # Simple layer with aesthetic mapping ----
-  p1 <- ggswim(data = pt_data, aes(x = time, y = id, fill = "trt")) +
+  p1 <- ggswim_layer +
+    new_scale_color() +
     mk1_layer
 
   skip_on_ci()
@@ -55,9 +36,15 @@ test_that("add_marker works for aes mapping", {
   )
 
   # Emoji layer aesthetic mapping ----
+  mk2_layer <- add_marker(
+    data = end_study_events,
+    aes(x = time_from_initial_infusion, y = pt_id, label_vals = end_study_label, label_names = end_study_name)
+  )
+
   p2 <- ggswim_layer +
+    new_scale_color() +
     mk1_layer +
-    add_marker(data = mk2_data, aes(x = time, y = id, label_vals = label, label_names = name))
+    mk2_layer
 
   skip_on_ci()
   vdiffr::expect_doppelganger(
@@ -66,34 +53,41 @@ test_that("add_marker works for aes mapping", {
   )
 })
 
-test_that("add_marker works for static aesthetics", {
+test_that("add_marker works for fixed aesthetics", {
   mk1_layer <- add_marker(
-    data = mk1_data[mk1_data$type == "Dose I", ],
-    mapping = aes(x = time, y = id, name = "Dose Name"),
+    data = initial_infusions,
+    mapping = aes(x = time_from_initial_infusion, y = pt_id, name = "Infusion"),
     color = "red", size = 10
   ) |>
     suppressWarnings()
 
   p1 <- ggswim_layer +
+    new_scale_color() +
     mk1_layer
 
   skip_on_ci()
   vdiffr::expect_doppelganger(
-    title = "Single marker with static color callout",
+    title = "Single marker with fixed color callout",
     fig = p1
   )
 })
 
 test_that("error on fill argument", {
   expect_error(
-    add_marker(data = pt_data, aes(x = time, y = id, fill = trt)),
+    add_marker(
+      data = patient_data,
+      aes(x = start_time, xend = end_time, y = pt_id, fill = disease_assessment)
+    ),
     class = "unsupported_aes"
   )
 })
 
 test_that("warn on label without color argument", {
   expect_warning(
-    add_marker(data = mk2_data, aes(x = time, y = id, label_vals = trt)),
+    add_marker(
+      data = end_study_events,
+      aes(x = time_from_initial_infusion, y = pt_id, label_vals = end_study_label)
+    ),
     class = "marker_label_aes"
   )
 })

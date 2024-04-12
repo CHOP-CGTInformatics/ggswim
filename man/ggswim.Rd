@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggswim.R
 \name{ggswim}
 \alias{ggswim}
-\title{Plot individual level response trajectories}
+\title{Create swimmer survival plots}
 \usage{
 ggswim(
   data,
@@ -18,7 +18,7 @@ ggswim(
 )
 }
 \arguments{
-\item{data}{a dataframe prepared for use with \code{ggswim()}}
+\item{data}{a dataframe prepared for use with \code{\link[=ggswim]{ggswim()}}}
 
 \item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}}. If specified and
 \code{inherit.aes = TRUE} (the default), it is combined with the default mapping
@@ -51,7 +51,8 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 to the paired geom/stat.}
 }
 \description{
-Visualize individual record response trajectories over time using a swimmer plot.
+Use ggplot2 architecture to create a swimmer plot showing subject survival
+timelines.
 }
 \details{
 A swimmer plot is a data visualization used to display individual
@@ -65,14 +66,27 @@ identification.
 \itemize{
 \item \strong{\code{x}}
 \item \strong{\code{y}}
+\item \strong{xend \emph{or} yend}
 \item \code{alpha}
-\item \code{fill}
+\item \code{colour}
 \item \code{group}
 \item \code{linetype}
 \item \code{linewidth}
 }
 
-\strong{Note}: \code{ggswim()} \strong{does not} support mapping using \code{color}/\code{colour}.
+\code{ggswim()} is a wrapper for \code{\link[=geom_segment]{geom_segment()}} and can support much of the same
+functionality.
+
+\strong{Notes}:
+\itemize{
+\item \code{ggswim()} \strong{does not} support mapping using \code{fill}.
+}
+}
+
+\section{Arrows}{
+
+Arrows can be specified in \code{ggswim()} as well as via the separate function,
+\code{\link[=add_arrows]{add_arrows()}}.
 }
 
 \examples{
@@ -80,9 +94,10 @@ identification.
 ggswim(
   data = patient_data,
   mapping = aes(
-    x = delta_t0_months,
+    x = start_time,
+    xend = end_time,
     y = pt_id,
-    fill = disease_assessment
+    color = disease_assessment
   )
 )
 
@@ -90,13 +105,15 @@ ggswim(
 ggswim(
   data = patient_data,
   mapping = aes(
-    x = delta_t0_months,
+    x = start_time,
+    xend = end_time,
     y = pt_id,
-    fill = disease_assessment
+    color = disease_assessment
   ),
-  arrow = arrow_status,
-  arrow_fill = "cyan",
+  arrow = status,
+  arrow_fill = "forestgreen",
+  arrow_colour = "cyan",
   arrow_head_length = ggplot2::unit(.25, "inches"),
-  arrow_neck_length = delta_today
+  arrow_neck_length = status_length
 )
 }
