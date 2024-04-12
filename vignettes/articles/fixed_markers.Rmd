@@ -37,14 +37,19 @@ reinfusions |>
 We'll start by setting up the same swimmer plot we've made from previous examples. Recall our use of `new_scale_color()` and sequencing of scale changes:
 
 ```{r initial plot, message=FALSE, warning=FALSE}
-p <- patient_data |> 
-  ggswim(mapping = aes(x = start_time, xend = end_time, y = pt_id,
-                       color = disease_assessment),
-         arrow = status,
-         linewidth = 5
+p <- patient_data |>
+  ggswim(
+    mapping = aes(
+      x = start_time, xend = end_time, y = pt_id,
+      color = disease_assessment
+    ),
+    arrow = status,
+    linewidth = 5
   ) +
-  scale_color_manual(name = "Overall Disease Assessment",
-                     values = c("#6394F3", "#F3C363", "#EB792F", "#d73a76", "#85a31e"))
+  scale_color_manual(
+    name = "Overall Disease Assessment",
+    values = c("#6394F3", "#F3C363", "#EB792F", "#d73a76", "#85a31e")
+  )
 ```
 
 Now, building off of this, lets add our `initial_infusions` and `reinfusions` markers as separate calls to `add_marker()`:
@@ -57,20 +62,21 @@ p +
   add_marker(
     data = initial_infusions,
     aes(x = time_from_initial_infusion, y = pt_id, name = "Initial Infusion"),
-    color = "green", size = 5
-  )  +
+    color = "green", size = 5, fixed_marker_name = "Markers"
+  ) +
   add_marker(
     data = reinfusions,
-    aes(x = time_from_initial_infusion+2, y = pt_id, name = "Reinfusion"),
-    color = "red", size = 5
+    aes(x = time_from_initial_infusion + 2, y = pt_id, name = "Reinfusion"),
+    color = "red", size = 5, fixed_marker_name = "Markers"
   ) +
   theme_ggswim()
 ```
 
-Notice here how we specified a `color` outside of `aes()`, along with a unique `aes()` param: `name`. `name` is required to show static layers in the legend, and also for proper display in cases where a static marker is the first one added.
+Notice here how we specified a `color` outside of `aes()`, along with a unique `aes()` param: `name`. `name` is required to show static layers in the legend, and also for proper display in cases where a static marker is the first one added. Additionally, we used the parameter `fixed_maker_name` to set the title of the markers in the legend.
 
 ## Notes
 
-- It is not recommended to use `add_marker()` in ggplot layering chains combining both aesthetic mapping and fixed mapping techniques
-- There is current a known issue where using fixed markers result in the legend title being matched to the first `add_marker()` label value
+- It is **not** recommended to use `add_marker()` in ggplot layering chains combining both aesthetic mapping and fixed mapping techniques
+- When using fixed markers, only one `new_scale_color()` call is permitted.
+- When using fixed markers, only one unique `fixed_marker_name` is permitted.
 

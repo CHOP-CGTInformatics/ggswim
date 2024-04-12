@@ -82,14 +82,23 @@ build_ggswim <- function(ggswim_obj) {
 
   # If using fixed markers, apply manual color scale so colors appear in plot
   # TODO: Address that this cannot be mixed with dynamic markers
-  # TODO: Address that fixed markers have to be renamed on first call internal
-  #       to add_marker
+  # TODO: Address that fixed markers cannot have multiple scales or name assignments
   if (nrow(ref_layer_info$fixed_colours > 0)) {
+    fixed_marker_name <- unique(ref_layer_info$fixed_colours$fixed_marker_name)
+
+    check_valid_fixed_maker_scales(
+      ggswim_obj,
+      ref_layer_info
+    )
+
     ggswim_obj <- ggswim_obj +
-      scale_color_manual(values = setNames(
-        override$colour$colour,
-        override$colour$colour_mapping
-      ))
+      scale_color_manual(
+        name = fixed_marker_name,
+        values = setNames(
+          override$colour$colour,
+          override$colour$colour_mapping
+        )
+      )
   }
 
   ggswim_obj |>
@@ -234,6 +243,7 @@ get_ref_layer_info <- function(ggswim_obj) {
     if (!is.null(ggswim_obj$layers[[i]]$fixed_colours)) {
       fixed_colours$indices <- c(fixed_colours$indices, i)
       fixed_colours$colors <- c(fixed_colours$colors, ggswim_obj$layers[[i]]$fixed_colours)
+      fixed_colours$fixed_marker_name <- c(fixed_colours$fixed_marker_name, ggswim_obj$layers[[i]]$fixed_marker_name)
       fixed_colours$name <- c(
         fixed_colours$name,
         ggswim_obj$layers[[i]]$mapping$colour |>

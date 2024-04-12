@@ -22,10 +22,13 @@ Let's dive into an example similar to that in the README:
 ```{r}
 library(ggswim)
 
-patient_data |> 
-  ggswim(mapping = aes(x = start_time, xend = end_time, y = pt_id,
-                       color = disease_assessment),
-         linewidth = 5
+patient_data |>
+  ggswim(
+    mapping = aes(
+      x = start_time, xend = end_time, y = pt_id,
+      color = disease_assessment
+    ),
+    linewidth = 5
   )
 ```
 
@@ -43,27 +46,33 @@ patient_data |>
 Let's add the arrows onto the plot from before:
 
 ```{r}
-patient_data |> 
-  ggswim(mapping = aes(x = start_time, xend = end_time, y = pt_id,
-                       color = disease_assessment),
-         arrow = status,
-         linewidth = 5
+patient_data |>
+  ggswim(
+    mapping = aes(
+      x = start_time, xend = end_time, y = pt_id,
+      color = disease_assessment
+    ),
+    arrow = status,
+    linewidth = 5
   )
 ```
 
 Default values are set for arrows, but can be manipulated for different aesthetic preferences. Below we add color and fill specifiers, as well as a specification for `arrow_neck_length`. `arrow_neck_length` sets a default proportional value, but can also accept numeric values or reference to a column of numeric values in the dataset. In this case, we use `status_length` to specify that the neck length should be equivalent to the length of time from the last time point to "today."
 
 ```{r}
-patient_data |> 
-  ggswim(mapping = aes(x = start_time, xend = end_time, y = pt_id,
-                       color = disease_assessment),
-         arrow = status,
-         arrow_fill = "cyan",
-         arrow_colour = "slateblue",
-         arrow_head_length = grid::unit(.25, "inches"),
-         arrow_neck_length = status_length,
-         width = 0.25,
-         linewidth = 5
+patient_data |>
+  ggswim(
+    mapping = aes(
+      x = start_time, xend = end_time, y = pt_id,
+      color = disease_assessment
+    ),
+    arrow = status,
+    arrow_fill = "cyan",
+    arrow_colour = "slateblue",
+    arrow_head_length = grid::unit(.25, "inches"),
+    arrow_neck_length = status_length,
+    width = 0.25,
+    linewidth = 5
   )
 ```
 
@@ -73,22 +82,25 @@ Above, we demonstrated how users can specify arrow details and information insid
 
 ```{r}
 patient_status <- patient_data |>
-  dplyr::filter(status) |> 
+  dplyr::filter(status) |>
   dplyr::select(pt_id, end_time, status, status_length) |>
   unique() |>
   dplyr::rename("arrow" = status, "time_from_today" = status_length)
 
-patient_status |> 
+patient_status |>
   rmarkdown::paged_table()
 ```
 
 In this setup, we have a separate dataset where each row is unique to each `pt_id`. In this case, we can supply the data seaparately in the same ggplot-style layering chain using `add_arrows()`:
 
 ```{r}
-patient_data |> 
-  ggswim(mapping = aes(x = start_time, xend = end_time, y = pt_id,
-                       color = disease_assessment),
-         linewidth = 5
+patient_data |>
+  ggswim(
+    mapping = aes(
+      x = start_time, xend = end_time, y = pt_id,
+      color = disease_assessment
+    ),
+    linewidth = 5
   ) +
   add_arrows(
     data = patient_status,

@@ -44,14 +44,19 @@ survival bars of our swimmer plot, i.e. the “lanes:”
 library(ggswim)
 library(ggplot2)
 
-p <- patient_data |> 
-  ggswim(mapping = aes(x = start_time, xend = end_time, y = pt_id,
-                       color = disease_assessment),
-         arrow = status,
-         linewidth = 5
-  )  +
-  scale_color_manual(name = "Overall Disease Assessment",
-                     values = c("#6394F3", "#F3C363", "#EB792F", "#d73a76", "#85a31e"))
+p <- patient_data |>
+  ggswim(
+    mapping = aes(
+      x = start_time, xend = end_time, y = pt_id,
+      color = disease_assessment
+    ),
+    arrow = status,
+    linewidth = 5
+  ) +
+  scale_color_manual(
+    name = "Overall Disease Assessment",
+    values = c("#6394F3", "#F3C363", "#EB792F", "#d73a76", "#85a31e")
+  )
 
 p
 ```
@@ -70,7 +75,7 @@ p <- p +
     label.size = NA, fill = NA, size = 5
   ) +
   add_marker(
-    data = infusion_events ,
+    data = infusion_events,
     aes(x = time_from_initial_infusion, y = pt_id, color = infusion_type)
   )
 

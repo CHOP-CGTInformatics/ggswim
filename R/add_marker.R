@@ -12,6 +12,8 @@
 #'
 #' @inheritParams ggplot2::geom_point
 #' @param data a dataframe prepared for use with [ggswim()]
+#' @param fixed_marker_name A character string for the name of a fixed marker
+#' scale
 #'
 #' @section Aesthetics:
 #' [add_marker()] understands the following aesthetics (required aesthetics are in bold)
@@ -49,7 +51,9 @@
 #'
 #' - `add_marker()` **does not** support mapping using `fill`.
 #' - If using a fixed/non-mapping `color` specifier, a mapping `name` is required
-#' for aesthetic mapping to render the legend correctly.
+#' for aesthetic mapping to render the legend value label correctly.
+#' - If using a fixed/non-mapping `color` specifier, a `fixed_marker_name` must
+#' be set for the _first_ marker in a given new scale.
 #' - If using labels, both `label_vals` and `label_names` are required for
 #' proper legend population. At minimum, `label_vals` is needed for data
 #' display. These are unique parameter options for [aes()] to ggswim.
@@ -98,6 +102,7 @@
 add_marker <- function(
     mapping = aes(),
     data = NULL,
+    fixed_marker_name = NULL,
     ...) {
   # Enforce checks ----
   check_supported_mapping_aes(
@@ -113,6 +118,10 @@ add_marker <- function(
     params = c("x", "y"),
     parent_func = "add_marker()"
   )
+
+  if (!is.null(fixed_marker_name)) {
+    check_arg_is_character(fixed_marker_name)
+  }
 
   # Identify labels ----
   has_labels <- "label_vals" %in% names(mapping)
@@ -167,6 +176,7 @@ add_marker <- function(
     }
 
     out$fixed_colours <- fixed_colours
+    out$fixed_marker_name <- fixed_marker_name
 
     # Tag the layer with a reference attribute
     attributes(out)$swim_class <- "marker_point"

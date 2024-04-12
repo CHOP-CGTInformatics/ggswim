@@ -48,7 +48,7 @@ p <- ggswim(
   mapping = aes(
     x = start_time,
     xend = end_time,
-    y = pt_id, 
+    y = pt_id,
     color = disease_assessment
   ),
   linewidth = 5

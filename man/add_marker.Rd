@@ -4,7 +4,7 @@
 \alias{add_marker}
 \title{Add markers of interest swimmer plots}
 \usage{
-add_marker(mapping = aes(), data = NULL, ...)
+add_marker(mapping = aes(), data = NULL, fixed_marker_name = NULL, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}}. If specified and
@@ -13,6 +13,9 @@ at the top level of the plot. You must supply \code{mapping} if there is no plot
 mapping.}
 
 \item{data}{a dataframe prepared for use with \code{\link[=ggswim]{ggswim()}}}
+
+\item{fixed_marker_name}{A character string for the name of a fixed marker
+scale}
 
 \item{...}{Other arguments passed on to \code{\link[ggplot2:layer]{layer()}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
@@ -69,7 +72,9 @@ additional considerations and requirements.
 \itemize{
 \item \code{add_marker()} \strong{does not} support mapping using \code{fill}.
 \item If using a fixed/non-mapping \code{color} specifier, a mapping \code{name} is required
-for aesthetic mapping to render the legend correctly.
+for aesthetic mapping to render the legend value label correctly.
+\item If using a fixed/non-mapping \code{color} specifier, a \code{fixed_marker_name} must
+be set for the \emph{first} marker in a given new scale.
 \item If using labels, both \code{label_vals} and \code{label_names} are required for
 proper legend population. At minimum, \code{label_vals} is needed for data
 display. These are unique parameter options for \code{\link[=aes]{aes()}} to ggswim.
