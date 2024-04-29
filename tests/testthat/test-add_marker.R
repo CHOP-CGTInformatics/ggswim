@@ -21,8 +21,8 @@ test_that("add_marker works for aes mapping", {
   )
 
   expect_setequal(class(mk1_layer), c("LayerInstance", "Layer", "ggproto", "gg"))
-  expect_true("swim_class" %in% names(attributes(mk1_layer)))
-  expect_true(attributes(mk1_layer)$swim_class == "marker_point")
+  expect_true("swim_class" %in% names(mk1_layer))
+  expect_true(mk1_layer$swim_class == "marker_point")
 
   # Simple layer with aesthetic mapping ----
   p1 <- ggswim_layer +

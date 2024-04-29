@@ -230,12 +230,12 @@ get_ref_layer_info <- function(ggswim_obj) {
   # Determine indices of layers in ggplot object that contain labels, points, and fixed colors
   for (i in seq_along(ggswim_obj$layers)) {
     # Check for swim_class attrs, required to allow for other types of layer additions (ex: geom_vline)
-    if ("swim_class" %in% names(attributes(ggswim_obj$layers[[i]]))) {
-      if (attributes(ggswim_obj$layers[[i]])$swim_class == "marker_label") {
+    if (!is.null(ggswim_obj$layers[[i]]$swim_class)) {
+      if ("marker_label" %in% ggswim_obj$layers[[i]]$swim_class) {
         label_layer_indices <- c(label_layer_indices, i)
       }
 
-      if (attributes(ggswim_obj$layers[[i]])$swim_class == "marker_point") {
+      if ("marker_point" %in% ggswim_obj$layers[[i]]$swim_class) {
         point_layer_indices <- c(point_layer_indices, i)
       }
     }

@@ -121,6 +121,16 @@ ggswim <- function(
       ...
     )
 
+  # Define new class 'ggswim_obj' (after new color scale)
+  class(out) <- c("ggswim_obj", class(out))
+  # The max length can be considered the current working layer
+  # TODO: Determine if necessary, ggswim currently does not work with an existing
+  # ggplot. We may want to make this available in the future.
+  current_layer <- length(out$layers)
+
+  # Add a reference class to the layer attributes
+  out$layers[[current_layer]]$swim_class <- "ggswim"
+
   # Detect arrows ----
   arrow <- enquo(arrow) |> get_expr()
   arrow_neck_length <- if (quo_is_symbolic(quo(arrow_neck_length))) {
@@ -144,16 +154,6 @@ ggswim <- function(
         arrow_neck_length = {{ arrow_neck_length }}
       )
   }
-
-  # Define new class 'ggswim_obj' (after new color scale)
-  class(out) <- c("ggswim_obj", class(out))
-  # The max length can be considered the current working layer
-  # TODO: Determine if necessary, ggswim currently does not work with an existing
-  # ggplot. We may want to make this available in the future.
-  current_layer <- length(out$layers)
-
-  # Add a reference class to the layer attributes
-  attributes(out$layers[[current_layer]])$swim_class <- "ggswim"
 
   # Return
   out
@@ -258,7 +258,7 @@ add_arrows <- function(data = NULL,
   class(out) <- c("ggswim_obj", class(out))
 
   # Add a reference class to the layer attributes
-  attributes(out)$swim_class <- "ggswim_arrows"
+  out$swim_class <- "ggswim_arrows"
 
   out
 }

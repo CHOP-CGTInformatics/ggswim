@@ -22,8 +22,8 @@ test_that("test for expected attributes", {
   p <- ggswim(patient_data, aes(x = start_time, xend = end_time, y = pt_id, color = disease_assessment))
 
   expect_setequal(class(p), c("ggswim_obj", "gg", "ggplot"))
-  expect_true("swim_class" %in% names(attributes(p$layers[[1]])))
-  expect_true(attributes(p$layers[[1]])$swim_class == "ggswim")
+  expect_true("swim_class" %in% names(p$layers[[1]]))
+  expect_true(p$layers[[1]]$swim_class == "ggswim")
 })
 
 test_that("add_arrows works", {
@@ -41,8 +41,8 @@ test_that("add_arrows works", {
   )
 
   expect_setequal(class(p_arrow), c("ggswim_obj", "gg", "ggproto", "LayerInstance", "Layer"))
-  expect_true("swim_class" %in% names(attributes(p_arrow)))
-  expect_true(attributes(p_arrow)$swim_class == "ggswim_arrows")
+  expect_true("swim_class" %in% names(p_arrow))
+  expect_true(p_arrow$swim_class == "ggswim_arrows")
 
   skip_on_ci()
   p <- ggswim(

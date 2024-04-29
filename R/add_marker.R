@@ -139,7 +139,7 @@ add_marker <- function(
     )
 
     # Tag the layer with a reference attribute
-    attributes(out)$swim_class <- "marker_label"
+    out$swim_class <- "marker_label"
   } else {
     dots <- rlang::dots_list(...)
     fixed_colours <- NULL
@@ -179,7 +179,7 @@ add_marker <- function(
     out$fixed_marker_name <- fixed_marker_name
 
     # Tag the layer with a reference attribute
-    attributes(out)$swim_class <- "marker_point"
+    out$swim_class <- "marker_point"
   }
 
   out
