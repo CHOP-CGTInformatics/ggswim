@@ -88,20 +88,20 @@ applicable for use with <code><a href="ggswim.html">ggswim()</a></code> and <cod
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">patient_data</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 50 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 53 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    pt_id disease_assessment       start_time end_time status status_length</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 01    CR/CRi + B Cell Recovery       -<span style="color: #BB0000;">2.8</span>      0   FALSE           10.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01    RD                              0        0.9 FALSE           10.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 01    CR/CRi + B Cell Aplasia         0.9      1.8 FALSE           10.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 01    CR/CRi + B Cell Recovery        1.8      2   FALSE           10.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 02    RD                             -<span style="color: #BB0000;">2.8</span>      0   FALSE            9  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 02    CRi                             0        0.2 FALSE            9  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 03    CR/CRi + B Cell Recovery       -<span style="color: #BB0000;">2.4</span>      0   FALSE           16.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 03    CR/CRi + B Cell Recovery        0        0.9 FALSE           16.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 03    CR/CRi + B Cell Aplasia         0.9      2.8 FALSE           16.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 03    CR/CRi + B Cell Aplasia         2.8      6.2 FALSE           16.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 40 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 01    CR/CRi + B Cell Recovery       -<span style="color: #BB0000;">2.8</span>      0   FALSE           10.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 01    RD                              0        0.9 FALSE           10.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 01    CR/CRi + B Cell Aplasia         0.9      1.8 FALSE           10.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 01    CR/CRi + B Cell Recovery        1.8      2   FALSE           10.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 02    RD                             -<span style="color: #BB0000;">2.8</span>      0   FALSE            9.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 02    CRi                             0        0.2 FALSE            9.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 03    CR/CRi + B Cell Recovery       -<span style="color: #BB0000;">2.4</span>      0   FALSE           17.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 03    CR/CRi + B Cell Recovery        0        0.9 FALSE           17.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 03    CR/CRi + B Cell Aplasia         0.9      2.8 FALSE           17.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 03    CR/CRi + B Cell Aplasia         2.8      6.2 FALSE           17.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 43 more rows</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
