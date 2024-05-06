@@ -57,9 +57,9 @@ p <- patient_data |>
     mapping = aes(x = start_time, xend = end_time, y = pt_id),
     arrow = "status"
   ) +
-  scale_color_manual(
+  scale_color_brewer(
     name = "Overall Disease Assessment",
-    values = c("#6394F3", "#F3C363", "#EB792F", "#d73a76", "#85a31e")
+    palette = "Set1"
   )
 
 p
@@ -94,7 +94,7 @@ last finishing touch with `theme_ggswim()`:
 
 ``` r
 p +
-  scale_color_manual(name = "Markers", values = c(NA, NA, "green", NA, "red")) +
+  scale_color_brewer(name = "Markers", palette = "Set2") +
   labs(title = "My Swimmer Plot") +
   xlab("Time Since Infusion (Months)") + ylab("Patient ID") +
   theme_ggswim()
