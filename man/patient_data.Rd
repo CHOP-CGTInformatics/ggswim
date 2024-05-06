@@ -5,7 +5,7 @@
 \alias{patient_data}
 \title{Patient Data dataset}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 53 rows and 5 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 53 rows and 4 columns.
 }
 \source{
 This dataset is for demonstration purposes only.

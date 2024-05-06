@@ -38,11 +38,7 @@ specify \code{arrow_neck_length} which can be useful for tracking and visualizai
 time in between markers
 }
 \examples{
-patient_status <- patient_data |>
-  dplyr::select(pt_id, end_time, status, status_length) |>
-  unique() |>
-  dplyr::rename("arrow" = status, "time_from_today" = status_length)
-
+\dontrun{
 add_arrows(
   data = patient_status,
   mapping = aes(xend = end_time, y = pt_id),
@@ -51,5 +47,5 @@ add_arrows(
   arrow_colour = "forestgreen",
   arrow_fill = "forestgreen"
 )
-
+}
 }
