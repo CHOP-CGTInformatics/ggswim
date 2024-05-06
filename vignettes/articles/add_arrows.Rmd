@@ -13,85 +13,36 @@ knitr::opts_chunk$set(
 
 It can be useful to visually indicate the continuation of specific records in a swimmer plot. Optionally adding arrows to the tail ends of swimmer plot lanes in ggswim can help communicate subject survival status, such as whether or not a subject is still on a given study.
 
-Behind the scenes, the inclusion of arrows is facilitated by a call to `ggplot2::geom_segment()`. ggswim sets the segment length to 0, so that assigned arrows are always placed on the right side of indicated subjects. Within `ggswim()`, users have full control over arrow neck and head length, along with options for color, fill, and type (refer to `?ggswim` for detailed information).
-
-For developers, it is important to note that this means ggswim adds another new layer onto the one created by `ggswim()`. This is to allow users the ability to define the neck length of the arrows, which otherwise isn't easily doable with vanilla `geom_segment()`.
-
-Let's dive into an example similar to that in the README:
-
-```{r}
-library(ggswim)
-
-patient_data |>
-  ggswim(
-    mapping = aes(
-      x = start_time, xend = end_time, y = pt_id,
-      color = disease_assessment
-    ),
-    linewidth = 5
-  )
-```
-
-Before we can incorporate arrows into our swimmer plot, we need to designate a boolean column that informs `ggswim()` when to append an arrow to a specific row. In our example using `patient_data`, this column is named `status` and takes on `TRUE` or `FALSE` values to denote a patient's study status at the time of plotting.
-
-Notice in the `patient_data` dataset how some patients have a `TRUE` at the end of their survival time series. This means the patient is still on the study or an ending status has not yet been reached.
-
-```{r}
-patient_data |>
-  rmarkdown::paged_table()
-```
-
-## Adding arrows using `ggswim()`
-
-Let's add the arrows onto the plot from before:
-
-```{r}
-patient_data |>
-  ggswim(
-    mapping = aes(
-      x = start_time, xend = end_time, y = pt_id,
-      color = disease_assessment
-    ),
-    arrow = status,
-    linewidth = 5
-  )
-```
-
-Default values are set for arrows, but can be manipulated for different aesthetic preferences. Below we add color and fill specifiers, as well as a specification for `arrow_neck_length`. `arrow_neck_length` sets a default proportional value, but can also accept numeric values or reference to a column of numeric values in the dataset. In this case, we use `status_length` to specify that the neck length should be equivalent to the length of time from the last time point to "today."
-
-```{r}
-patient_data |>
-  ggswim(
-    mapping = aes(
-      x = start_time, xend = end_time, y = pt_id,
-      color = disease_assessment
-    ),
-    arrow = status,
-    arrow_fill = "cyan",
-    arrow_colour = "slateblue",
-    arrow_head_length = grid::unit(.25, "inches"),
-    arrow_neck_length = status_length,
-    width = 0.25,
-    linewidth = 5
-  )
-```
+To facilitate the addition of arrows, we provide the `add_arrows()` function as a way to tack on these continuation indicators to your swimmer plot lanes. Behind the scenes, the inclusion of arrows is facilitated by a call to `ggplot2::geom_segment()` and creates a new ggplot2 layer with a `ggswim_arrows` flag. `add_arrows()` sets the segment length to 0, so that assigned arrows are always placed on the right side of indicated subjects. `add_arrows()` gives users have full control over arrow neck and head length, along with options for color, fill, and type (refer to `?add_arrows` for detailed information).
 
 ## Adding arrows using `add_arrows()`
 
-Above, we demonstrated how users can specify arrow details and information inside of a `ggwim()` call. However, this may not always be a readily available approach. `ggswim()` actually wraps an additional function we provide called `add_arrows()`, which can be called on its own. As an example, users may wish to use `add_arrows()` when having the above `patient_data` dataset and an additional arrow-specific dataset, which we'll call `patient_status`:
+To demonstrate how you might add arrows onto the `patient_data` dataset, let's take a sample subset of `patient_data` that would help us make use of `add_arrows()`:
+
+```{r, include=FALSE}
+library(ggswim)
+no_arrow_statuses <- c(
+  "Completed Study Follow-Up",
+  "Deceased",
+  "Other End Study Reason"
+)
+
+arrow_data <- patient_data |>
+  dplyr::left_join(end_study_events |>
+                     dplyr::select(pt_id, end_study_name),
+                   by = "pt_id") |>
+  dplyr::select(pt_id, start_time, end_time, end_study_name) |>
+  dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
+  unique() |>
+  dplyr::mutate(status = ifelse(!end_study_name %in% no_arrow_statuses, TRUE, FALSE))
+```
 
 ```{r}
-patient_status <- patient_data |>
-  dplyr::filter(status) |>
-  dplyr::select(pt_id, end_time, status, status_length) |>
-  unique() |>
-  dplyr::rename("arrow" = status, "time_from_today" = status_length)
-
-patient_status |>
+arrow_data |> 
   rmarkdown::paged_table()
 ```
 
-In this setup, we have a separate dataset where each row is unique to each `pt_id`. In this case, we can supply the data seaparately in the same ggplot-style layering chain using `add_arrows()`:
+This should look familiar, a pared-down dataset with a `status` column that we'll use to flag which lanes of our swimmer plot should have arrows. Now let's use `add_arrows()` in combination with `ggswim()` to make a swimmer plot:
 
 ```{r}
 patient_data |>
@@ -103,12 +54,11 @@ patient_data |>
     linewidth = 5
   ) +
   add_arrows(
-    data = patient_status,
+    data = arrow_data,
     mapping = aes(xend = end_time, y = pt_id),
-    arrow = arrow,
-    arrow_neck_length = time_from_today,
+    arrow = status,
+    arrow_neck_length = 5,
     arrow_colour = "slateblue",
     arrow_fill = "cyan"
   )
 ```
-

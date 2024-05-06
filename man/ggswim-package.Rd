@@ -3,7 +3,6 @@
 \docType{package}
 \name{ggswim-package}
 \alias{ggswim-package}
-\alias{_PACKAGE}
 \title{ggswim: Create Swimmer Plots with ggplot2}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}

@@ -4,18 +4,7 @@
 \alias{ggswim}
 \title{Create swimmer survival plots}
 \usage{
-ggswim(
-  data,
-  mapping = aes(),
-  position = "identity",
-  arrow = NULL,
-  arrow_colour = "black",
-  arrow_head_length = unit(0.25, "inches"),
-  arrow_neck_length = NULL,
-  arrow_fill = NULL,
-  arrow_type = "closed",
-  ...
-)
+ggswim(data, mapping = aes(), position = "identity", ...)
 }
 \arguments{
 \item{data}{a dataframe prepared for use with \code{\link[=ggswim]{ggswim()}}}
@@ -27,23 +16,6 @@ mapping.}
 
 \item{position}{Position adjustment. ggswim accepts either "stack", or "identity"
 depending on the use case. Default "identity".}
-
-\item{arrow}{A column indicating what swim lanes should have arrows applied.
-The column must be a logical data type (T/F).}
-
-\item{arrow_colour}{Border/line color to use for the arrow. Default "black".}
-
-\item{arrow_head_length}{A unit specifying the length of the arrow head (from tip to base).
-Must be a ggplot2 \code{unit()} object. Default \code{ggplot2::unit(0.25, "inches")}.}
-
-\item{arrow_neck_length}{The length of the neck of the arrow from the end of a
-swim lane to the base of the arrow head. Either an integer value or a column
-specifier. The default, \code{NULL}, sets a value proportional to the max lane value.}
-
-\item{arrow_fill}{Fill color/colour to use for the arrow head (if closed). Default \code{NULL}.}
-
-\item{arrow_type}{One of "open" or "closed" indicating whether the arrow head should
-be a closed triangle. Default "closed."}
 
 \item{...}{Other arguments passed on to \code{\link[ggplot2:layer]{layer()}}'s \code{params} argument. These
 arguments broadly fall into one of 4 categories below. Notably, further
@@ -123,20 +95,5 @@ ggswim(
     color = disease_assessment
   ),
   linewidth = 5
-)
-
-# ggswim call with arrows
-ggswim(
-  data = patient_data,
-  mapping = aes(
-    x = start_time,
-    xend = end_time,
-    y = pt_id,
-    color = disease_assessment
-  ),
-  linewidth = 5,
-  arrow = status,
-  arrow_head_length = ggplot2::unit(.25, "inches"),
-  arrow_neck_length = status_length
 )
 }

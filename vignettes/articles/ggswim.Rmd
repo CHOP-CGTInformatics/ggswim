@@ -33,12 +33,10 @@ patient_data |>
 
 `patient_data` contains a long pivoted dataset where patient ID's (`pt_id`) can be repeated. These rows are differentiated by `disease_assessments`s combined with corresponding start and end times, representing months. Together, these rows signify a patient survival timeline.
 
-- `disease_assessment` is broken down by the following nomenclature along with some indiciator of B-cell status (if applicable):
+- `disease_assessment` is broken down by the following nomenclature along with some indicator of B-cell status (if applicable):
    - CR = "Complete Response"
    - CRi = "Complete Response with Incomplete Blood Count Recovery"
    - RD = "Relapsed Disease"
-
-The columns `status` and `status_length` are indicator columns for arrow support, and discussed in greater detail in [Adding arrows to ggswim](https://chop-cgtinformatics.github.io/ggswim/articles/add_arrows.html)
 
 Now, let's make the plot using `ggswim()`:
 
