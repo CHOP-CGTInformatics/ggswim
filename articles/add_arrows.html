@@ -60,6 +60,7 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/add_arrows.html">Adding Arrows</a>
     <a class="dropdown-item" href="../articles/fixed_markers.html">Fixed Mapping with Markers</a>
+    <a class="dropdown-item" href="../articles/gallery.html">Gallery</a>
   </div>
 </li>
       </ul>
@@ -99,121 +100,37 @@
 records in a swimmer plot. Optionally adding arrows to the tail ends of
 swimmer plot lanes in ggswim can help communicate subject survival
 status, such as whether or not a subject is still on a given study.</p>
-<p>Behind the scenes, the inclusion of arrows is facilitated by a call
-to <code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">ggplot2::geom_segment()</a></code>. ggswim sets the segment length
-to 0, so that assigned arrows are always placed on the right side of
-indicated subjects. Within <code><a href="../reference/ggswim.html">ggswim()</a></code>, users have full
-control over arrow neck and head length, along with options for color,
-fill, and type (refer to <code><a href="../reference/ggswim.html">?ggswim</a></code> for detailed
-information).</p>
-<p>For developers, it is important to note that this means ggswim adds
-another new layer onto the one created by <code><a href="../reference/ggswim.html">ggswim()</a></code>. This is
-to allow users the ability to define the neck length of the arrows,
-which otherwise isn’t easily doable with vanilla
-<code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">geom_segment()</a></code>.</p>
-<p>Let’s dive into an example similar to that in the README:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://chop-cgtinformatics.github.io/ggswim/">ggswim</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">patient_data</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span></span>
-<span>    mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
-<span>      x <span class="op">=</span> <span class="va">start_time</span>, xend <span class="op">=</span> <span class="va">end_time</span>, y <span class="op">=</span> <span class="va">pt_id</span>,</span>
-<span>      color <span class="op">=</span> <span class="va">disease_assessment</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    linewidth <span class="op">=</span> <span class="fl">5</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="add_arrows_files/figure-html/unnamed-chunk-2-1.png" width="1152"></p>
-<p>Before we can incorporate arrows into our swimmer plot, we need to
-designate a boolean column that informs <code><a href="../reference/ggswim.html">ggswim()</a></code> when to
-append an arrow to a specific row. In our example using
-<code>patient_data</code>, this column is named <code>status</code> and
-takes on <code>TRUE</code> or <code>FALSE</code> values to denote a
-patient’s study status at the time of plotting.</p>
-<p>Notice in the <code>patient_data</code> dataset how some patients
-have a <code>TRUE</code> at the end of their survival time series. This
-means the patient is still on the study or an ending status has not yet
-been reached.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">patient_data</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">rmarkdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgs.rstudio.com/rmarkdown/reference/paged_table.html" class="external-link">paged_table</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["pt_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["disease_assessment"],"name":[2],"type":["chr"],"align":["left"]},{"label":["start_time"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["end_time"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["status"],"name":[5],"type":["lgl"],"align":["right"]},{"label":["status_length"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"01","2":"CR/CRi + B Cell Recovery","3":"-2.8","4":"0.0","5":"FALSE","6":"10.9"},{"1":"01","2":"RD","3":"0.0","4":"0.9","5":"FALSE","6":"10.9"},{"1":"01","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"1.8","5":"FALSE","6":"10.9"},{"1":"01","2":"CR/CRi + B Cell Recovery","3":"1.8","4":"2.0","5":"FALSE","6":"10.9"},{"1":"02","2":"RD","3":"-2.8","4":"0.0","5":"FALSE","6":"9.7"},{"1":"02","2":"CRi","3":"0.0","4":"0.2","5":"FALSE","6":"9.7"},{"1":"03","2":"CR/CRi + B Cell Recovery","3":"-2.4","4":"0.0","5":"FALSE","6":"17.3"},{"1":"03","2":"CR/CRi + B Cell Recovery","3":"0.0","4":"0.9","5":"FALSE","6":"17.3"},{"1":"03","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"2.8","5":"FALSE","6":"17.3"},{"1":"03","2":"CR/CRi + B Cell Aplasia","3":"2.8","4":"6.2","5":"FALSE","6":"17.3"},{"1":"03","2":"CR/CRi + B Cell Recovery","3":"6.2","4":"8.4","5":"FALSE","6":"17.3"},{"1":"03","2":"CR/CRi + B Cell Recovery","3":"8.4","4":"11.9","5":"FALSE","6":"17.3"},{"1":"03","2":"CR/CRi + B Cell Recovery","3":"11.9","4":"11.9","5":"FALSE","6":"17.3"},{"1":"04","2":"CR/CRi + B Cell Recovery","3":"-3.8","4":"0.0","5":"FALSE","6":"10.2"},{"1":"04","2":"CR/CRi + B Cell Recovery","3":"0.0","4":"0.9","5":"FALSE","6":"10.2"},{"1":"04","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"3.0","5":"FALSE","6":"10.2"},{"1":"04","2":"CR/CRi + B Cell Aplasia","3":"3.0","4":"6.2","5":"FALSE","6":"10.2"},{"1":"04","2":"CR/CRi + B Cell Aplasia","3":"6.2","4":"9.0","5":"TRUE","6":"10.2"},{"1":"05","2":"RD","3":"-5.0","4":"0.0","5":"FALSE","6":"14.6"},{"1":"05","2":"CR/CRi + B Cell Recovery","3":"0.0","4":"0.9","5":"FALSE","6":"14.6"},{"1":"05","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"2.7","5":"FALSE","6":"14.6"},{"1":"05","2":"CR/CRi + B Cell Aplasia","3":"2.7","4":"5.7","5":"FALSE","6":"14.6"},{"1":"05","2":"CR/CRi + B Cell Recovery","3":"5.7","4":"8.9","5":"TRUE","6":"14.6"},{"1":"06","2":"CR/CRi + B Cell Recovery","3":"-2.1","4":"-0.2","5":"FALSE","6":"15.5"},{"1":"06","2":"CR/CRi + B Cell Recovery","3":"-0.2","4":"0.9","5":"FALSE","6":"15.5"},{"1":"06","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"2.8","5":"FALSE","6":"15.5"},{"1":"06","2":"CR/CRi + B Cell Recovery","3":"2.8","4":"4.8","5":"FALSE","6":"15.5"},{"1":"08","2":"RD","3":"-6.3","4":"-0.2","5":"FALSE","6":"13.4"},{"1":"08","2":"CR/CRi + B Cell Aplasia","3":"-0.2","4":"0.9","5":"FALSE","6":"13.4"},{"1":"08","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"3.3","5":"FALSE","6":"13.4"},{"1":"08","2":"CR/CRi + B Cell Aplasia","3":"3.3","4":"5.7","5":"FALSE","6":"13.4"},{"1":"08","2":"CR/CRi + B Cell Aplasia","3":"5.7","4":"8.8","5":"FALSE","6":"13.4"},{"1":"08","2":"RD","3":"8.8","4":"11.7","5":"FALSE","6":"13.4"},{"1":"09","2":"CR/CRi + B Cell Recovery","3":"-5.7","4":"0.0","5":"FALSE","6":"11.6"},{"1":"09","2":"RD","3":"0.0","4":"0.9","5":"FALSE","6":"11.6"},{"1":"09","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"3.3","5":"FALSE","6":"11.6"},{"1":"09","2":"CR/CRi + B Cell Aplasia","3":"3.3","4":"5.8","5":"FALSE","6":"11.6"},{"1":"09","2":"CR/CRi + B Cell Aplasia","3":"5.8","4":"8.3","5":"TRUE","6":"11.6"},{"1":"12","2":"RD","3":"-3.6","4":"0.0","5":"FALSE","6":"12.3"},{"1":"12","2":"RD","3":"0.0","4":"0.9","5":"FALSE","6":"12.3"},{"1":"12","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"3.0","5":"FALSE","6":"12.3"},{"1":"12","2":"CR/CRi + B Cell Aplasia","3":"3.0","4":"6.2","5":"FALSE","6":"12.3"},{"1":"12","2":"CR/CRi + B Cell Aplasia","3":"6.2","4":"9.0","5":"FALSE","6":"12.3"},{"1":"12","2":"CR/CRi + B Cell Aplasia","3":"9.0","4":"7.9","5":"FALSE","6":"12.3"},{"1":"12","2":"CR/CRi + B Cell Aplasia","3":"7.9","4":"9.7","5":"FALSE","6":"12.3"},{"1":"13","2":"RD","3":"-3.4","4":"-0.2","5":"TRUE","6":"1.4"},{"1":"17","2":"CR/CRi + B Cell Recovery","3":"-3.7","4":"-0.2","5":"FALSE","6":"2.1"},{"1":"17","2":"CR","3":"-0.2","4":"0.9","5":"TRUE","6":"2.1"},{"1":"18","2":"CR","3":"-3.5","4":"0.0","5":"FALSE","6":"3.3"},{"1":"18","2":"RD","3":"0.0","4":"0.9","5":"TRUE","6":"3.3"},{"1":"19","2":"CR","3":"-2.0","4":"-0.2","5":"FALSE","6":"4.2"},{"1":"19","2":"CR","3":"-0.2","4":"0.9","5":"FALSE","6":"4.2"},{"1":"19","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"3.0","5":"TRUE","6":"4.2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
-<div class="section level2">
-<h2 id="adding-arrows-using-ggswim">Adding arrows using <code>ggswim()</code><a class="anchor" aria-label="anchor" href="#adding-arrows-using-ggswim"></a>
-</h2>
-<p>Let’s add the arrows onto the plot from before:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">patient_data</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span></span>
-<span>    mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
-<span>      x <span class="op">=</span> <span class="va">start_time</span>, xend <span class="op">=</span> <span class="va">end_time</span>, y <span class="op">=</span> <span class="va">pt_id</span>,</span>
-<span>      color <span class="op">=</span> <span class="va">disease_assessment</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    arrow <span class="op">=</span> <span class="va">status</span>,</span>
-<span>    linewidth <span class="op">=</span> <span class="fl">5</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="add_arrows_files/figure-html/unnamed-chunk-4-1.png" width="1152"></p>
-<p>Default values are set for arrows, but can be manipulated for
-different aesthetic preferences. Below we add color and fill specifiers,
-as well as a specification for <code>arrow_neck_length</code>.
-<code>arrow_neck_length</code> sets a default proportional value, but
-can also accept numeric values or reference to a column of numeric
-values in the dataset. In this case, we use <code>status_length</code>
-to specify that the neck length should be equivalent to the length of
-time from the last time point to “today.”</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">patient_data</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span></span>
-<span>    mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
-<span>      x <span class="op">=</span> <span class="va">start_time</span>, xend <span class="op">=</span> <span class="va">end_time</span>, y <span class="op">=</span> <span class="va">pt_id</span>,</span>
-<span>      color <span class="op">=</span> <span class="va">disease_assessment</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    arrow <span class="op">=</span> <span class="va">status</span>,</span>
-<span>    arrow_fill <span class="op">=</span> <span class="st">"cyan"</span>,</span>
-<span>    arrow_colour <span class="op">=</span> <span class="st">"slateblue"</span>,</span>
-<span>    arrow_head_length <span class="op">=</span> <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">.25</span>, <span class="st">"inches"</span><span class="op">)</span>,</span>
-<span>    arrow_neck_length <span class="op">=</span> <span class="va">status_length</span>,</span>
-<span>    width <span class="op">=</span> <span class="fl">0.25</span>,</span>
-<span>    linewidth <span class="op">=</span> <span class="fl">5</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in geom_segment(mapping, position = position, ...): Ignoring</span></span>
-<span><span class="co">#&gt; unknown parameters: `width`</span></span></code></pre></div>
-<p><img src="add_arrows_files/figure-html/unnamed-chunk-5-1.png" width="1152"></p>
-</div>
+<p>To facilitate the addition of arrows, we provide the
+<code><a href="../reference/add_arrows.html">add_arrows()</a></code> function as a way to tack on these
+continuation indicators to your swimmer plot lanes. Behind the scenes,
+the inclusion of arrows is facilitated by a call to
+<code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">ggplot2::geom_segment()</a></code> and creates a new ggplot2 layer
+with a <code>ggswim_arrows</code> flag. <code><a href="../reference/add_arrows.html">add_arrows()</a></code> sets
+the segment length to 0, so that assigned arrows are always placed on
+the right side of indicated subjects. <code><a href="../reference/add_arrows.html">add_arrows()</a></code> gives
+users have full control over arrow neck and head length, along with
+options for color, fill, and type (refer to <code><a href="../reference/add_arrows.html">?add_arrows</a></code> for
+detailed information).</p>
 <div class="section level2">
 <h2 id="adding-arrows-using-add_arrows">Adding arrows using <code>add_arrows()</code><a class="anchor" aria-label="anchor" href="#adding-arrows-using-add_arrows"></a>
 </h2>
-<p>Above, we demonstrated how users can specify arrow details and
-information inside of a <code>ggwim()</code> call. However, this may not
-always be a readily available approach. <code><a href="../reference/ggswim.html">ggswim()</a></code> actually
-wraps an additional function we provide called
-<code><a href="../reference/add_arrows.html">add_arrows()</a></code>, which can be called on its own. As an
-example, users may wish to use <code><a href="../reference/add_arrows.html">add_arrows()</a></code> when having the
-above <code>patient_data</code> dataset and an additional arrow-specific
-dataset, which we’ll call <code>patient_status</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">patient_status</span> <span class="op">&lt;-</span> <span class="va">patient_data</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">status</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">pt_id</span>, <span class="va">end_time</span>, <span class="va">status</span>, <span class="va">status_length</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span><span class="st">"arrow"</span> <span class="op">=</span> <span class="va">status</span>, <span class="st">"time_from_today"</span> <span class="op">=</span> <span class="va">status_length</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">patient_status</span> <span class="op">|&gt;</span></span>
+<p>To demonstrate how you might add arrows onto the
+<code>patient_data</code> dataset, let’s take a sample subset of
+<code>patient_data</code> that would help us make use of
+<code><a href="../reference/add_arrows.html">add_arrows()</a></code>:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">arrow_data</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">rmarkdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgs.rstudio.com/rmarkdown/reference/paged_table.html" class="external-link">paged_table</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["pt_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["end_time"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["arrow"],"name":[3],"type":["lgl"],"align":["right"]},{"label":["time_from_today"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"04","2":"9.0","3":"TRUE","4":"10.2"},{"1":"05","2":"8.9","3":"TRUE","4":"14.6"},{"1":"09","2":"8.3","3":"TRUE","4":"11.6"},{"1":"13","2":"-0.2","3":"TRUE","4":"1.4"},{"1":"17","2":"0.9","3":"TRUE","4":"2.1"},{"1":"18","2":"0.9","3":"TRUE","4":"3.3"},{"1":"19","2":"3.0","3":"TRUE","4":"4.2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["pt_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["start_time"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["end_time"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["end_study_name"],"name":[4],"type":["chr"],"align":["left"]},{"label":["status"],"name":[5],"type":["lgl"],"align":["right"]}],"data":[{"1":"01","2":"1.8","3":"2.0","4":"Other End Study Reason","5":"FALSE"},{"1":"02","2":"0.0","3":"0.2","4":"Deceased","5":"FALSE"},{"1":"03","2":"8.4","3":"11.9","4":"Completed Study Follow-Up","5":"FALSE"},{"1":"03","2":"11.9","3":"11.9","4":"Completed Study Follow-Up","5":"FALSE"},{"1":"04","2":"6.2","3":"9.0","4":"NA","5":"TRUE"},{"1":"05","2":"5.7","3":"8.9","4":"NA","5":"TRUE"},{"1":"06","2":"2.8","3":"4.8","4":"Other End Study Reason","5":"FALSE"},{"1":"08","2":"8.8","3":"11.7","4":"Other End Study Reason","5":"FALSE"},{"1":"09","2":"5.8","3":"8.3","4":"NA","5":"TRUE"},{"1":"12","2":"7.9","3":"9.7","4":"Other End Study Reason","5":"FALSE"},{"1":"13","2":"-3.4","3":"-0.2","4":"NA","5":"TRUE"},{"1":"17","2":"-0.2","3":"0.9","4":"NA","5":"TRUE"},{"1":"18","2":"0.0","3":"0.9","4":"NA","5":"TRUE"},{"1":"19","2":"0.9","3":"3.0","4":"NA","5":"TRUE"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<p>In this setup, we have a separate dataset where each row is unique to
-each <code>pt_id</code>. In this case, we can supply the data
-seaparately in the same ggplot-style layering chain using
-<code><a href="../reference/add_arrows.html">add_arrows()</a></code>:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>This should look familiar, a pared-down dataset with a
+<code>status</code> column that we’ll use to flag which lanes of our
+swimmer plot should have arrows. Now let’s use <code><a href="../reference/add_arrows.html">add_arrows()</a></code>
+in combination with <code><a href="../reference/ggswim.html">ggswim()</a></code> to make a swimmer plot:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">patient_data</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span></span>
 <span>    mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
@@ -223,17 +140,16 @@ seaparately in the same ggplot-style layering chain using
 <span>    linewidth <span class="op">=</span> <span class="fl">5</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/add_arrows.html">add_arrows</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">patient_status</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">arrow_data</span>,</span>
 <span>    mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>xend <span class="op">=</span> <span class="va">end_time</span>, y <span class="op">=</span> <span class="va">pt_id</span><span class="op">)</span>,</span>
-<span>    arrow <span class="op">=</span> <span class="va">arrow</span>,</span>
-<span>    arrow_neck_length <span class="op">=</span> <span class="va">time_from_today</span>,</span>
+<span>    arrow <span class="op">=</span> <span class="va">status</span>,</span>
+<span>    arrow_neck_length <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>    arrow_colour <span class="op">=</span> <span class="st">"slateblue"</span>,</span>
 <span>    arrow_fill <span class="op">=</span> <span class="st">"cyan"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="add_arrows_files/figure-html/unnamed-chunk-7-1.png" width="1152"></p>
+<p><img src="add_arrows_files/figure-html/unnamed-chunk-4-1.png" width="1152"></p>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
-    </nav></aside>
+  </main>
 </div>
 
 

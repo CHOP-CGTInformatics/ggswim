@@ -60,6 +60,7 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/add_arrows.html">Adding Arrows</a>
     <a class="dropdown-item" href="../articles/fixed_markers.html">Fixed Mapping with Markers</a>
+    <a class="dropdown-item" href="../articles/gallery.html">Gallery</a>
   </div>
 </li>
       </ul>
@@ -120,7 +121,7 @@ internal datasets: <code>patient_data</code>,
 <p>Let’s start with observing <code>patient_data</code>’s structure:</p>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["pt_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["disease_assessment"],"name":[2],"type":["chr"],"align":["left"]},{"label":["start_time"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["end_time"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["status"],"name":[5],"type":["lgl"],"align":["right"]},{"label":["status_length"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"01","2":"CR/CRi + B Cell Recovery","3":"-2.8","4":"0.0","5":"FALSE","6":"10.9"},{"1":"01","2":"RD","3":"0.0","4":"0.9","5":"FALSE","6":"10.9"},{"1":"01","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"1.8","5":"FALSE","6":"10.9"},{"1":"01","2":"CR/CRi + B Cell Recovery","3":"1.8","4":"2.0","5":"FALSE","6":"10.9"},{"1":"02","2":"RD","3":"-2.8","4":"0.0","5":"FALSE","6":"9.7"},{"1":"02","2":"CRi","3":"0.0","4":"0.2","5":"FALSE","6":"9.7"},{"1":"03","2":"CR/CRi + B Cell Recovery","3":"-2.4","4":"0.0","5":"FALSE","6":"17.3"},{"1":"03","2":"CR/CRi + B Cell Recovery","3":"0.0","4":"0.9","5":"FALSE","6":"17.3"},{"1":"03","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"2.8","5":"FALSE","6":"17.3"},{"1":"03","2":"CR/CRi + B Cell Aplasia","3":"2.8","4":"6.2","5":"FALSE","6":"17.3"},{"1":"03","2":"CR/CRi + B Cell Recovery","3":"6.2","4":"8.4","5":"FALSE","6":"17.3"},{"1":"03","2":"CR/CRi + B Cell Recovery","3":"8.4","4":"11.9","5":"FALSE","6":"17.3"},{"1":"03","2":"CR/CRi + B Cell Recovery","3":"11.9","4":"11.9","5":"FALSE","6":"17.3"},{"1":"04","2":"CR/CRi + B Cell Recovery","3":"-3.8","4":"0.0","5":"FALSE","6":"10.2"},{"1":"04","2":"CR/CRi + B Cell Recovery","3":"0.0","4":"0.9","5":"FALSE","6":"10.2"},{"1":"04","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"3.0","5":"FALSE","6":"10.2"},{"1":"04","2":"CR/CRi + B Cell Aplasia","3":"3.0","4":"6.2","5":"FALSE","6":"10.2"},{"1":"04","2":"CR/CRi + B Cell Aplasia","3":"6.2","4":"9.0","5":"TRUE","6":"10.2"},{"1":"05","2":"RD","3":"-5.0","4":"0.0","5":"FALSE","6":"14.6"},{"1":"05","2":"CR/CRi + B Cell Recovery","3":"0.0","4":"0.9","5":"FALSE","6":"14.6"},{"1":"05","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"2.7","5":"FALSE","6":"14.6"},{"1":"05","2":"CR/CRi + B Cell Aplasia","3":"2.7","4":"5.7","5":"FALSE","6":"14.6"},{"1":"05","2":"CR/CRi + B Cell Recovery","3":"5.7","4":"8.9","5":"TRUE","6":"14.6"},{"1":"06","2":"CR/CRi + B Cell Recovery","3":"-2.1","4":"-0.2","5":"FALSE","6":"15.5"},{"1":"06","2":"CR/CRi + B Cell Recovery","3":"-0.2","4":"0.9","5":"FALSE","6":"15.5"},{"1":"06","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"2.8","5":"FALSE","6":"15.5"},{"1":"06","2":"CR/CRi + B Cell Recovery","3":"2.8","4":"4.8","5":"FALSE","6":"15.5"},{"1":"08","2":"RD","3":"-6.3","4":"-0.2","5":"FALSE","6":"13.4"},{"1":"08","2":"CR/CRi + B Cell Aplasia","3":"-0.2","4":"0.9","5":"FALSE","6":"13.4"},{"1":"08","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"3.3","5":"FALSE","6":"13.4"},{"1":"08","2":"CR/CRi + B Cell Aplasia","3":"3.3","4":"5.7","5":"FALSE","6":"13.4"},{"1":"08","2":"CR/CRi + B Cell Aplasia","3":"5.7","4":"8.8","5":"FALSE","6":"13.4"},{"1":"08","2":"RD","3":"8.8","4":"11.7","5":"FALSE","6":"13.4"},{"1":"09","2":"CR/CRi + B Cell Recovery","3":"-5.7","4":"0.0","5":"FALSE","6":"11.6"},{"1":"09","2":"RD","3":"0.0","4":"0.9","5":"FALSE","6":"11.6"},{"1":"09","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"3.3","5":"FALSE","6":"11.6"},{"1":"09","2":"CR/CRi + B Cell Aplasia","3":"3.3","4":"5.8","5":"FALSE","6":"11.6"},{"1":"09","2":"CR/CRi + B Cell Aplasia","3":"5.8","4":"8.3","5":"TRUE","6":"11.6"},{"1":"12","2":"RD","3":"-3.6","4":"0.0","5":"FALSE","6":"12.3"},{"1":"12","2":"RD","3":"0.0","4":"0.9","5":"FALSE","6":"12.3"},{"1":"12","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"3.0","5":"FALSE","6":"12.3"},{"1":"12","2":"CR/CRi + B Cell Aplasia","3":"3.0","4":"6.2","5":"FALSE","6":"12.3"},{"1":"12","2":"CR/CRi + B Cell Aplasia","3":"6.2","4":"9.0","5":"FALSE","6":"12.3"},{"1":"12","2":"CR/CRi + B Cell Aplasia","3":"9.0","4":"7.9","5":"FALSE","6":"12.3"},{"1":"12","2":"CR/CRi + B Cell Aplasia","3":"7.9","4":"9.7","5":"FALSE","6":"12.3"},{"1":"13","2":"RD","3":"-3.4","4":"-0.2","5":"TRUE","6":"1.4"},{"1":"17","2":"CR/CRi + B Cell Recovery","3":"-3.7","4":"-0.2","5":"FALSE","6":"2.1"},{"1":"17","2":"CR","3":"-0.2","4":"0.9","5":"TRUE","6":"2.1"},{"1":"18","2":"CR","3":"-3.5","4":"0.0","5":"FALSE","6":"3.3"},{"1":"18","2":"RD","3":"0.0","4":"0.9","5":"TRUE","6":"3.3"},{"1":"19","2":"CR","3":"-2.0","4":"-0.2","5":"FALSE","6":"4.2"},{"1":"19","2":"CR","3":"-0.2","4":"0.9","5":"FALSE","6":"4.2"},{"1":"19","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"3.0","5":"TRUE","6":"4.2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["pt_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["disease_assessment"],"name":[2],"type":["chr"],"align":["left"]},{"label":["start_time"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["end_time"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"01","2":"CR/CRi + B Cell Recovery","3":"-2.8","4":"0.0"},{"1":"01","2":"RD","3":"0.0","4":"0.9"},{"1":"01","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"1.8"},{"1":"01","2":"CR/CRi + B Cell Recovery","3":"1.8","4":"2.0"},{"1":"02","2":"RD","3":"-2.8","4":"0.0"},{"1":"02","2":"CRi","3":"0.0","4":"0.2"},{"1":"03","2":"CR/CRi + B Cell Recovery","3":"-2.4","4":"0.0"},{"1":"03","2":"CR/CRi + B Cell Recovery","3":"0.0","4":"0.9"},{"1":"03","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"2.8"},{"1":"03","2":"CR/CRi + B Cell Aplasia","3":"2.8","4":"6.2"},{"1":"03","2":"CR/CRi + B Cell Recovery","3":"6.2","4":"8.4"},{"1":"03","2":"CR/CRi + B Cell Recovery","3":"8.4","4":"11.9"},{"1":"03","2":"CR/CRi + B Cell Recovery","3":"11.9","4":"11.9"},{"1":"04","2":"CR/CRi + B Cell Recovery","3":"-3.8","4":"0.0"},{"1":"04","2":"CR/CRi + B Cell Recovery","3":"0.0","4":"0.9"},{"1":"04","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"3.0"},{"1":"04","2":"CR/CRi + B Cell Aplasia","3":"3.0","4":"6.2"},{"1":"04","2":"CR/CRi + B Cell Aplasia","3":"6.2","4":"9.0"},{"1":"05","2":"RD","3":"-5.0","4":"0.0"},{"1":"05","2":"CR/CRi + B Cell Recovery","3":"0.0","4":"0.9"},{"1":"05","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"2.7"},{"1":"05","2":"CR/CRi + B Cell Aplasia","3":"2.7","4":"5.7"},{"1":"05","2":"CR/CRi + B Cell Recovery","3":"5.7","4":"8.9"},{"1":"06","2":"CR/CRi + B Cell Recovery","3":"-2.1","4":"-0.2"},{"1":"06","2":"CR/CRi + B Cell Recovery","3":"-0.2","4":"0.9"},{"1":"06","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"2.8"},{"1":"06","2":"CR/CRi + B Cell Recovery","3":"2.8","4":"4.8"},{"1":"08","2":"RD","3":"-6.3","4":"-0.2"},{"1":"08","2":"CR/CRi + B Cell Aplasia","3":"-0.2","4":"0.9"},{"1":"08","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"3.3"},{"1":"08","2":"CR/CRi + B Cell Aplasia","3":"3.3","4":"5.7"},{"1":"08","2":"CR/CRi + B Cell Aplasia","3":"5.7","4":"8.8"},{"1":"08","2":"RD","3":"8.8","4":"11.7"},{"1":"09","2":"CR/CRi + B Cell Recovery","3":"-5.7","4":"0.0"},{"1":"09","2":"RD","3":"0.0","4":"0.9"},{"1":"09","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"3.3"},{"1":"09","2":"CR/CRi + B Cell Aplasia","3":"3.3","4":"5.8"},{"1":"09","2":"CR/CRi + B Cell Aplasia","3":"5.8","4":"8.3"},{"1":"12","2":"RD","3":"-3.6","4":"0.0"},{"1":"12","2":"RD","3":"0.0","4":"0.9"},{"1":"12","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"3.0"},{"1":"12","2":"CR/CRi + B Cell Aplasia","3":"3.0","4":"6.2"},{"1":"12","2":"CR/CRi + B Cell Aplasia","3":"6.2","4":"9.0"},{"1":"12","2":"CR/CRi + B Cell Aplasia","3":"9.0","4":"7.9"},{"1":"12","2":"CR/CRi + B Cell Aplasia","3":"7.9","4":"9.7"},{"1":"13","2":"RD","3":"-3.4","4":"-0.2"},{"1":"17","2":"CR/CRi + B Cell Recovery","3":"-3.7","4":"-0.2"},{"1":"17","2":"CR","3":"-0.2","4":"0.9"},{"1":"18","2":"CR","3":"-3.5","4":"0.0"},{"1":"18","2":"RD","3":"0.0","4":"0.9"},{"1":"19","2":"CR","3":"-2.0","4":"-0.2"},{"1":"19","2":"CR","3":"-0.2","4":"0.9"},{"1":"19","2":"CR/CRi + B Cell Aplasia","3":"0.9","4":"3.0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p><code>patient_data</code> contains a long pivoted dataset where
@@ -131,8 +132,7 @@ rows signify a patient survival timeline.</p>
 <ul>
 <li>
 <code>disease_assessment</code> is broken down by the following
-nomenclature along with some indiciator of B-cell status (if
-applicable):
+nomenclature along with some indicator of B-cell status (if applicable):
 <ul>
 <li>CR = “Complete Response”</li>
 <li>CRi = “Complete Response with Incomplete Blood Count Recovery”</li>
@@ -140,10 +140,6 @@ applicable):
 </ul>
 </li>
 </ul>
-<p>The columns <code>status</code> and <code>status_length</code> are
-indicator columns for arrow support, and discussed in greater detail in
-<a href="https://chop-cgtinformatics.github.io/ggswim/articles/add_arrows.html">Adding
-arrows to ggswim</a></p>
 <p>Now, let’s make the plot using <code><a href="../reference/ggswim.html">ggswim()</a></code>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span></span>
@@ -158,7 +154,7 @@ arrows to ggswim</a></p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
-<p><img src="ggswim_files/figure-html/ggswim%20plot-1.png" width="1152"></p>
+<p><img src="ggswim_files/figure-html/ggswim%20plot-1.png" width="100%"></p>
 <p>Here we have a simple line graph, showing infusions grouped by
 patients with a given disease assessment status. <code><a href="../reference/ggswim.html">ggswim()</a></code>
 does the work of setting up a <code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">geom_segment()</a></code> and readying
@@ -212,7 +208,7 @@ adding the markers.</p>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
-<p><img src="ggswim_files/figure-html/first%20marker%20plot-1.png" width="1152"></p>
+<p><img src="ggswim_files/figure-html/first%20marker%20plot-1.png" width="100%"></p>
 <p>Now we can see shapes have been added to establish our markers for
 infusions.</p>
 <p>Our last dataset involves end of study events, i.e. events that
@@ -249,7 +245,7 @@ time. Let’s add a layer using emojis via the
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
-<p><img src="ggswim_files/figure-html/second%20marker%20plot-1.png" width="1152"></p>
+<p><img src="ggswim_files/figure-html/second%20marker%20plot-1.png" width="100%"></p>
 <p>We’ve successfully made a swimmer plot with lanes and two different
 kinds of marker layers. Recall that ggswim works within the ggplot2
 framework, therefore customization can be done using the same ggplot2
@@ -272,12 +268,12 @@ earlier!</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Time (Months)"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Patient ID"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
-<p><img src="ggswim_files/figure-html/mapping%20finalizing-1.png" width="1152"></p>
+<p><img src="ggswim_files/figure-html/mapping%20finalizing-1.png" width="100%"></p>
 <p>We can also apply the <code><a href="../reference/theme_ggswim.html">theme_ggswim()</a></code> function:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/theme_ggswim.html">theme_ggswim</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggswim_files/figure-html/mapping%20with%20theme_ggswim-1.png" width="1152"></p>
+<p><img src="ggswim_files/figure-html/mapping%20with%20theme_ggswim-1.png" width="100%"></p>
 </div>
 <div class="section level3">
 <h3 id="additional-notes">Additional notes<a class="anchor" aria-label="anchor" href="#additional-notes"></a>

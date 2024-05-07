@@ -60,6 +60,7 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/add_arrows.html">Adding Arrows</a>
     <a class="dropdown-item" href="../articles/fixed_markers.html">Fixed Mapping with Markers</a>
+    <a class="dropdown-item" href="../articles/gallery.html">Gallery</a>
   </div>
 </li>
       </ul>
@@ -140,7 +141,6 @@ sequencing of scale changes:</p>
 <span>      x <span class="op">=</span> <span class="va">start_time</span>, xend <span class="op">=</span> <span class="va">end_time</span>, y <span class="op">=</span> <span class="va">pt_id</span>,</span>
 <span>      color <span class="op">=</span> <span class="va">disease_assessment</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    arrow <span class="op">=</span> <span class="va">status</span>,</span>
 <span>    linewidth <span class="op">=</span> <span class="fl">5</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span></span>
@@ -166,7 +166,7 @@ separate calls to <code><a href="../reference/add_marker.html">add_marker()</a><
 <span>    color <span class="op">=</span> <span class="st">"red"</span>, size <span class="op">=</span> <span class="fl">5</span>, fixed_marker_name <span class="op">=</span> <span class="st">"Markers"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/theme_ggswim.html">theme_ggswim</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="fixed_markers_files/figure-html/fixed%20plot-1.png" width="1152"></p>
+<p><img src="fixed_markers_files/figure-html/fixed%20plot-1.png" width="100%"></p>
 <p>Notice here how we specified a <code>color</code> outside of
 <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code>, along with a unique <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> param:
 <code>name</code>. <code>name</code> is required to show static layers
