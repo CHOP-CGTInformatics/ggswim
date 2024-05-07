@@ -52,7 +52,6 @@
 #'   ),
 #'   linewidth = 5
 #' )
-
 ggswim <- function(
     data,
     mapping = aes(),

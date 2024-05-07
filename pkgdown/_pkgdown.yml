@@ -28,6 +28,8 @@ navbar:
           href: articles/add_arrows.html
         - text: "Fixed Mapping with Markers"
           href: articles/fixed_markers.html
+        - text: "Gallery"
+          href: articles/gallery.html
 
 search:
   exclude: ['news/index.html']
@@ -39,11 +41,15 @@ reference:
   contents:
   - ggswim
   - add_marker
-  - add_arrows
   - new_scale_color
   - new_scale_colour
   - build_ggswim
+- title: "Decorators & Themeing"
+  descr: >
+    Themes and options to add to swimmer plots.
+  contents:
   - theme_ggswim
+  - add_arrows
 - title: "Datasets"
   descr: >
     Internal datasets for use in testing.

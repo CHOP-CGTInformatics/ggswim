@@ -23,7 +23,7 @@
 #'   arrow_colour = "forestgreen",
 #'   arrow_fill = "forestgreen"
 #' )
-#'}
+#' }
 #' @export
 
 add_arrows <- function(data = NULL,
@@ -71,21 +71,21 @@ add_arrows <- function(data = NULL,
     arrow_neck_length <- max(true_arrow_data$xend) * 0.15
   }
   out <- geom_segment(true_arrow_data,
-                      mapping = aes(
-                        x = xend,
-                        y = .data[[y_val]],
-                        yend = .data[[y_val]],
-                        xend = if (is.name(arrow_neck_length)) {
-                          xend + .data[[arrow_neck_length]]
-                        } else {
-                          xend + arrow_neck_length
-                        },
-                      ), colour = arrow_colour,
-                      arrow = arrow(
-                        type = arrow_type,
-                        length = arrow_head_length
-                      ),
-                      arrow.fill = arrow_fill
+    mapping = aes(
+      x = xend,
+      y = .data[[y_val]],
+      yend = .data[[y_val]],
+      xend = if (is.name(arrow_neck_length)) {
+        xend + .data[[arrow_neck_length]]
+      } else {
+        xend + arrow_neck_length
+      },
+    ), colour = arrow_colour,
+    arrow = arrow(
+      type = arrow_type,
+      length = arrow_head_length
+    ),
+    arrow.fill = arrow_fill
   )
 
   # Add ggswim_obj class if none exists due to separate call

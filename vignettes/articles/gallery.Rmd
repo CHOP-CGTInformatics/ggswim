@@ -1,0 +1,64 @@
+---
+title: "Gallery"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  out.width = "100%",
+  dev = "ragg_png",
+  dpi = 400,
+  fig.width = 12, fig.height = 6
+)
+```
+
+```{r setup, message=FALSE, warning=FALSE}
+library(ggswim)
+library(ggplot2)
+library(dplyr)
+```
+
+This gallery will showcase different datasets and ways to interact with ggswim.
+
+## Single-Row Dataset
+
+Some common swimmer plot data structures may involve single-row observations where each record or lane corresponds to a single status classification and contains all associated points of interest. Let's look at an example of what we mean by this:
+
+```{r single row dataset}
+single_row_data <- tibble::tribble(
+  ~"record", ~"status", ~"start_time", ~"end_time", ~"m1", ~"m1_time", ~"m2", ~"m2_time", ~"m2_name",
+  1, "status1", 0, 5, "m1", 3, "❌", 5, "Negative",
+  2, "status1", -2, 7, "m1", 4, "✅", 6, "Positive",
+  3, "status2", 2, 15, "m2", 10, "❌", 15, "Negative"
+)
+
+single_row_data |>
+  rmarkdown::paged_table()
+```
+
+In this dataset, we have a combination of statuses and markers where each `record` is a single row observation. Notice that we have markers defined as both points and label value/name pairs. 
+
+In this example, ggswim can handle the dataset quite easily and with the convenience of inheriting `single_row_data` for the `data` parameter in each `add_marker()` call:
+
+```{r}
+ggswim(
+  data = single_row_data,
+  mapping = aes(x = start_time, xend = end_time, y = record, colour = status),
+  linewidth = 2
+) +
+  scale_color_brewer(name = "Lanes", palette = "Dark2") +
+  new_scale_color() +
+  add_marker(
+    mapping = aes(x = m1_time, y = record, colour = m1),
+    size = 5
+  ) +
+  add_marker(
+    mapping = aes(x = m2_time, y = record, label_vals = m2, label_names = m2_name),
+    fill = NA, label.size = NA, size = 5
+  ) +
+  scale_color_brewer(name = "Markers", palette = "Set2") +
+  theme_ggswim()
+```
+
+> **Note**: `add_marker()` still needs `aes()` parameters defined.

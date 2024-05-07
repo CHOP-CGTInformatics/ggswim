@@ -1,5 +1,4 @@
 test_that("add_arrows works", {
-
   no_arrow_statuses <- c(
     "Completed Study Follow-Up",
     "Deceased",
@@ -7,9 +6,11 @@ test_that("add_arrows works", {
   )
 
   arrow_data <- patient_data |>
-    dplyr::left_join(end_study_events |>
-                       dplyr::select(pt_id, end_study_name),
-                     by = "pt_id") |>
+    dplyr::left_join(
+      end_study_events |>
+        dplyr::select(pt_id, end_study_name),
+      by = "pt_id"
+    ) |>
     dplyr::select(pt_id, start_time, end_time, end_study_name) |>
     dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
     unique() |>

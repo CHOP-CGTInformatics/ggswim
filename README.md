@@ -68,7 +68,7 @@ p
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
 
 Next we’ll add on events of interest: end of study updates, and
-infusions. These we’ll refer to as “markers”:
+infusions. We’ll refer to these as “markers”:
 
 ``` r
 p <- p +

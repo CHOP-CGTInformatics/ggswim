@@ -6,8 +6,10 @@ title: "Getting Started with ggswim"
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.width = 12,
-  fig.height = 6
+  out.width = "100%",
+  dev = "ragg_png",
+  dpi = 400,
+  fig.width = 12, fig.height = 6
 )
 ```
 
