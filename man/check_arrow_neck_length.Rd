@@ -6,11 +6,6 @@
 \usage{
 check_arrow_neck_length(arrow_neck_length)
 }
-\arguments{
-\item{arrow_neck_length}{The length of the neck of the arrow from the end of a
-swim lane to the base of the arrow head. Either an integer value or a column
-specifier. The default, \code{NULL}, sets a value proportional to the max lane value.}
-}
 \description{
 Supply users with an error when \code{arrow_neck_length} is not an integer, a
 symbolic column from the parent dataset, or the default (\code{NULL}).

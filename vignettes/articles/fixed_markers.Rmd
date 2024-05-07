@@ -6,8 +6,10 @@ title: "Fixed Marker Mapping"
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.width = 12,
-  fig.height = 6
+  out.width = "100%",
+  dev = "ragg_png",
+  dpi = 400,
+  fig.width = 12, fig.height = 6
 )
 ```
 
@@ -43,7 +45,6 @@ p <- patient_data |>
       x = start_time, xend = end_time, y = pt_id,
       color = disease_assessment
     ),
-    arrow = status,
     linewidth = 5
   ) +
   scale_color_manual(

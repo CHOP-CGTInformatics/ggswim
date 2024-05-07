@@ -141,9 +141,7 @@ patient_data <- prodigy |>
         dasmt_bcell_status == "B-cell Recovery" ~ "CR/CRi + B Cell Recovery",
       dasmt_overall == "RD" ~ "RD",
       TRUE ~ dasmt_overall
-    ),
-    # Add arrow status
-    status = if_else(is.na(end_study_reason), TRUE, FALSE)
+    )
   ) |>
   mutate(
     # Establish an initial infusion time so that reinfusions can also be mapped chronologically
@@ -166,7 +164,6 @@ patient_data <- prodigy |>
     .by = infseq_id,
     time_from_initial_infusion = interval(initial_infusion_date, dasmt_date) %/% days(1),
     today = interval(infusion_date, Sys.Date()) %/% days(1),
-    time_from_today = round(today / 30.417, digit = 1),
     start_time = time_from_initial_infusion,
     end_time = case_when(
       # If end study reason and last value, tdiff between initial and end study date
@@ -184,17 +181,10 @@ patient_data <- prodigy |>
     initial_infusion_date, time_from_initial_infusion, contains("date")
   )) |>
   dplyr::relocate(pt_id, .before = everything()) |>
-  dplyr::relocate(c(status, time_from_today), .after = everything()) |>
-  dplyr::rename("status_length" = time_from_today) |>
   # Convert to months
   mutate(
     start_time = round(start_time / 30.417, digit = 1), # average days in a month.
     end_time = round(end_time / 30.417, digit = 1)
-  ) |>
-  mutate(
-    .by = pt_id,
-    # Add arrow status, then correct for only last val to be TRUE
-    status = ifelse(row_number() == n() & status, TRUE, FALSE)
   )
 
 # infusion_events ----

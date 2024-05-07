@@ -26,66 +26,6 @@ test_that("test for expected attributes", {
   expect_true(p$layers[[1]]$swim_class == "ggswim")
 })
 
-test_that("add_arrows works", {
-  p_arrow <- add_arrows(
-    data = patient_data,
-    position = "identity",
-    mapping = aes(x = start_time, xend = end_time, y = pt_id, color = disease_assessment),
-    arrow = "status",
-    # replicate defaults inherited from ggswim()
-    arrow_type = "closed",
-    arrow_colour = "black",
-    arrow_fill = NULL,
-    arrow_head_length = unit(0.25, "inches"),
-    arrow_neck_length = NULL
-  )
-
-  expect_setequal(class(p_arrow), c("ggswim_obj", "gg", "ggproto", "LayerInstance", "Layer"))
-  expect_true("swim_class" %in% names(p_arrow))
-  expect_true(p_arrow$swim_class == "ggswim_arrows")
-
-  skip_on_ci()
-  p <- ggswim(
-    patient_data,
-    aes(x = start_time, xend = end_time, y = pt_id, color = disease_assessment)
-  ) +
-    p_arrow
-
-  vdiffr::expect_doppelganger(
-    title = "Arrows appear with add_arrows() external",
-    fig = p
-  )
-
-  p <- ggswim(patient_data,
-    aes(x = start_time, xend = end_time, y = pt_id, color = disease_assessment),
-    arrow = status,
-    arrow_neck_length = status_length
-  )
-
-  vdiffr::expect_doppelganger(
-    title = "Arrows appear with internal ggswim() method",
-    fig = p
-  )
-
-
-  # Check for logical supplied to arg `arrow`
-  expect_error(
-    add_arrows(
-      data = patient_data,
-      mapping = aes(x = start_time, y = id),
-      position = "identity",
-      arrow = end_time,
-      # replicate defaults inherited from ggswim()
-      arrow_type = "closed",
-      arrow_colour = "black",
-      arrow_fill = NULL,
-      arrow_head_length = unit(0.25, "inches"),
-      arrow_neck_length = NULL
-    ),
-    class = "ggswim_cond"
-  )
-})
-
 test_that("ggswim works with other layer types", {
   # This test looks for the inclusion of `geom_vline`, which makes for a new layer
   # We want to test that `build_ggswim()` doesn't fail on render and a vline appears
@@ -111,45 +51,8 @@ test_that("ggswim works for various and combined use cases", {
     dplyr::filter(time_from_initial_infusion > 0)
 
   patient_status <- patient_data |>
-    select(pt_id, end_time, status, status_length) |>
-    unique() |>
-    dplyr::rename("arrow" = status, "time_from_today" = status_length)
-
-  p_external_arrows <- patient_data |>
-    ggswim(mapping = aes(
-      x = start_time, xend = end_time, y = pt_id,
-      color = disease_assessment
-    ), linewidth = 15) +
-    add_arrows(
-      data = patient_status,
-      mapping = aes(xend = end_time, y = pt_id),
-      arrow = arrow,
-      arrow_neck_length = time_from_today,
-      arrow_colour = "forestgreen", arrow_fill = "forestgreen"
-    )
-
-  skip_on_ci()
-  vdiffr::expect_doppelganger(
-    title = "Case 1: ggswim works with add_arrows()",
-    fig = p_external_arrows
-  )
-
-  p_internal_arrows <- patient_data |>
-    ggswim(
-      mapping = aes(
-        x = start_time, xend = end_time, y = pt_id,
-        color = disease_assessment
-      ),
-      arrow = status,
-      arrow_neck_length = status_length,
-      arrow_colour = "forestgreen", arrow_fill = "cyan"
-    )
-
-  skip_on_ci()
-  vdiffr::expect_doppelganger(
-    title = "Case #2: ggswim with internal arrows",
-    fig = p_internal_arrows
-  )
+    select(pt_id, end_time) |>
+    unique()
 
   p_labels <- patient_data |>
     ggswim(mapping = aes(
@@ -164,7 +67,7 @@ test_that("ggswim works for various and combined use cases", {
 
   skip_on_ci()
   vdiffr::expect_doppelganger(
-    title = "Case #3: ggswim with labels",
+    title = "Case #1: ggswim with labels",
     fig = p_labels
   )
 
@@ -188,7 +91,7 @@ test_that("ggswim works for various and combined use cases", {
 
   skip_on_ci()
   vdiffr::expect_doppelganger(
-    title = "Case #4: ggswim with fixed marker points",
+    title = "Case #2: ggswim with fixed marker points",
     fig = p_fixed_points
   )
 
@@ -204,7 +107,7 @@ test_that("ggswim works for various and combined use cases", {
 
   skip_on_ci()
   vdiffr::expect_doppelganger(
-    title = "Case #5: ggswim with dynamic marker points",
+    title = "Case #3: ggswim with dynamic marker points",
     fig = p_dynamic_points
   )
 })

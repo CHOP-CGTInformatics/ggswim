@@ -50,21 +50,25 @@ p <- patient_data |>
       x = start_time, xend = end_time, y = pt_id,
       color = disease_assessment
     ),
-    arrow = status,
     linewidth = 5
   ) +
-  scale_color_manual(
+  add_arrows(
+    data = arrow_data,
+    mapping = aes(x = start_time, xend = end_time, y = pt_id),
+    arrow = "status"
+  ) +
+  scale_color_brewer(
     name = "Overall Disease Assessment",
-    values = c("#6394F3", "#F3C363", "#EB792F", "#d73a76", "#85a31e")
+    palette = "Set1"
   )
 
 p
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
 
 Next we’ll add on events of interest: end of study updates, and
-infusions. These we’ll refer to as “markers”:
+infusions. We’ll refer to these as “markers”:
 
 ``` r
 p <- p +
@@ -76,26 +80,27 @@ p <- p +
   ) +
   add_marker(
     data = infusion_events,
-    aes(x = time_from_initial_infusion, y = pt_id, color = infusion_type)
+    aes(x = time_from_initial_infusion, y = pt_id, color = infusion_type),
+    size = 5
   )
 
 p
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
 
 Finally, we’ll beautify the plot with familiar ggplot2 techniques and a
 last finishing touch with `theme_ggswim()`:
 
 ``` r
 p +
-  scale_color_manual(name = "Markers", values = c(NA, NA, "green", NA, "red")) +
+  scale_color_brewer(name = "Markers", palette = "Set2") +
   labs(title = "My Swimmer Plot") +
   xlab("Time Since Infusion (Months)") + ylab("Patient ID") +
   theme_ggswim()
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
 
 ## Collaboration
 
