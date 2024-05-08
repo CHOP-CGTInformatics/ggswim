@@ -23,5 +23,5 @@ NULL
 #' @export
 #' @rdname print.ggswim_obj
 print.ggswim_obj <- function(x, ...) {
-  build_ggswim(x) |> print()
+  try_ggswim(build_ggswim(x) |> print())
 }
