@@ -25,6 +25,7 @@ Imports:
     ggplot2,
     grid,
     rlang,
+    stringr,
     tibble,
     tidyr,
     tidyselect

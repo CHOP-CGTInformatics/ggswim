@@ -108,22 +108,27 @@ test_that("retrieve_original_aes works", {
 
 test_that("try_ggswim captures expected errors", {
   tbl <- tibble::tribble(
-    ~"record", ~"status", ~"start_time", ~"end_time", ~"marker1", ~"marker1_time", ~"marker2", ~"marker2_time", ~"marker2_name",
+    ~"record", ~"status", ~"start_time", ~"end_time", ~"marker1", ~"marker1_time",
+    ~"marker2", ~"marker2_time", ~"marker2_name",
     1, "status1", 0, 5, "marker1", 3, "❌", 5, "Negative",
     2, "status1", -2, 7, "marker1", 4, "✅", 6, "Positive",
     3, "status2", 2, 15, "marker2", 10, "❌", 15, "Negative"
   )
 
-  p <- ggswim(data = tbl,
-         mapping = aes(x = start_time, xend = end_time, y = record, colour = status)) +
+  p <- ggswim(
+    data = tbl,
+    mapping = aes(x = start_time, xend = end_time, y = record, colour = status)
+  ) +
     new_scale_color() +
     add_marker(mapping = aes(x = marker1_time, y = record, colour = marker1)) +
     add_marker(mapping = aes(x = marker2_time, y = record, label_vals = marker2, label_names = marker2_name))
 
   expect_no_error(p)
 
-  p <- ggswim(data = tbl,
-              mapping = aes(x = start_time, xend = end_time, y = record, colour = status)) +
+  p <- ggswim(
+    data = tbl,
+    mapping = aes(x = start_time, xend = end_time, y = record, colour = status)
+  ) +
     add_marker(mapping = aes(x = marker1_time, y = record, colour = marker1)) +
     add_marker(mapping = aes(x = marker2_time, y = record, label_vals = marker2, label_names = marker2_name))
 
