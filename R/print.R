@@ -24,4 +24,5 @@ NULL
 #' @rdname print.ggswim_obj
 print.ggswim_obj <- function(x, ...) {
   try_ggswim(build_ggswim(x) |> print())
+  invisible(x) # Used for pkgdown example rendering
 }
