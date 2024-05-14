@@ -18,7 +18,6 @@ geom_swim_label <- function(mapping = NULL, data = NULL,
   structure(
     "A geom_swim_label layer.",
     class = "marker_label",
-    fn = "geom_swim_label_",
     stat = stat,
     position = position,
     mapping = mapping,
@@ -65,7 +64,6 @@ ggplot_add.marker_label <- function(object, plot, object_name) {
     key_glyph = "label",
     show.legend = attr(object, "show.legend"),
     inherit.aes = attr(object, "inherit.aes"),
-    # params = list(na.rm = na.rm, ...)
     params = attr(object, "params")
   )
 

@@ -42,17 +42,43 @@
 
 geom_swim_lane <- function(mapping = NULL, data = NULL,
                            stat = "identity", position = "identity",
-                           ..., na.rm = FALSE, show.legend = NA,
+                           ...,
+                           arrow = NULL,
+                           arrow.fill = NULL,
+                           lineend = "butt",
+                           linejoin = "round",
+                           na.rm = FALSE,
+                           show.legend = NA,
                            inherit.aes = TRUE) {
-  env <- environment()
-  env_list <- list(env)[[1]]
 
-  structure(list(expr = env_list, dots = dots_list(...)), class = "swim_lane")
+  structure(
+    "A geom_swim_lane layer.",
+    class = "swim_lane",
+    stat = stat,
+    position = position,
+    mapping = mapping,
+    data = data,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(
+      na.rm = na.rm,
+      lineend = lineend,
+      linejoin = linejoin,
+      arrow = arrow,
+      arrow.fill = arrow.fill,
+      ... = ...
+    )
+  )
 }
 
 #' @export
 ggplot_add.swim_lane <- function(object, plot, object_name) {
-  list2env(as.list(object$expr), current_env())
+
+  args <- attributes(object)[!names(attributes(object)) %in%
+                               c("class", "fn")]
+
+  # Enforce checks ----
+  mapping <- attr(object, "mapping")
 
   check_supported_mapping_aes(
     mapping = mapping,
@@ -61,16 +87,15 @@ ggplot_add.swim_lane <- function(object, plot, object_name) {
   )
 
   new_layer <- layer(
-    data = data,
+    data = attr(object, "data"),
     mapping = mapping,
-    stat = stat,
+    stat = attr(object, "stat"),
     geom = GeomSwimLane,
-    position = position,
-    show.legend = show.legend,
+    position = attr(object, "position"),
+    show.legend = attr(object, "show.legend"),
     key_glyph = "path",
-    inherit.aes = inherit.aes,
-    # params = list(na.rm = na.rm, ...)
-    params = append(list(na.rm = na.rm), object$dots)
+    inherit.aes = attr(object, "inherit.aes"),
+    params = attr(object, "params")
   )
 
   # Add a reference class to the layer attributes
@@ -100,11 +125,13 @@ GeomSwimLane <- ggproto("GeomSwimLane", Geom,
                       linetype = 1,
                       alpha = NA
                     ),
-                    draw_panel = function(data, panel_params, coord, ...) {
+                    draw_panel = function(data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
+                                          lineend = "butt", linejoin = "round", na.rm = FALSE) {
 
                       # Return all components
                       grid::gList(
-                        GeomSegment$draw_panel(data, panel_params, coord, ...)
+                        GeomSegment$draw_panel(data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
+                                               lineend = "butt", linejoin = "round", na.rm = FALSE)
                       )
                     }
 )

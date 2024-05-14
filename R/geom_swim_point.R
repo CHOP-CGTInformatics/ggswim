@@ -1,18 +1,39 @@
 #' @title Add markers of interest swimmer plots - point
 #' @export
 geom_swim_point <- function(mapping = NULL, data = NULL,
-                           stat = "identity", position = "identity",
-                           ..., na.rm = FALSE, show.legend = NA,
-                           inherit.aes = TRUE) {
-  env <- environment()
-  env_list <- list(env)[[1]]
+                            stat = "identity", position = "identity",
+                            ...,
+                            na.rm = FALSE,
+                            show.legend = NA,
+                            inherit.aes = TRUE) {
+  # env <- environment()
+  # env_list <- list(env)[[1]]
+  #
+  # structure(list(expr = env_list, dots = dots_list(...)), class = "marker_point")
 
-  structure(list(expr = env_list, dots = dots_list(...)), class = "marker_point")
+  structure(
+    "A geom_swim_point layer.",
+    class = "marker_point",
+    stat = stat,
+    position = position,
+    mapping = mapping,
+    data = data,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(
+      na.rm = na.rm,
+      ... = ...
+    )
+  )
 }
 
 #' @export
 ggplot_add.marker_point <- function(object, plot, object_name){
-  list2env(as.list(object$expr), current_env())
+  args <- attributes(object)[!names(attributes(object)) %in%
+                               c("class", "fn")]
+
+  # Enforce checks ----
+  mapping <- attr(object, "mapping")
 
   # Enforce checks ----
   check_supported_mapping_aes(
@@ -22,15 +43,14 @@ ggplot_add.marker_point <- function(object, plot, object_name){
   )
 
   new_layer <- layer(
-    data = data,
+    data = attr(object, "data"),
     mapping = mapping,
-    stat = stat,
+    stat = attr(object, "stat"),
     geom = GeomSwimPoint,
-    position = position,
-    show.legend = show.legend,
-    inherit.aes = inherit.aes,
-    params = append(list(na.rm = na.rm), object$dots)
-    # params = list(na.rm = na.rm)
+    position = attr(object, "position"),
+    show.legend = attr(object, "show.legend"),
+    inherit.aes = attr(object, "inherit.aes"),
+    params = attr(object, "params")
   )
 
   # Tag the layer with a reference attribute
