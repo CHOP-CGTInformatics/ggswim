@@ -35,10 +35,7 @@
 #' build_ggswim(ggswim_obj)
 build_ggswim <- function(ggswim_obj) {
   # Checks ----
-
   check_ggswim_obj(ggswim_obj)
-  # ggswim_obj <- last_plot() |>
-  #   ggplot_build()
 
   # Populate reference layer info ---
   ref_layer_info <- get_ref_layer_info(ggswim_obj)
