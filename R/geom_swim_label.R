@@ -7,8 +7,6 @@ geom_swim_label <- function(mapping = NULL, data = NULL,
                             stat = "identity", position = "identity",
                             ...,
                             parse = FALSE,
-                            nudge_x = 0,
-                            nudge_y = 0,
                             label.padding = unit(0.25, "lines"),
                             label.r = unit(0.15, "lines"),
                             label.size = 0.25,
@@ -16,17 +14,38 @@ geom_swim_label <- function(mapping = NULL, data = NULL,
                             na.rm = FALSE,
                             show.legend = NA,
                             inherit.aes = TRUE) {
-  env <- environment()
-  env_list <- list(env)[[1]]
 
-  structure(list(expr = env_list, dots = dots_list(...)), class = "marker_label")
+  structure(
+    "A geom_swim_label layer.",
+    class = "marker_label",
+    fn = "geom_swim_label_",
+    stat = stat,
+    position = position,
+    mapping = mapping,
+    data = data,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(
+      na.rm = na.rm,
+      parse = parse,
+      label.padding = label.padding,
+      label.r = label.r,
+      label.size = label.size,
+      size.unit = size.unit,
+      ... = ...
+    )
+  )
 }
 
 #' @export
 ggplot_add.marker_label <- function(object, plot, object_name) {
-  list2env(as.list(object$expr), current_env())
+
+  args <- attributes(object)[!names(attributes(object)) %in%
+                               c("class", "fn")]
 
   # Enforce checks ----
+  mapping <- attr(object, "mapping")
+
   check_supported_mapping_aes(
     mapping = mapping,
     unsupported_aes = "fill",
@@ -37,30 +56,18 @@ ggplot_add.marker_label <- function(object, plot, object_name) {
   names(mapping)[names(mapping) == "label_vals"] <- "label"
   names(mapping)[names(mapping) == "label_names"] <- "colour"
 
-  params <- append(list(na.rm = na.rm,
-                        parse = parse,
-                        label.padding = label.padding,
-                        label.r = label.r,
-                        label.size = label.size,
-                        size.unit = size.unit),
-                   object$dots)
-
   new_layer <- layer(
-    data = data,
+    data = attr(object, "data"),
     mapping = mapping,
-    stat = stat,
+    stat = attr(object, "stat"),
     geom = GeomSwimLabel,
-    position = position,
+    position = attr(object, "position"),
     key_glyph = "label",
-    show.legend = show.legend,
-    inherit.aes = inherit.aes
+    show.legend = attr(object, "show.legend"),
+    inherit.aes = attr(object, "inherit.aes"),
     # params = list(na.rm = na.rm, ...)
-    # params = params
+    params = attr(object, "params")
   )
-
-  # TODO: Figure out why this doesn't work in `layer()` above
-  new_layer$geom_params <- params
-  new_layer$stat_params <- params
 
   # Tag the layer with a reference attribute
   new_layer$swim_class <- "marker_label"
@@ -86,10 +93,20 @@ GeomSwimLabel <- ggproto("GeomSwimLabel", Geom,
                            hjust = 0.5, vjust = 0.5, alpha = NA, family = "", fontface = 1,
                            lineheight = 1.2
                          ),
-                         draw_panel = function(data, panel_params, coord, optional_aes, label.size = NA, ...) {
+                         draw_panel = function(data, panel_params, coord, parse = FALSE,
+                                               na.rm = FALSE,
+                                               label.padding = unit(0.25, "lines"),
+                                               label.r = unit(0.15, "lines"),
+                                               label.size = 0.25,
+                                               size.unit = "mm") {
                            # Return all components
                            grid::gList(
-                             GeomLabel$draw_panel(data, panel_params, coord, label.size = label.size, ...)
+                             GeomLabel$draw_panel(data, panel_params, coord, parse = FALSE,
+                                                  na.rm = na.rm,
+                                                  label.padding = label.padding,
+                                                  label.r = label.r,
+                                                  label.size = label.size,
+                                                  size.unit = size.unit)
                            )
                          }
 )

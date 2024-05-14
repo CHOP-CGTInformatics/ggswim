@@ -9,6 +9,7 @@
 \alias{aes}
 \alias{new_scale_color}
 \alias{new_scale_colour}
+\alias{ggplot_add}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -18,7 +19,7 @@ below to see their documentation.
 \describe{
   \item{ggnewscale}{\code{\link[ggnewscale:new_scale]{new_scale_color}}, \code{\link[ggnewscale:new_scale]{new_scale_colour}}}
 
-  \item{ggplot2}{\code{\link[ggplot2:gg-add]{\%+\%}}, \code{\link[ggplot2]{aes}}, \code{\link[ggplot2]{ggsave}}}
+  \item{ggplot2}{\code{\link[ggplot2:gg-add]{\%+\%}}, \code{\link[ggplot2]{aes}}, \code{\link[ggplot2]{ggplot_add}}, \code{\link[ggplot2]{ggsave}}}
 
   \item{grid}{\code{\link[grid]{grid.draw}}}
 }}

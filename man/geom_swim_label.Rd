@@ -13,8 +13,6 @@ geom_swim_label(
   position = "identity",
   ...,
   parse = FALSE,
-  nudge_x = 0,
-  nudge_y = 0,
   label.padding = unit(0.25, "lines"),
   label.r = unit(0.15, "lines"),
   label.size = 0.25,
@@ -101,10 +99,6 @@ lists which parameters it can accept.
 
 \item{parse}{If \code{TRUE}, the labels will be parsed into expressions and
 displayed as described in \code{?plotmath}.}
-
-\item{nudge_x, nudge_y}{Horizontal and vertical adjustment to nudge labels by.
-Useful for offsetting text from points, particularly on discrete scales.
-Cannot be jointly specified with \code{position}.}
 
 \item{label.padding}{Amount of padding around label. Defaults to 0.25 lines.}
 
