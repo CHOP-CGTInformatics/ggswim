@@ -53,7 +53,6 @@ get_layer_data <- function(data, mapping, i = 1L, fixed_colours = NULL) {
       arrange(fill_mapping) # Assume correct since ggplot legend is arranged this way
   }
 
-
   if (!is.null(colour_mapping)) {
     layer_data <- cbind(layer_data(i = i), colour_mapping) |>
       arrange(colour_mapping) # Assume correct since ggplot legend is arranged this way

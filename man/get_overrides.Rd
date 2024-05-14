@@ -4,10 +4,12 @@
 \alias{get_overrides}
 \title{Get overrides list for \code{guides()}}
 \usage{
-get_overrides(ref_guide, label_layer_data, point_layer_data)
+get_overrides(ref_guide, lane_layer_data, label_layer_data, point_layer_data)
 }
 \arguments{
 \item{ref_guide}{A reference object from \code{get_guide_data()} to assist with computation}
+
+\item{lane_layer_data}{dataframe related to the lane layer data for a ggswim_obj}
 
 \item{label_layer_data}{dataframe related to the label layer data for a ggswim_obj}
 

@@ -39,57 +39,58 @@
 #' [add_arrows()].
 #'
 #' @export
-#'
-#' @examples
-#' ggswim(
-#'   data = patient_data,
-#'   mapping = aes(
-#'     x = start_time,
-#'     xend = end_time,
-#'     y = pt_id,
-#'     color = disease_assessment
-#'   ),
-#'   linewidth = 5
-#' )
 
 geom_swim_lane <- function(mapping = NULL, data = NULL,
-                      stat = "identity", position = "identity",
-                      ..., na.rm = FALSE, show.legend = NA,
-                      inherit.aes = TRUE) {
+                           stat = "identity", position = "identity",
+                           ..., na.rm = FALSE, show.legend = NA,
+                           inherit.aes = TRUE) {
+  env <- environment()
+  env_list <- list(env)[[1]]
+
+  structure(list(expr = env_list, dots = dots_list(...)), class = "swim_lane")
+}
+
+#' @export
+ggplot_add.swim_lane <- function(object, plot, object_name) {
+  list2env(as.list(object$expr), current_env())
 
   check_supported_mapping_aes(
     mapping = mapping,
     unsupported_aes = "fill",
-    parent_func = "ggswim()"
+    parent_func = "geom_swim_lane()"
   )
 
-  out <- layer(
+  new_layer <- layer(
     data = data,
     mapping = mapping,
     stat = stat,
-    geom = GeomSwim,
+    geom = GeomSwimLane,
     position = position,
     show.legend = show.legend,
     key_glyph = "path",
     inherit.aes = inherit.aes,
-    params = list(na.rm = na.rm, ...)
+    # params = list(na.rm = na.rm, ...)
+    params = append(list(na.rm = na.rm), object$dots)
   )
 
-  # Define new class 'ggswim_obj' (after new color scale)
-  class(out) <- c("ggswim_obj", class(out))
-
   # Add a reference class to the layer attributes
-  out$swim_class <- "ggswim"
+  new_layer$swim_class <- "swim_lane"
+
+  plot$layers <- append(plot$layers, new_layer)
 
   # Return
-  out
+  if (!"ggswim_obj" %in% class(plot)) {
+    class(plot) <- c("ggswim_obj", class(plot))
+  }
+
+  plot
 }
 
-#' @rdname geom_swim_lane
-#' @format NULL
-#' @usage NULL
-#' @export
-GeomSwim <- ggproto("GeomSwim", Geom,
+#' #' @rdname geom_swim_lane
+#' #' @format NULL
+#' #' @usage NULL
+#' #' @export
+GeomSwimLane <- ggproto("GeomSwimLane", Geom,
                     required_aes = c("x", "y", "xend"),
                     non_missing_aes = c("linetype", "linewidth"),
                     default_aes = aes(

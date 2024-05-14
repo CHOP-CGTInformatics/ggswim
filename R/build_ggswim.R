@@ -35,7 +35,10 @@
 #' build_ggswim(ggswim_obj)
 build_ggswim <- function(ggswim_obj) {
   # Checks ----
+
   check_ggswim_obj(ggswim_obj)
+  # ggswim_obj <- last_plot() |>
+  #   ggplot_build()
 
   # Populate reference layer info ---
   ref_layer_info <- get_ref_layer_info(ggswim_obj)
@@ -51,6 +54,9 @@ build_ggswim <- function(ggswim_obj) {
   }
 
   # Create bound layer dataframes for additional layers ----
+  lane_layer_data <- bind_layer_data(ggswim_obj,
+                                     layer_indices = ref_layer_info$lane_layer_indices)
+
   label_layer_data <- bind_layer_data(ggswim_obj,
     layer_indices = ref_layer_info$label_layer_indices
   )
@@ -64,7 +70,10 @@ build_ggswim <- function(ggswim_obj) {
   ref_guide <- get_guide_data(ggswim_obj, "color") |>
     mutate(.label = factor(.data$.label, ordered = TRUE))
 
-  override <- get_overrides(ref_guide, label_layer_data, point_layer_data)
+  override <- get_overrides(ref_guide,
+                            lane_layer_data,
+                            label_layer_data,
+                            point_layer_data)
 
   # Return fixed ggswim object and guide and scale overrides -----
   ggswim_obj <- ggswim_obj +
@@ -160,6 +169,7 @@ bind_layer_data <- function(ggswim_obj, layer_indices, fixed_colours = NULL) {
 #' Creates a list of override definitions to pass to `guides()` `override.aes`.
 #'
 #' @param ref_guide A reference object from `get_guide_data()` to assist with computation
+#' @param lane_layer_data dataframe related to the lane layer data for a ggswim_obj
 #' @param label_layer_data dataframe related to the label layer data for a ggswim_obj
 #' @param point_layer_data dataframe related to the point layer data for a ggswim_obj
 #'
@@ -168,6 +178,7 @@ bind_layer_data <- function(ggswim_obj, layer_indices, fixed_colours = NULL) {
 #' @keywords internal
 
 get_overrides <- function(ref_guide,
+                          lane_layer_data,
                           label_layer_data,
                           point_layer_data) {
   # TODO: Verify all acceptable column names
@@ -179,6 +190,7 @@ get_overrides <- function(ref_guide,
 
   # Define override aesthetic guides
   override$colour <- bind_rows(label_layer_data, point_layer_data) |>
+    bind_rows(lane_layer_data) |>
     select(any_of(accepted_colour_columns))
 
   if ("colour_mapping" %in% names(override$colour)) {
@@ -222,6 +234,7 @@ get_overrides <- function(ref_guide,
 get_ref_layer_info <- function(ggswim_obj) {
   # Set up initial capture variables ----
   # Indices for layer positions in ggswim_obj
+  lane_layer_indices <- c()
   label_layer_indices <- c()
   point_layer_indices <- c()
   # fixed_colours for fixed color manipulation and legend re-definition
@@ -231,6 +244,10 @@ get_ref_layer_info <- function(ggswim_obj) {
   for (i in seq_along(ggswim_obj$layers)) {
     # Check for swim_class attrs, required to allow for other types of layer additions (ex: geom_vline)
     if (!is.null(ggswim_obj$layers[[i]]$swim_class)) {
+      if ("swim_lane" %in% ggswim_obj$layers[[i]]$swim_class) {
+        lane_layer_indices <- c(lane_layer_indices, i)
+      }
+
       if ("marker_label" %in% ggswim_obj$layers[[i]]$swim_class) {
         label_layer_indices <- c(label_layer_indices, i)
       }
@@ -257,6 +274,7 @@ get_ref_layer_info <- function(ggswim_obj) {
   fixed_colours <- data.frame(fixed_colours)
 
   list(
+    lane_layer_indices = lane_layer_indices,
     label_layer_indices = label_layer_indices,
     point_layer_indices = point_layer_indices,
     fixed_colours = fixed_colours
