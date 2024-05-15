@@ -77,6 +77,7 @@ ggplot_add.marker_label <- function(object, plot, object_name) {
   label_layer_data <- layer_data(plot = plot, i = current_layer)
   temp <- label_layer_data$label |> unique() # TODO: Make robust, will likely fail
 
+  # TODO: account for other markers with non-newscale split
   plot <- plot +
     guides(
       colour = guide_legend(

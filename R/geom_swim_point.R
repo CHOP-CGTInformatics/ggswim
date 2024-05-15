@@ -16,7 +16,6 @@ geom_swim_point <- function(mapping = NULL, data = NULL,
     data = data,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
-    set_new_scale = set_new_scale,
     params = list(
       na.rm = na.rm,
       ... = ...
