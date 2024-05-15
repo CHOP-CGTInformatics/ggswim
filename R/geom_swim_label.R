@@ -39,9 +39,6 @@ geom_swim_label <- function(mapping = NULL, data = NULL,
 #' @export
 ggplot_add.marker_label <- function(object, plot, object_name) {
 
-  args <- attributes(object)[!names(attributes(object)) %in%
-                               c("class", "fn")]
-
   # Enforce checks ----
   mapping <- attr(object, "mapping")
 

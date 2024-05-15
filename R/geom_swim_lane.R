@@ -74,9 +74,6 @@ geom_swim_lane <- function(mapping = NULL, data = NULL,
 #' @export
 ggplot_add.swim_lane <- function(object, plot, object_name) {
 
-  args <- attributes(object)[!names(attributes(object)) %in%
-                               c("class", "fn")]
-
   # Enforce checks ----
   mapping <- attr(object, "mapping")
 

@@ -6,10 +6,6 @@ geom_swim_point <- function(mapping = NULL, data = NULL,
                             na.rm = FALSE,
                             show.legend = NA,
                             inherit.aes = TRUE) {
-  # env <- environment()
-  # env_list <- list(env)[[1]]
-  #
-  # structure(list(expr = env_list, dots = dots_list(...)), class = "marker_point")
 
   structure(
     "A geom_swim_point layer.",
@@ -20,6 +16,7 @@ geom_swim_point <- function(mapping = NULL, data = NULL,
     data = data,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
+    set_new_scale = set_new_scale,
     params = list(
       na.rm = na.rm,
       ... = ...
@@ -29,8 +26,6 @@ geom_swim_point <- function(mapping = NULL, data = NULL,
 
 #' @export
 ggplot_add.marker_point <- function(object, plot, object_name){
-  args <- attributes(object)[!names(attributes(object)) %in%
-                               c("class", "fn")]
 
   # Enforce checks ----
   mapping <- attr(object, "mapping")
