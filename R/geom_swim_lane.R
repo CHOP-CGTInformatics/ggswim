@@ -98,6 +98,7 @@ ggplot_add.swim_lane <- function(object, plot, object_name) {
   # Add a reference class to the layer attributes
   new_layer$swim_class <- "swim_lane"
 
+  # TODO: Determine if below better than just:   plot <- plot + new_layer
   plot$layers <- append(plot$layers, new_layer)
 
   # Return

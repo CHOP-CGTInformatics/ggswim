@@ -38,6 +38,8 @@ geom_swim_label <- function(mapping = NULL, data = NULL,
 
 #' @export
 ggplot_add.marker_label <- function(object, plot, object_name) {
+  # Retrieve object vals ---
+  data <- attr(object, "data")
 
   # Enforce checks ----
   mapping <- attr(object, "mapping")
@@ -68,6 +70,21 @@ ggplot_add.marker_label <- function(object, plot, object_name) {
   new_layer$swim_class <- "marker_label"
 
   plot$layers <- append(plot$layers, new_layer)
+
+  # Fix legend ----
+  current_layer <- length(plot$layers)
+
+  label_layer_data <- layer_data(plot = plot, i = current_layer)
+  temp <- label_layer_data$label |> unique() # TODO: Make robust, will likely fail
+
+  plot <- plot +
+    guides(
+      colour = guide_legend(
+        override.aes = list(
+          label = temp
+        )
+      )
+    )
 
   # Return
   if (!"ggswim_obj" %in% class(plot)) {
