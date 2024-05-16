@@ -8,7 +8,6 @@ add_arrows(
   data = NULL,
   mapping = NULL,
   position = "identity",
-  arrow = NULL,
   arrow_colour = "black",
   arrow_head_length = unit(0.25, "inches"),
   arrow_neck_length = NULL,
@@ -34,7 +33,7 @@ or continued record-level trajectories.
 \details{
 \code{add_arrows()} wraps a new \code{\link[=geom_segment]{geom_segment()}} layer by adding a zero-length
 segment at the right end of swimmer lanes. This approach allows users to
-specify \code{arrow_neck_length} which can be useful for tracking and visualizaing
+specify \code{arrow_neck_length} which can be useful for tracking and visualizing
 time in between markers
 }
 \examples{
@@ -42,7 +41,6 @@ time in between markers
 add_arrows(
   data = patient_status,
   mapping = aes(xend = end_time, y = pt_id),
-  arrow = arrow,
   arrow_neck_length = time_from_today,
   arrow_colour = "forestgreen",
   arrow_fill = "forestgreen"

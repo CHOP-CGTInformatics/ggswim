@@ -7,7 +7,7 @@
 #' @details
 #' `add_arrows()` wraps a new [geom_segment()] layer by adding a zero-length
 #' segment at the right end of swimmer lanes. This approach allows users to
-#' specify `arrow_neck_length` which can be useful for tracking and visualizaing
+#' specify `arrow_neck_length` which can be useful for tracking and visualizing
 #' time in between markers
 #'
 #' @param data a dataframe prepared for use with [ggswim()]
@@ -18,7 +18,6 @@
 #' add_arrows(
 #'   data = patient_status,
 #'   mapping = aes(xend = end_time, y = pt_id),
-#'   arrow = arrow,
 #'   arrow_neck_length = time_from_today,
 #'   arrow_colour = "forestgreen",
 #'   arrow_fill = "forestgreen"
@@ -29,14 +28,12 @@
 add_arrows <- function(data = NULL,
                        mapping = NULL,
                        position = "identity",
-                       arrow = NULL,
                        arrow_colour = "black",
                        arrow_head_length = unit(0.25, "inches"),
                        arrow_neck_length = NULL,
                        arrow_fill = NULL,
                        arrow_type = "closed") {
   # Handle dynamic arrow vars ----
-  arrow <- enquo(arrow) |> get_expr()
   arrow_neck_length <- if (quo_is_symbolic(quo(arrow_neck_length))) {
     enquo(arrow_neck_length) |> get_expr()
   } else {
@@ -45,7 +42,6 @@ add_arrows <- function(data = NULL,
 
   # Implement UI checks ----
   # Check that warning supplied if `arrow_fill` !NULL and `arrow_type` "open"
-  check_arg_is_logical(data[[arrow]])
   check_arrow_fill_type(arrow_type, arrow_fill)
   check_arrow_neck_length(arrow_neck_length)
 
@@ -56,7 +52,7 @@ add_arrows <- function(data = NULL,
 
   # Filter for only data where arrows are TRUE, sum xend for instances of non-zero
   # start values
-  true_arrow_data <- data[data[arrow] == TRUE, ] |>
+  true_arrow_data <- data |>
     mutate(
       .by = all_of(y_val),
       xend = case_when(
