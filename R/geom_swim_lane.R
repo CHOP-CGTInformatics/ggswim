@@ -50,7 +50,6 @@ geom_swim_lane <- function(mapping = NULL, data = NULL,
                            na.rm = FALSE,
                            show.legend = NA,
                            inherit.aes = TRUE) {
-
   structure(
     "A geom_swim_lane layer.",
     class = "swim_lane",
@@ -73,7 +72,6 @@ geom_swim_lane <- function(mapping = NULL, data = NULL,
 
 #' @export
 ggplot_add.swim_lane <- function(object, plot, object_name) {
-
   # Enforce checks ----
   mapping <- attr(object, "mapping")
 
@@ -114,22 +112,23 @@ ggplot_add.swim_lane <- function(object, plot, object_name) {
 #' #' @usage NULL
 #' #' @export
 GeomSwimLane <- ggproto("GeomSwimLane", Geom,
-                    required_aes = c("x", "y", "xend"),
-                    non_missing_aes = c("linetype", "linewidth"),
-                    default_aes = aes(
-                      colour = "black",
-                      linewidth = 2,
-                      size = 2,
-                      linetype = 1,
-                      alpha = NA
-                    ),
-                    draw_panel = function(data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
-                                          lineend = "butt", linejoin = "round", na.rm = FALSE) {
-
-                      # Return all components
-                      grid::gList(
-                        GeomSegment$draw_panel(data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
-                                               lineend = "butt", linejoin = "round", na.rm = FALSE)
-                      )
-                    }
+  required_aes = c("x", "y", "xend"),
+  non_missing_aes = c("linetype", "linewidth"),
+  default_aes = aes(
+    colour = "black",
+    linewidth = 2,
+    size = 2,
+    linetype = 1,
+    alpha = NA
+  ),
+  draw_panel = function(data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
+                        lineend = "butt", linejoin = "round", na.rm = FALSE) {
+    # Return all components
+    grid::gList(
+      GeomSegment$draw_panel(data, panel_params, coord,
+        arrow = NULL, arrow.fill = NULL,
+        lineend = "butt", linejoin = "round", na.rm = FALSE
+      )
+    )
+  }
 )

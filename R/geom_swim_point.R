@@ -6,7 +6,6 @@ geom_swim_point <- function(mapping = NULL, data = NULL,
                             na.rm = FALSE,
                             show.legend = NA,
                             inherit.aes = TRUE) {
-
   structure(
     "A geom_swim_point layer.",
     class = "marker_point",
@@ -24,8 +23,7 @@ geom_swim_point <- function(mapping = NULL, data = NULL,
 }
 
 #' @export
-ggplot_add.marker_point <- function(object, plot, object_name){
-
+ggplot_add.marker_point <- function(object, plot, object_name) {
   # Enforce checks ----
   mapping <- attr(object, "mapping")
 
@@ -65,16 +63,16 @@ ggplot_add.marker_point <- function(object, plot, object_name){
 #' @usage NULL
 #' @export
 GeomSwimPoint <- ggproto("GeomSwimPoint", Geom,
-                         required_aes = c("x", "y"),
-                         non_missing_aes = c("size", "shape", "colour"),
-                         default_aes = aes(
-                           shape = 19, colour = "black", size = 1.5, fill = NA,
-                           alpha = NA, stroke = 0.5
-                         ),
-                         draw_panel = function(data, panel_params, coord, ...) {
-                           # Return all components
-                           grid::gList(
-                             GeomPoint$draw_panel(data, panel_params, coord, ...)
-                           )
-                         }
+  required_aes = c("x", "y"),
+  non_missing_aes = c("size", "shape", "colour"),
+  default_aes = aes(
+    shape = 19, colour = "black", size = 1.5, fill = NA,
+    alpha = NA, stroke = 0.5
+  ),
+  draw_panel = function(data, panel_params, coord, ...) {
+    # Return all components
+    grid::gList(
+      GeomPoint$draw_panel(data, panel_params, coord, ...)
+    )
+  }
 )

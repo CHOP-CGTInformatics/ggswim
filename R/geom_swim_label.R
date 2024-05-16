@@ -3,6 +3,7 @@
 #' @inheritParams ggplot2::geom_label
 #'
 #' @export
+
 geom_swim_label <- function(mapping = NULL, data = NULL,
                             stat = "identity", position = "identity",
                             ...,
@@ -14,7 +15,6 @@ geom_swim_label <- function(mapping = NULL, data = NULL,
                             na.rm = FALSE,
                             show.legend = NA,
                             inherit.aes = TRUE) {
-
   structure(
     "A geom_swim_label layer.",
     class = "marker_label",
@@ -39,7 +39,7 @@ geom_swim_label <- function(mapping = NULL, data = NULL,
 #' @export
 ggplot_add.marker_label <- function(object, plot, object_name) {
   # Retrieve object vals ---
-  data <- attr(object, "data")
+  data <- attr(object, "data") # nolint object_usage_linter
 
   # Enforce checks ----
   mapping <- attr(object, "mapping")
@@ -96,28 +96,30 @@ ggplot_add.marker_label <- function(object, plot, object_name) {
 #' @usage NULL
 #' @export
 GeomSwimLabel <- ggproto("GeomSwimLabel", Geom,
-                         required_aes = c("x", "y", "label"),
-                         default_aes = aes(
-                           colour = NA, fill = NA, size = 3.88, angle = 0,
-                           hjust = 0.5, vjust = 0.5, alpha = NA, family = "", fontface = 1,
-                           lineheight = 1.2
-                         ),
-                         draw_panel = function(data, panel_params, coord, parse = FALSE,
-                                               na.rm = FALSE,
-                                               label.padding = unit(0.25, "lines"),
-                                               label.r = unit(0.15, "lines"),
-                                               label.size = 0.25,
-                                               size.unit = "mm") {
-                           # Return all components
-                           grid::gList(
-                             GeomLabel$draw_panel(data, panel_params, coord, parse = FALSE,
-                                                  na.rm = na.rm,
-                                                  label.padding = label.padding,
-                                                  label.r = label.r,
-                                                  label.size = label.size,
-                                                  size.unit = size.unit)
-                           )
-                         }
+  required_aes = c("x", "y", "label"),
+  default_aes = aes(
+    colour = NA, fill = NA, size = 3.88, angle = 0,
+    hjust = 0.5, vjust = 0.5, alpha = NA, family = "", fontface = 1,
+    lineheight = 1.2
+  ),
+  draw_panel = function(data, panel_params, coord, parse = FALSE,
+                        na.rm = FALSE,
+                        label.padding = unit(0.25, "lines"),
+                        label.r = unit(0.15, "lines"),
+                        label.size = 0.25,
+                        size.unit = "mm") {
+    # Return all components
+    grid::gList(
+      GeomLabel$draw_panel(data, panel_params, coord,
+        parse = FALSE,
+        na.rm = na.rm,
+        label.padding = label.padding,
+        label.r = label.r,
+        label.size = label.size,
+        size.unit = size.unit
+      )
+    )
+  }
 )
 
 #' @title Fix Label Legend
@@ -134,12 +136,9 @@ GeomSwimLabel <- ggproto("GeomSwimLabel", Geom,
 
 get_label_override <- function(plot, layer) {
   g <- ggplot_build(plot)
-  current_layer <- length(plot$layers)
+
   current_scale <- length(g$plot$scales$scales)
 
-  label_layer_data <- layer_data(plot = plot, i = current_layer) |>
-    select(colour, label) |>
-    unique()
   label_layer_values <- g$plot$scales$scales[[current_scale]]$get_labels()
 
   original_colour_var <- retrieve_original_aes(layer$data, aes_mapping = unlist(layer$mapping), aes_var = "colour")
@@ -149,7 +148,7 @@ get_label_override <- function(plot, layer) {
     label_values = label_layer_values
   ) |>
     left_join(
-      layer$data |> select(original_colour_var, original_label_var) |> unique(),
+      layer$data |> select(all_of(original_colour_var), all_of(original_label_var)) |> unique(),
       by = c(label_values = original_colour_var)
     )
 
