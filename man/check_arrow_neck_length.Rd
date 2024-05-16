@@ -6,6 +6,10 @@
 \usage{
 check_arrow_neck_length(arrow_neck_length)
 }
+\arguments{
+\item{arrow_neck_length}{Value specifying neck length from end of segment
+to arrow head base}
+}
 \description{
 Supply users with an error when \code{arrow_neck_length} is not an integer, a
 symbolic column from the parent dataset, or the default (\code{NULL}).

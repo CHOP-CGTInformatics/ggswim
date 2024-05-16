@@ -16,15 +16,27 @@ add_arrows(
 )
 }
 \arguments{
-\item{data}{a dataframe prepared for use with \code{\link[=ggswim]{ggswim()}}}
+\item{data}{A dataframe prepared for use with \code{ggswim}}
 
-\item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}}. If specified and
-\code{inherit.aes = TRUE} (the default), it is combined with the default mapping
-at the top level of the plot. You must supply \code{mapping} if there is no plot
-mapping.}
+\item{mapping}{Default list of aesthetic mappings to use for plot.
+If not specified, must be supplied in each layer added to the plot.}
 
-\item{position}{Position adjustment. ggswim accepts either "stack", or "identity"
-depending on the use case. Default "identity".}
+\item{position}{Position adjustment. ggswim accepts either "stack", or
+"identity" depending on the use case. Default "identity".}
+
+\item{arrow_colour}{The color of the arrow head}
+
+\item{arrow_head_length}{A unit specifying the length of the arrow head
+(from tip to base).}
+
+\item{arrow_neck_length}{Value specifying neck length from end of segment
+to arrow head base}
+
+\item{arrow_fill}{The color to fill the arrow head with. Only applicable when
+\code{arrow_type == "closed"}}
+
+\item{arrow_type}{One of "open" or "closed" indicating whether the arrow head
+should be a closed triangle.}
 }
 \description{
 Add arrows to the ends of swimmer plot lanes to indicate unknown statuses

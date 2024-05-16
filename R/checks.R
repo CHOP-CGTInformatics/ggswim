@@ -168,7 +168,7 @@ check_marker_label_aes <- function(mapping) {
 #' argument is specified. No error will occur, but nothing will indicate an issue
 #' in the output.
 #'
-#' @inheritParams ggswim
+#' @inheritParams add_arrows
 #'
 #' @keywords internal
 
@@ -194,7 +194,7 @@ check_arrow_fill_type <- function(arrow_type, arrow_fill) {
 #' Supply users with an error when `arrow_neck_length` is not an integer, a
 #' symbolic column from the parent dataset, or the default (`NULL`).
 #'
-#' @inheritParams ggswim
+#' @inheritParams add_arrows
 #'
 #' @keywords internal
 

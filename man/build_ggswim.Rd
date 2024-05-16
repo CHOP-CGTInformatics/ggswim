@@ -10,24 +10,16 @@ build_ggswim(ggswim_obj)
 \item{ggswim_obj}{A ggswim object}
 }
 \value{
-A ggswim object
+A ggplot2 object
 }
 \description{
-This function seeks to correct the output of manual overrides introduced by
-\code{\link[=add_marker]{add_marker()}} depending on the combination of layer types the user provides.
-
-It is to be run automatically in the background as a print method via
+Users should generally never have to call this function, but it is used to
+invoke final changes before plot rendering and a custom print method via
 \code{\link[=print.ggswim_obj]{print.ggswim_obj()}}.
 }
 \details{
 In its current state, \code{build_ggswim()} can only work with a pre-rendered
 ggswim plot object, therefore it cannot be added to the \code{+} operator chain.
-
-\code{build_ggswim()} makes use of \code{\link[ggplot2:guides]{ggplot2::guides()}} to dynamically override
-displays in the layers of the ggswim legend. It also applies a call to
-\code{\link[ggplot2:scale_manual]{ggplot2::scale_color_manual()}} in applicable cases where a user calls out
-a fixed \code{color}/\code{colour} argument in addition to the required \code{color}
-mapping aesthetic (handled by arg: \code{name}).
 }
 \examples{
 ggswim_obj <- ggswim(

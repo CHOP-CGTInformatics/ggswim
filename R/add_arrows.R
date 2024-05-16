@@ -10,8 +10,19 @@
 #' specify `arrow_neck_length` which can be useful for tracking and visualizing
 #' time in between markers
 #'
-#' @param data a dataframe prepared for use with [ggswim()]
-#' @inheritParams ggswim
+#' @param data A dataframe prepared for use with `ggswim`
+#' @inheritParams ggplot2::ggplot
+#' @param position Position adjustment. ggswim accepts either "stack", or
+#' "identity" depending on the use case. Default "identity".
+#' @param arrow_colour The color of the arrow head
+#' @param arrow_head_length A unit specifying the length of the arrow head
+#' (from tip to base).
+#' @param arrow_neck_length Value specifying neck length from end of segment
+#' to arrow head base
+#' @param arrow_fill The color to fill the arrow head with. Only applicable when
+#' `arrow_type == "closed"`
+#' @param arrow_type One of "open" or "closed" indicating whether the arrow head
+#' should be a closed triangle.
 #'
 #' @examples
 #' \dontrun{
