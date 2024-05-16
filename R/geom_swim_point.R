@@ -1,5 +1,15 @@
 #' @title Add markers of interest swimmer plots - point
+#'
+#' @inheritParams ggplot2::geom_point
+#'
 #' @export
+#'
+#' @examples
+#' infusion_events |>
+#' ggplot2::ggplot() +
+#' geom_swim_point(mapping = aes(x = time_from_initial_infusion, y = pt_id,
+#'                               color = infusion_type),
+#'                 size = 5)
 geom_swim_point <- function(mapping = NULL, data = NULL,
                             stat = "identity", position = "identity",
                             ...,

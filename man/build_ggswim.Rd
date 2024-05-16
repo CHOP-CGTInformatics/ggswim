@@ -22,14 +22,12 @@ In its current state, \code{build_ggswim()} can only work with a pre-rendered
 ggswim plot object, therefore it cannot be added to the \code{+} operator chain.
 }
 \examples{
-ggswim_obj <- ggswim(
-  data = patient_data,
-  mapping = aes(
-    x = start_time,
-    xend = end_time,
-    y = pt_id,
-    color = disease_assessment
-  ), linewidth = 5
-)
+ggswim_obj <- ggplot2::ggplot(data = patient_data) +
+ geom_swim_lane(
+  mapping = aes(x = start_time,
+                y = pt_id,
+                xend = end_time,
+                color = disease_assessment)
+                )
 build_ggswim(ggswim_obj)
 }
