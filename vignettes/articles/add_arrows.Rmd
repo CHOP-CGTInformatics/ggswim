@@ -17,15 +17,11 @@ To facilitate the addition of arrows, we provide the `add_arrows()` function as 
 
 ## Adding arrows using `add_arrows()`
 
-To demonstrate how you might add arrows onto the `patient_data` dataset, let's take a sample subset of `patient_data` that would help us make use of `add_arrows()`:
+To demonstrate how you might add arrows onto the `patient_data` dataset, let's take a subset of `patient_data` that would help us make use of `add_arrows()`:
 
-```{r, include=FALSE}
+```{r, include=TRUE}
 library(ggswim)
-no_arrow_statuses <- c(
-  "Completed Study Follow-Up",
-  "Deceased",
-  "Other End Study Reason"
-)
+library(ggplot2)
 
 arrow_data <- patient_data |>
   dplyr::left_join(
@@ -33,13 +29,10 @@ arrow_data <- patient_data |>
       dplyr::select(pt_id, end_study_name),
     by = "pt_id"
   ) |>
-  dplyr::select(pt_id, start_time, end_time, end_study_name) |>
+  dplyr::select(pt_id, end_time, end_study_name) |>
   dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
-  unique() |>
-  dplyr::mutate(status = ifelse(!end_study_name %in% no_arrow_statuses, TRUE, FALSE))
-```
+  unique()
 
-```{r}
 arrow_data |>
   rmarkdown::paged_table()
 ```
@@ -48,7 +41,8 @@ This should look familiar, a pared-down dataset with a `status` column that we'l
 
 ```{r}
 patient_data |>
-  ggswim(
+  ggplot() +
+  geom_swim_lane(
     mapping = aes(
       x = start_time, xend = end_time, y = pt_id,
       color = disease_assessment
@@ -58,7 +52,6 @@ patient_data |>
   add_arrows(
     data = arrow_data,
     mapping = aes(xend = end_time, y = pt_id),
-    arrow = status,
     arrow_neck_length = 5,
     arrow_colour = "slateblue",
     arrow_fill = "cyan"

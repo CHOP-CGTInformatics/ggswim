@@ -22,12 +22,14 @@ on 'ggswim' figures.
 }
 \examples{
 p <- ggplot2::ggplot(data = patient_data) +
- geom_swim_lane(
-  mapping = aes(x = start_time,
-                y = pt_id,
-                xend = end_time,
-                color = disease_assessment)
-                )
+  geom_swim_lane(
+    mapping = aes(
+      x = start_time,
+      y = pt_id,
+      xend = end_time,
+      color = disease_assessment
+    )
+  )
 grid.draw(p)
 }
 \keyword{internal}

@@ -23,11 +23,13 @@ ggswim plot object, therefore it cannot be added to the \code{+} operator chain.
 }
 \examples{
 ggswim_obj <- ggplot2::ggplot(data = patient_data) +
- geom_swim_lane(
-  mapping = aes(x = start_time,
-                y = pt_id,
-                xend = end_time,
-                color = disease_assessment)
-                )
+  geom_swim_lane(
+    mapping = aes(
+      x = start_time,
+      y = pt_id,
+      xend = end_time,
+      color = disease_assessment
+    )
+  )
 build_ggswim(ggswim_obj)
 }

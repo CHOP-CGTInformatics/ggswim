@@ -25,21 +25,23 @@ specific theme elements to provide a customized look and feel for plots.
 }
 \examples{
 p <- ggplot2::ggplot(data = patient_data) +
- geom_swim_lane(
-  mapping = aes(x = start_time,
-                y = pt_id,
-                xend = end_time,
-                color = disease_assessment)
-                ) +
- ggplot2::scale_color_brewer(name = "Lanes", palette = "Set1") +
- new_scale_color() +
- geom_swim_point(
-   data = infusion_events,
-   mapping = aes(x = time_from_initial_infusion, y = pt_id, color = infusion_type), # nolint: object_usage_linter
-   size = 5
- ) +
- ggplot2::scale_color_manual(name = "Markers", values = c("red", "green"))
+  geom_swim_lane(
+    mapping = aes(
+      x = start_time,
+      y = pt_id,
+      xend = end_time,
+      color = disease_assessment
+    )
+  ) +
+  ggplot2::scale_color_brewer(name = "Lanes", palette = "Set1") +
+  new_scale_color() +
+  geom_swim_point(
+    data = infusion_events,
+    mapping = aes(x = time_from_initial_infusion, y = pt_id, color = infusion_type), # nolint: object_usage_linter
+    size = 5
+  ) +
+  ggplot2::scale_color_manual(name = "Markers", values = c("red", "green"))
 
- p +
+p +
   theme_ggswim()
 }

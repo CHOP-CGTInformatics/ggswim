@@ -25,8 +25,10 @@ test_that("single row data with 2 new scales", {
     scale_color_manual(name = "Marker Points", values = c("green", "orange")) +
     new_scale_color() +
     geom_swim_label(
-      data = single_row_data, mapping = aes(x = marker2_time, y = record,
-                                            label_vals = marker2, label_names = marker2_name),
+      data = single_row_data, mapping = aes(
+        x = marker2_time, y = record,
+        label_vals = marker2, label_names = marker2_name
+      ),
       label.size = NA, size = 5
     ) +
     scale_color_manual(name = "Marker Labels", values = c(NA, NA, NA)) +
@@ -62,8 +64,10 @@ test_that("single row data with 1 new scale", {
       size = 5
     ) +
     geom_swim_label(
-      data = single_row_data, mapping = aes(x = marker2_time, y = record,
-                                            label_vals = marker2, label_names = marker2_name),
+      data = single_row_data, mapping = aes(
+        x = marker2_time, y = record,
+        label_vals = marker2, label_names = marker2_name
+      ),
       label.size = NA, size = 5
     ) +
     scale_color_manual(name = "All Markers", values = c(NA, "green", "orange", NA, NA)) +
@@ -91,8 +95,10 @@ test_that("patient data sets with 2 new scales", {
     new_scale_color() +
     geom_swim_label(
       data = end_study_events,
-      mapping = aes(x = time_from_initial_infusion, y = pt_id,
-                    label_vals = end_study_label, label_names = end_study_name), # nolint object_usage_linter
+      mapping = aes(
+        x = time_from_initial_infusion, y = pt_id,
+        label_vals = end_study_label, label_names = end_study_name
+      ), # nolint object_usage_linter
       label.size = NA, size = 5
     ) +
     ggplot2::scale_color_brewer(name = "Labels", palette = 1) +

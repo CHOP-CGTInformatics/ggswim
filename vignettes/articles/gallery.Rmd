@@ -33,32 +33,37 @@ single_row_data <- tibble::tribble(
   3, "status2", 2, 15, "m2", 10, "❌", 15, "Negative"
 )
 
+# Convert to factor
+single_row_data$record <- factor(single_row_data$record)
+
 single_row_data |>
   rmarkdown::paged_table()
 ```
 
 In this dataset, we have a combination of statuses and markers where each `record` is a single row observation. Notice that we have markers defined as both points and label value/name pairs. 
 
-In this example, ggswim can handle the dataset quite easily and with the convenience of inheriting `single_row_data` for the `data` parameter in each `add_marker()` call:
+For this example, we'll add two additional new scales to separate out the marker points and the marker labels. Notice how we must still refer to `data` to `single_row_data` due to the scale splits:
 
 ```{r}
-ggswim(
-  data = single_row_data,
-  mapping = aes(x = start_time, xend = end_time, y = record, colour = status),
-  linewidth = 2
-) +
-  scale_color_brewer(name = "Lanes", palette = "Dark2") +
+ggplot2::ggplot() +
+  geom_swim_lane(
+    data = single_row_data,
+    mapping = aes(x = start_time, xend = end_time, y = record, colour = status), linewidth = 2
+  ) +
+  scale_color_manual(name = "Lanes", values = c("firebrick", "steelblue")) +
   new_scale_color() +
-  add_marker(
+  geom_swim_point(
+    data = single_row_data,
     mapping = aes(x = m1_time, y = record, colour = m1),
     size = 5
   ) +
-  add_marker(
+  scale_color_manual(name = "Marker Points", values = c("green", "orange")) +
+  new_scale_color() +
+  geom_swim_label(
+    data = single_row_data,
     mapping = aes(x = m2_time, y = record, label_vals = m2, label_names = m2_name),
-    fill = NA, label.size = NA, size = 5
+    label.size = NA, size = 5
   ) +
-  scale_color_brewer(name = "Markers", palette = "Set2") +
-  theme_ggswim()
+  scale_color_discrete(name = "Marker Labels") +
+  theme_minimal()
 ```
-
-> **Note**: `add_marker()` still needs `aes()` parameters defined.

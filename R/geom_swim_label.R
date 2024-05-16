@@ -6,11 +6,14 @@
 #'
 #' @examples
 #' ggplot2::ggplot() +
-#' geom_swim_label(data = end_study_events,
-#'                 mapping = aes(x = time_from_initial_infusion, y = pt_id,
-#'                               label_vals = end_study_label, label_names = end_study_name),
-#'                 size = 5, label.size = NA)
-
+#'   geom_swim_label(
+#'     data = end_study_events,
+#'     mapping = aes(
+#'       x = time_from_initial_infusion, y = pt_id,
+#'       label_vals = end_study_label, label_names = end_study_name
+#'     ),
+#'     size = 5, label.size = NA
+#'   )
 geom_swim_label <- function(mapping = NULL, data = NULL,
                             stat = "identity", position = "identity",
                             ...,
@@ -140,6 +143,7 @@ GeomSwimLabel <- ggproto("GeomSwimLabel", Geom,
 #'
 #' @returns
 #' A dataframe, acting as a key for [guide_legend()] label aes overrides
+#' @keywords internal
 
 get_label_override <- function(plot, layer) {
   g <- ggplot_build(plot)

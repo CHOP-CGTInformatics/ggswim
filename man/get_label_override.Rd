@@ -18,3 +18,4 @@ A dataframe, acting as a key for \code{\link[=guide_legend]{guide_legend()}} lab
 Fixes the legend for labels, while accounting for use of \code{\link[=new_scale_colour]{new_scale_colour()}},
 so that labels appear over legend glyphs.
 }
+\keyword{internal}

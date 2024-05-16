@@ -12,8 +12,8 @@ test_that("add_arrows works", {
       by = "pt_id"
     ) |>
     dplyr::select(pt_id, end_time, end_study_name) |>
-    dplyr::filter(.by = pt_id, end_time == max(end_time))
-
+    dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
+    unique()
 
   p_arrow <- add_arrows(
     data = arrow_data,

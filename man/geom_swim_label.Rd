@@ -69,7 +69,7 @@ to use \code{position_jitter()}, give the position as \code{"jitter"}.
 \link[ggplot2:layer_positions]{layer position} documentation.
 }}
 
-\item{...}{Other arguments passed on to \code{\link[=layer]{layer()}}'s \code{params} argument. These
+\item{...}{Other arguments passed on to \code{\link[ggplot2:layer]{layer()}}'s \code{params} argument. These
 arguments broadly fall into one of 4 categories below. Notably, further
 arguments to the \code{position} argument, or aesthetics that are required
 can \emph{not} be passed through \code{...}. Unknown arguments that are not part
@@ -92,7 +92,7 @@ documentation lists which parameters it can accept.
 to the \code{stat} part of the layer. An example of this is
 \code{geom_area(stat = "density", adjust = 0.5)}. The stat's documentation
 lists which parameters it can accept.
-\item The \code{key_glyph} argument of \code{\link[=layer]{layer()}} may also be passed on through
+\item The \code{key_glyph} argument of \code{\link[ggplot2:layer]{layer()}} may also be passed on through
 \code{...}. This can be one of the functions described as
 \link[ggplot2:draw_key]{key glyphs}, to change the display of the layer in the legend.
 }}
@@ -129,9 +129,13 @@ Add markers of interest swimmer plots - labels
 }
 \examples{
 ggplot2::ggplot() +
-geom_swim_label(data = end_study_events,
-                mapping = aes(x = time_from_initial_infusion, y = pt_id,
-                              label_vals = end_study_label, label_names = end_study_name),
-                size = 5, label.size = NA)
+  geom_swim_label(
+    data = end_study_events,
+    mapping = aes(
+      x = time_from_initial_infusion, y = pt_id,
+      label_vals = end_study_label, label_names = end_study_name
+    ),
+    size = 5, label.size = NA
+  )
 }
 \keyword{datasets}

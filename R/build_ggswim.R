@@ -16,12 +16,14 @@
 #'
 #' @examples
 #' ggswim_obj <- ggplot2::ggplot(data = patient_data) +
-#'  geom_swim_lane(
-#'   mapping = aes(x = start_time,
-#'                 y = pt_id,
-#'                 xend = end_time,
-#'                 color = disease_assessment)
-#'                 )
+#'   geom_swim_lane(
+#'     mapping = aes(
+#'       x = start_time,
+#'       y = pt_id,
+#'       xend = end_time,
+#'       color = disease_assessment
+#'     )
+#'   )
 #' build_ggswim(ggswim_obj)
 build_ggswim <- function(ggswim_obj) {
   # Checks ----
