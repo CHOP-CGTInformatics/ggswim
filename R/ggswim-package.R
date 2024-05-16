@@ -5,7 +5,7 @@
 #'   %+replace% theme_minimal theme element_text element_blank margin
 #'   element_line element_rect get_guide_data unit ggproto layer
 #'   Geom GeomSegment GeomLabel GeomPoint
-#' @importFrom dplyr case_when
+#' @importFrom dplyr case_when left_join
 #' @importFrom cli cli_abort cli_vec cli_warn
 #' @importFrom rlang caller_arg caller_env as_label is_atomic get_expr .data
 #'   is_empty := enquo quo_is_symbolic quo

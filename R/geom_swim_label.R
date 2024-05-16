@@ -72,17 +72,13 @@ ggplot_add.marker_label <- function(object, plot, object_name) {
   plot$layers <- append(plot$layers, new_layer)
 
   # Fix legend ----
-  current_layer <- length(plot$layers)
+  label_override <- get_label_override(plot, new_layer)
 
-  label_layer_data <- layer_data(plot = plot, i = current_layer)
-  temp <- label_layer_data$label |> unique() # TODO: Make robust, will likely fail
-
-  # TODO: account for other markers with non-newscale split
   plot <- plot +
     guides(
       colour = guide_legend(
         override.aes = list(
-          label = temp
+          label = label_override
         )
       )
     )
@@ -123,3 +119,39 @@ GeomSwimLabel <- ggproto("GeomSwimLabel", Geom,
                            )
                          }
 )
+
+#' @title Fix Label Legend
+#'
+#' @description
+#' Fixes the legend for labels, while accounting for use of [new_scale_colour()],
+#' so that labels appear over legend glyphs.
+#'
+#' @param plot The current plot
+#' @param layer The new label layer being added
+#'
+#' @returns
+#' A dataframe, acting as a key for [guide_legend()] label aes overrides
+
+get_label_override <- function(plot, layer) {
+  g <- ggplot_build(plot)
+  current_layer <- length(plot$layers)
+  current_scale <- length(g$plot$scales$scales)
+
+  label_layer_data <- layer_data(plot = plot, i = current_layer) |>
+    select(colour, label) |>
+    unique()
+  label_layer_values <- g$plot$scales$scales[[current_scale]]$get_labels()
+
+  original_colour_var <- retrieve_original_aes(layer$data, aes_mapping = unlist(layer$mapping), aes_var = "colour")
+  original_label_var <- retrieve_original_aes(layer$data, aes_mapping = unlist(layer$mapping), aes_var = "label")
+
+  out <- tibble(
+    label_values = label_layer_values
+  ) |>
+    left_join(
+      layer$data |> select(original_colour_var, original_label_var) |> unique(),
+      by = c(label_values = original_colour_var)
+    )
+
+  out[original_label_var]
+}
