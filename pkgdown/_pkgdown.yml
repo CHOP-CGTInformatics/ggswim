@@ -24,6 +24,8 @@ navbar:
       href: reference/index.html
     - text: Articles
       menu:
+      - text: "Adding Arrows"
+        href: articles/add_arrows.html
       - text: "Gallery"
         href: articles/gallery.html
 

@@ -2,6 +2,25 @@
 #'
 #' @inheritParams ggplot2::geom_point
 #'
+#' @section Aesthetics:
+#' [geom_swim_point()] understands the following aesthetics (required aesthetics are in bold):
+#'
+#' - **`x`**
+#' - **`y`**
+#' - `alpha`
+#' - `colour`
+#' - `group`
+#' - `shape`
+#' - `size`
+#' - `stroke`
+#'
+#' [geom_swim_point()] is a wrapper for [geom_point()] and can support much of the same
+#' functionality.
+#'
+#' **Notes**:
+#'
+#' - [geom_swim_point()] **does not** support mapping using `fill`.
+#'
 #' @export
 #'
 #' @examples

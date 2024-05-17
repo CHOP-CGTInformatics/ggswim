@@ -109,6 +109,29 @@ the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 \description{
 Add markers of interest swimmer plots - point
 }
+\section{Aesthetics}{
+
+\code{\link[=geom_swim_point]{geom_swim_point()}} understands the following aesthetics (required aesthetics are in bold):
+\itemize{
+\item \strong{\code{x}}
+\item \strong{\code{y}}
+\item \code{alpha}
+\item \code{colour}
+\item \code{group}
+\item \code{shape}
+\item \code{size}
+\item \code{stroke}
+}
+
+\code{\link[=geom_swim_point]{geom_swim_point()}} is a wrapper for \code{\link[=geom_point]{geom_point()}} and can support much of the same
+functionality.
+
+\strong{Notes}:
+\itemize{
+\item \code{\link[=geom_swim_point]{geom_swim_point()}} \strong{does not} support mapping using \code{fill}.
+}
+}
+
 \examples{
 infusion_events |>
   ggplot2::ggplot() +

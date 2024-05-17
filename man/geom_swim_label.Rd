@@ -127,6 +127,37 @@ the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 \description{
 Add markers of interest swimmer plots - labels
 }
+\section{Aesthetics}{
+
+\code{\link[=geom_swim_label]{geom_swim_label()}} understands the following aesthetics (required aesthetics are in bold)
+when using \code{label_vals}/\code{label_names} similar to \code{\link[=geom_label]{geom_label()}}. See "Notes" below for
+additional considerations and requirements.
+\itemize{
+\item \strong{\code{x}}
+\item \strong{\code{y}}
+\item \strong{label_vals}
+\item \strong{\code{label_names}} *
+\item \code{alpha}
+\item \code{angle}
+\item \code{family}
+\item \code{fontface}
+\item \code{group}
+\item \code{hjust}
+\item \code{lineheight}
+\item \code{size}
+\item \code{vjust}
+}
+}
+
+\section{Notes}{
+
+\itemize{
+\item If using labels, both \code{label_vals} and \code{label_names} are required for
+proper legend population. At minimum, \code{label_vals} is needed for data
+display. These are unique parameter options for \code{\link[=aes]{aes()}} to ggswim.
+}
+}
+
 \examples{
 ggplot2::ggplot() +
   geom_swim_label(

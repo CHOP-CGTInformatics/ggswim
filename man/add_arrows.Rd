@@ -49,13 +49,22 @@ specify \code{arrow_neck_length} which can be useful for tracking and visualizin
 time in between markers
 }
 \examples{
-\dontrun{
+# Set up data for arrows
+arrow_data <- patient_data |>
+dplyr::left_join(
+  end_study_events |>
+    dplyr::select(pt_id, end_study_name),
+  by = "pt_id"
+) |>
+  dplyr::select(pt_id, end_time, end_study_name) |>
+  dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
+  unique()
+
 add_arrows(
-  data = patient_status,
+  data = arrow_data,
   mapping = aes(xend = end_time, y = pt_id),
   arrow_neck_length = time_from_today,
   arrow_colour = "forestgreen",
   arrow_fill = "forestgreen"
 )
-}
 }

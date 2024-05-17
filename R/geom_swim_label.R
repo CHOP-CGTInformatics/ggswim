@@ -2,6 +2,30 @@
 #'
 #' @inheritParams ggplot2::geom_label
 #'
+#' @section Aesthetics:
+#' [geom_swim_label()] understands the following aesthetics (required aesthetics are in bold)
+#' when using `label_vals`/`label_names` similar to [geom_label()]. See "Notes" below for
+#' additional considerations and requirements.
+#'
+#' - **`x`**
+#' - **`y`**
+#' - **label_vals**
+#' - **`label_names`** *
+#' - `alpha`
+#' - `angle`
+#' - `family`
+#' - `fontface`
+#' - `group`
+#' - `hjust`
+#' - `lineheight`
+#' - `size`
+#' - `vjust`
+#'
+#' @section Notes:
+#' - If using labels, both `label_vals` and `label_names` are required for
+#' proper legend population. At minimum, `label_vals` is needed for data
+#' display. These are unique parameter options for [aes()] to ggswim.
+#'
 #' @export
 #'
 #' @examples
@@ -152,14 +176,21 @@ get_label_override <- function(plot, layer) {
 
   label_layer_values <- g$plot$scales$scales[[current_scale]]$get_labels()
 
-  original_colour_var <- retrieve_original_aes(layer$data, aes_mapping = unlist(layer$mapping), aes_var = "colour")
-  original_label_var <- retrieve_original_aes(layer$data, aes_mapping = unlist(layer$mapping), aes_var = "label")
+  # In case where data not assigned at this layer, grab from top-level data
+  layer_data <- if (is_empty(layer$data)) {
+    plot$data
+  } else {
+    layer$data
+  }
+
+  original_colour_var <- retrieve_original_aes(layer_data, aes_mapping = unlist(layer$mapping), aes_var = "colour")
+  original_label_var <- retrieve_original_aes(layer_data, aes_mapping = unlist(layer$mapping), aes_var = "label")
 
   out <- tibble(
     label_values = label_layer_values
   ) |>
     left_join(
-      layer$data |> select(all_of(original_colour_var), all_of(original_label_var)) |> unique(),
+      layer_data |> select(all_of(original_colour_var), all_of(original_label_var)) |> unique(),
       by = c(label_values = original_colour_var)
     )
 

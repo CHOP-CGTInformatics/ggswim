@@ -12,8 +12,6 @@ geom_swim_lane(
   stat = "identity",
   position = "identity",
   ...,
-  arrow = NULL,
-  arrow.fill = NULL,
   lineend = "butt",
   linejoin = "round",
   na.rm = FALSE,
@@ -73,11 +71,6 @@ lists which parameters it can accept.
 \link[ggplot2:draw_key]{key glyphs}, to change the display of the layer in the legend.
 }}
 
-\item{arrow}{specification for arrow heads, as created by \code{\link[grid:arrow]{grid::arrow()}}.}
-
-\item{arrow.fill}{fill colour to use for the arrow head (if closed). \code{NULL}
-means use \code{colour} aesthetic.}
-
 \item{lineend}{Line end style (round, butt, square).}
 
 \item{linejoin}{Line join style (round, mitre, bevel).}
@@ -108,7 +101,7 @@ identification.
 }
 \section{Aesthetics}{
 
-\code{ggswim()} understands the following aesthetics (required aesthetics are in bold):
+\code{\link[=geom_swim_lane]{geom_swim_lane()}} understands the following aesthetics (required aesthetics are in bold):
 \itemize{
 \item \strong{\code{x}}
 \item \strong{\code{y}}
@@ -120,12 +113,12 @@ identification.
 \item \code{linewidth}
 }
 
-\code{geom_swim_lane()} is a wrapper for \code{\link[=geom_segment]{geom_segment()}} and can support much of the same
+\code{\link[=geom_swim_lane]{geom_swim_lane()}} is a wrapper for \code{\link[=geom_segment]{geom_segment()}} and can support much of the same
 functionality.
 
 \strong{Notes}:
 \itemize{
-\item \code{geom_swim_lane()} \strong{does not} support mapping using \code{fill}.
+\item \code{\link[=geom_swim_lane]{geom_swim_lane()}} \strong{does not} support mapping using \code{fill}.
 }
 }
 

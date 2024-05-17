@@ -16,7 +16,7 @@
 #' depending on the use case. Default "identity".
 #'
 #' @section Aesthetics:
-#' `ggswim()` understands the following aesthetics (required aesthetics are in bold):
+#' [geom_swim_lane()] understands the following aesthetics (required aesthetics are in bold):
 #'
 #' - **`x`**
 #' - **`y`**
@@ -27,12 +27,12 @@
 #' - `linetype`
 #' - `linewidth`
 #'
-#' `geom_swim_lane()` is a wrapper for [geom_segment()] and can support much of the same
+#' [geom_swim_lane()] is a wrapper for [geom_segment()] and can support much of the same
 #' functionality.
 #'
 #' **Notes**:
 #'
-#' - `geom_swim_lane()` **does not** support mapping using `fill`.
+#' - [geom_swim_lane()] **does not** support mapping using `fill`.
 #'
 #' @section Arrows:
 #' Arrows can be added to the ends of swimmer plot lanes as specified in
@@ -50,8 +50,6 @@
 geom_swim_lane <- function(mapping = NULL, data = NULL,
                            stat = "identity", position = "identity",
                            ...,
-                           arrow = NULL,
-                           arrow.fill = NULL,
                            lineend = "butt",
                            linejoin = "round",
                            na.rm = FALSE,
@@ -70,8 +68,6 @@ geom_swim_lane <- function(mapping = NULL, data = NULL,
       na.rm = na.rm,
       lineend = lineend,
       linejoin = linejoin,
-      arrow = arrow,
-      arrow.fill = arrow.fill,
       ... = ...
     )
   )
@@ -82,6 +78,8 @@ ggplot_add.swim_lane <- function(object, plot, object_name) {
   # Enforce checks ----
   mapping <- attr(object, "mapping")
 
+  # TODO: Determine better standard method of stopping `fill`
+  # Is ignored in geom_segment
   check_supported_mapping_aes(
     mapping = mapping,
     unsupported_aes = "fill",
@@ -128,7 +126,7 @@ GeomSwimLane <- ggproto("GeomSwimLane", Geom,
     linetype = 1,
     alpha = NA
   ),
-  draw_panel = function(data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
+  draw_panel = function(data, panel_params, coord,
                         lineend = "butt", linejoin = "round", na.rm = FALSE) {
     # Return all components
     grid::gList(
