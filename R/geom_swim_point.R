@@ -57,7 +57,7 @@ geom_swim_point <- function(mapping = NULL, data = NULL,
 
 #' @export
 ggplot_add.marker_point <- function(object, plot, object_name) {
-  # Enforce checks ----
+  # Unpack vars ----
   mapping <- attr(object, "mapping")
 
   # Enforce checks ----

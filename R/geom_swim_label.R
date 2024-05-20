@@ -72,7 +72,7 @@ geom_swim_label <- function(mapping = NULL, data = NULL,
 
 #' @export
 ggplot_add.marker_label <- function(object, plot, object_name) {
-  # Retrieve object vals ---
+  # Unpack vars ----
   data <- attr(object, "data") # nolint object_usage_linter
 
   # Enforce checks ----
