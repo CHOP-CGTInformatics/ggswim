@@ -107,8 +107,6 @@ ggplot_add.swim_arrow <- function(object, plot, object_name) {
     length = arrow_head_length
   )
 
-  # Copied over add_arrows stuff ==============================================
-
   # Implement UI checks ----
   # Give warning supplied if `arrow_fill` !NULL and `arrow_type` "open"
   check_arrow_fill_type(arrow_type, arrow_fill)
@@ -132,7 +130,7 @@ ggplot_add.swim_arrow <- function(object, plot, object_name) {
 
   # If NULL, neck length to be a 0.15 proportion
   if (is.null(arrow_neck_length)) {
-    arrow_neck_length <- max(true_arrow_data$xend) * 0.15
+    arrow_neck_length <- max(new_arrow_data$xend) * 0.15
   }
 
   # Change mapping vals

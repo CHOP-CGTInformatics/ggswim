@@ -25,7 +25,7 @@ navbar:
     - text: Articles
       menu:
       - text: "Adding Arrows"
-        href: articles/add_arrows.html
+        href: articles/adding_arrows.html
       - text: "Gallery"
         href: articles/gallery.html
 
@@ -43,6 +43,8 @@ reference:
   - GeomSwimPoint
   - geom_swim_label
   - GeomSwimLabel
+  - geom_swim_arrow
+  - GeomSwimArrow
   - new_scale_color
   - new_scale_colour
   - build_ggswim
@@ -51,7 +53,6 @@ reference:
     Themes and options to add to swimmer plots.
   contents:
   - theme_ggswim
-  - add_arrows
 - title: "Datasets"
   descr: >
     Internal datasets for use in testing.

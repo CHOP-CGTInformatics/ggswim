@@ -2,7 +2,7 @@
 % Please edit documentation in R/checks.R
 \name{check_arrow_neck_length}
 \alias{check_arrow_neck_length}
-\title{check add_arrows for arrow_neck_length argument}
+\title{check geom_swim_arrow for arrow_neck_length argument}
 \usage{
 check_arrow_neck_length(arrow_neck_length)
 }

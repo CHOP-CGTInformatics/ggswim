@@ -54,7 +54,7 @@ p <- patient_data |>
       color = disease_assessment
     )
   ) +
-  add_arrows(
+  geom_swim_arrow(
     data = arrow_data,
     mapping = aes(xend = end_time, y = pt_id)
   ) +

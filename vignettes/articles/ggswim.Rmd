@@ -19,7 +19,7 @@ ggswim offers several layering functions that mimic other "geom" functions from 
 
 Drawing from the well-established principles of ggplot2, ggswim allows users to apply familiar layer-building techniques, including the application of styles and themes.
 
-### Building swimmer plots with aesthetic mapping
+### Adding a Lane Layer
 
 Let's get started building our swimmer plot! As with the README, we will be using ggswim's internal datasets: `patient_data`, `infusion_events`, and `end_study_events`. 
 
@@ -60,7 +60,11 @@ p <- patient_data |>
 p
 ```
 
-Here we have a simple line graph, showing infusions grouped by patients with a given disease assessment status. `geom_swim_lane()` does the work of setting up a `geom_segment()` and readying our plot layers for additional ggswim-specific features such as the "markers" mentioned earlier. Let's add a marker layer next from the `infusion_events` dataset:
+Here we have a simple line graph, showing infusions grouped by patients with a given disease assessment status. `geom_swim_lane()` does the work of setting up a `geom_segment()` and readying our plot layers for additional ggswim-specific features such as the "markers" mentioned earlier. 
+
+## Adding a Marker Layer: Points
+
+Let's add a marker layer next from the `infusion_events` dataset:
 
 ```{r infusion_events}
 infusion_events |>
@@ -95,6 +99,8 @@ p
 
 Now we can see shapes have been added to establish our markers for infusions.
 
+## Adding a Marker Layer: Labels
+
 Our last dataset involves end of study events, i.e. events that indicate a patient has left the study for various reasons.
 
 ```{r end_study_events}
@@ -122,6 +128,8 @@ p
 ```
 
 We've successfully made a swimmer plot with lanes and two different kinds of marker layers. Recall that ggswim works within the ggplot2 framework, therefore customization can be done using the same ggplot2 theme and styling functions users may already be familiar with. It is typical in this workflow to call `scale_color_manual()` to fix up the names and colors of the plot, but be sure to do so in the proper order with the use of `new_scale_color()` mentioned earlier!
+
+## A Full Swimmer Plot
 
 Let's fix up this plot so it looks nicer on the eyes:
 

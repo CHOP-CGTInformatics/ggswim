@@ -161,14 +161,14 @@ check_marker_label_aes <- function(mapping) {
 }
 
 
-#' @title check add_arrows for arrow_fill and arrow_type arguments
+#' @title check geom_swim_arrow for arrow_fill and arrow_type arguments
 #'
 #' @description
 #' Supply users with a warning when `arrow_type` is not "closed" and an `arrow_fill`
 #' argument is specified. No error will occur, but nothing will indicate an issue
 #' in the output.
 #'
-#' @inheritParams add_arrows
+#' @inheritParams geom_swim_arrow
 #'
 #' @keywords internal
 
@@ -188,13 +188,13 @@ check_arrow_fill_type <- function(arrow_type, arrow_fill) {
   }
 }
 
-#' @title check add_arrows for arrow_neck_length argument
+#' @title check geom_swim_arrow for arrow_neck_length argument
 #'
 #' @description
 #' Supply users with an error when `arrow_neck_length` is not an integer, a
 #' symbolic column from the parent dataset, or the default (`NULL`).
 #'
-#' @inheritParams add_arrows
+#' @inheritParams geom_swim_arrow
 #'
 #' @keywords internal
 

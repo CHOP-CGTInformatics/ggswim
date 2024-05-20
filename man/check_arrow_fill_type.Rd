@@ -2,16 +2,13 @@
 % Please edit documentation in R/checks.R
 \name{check_arrow_fill_type}
 \alias{check_arrow_fill_type}
-\title{check add_arrows for arrow_fill and arrow_type arguments}
+\title{check geom_swim_arrow for arrow_fill and arrow_type arguments}
 \usage{
 check_arrow_fill_type(arrow_type, arrow_fill)
 }
 \arguments{
 \item{arrow_type}{One of "open" or "closed" indicating whether the arrow head
 should be a closed triangle.}
-
-\item{arrow_fill}{The color to fill the arrow head with. Only applicable when
-\code{arrow_type == "closed"}}
 }
 \description{
 Supply users with a warning when \code{arrow_type} is not "closed" and an \code{arrow_fill}

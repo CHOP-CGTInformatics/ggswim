@@ -36,7 +36,7 @@
 #'
 #' @section Arrows:
 #' Arrows can be added to the ends of swimmer plot lanes as specified in
-#' [add_arrows()].
+#' [geom_swim_arrow()].
 #'
 #' @export
 #'

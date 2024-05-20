@@ -126,7 +126,7 @@ functionality.
 \section{Arrows}{
 
 Arrows can be added to the ends of swimmer plot lanes as specified in
-\code{\link[=add_arrows]{add_arrows()}}.
+\code{\link[=geom_swim_arrow]{geom_swim_arrow()}}.
 }
 
 \examples{
