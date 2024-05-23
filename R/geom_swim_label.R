@@ -29,6 +29,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' ggplot2::ggplot() +
 #'   geom_swim_label(
 #'     data = end_study_events,
@@ -38,6 +39,7 @@
 #'     ),
 #'     size = 5, label.size = NA
 #'   )
+#' }
 geom_swim_label <- function(mapping = NULL, data = NULL,
                             stat = "identity", position = "identity",
                             ...,
@@ -50,8 +52,8 @@ geom_swim_label <- function(mapping = NULL, data = NULL,
                             show.legend = NA,
                             inherit.aes = TRUE) {
   structure(
-    "A geom_swim_label layer.",
-    class = "marker_label",
+    "geom_swim_label",
+    class = c("swim_label", "ggswim_layer"),
     stat = stat,
     position = position,
     mapping = mapping,
@@ -71,7 +73,7 @@ geom_swim_label <- function(mapping = NULL, data = NULL,
 }
 
 #' @export
-ggplot_add.marker_label <- function(object, plot, object_name) {
+ggplot_add.swim_label <- function(object, plot, object_name) {
   # Unpack vars ----
   data <- attr(object, "data") # nolint object_usage_linter
 

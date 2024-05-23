@@ -5,7 +5,6 @@
 #' @param arg The name of the argument to include in an error message. Captured
 #' by `rlang::caller_arg()` by default
 #' @param call the calling environment to use in the error message
-#' @param req_cols required fields for `check_arg_is_supertbl()`
 #' @param ... additional arguments passed on to checkmate
 #'
 #' @return
@@ -260,7 +259,7 @@ check_ggswim_obj <- function(obj) {
 #' `rlang::get_expr()` will see the color mapping aesthetic as `factor(disp)`,
 #' and not `disp`.
 #'
-#' @param layer_aes a character vector to test for existence in the names of a
+#' @param expr a character vector to test for existence in the names of a
 #' dataset
 #'
 #' @keywords internal

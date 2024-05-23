@@ -82,6 +82,8 @@ lists which parameters it can accept.
 \item{arrow_neck_length}{Value specifying neck length from end of segment
 to arrow head base}
 
+\item{arrow_fill}{The fill color of the arrow head}
+
 \item{arrow_type}{One of "open" or "closed" indicating whether the arrow head
 should be a closed triangle.}
 
@@ -127,11 +129,11 @@ functionality.
 \examples{
 # Set up data for arrows
 arrow_data <- patient_data |>
-dplyr::left_join(
-  end_study_events |>
-    dplyr::select(pt_id, end_study_name),
-  by = "pt_id"
-) |>
+  dplyr::left_join(
+    end_study_events |>
+      dplyr::select(pt_id, end_study_name),
+    by = "pt_id"
+  ) |>
   dplyr::select(pt_id, end_time, end_study_name) |>
   dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
   unique()
@@ -141,7 +143,7 @@ geom_swim_arrow(
   mapping = aes(xend = end_time, y = pt_id),
   linewidth = .1,
   arrow_neck_length = 5,
-  arrow_head_length = unit(0.25, "inches"),
+  arrow_head_length = grid::unit(0.25, "inches"),
   arrow_colour = "slateblue",
   arrow_fill = "cyan"
 )

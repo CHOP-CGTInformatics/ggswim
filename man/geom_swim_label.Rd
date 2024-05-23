@@ -159,6 +159,7 @@ display. These are unique parameter options for \code{\link[=aes]{aes()}} to ggs
 }
 
 \examples{
+\dontrun{
 ggplot2::ggplot() +
   geom_swim_label(
     data = end_study_events,
@@ -168,5 +169,6 @@ ggplot2::ggplot() +
     ),
     size = 5, label.size = NA
   )
+}
 }
 \keyword{datasets}

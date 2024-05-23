@@ -56,8 +56,8 @@ geom_swim_lane <- function(mapping = NULL, data = NULL,
                            show.legend = NA,
                            inherit.aes = TRUE) {
   structure(
-    "A geom_swim_lane layer.",
-    class = "swim_lane",
+    "geom_swim_lane",
+    class = c("swim_lane", "ggswim_layer"),
     stat = stat,
     position = position,
     mapping = mapping,

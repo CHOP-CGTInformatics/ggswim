@@ -7,7 +7,7 @@
 check_coerced_data(expr)
 }
 \arguments{
-\item{layer_aes}{a character vector to test for existence in the names of a
+\item{expr}{a character vector to test for existence in the names of a
 dataset}
 }
 \description{

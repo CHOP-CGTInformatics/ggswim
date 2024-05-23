@@ -8,6 +8,7 @@
 #' @param position Position adjustment. ggswim accepts either "stack", or "identity"
 #' depending on the use case. Default "identity".
 #' @param arrow_colour The color of the arrow head
+#' @param arrow_fill The fill color of the arrow head
 #' @param arrow_head_length A unit specifying the length of the arrow head
 #' (from tip to base).
 #' @param arrow_neck_length Value specifying neck length from end of segment
@@ -33,11 +34,11 @@
 #' @examples
 #' # Set up data for arrows
 #' arrow_data <- patient_data |>
-#' dplyr::left_join(
-#'   end_study_events |>
-#'     dplyr::select(pt_id, end_study_name),
-#'   by = "pt_id"
-#' ) |>
+#'   dplyr::left_join(
+#'     end_study_events |>
+#'       dplyr::select(pt_id, end_study_name),
+#'     by = "pt_id"
+#'   ) |>
 #'   dplyr::select(pt_id, end_time, end_study_name) |>
 #'   dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
 #'   unique()
@@ -47,7 +48,7 @@
 #'   mapping = aes(xend = end_time, y = pt_id),
 #'   linewidth = .1,
 #'   arrow_neck_length = 5,
-#'   arrow_head_length = unit(0.25, "inches"),
+#'   arrow_head_length = grid::unit(0.25, "inches"),
 #'   arrow_colour = "slateblue",
 #'   arrow_fill = "cyan"
 #' )
@@ -55,21 +56,21 @@
 #' @export
 
 geom_swim_arrow <- function(mapping = NULL, data = NULL,
-                           stat = "identity", position = "identity",
-                           ...,
-                           arrow_colour = "black",
-                           arrow_head_length = unit(0.25, "inches"),
-                           arrow_neck_length = NULL,
-                           arrow_fill = NULL,
-                           arrow_type = "closed",
-                           lineend = "butt",
-                           linejoin = "round",
-                           na.rm = FALSE,
-                           show.legend = FALSE,
-                           inherit.aes = TRUE) {
+                            stat = "identity", position = "identity",
+                            ...,
+                            arrow_colour = "black",
+                            arrow_head_length = unit(0.25, "inches"),
+                            arrow_neck_length = NULL,
+                            arrow_fill = NULL,
+                            arrow_type = "closed",
+                            lineend = "butt",
+                            linejoin = "round",
+                            na.rm = FALSE,
+                            show.legend = FALSE,
+                            inherit.aes = TRUE) {
   structure(
-    "A geom_swim_arrow layer.",
-    class = "swim_arrow",
+    "geom_swim_arrow",
+    class = c("swim_arrow", "ggswim_layer"),
     stat = stat,
     position = position,
     mapping = mapping,
@@ -96,9 +97,9 @@ ggplot_add.swim_arrow <- function(object, plot, object_name) {
   # Unpack vars ----
   data <- attr(object, "data")
   mapping <- attr(object, "mapping")
-  position <- attr(object, "position")
+  position <- attr(object, "position") # nolint: object_usage_linter
   arrow_neck_length <- attr(object, "arrow_neck_length")
-  arrow_fill <-attr(object, "params")$arrow.fill
+  arrow_fill <- attr(object, "params")$arrow.fill
   arrow_type <- attr(object, "arrow_type")
   arrow_head_length <- attr(object, "arrow_head_length")
 
@@ -170,23 +171,23 @@ ggplot_add.swim_arrow <- function(object, plot, object_name) {
 #' @usage NULL
 #' @export
 GeomSwimArrow <- ggproto("GeomSwimArrow", Geom,
-                        required_aes = c("x", "y", "xend"),
-                        non_missing_aes = c("linetype", "linewidth"),
-                        default_aes = aes(
-                          colour = "black",
-                          linewidth = 0.5,
-                          size = 2,
-                          linetype = 1,
-                          alpha = NA
-                        ),
-                        draw_panel = function(data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
-                                              lineend = "butt", linejoin = "round", na.rm = FALSE) {
-                          # Return all components
-                          grid::gList(
-                            GeomSegment$draw_panel(data, panel_params, coord,
-                                                   arrow = arrow, arrow.fill = arrow.fill,
-                                                   lineend = lineend, linejoin = linejoin, na.rm = na.rm
-                            )
-                          )
-                        }
+  required_aes = c("x", "y", "xend"),
+  non_missing_aes = c("linetype", "linewidth"),
+  default_aes = aes(
+    colour = "black",
+    linewidth = 0.5,
+    size = 2,
+    linetype = 1,
+    alpha = NA
+  ),
+  draw_panel = function(data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
+                        lineend = "butt", linejoin = "round", na.rm = FALSE) {
+    # Return all components
+    grid::gList(
+      GeomSegment$draw_panel(data, panel_params, coord,
+        arrow = arrow, arrow.fill = arrow.fill,
+        lineend = lineend, linejoin = linejoin, na.rm = na.rm
+      )
+    )
+  }
 )

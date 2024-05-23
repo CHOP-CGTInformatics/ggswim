@@ -8,7 +8,7 @@ test_that("geom_swim_label is the right class", {
     )
   )
 
-  expect_equal(attr(layer, "class"), "marker_label")
+  expect_setequal(attr(layer, "class"), c("swim_label", "ggswim_layer"))
 })
 
 test_that("all expected attributes exist in geom_swim_label", {

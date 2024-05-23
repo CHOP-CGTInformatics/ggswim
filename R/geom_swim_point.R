@@ -40,8 +40,8 @@ geom_swim_point <- function(mapping = NULL, data = NULL,
                             show.legend = NA,
                             inherit.aes = TRUE) {
   structure(
-    "A geom_swim_point layer.",
-    class = "marker_point",
+    "geom_swim_point",
+    class = c("swim_point", "ggswim_layer"),
     stat = stat,
     position = position,
     mapping = mapping,
@@ -56,7 +56,7 @@ geom_swim_point <- function(mapping = NULL, data = NULL,
 }
 
 #' @export
-ggplot_add.marker_point <- function(object, plot, object_name) {
+ggplot_add.swim_point <- function(object, plot, object_name) {
   # Unpack vars ----
   mapping <- attr(object, "mapping")
 

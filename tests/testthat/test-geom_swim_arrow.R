@@ -11,7 +11,7 @@ test_that("geom_swim_arrow is the right class", {
     arrow_fill = "cyan"
   )
 
-  expect_equal(attr(layer, "class"), "swim_arrow")
+  expect_setequal(attr(layer, "class"), c("swim_arrow", "ggswim_layer"))
 })
 
 test_that("all expected attributes exist in geom_swim_arrow", {

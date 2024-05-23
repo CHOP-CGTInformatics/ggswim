@@ -7,7 +7,7 @@ test_that("geom_swim_lane is the right class", {
     )
   )
 
-  expect_equal(attr(layer, "class"), "swim_lane")
+  expect_setequal(attr(layer, "class"), c("swim_lane", "ggswim_layer"))
 })
 
 test_that("all expected attributes exist in geom_swim_lane", {
