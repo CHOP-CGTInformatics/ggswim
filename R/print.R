@@ -8,16 +8,17 @@
 #' @keywords internal
 #'
 #' @examples
-#' ggplot2::ggplot(data = patient_data) +
-#'   geom_swim_lane(
-#'     mapping = aes(
-#'       x = start_time,
-#'       y = pt_id,
-#'       xend = end_time,
-#'       color = disease_assessment
+#' print(
+#'   ggplot2::ggplot(data = patient_data) +
+#'     geom_swim_lane(
+#'       mapping = aes(
+#'         x = start_time,
+#'         y = pt_id,
+#'         xend = end_time,
+#'         color = disease_assessment
+#'       )
 #'     )
-#'   ) |>
-#'   print()
+#' )
 NULL
 
 #' @export
@@ -36,44 +37,61 @@ print.ggswim_obj <- function(x, ...) {
 #' @keywords internal
 #'
 #' @examples
-#' geom_swim_lane(
-#'   data = patient_data,
-#'   mapping = aes(
-#'     x = start_time,
-#'     y = pt_id,
-#'     xend = end_time,
-#'     color = disease_assessment
+#' print(
+#'   geom_swim_lane(
+#'     data = patient_data,
+#'     mapping = aes(
+#'       x = start_time,
+#'       y = pt_id,
+#'       xend = end_time,
+#'       color = disease_assessment
+#'     )
 #'   )
-#' ) |>
-#'   print()
+#' )
 NULL
 
 #' @export
 #' @rdname print.ggswim_layer
 print.ggswim_layer <- function(x, ..., flat = TRUE) {
+  # Print mapping
+  mapping <- attr(x, "mapping")
+  if (!is.null(mapping)) {
+    mapping_strings <- tibble(name = names(mapping), value = as.character(mapping)) |>
+      mutate(mapping_string = paste(.data$name, "=", .data$value, sep = " ")) |>
+      pull(.data$mapping_string)
+    cat("mapping", paste(mapping_strings, collapse = ", "), "\n")
+  }
+
+  # Print name
   cat(paste0(x, ": "))
 
-  # Print params attributes
+  # Print params
+  # Extract and process params using dplyr
   params <- attr(x, "params")
-  param_strings <- sapply(names(params), function(param) {
-    value <- params[[param]]
-    if (is.null(value)) {
-      value <- "NULL"
-    }
-    paste0(param, " = ", value)
-  })
+  param_strings <- tibble(name = names(params), value = params) |>
+    mutate(value = if_else(map_lgl(.data$value, is.null), "NULL", as.character(.data$value))) |>
+    mutate(param_string = paste(.data$name, "=", .data$value)) |>
+    pull(.data$param_string)
+
   cat(paste(param_strings, collapse = ", "), "\n")
 
-  # Print other attributes
+  # Print non params
   attrs <- attributes(x)
-  other_attrs <- setdiff(names(attrs), c("params", "class", "names"))
-  for (attr_name in other_attrs) {
-    if (attr_name == "stat" || attr_name == "position") {
-      if (attr_name == "stat") {
-        cat(paste0(attr_name, "_", attrs[[attr_name]], ": na.rm = ", params$na.rm, "\n"))
-      } else {
-        cat(paste0(attr_name, "_", attrs[[attr_name]], "\n"))
-      }
-    }
-  }
+  other_attrs <- names(attrs) |>
+    setdiff(c("params", "class", "names"))
+
+  attrs |>
+    enframe() |>
+    filter(.data$name %in% other_attrs) |>
+    mutate(output = case_when(
+      name == "stat" ~ paste0(
+        name, "_", value, ": na.rm = ",
+        if_else(is.null(params$na.rm), "NULL", as.character(params$na.rm))
+      ),
+      name == "position" ~ paste0(name, "_", value),
+      TRUE ~ NA_character_
+    )) |>
+    pull(.data$output) |>
+    discard(is.na) |>
+    walk(cat, "\n")
 }

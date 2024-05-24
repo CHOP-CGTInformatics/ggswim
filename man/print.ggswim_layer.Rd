@@ -18,15 +18,16 @@ a layer object
 Print ggswim layer object
 }
 \examples{
-geom_swim_lane(
-  data = patient_data,
-  mapping = aes(
-    x = start_time,
-    y = pt_id,
-    xend = end_time,
-    color = disease_assessment
+print(
+  geom_swim_lane(
+    data = patient_data,
+    mapping = aes(
+      x = start_time,
+      y = pt_id,
+      xend = end_time,
+      color = disease_assessment
+    )
   )
-) |>
-  print()
+)
 }
 \keyword{internal}

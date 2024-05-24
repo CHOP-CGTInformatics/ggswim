@@ -37,8 +37,10 @@ p <- ggplot2::ggplot(data = patient_data) +
   new_scale_color() +
   geom_swim_point(
     data = infusion_events,
-    mapping = aes(x = time_from_initial_infusion,
-    y = pt_id, color = infusion_type), # nolint: object_usage_linter
+    mapping = aes(
+      x = time_from_initial_infusion,
+      y = pt_id, color = infusion_type
+    ), # nolint: object_usage_linter
     size = 5
   ) +
   ggplot2::scale_color_manual(name = "Markers", values = c("red", "green"))
