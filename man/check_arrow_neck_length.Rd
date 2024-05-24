@@ -2,9 +2,13 @@
 % Please edit documentation in R/checks.R
 \name{check_arrow_neck_length}
 \alias{check_arrow_neck_length}
-\title{check add_arrows for arrow_neck_length argument}
+\title{check geom_swim_arrow for arrow_neck_length argument}
 \usage{
 check_arrow_neck_length(arrow_neck_length)
+}
+\arguments{
+\item{arrow_neck_length}{Value specifying neck length from end of segment
+to arrow head base}
 }
 \description{
 Supply users with an error when \code{arrow_neck_length} is not an integer, a

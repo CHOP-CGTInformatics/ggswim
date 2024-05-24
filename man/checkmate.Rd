@@ -28,8 +28,6 @@ check_arg_is_logical(x, ..., arg = caller_arg(x), call = caller_env())
 by \code{rlang::caller_arg()} by default}
 
 \item{call}{the calling environment to use in the error message}
-
-\item{req_cols}{required fields for \code{check_arg_is_supertbl()}}
 }
 \value{
 \code{TRUE} if \code{x} passes the checkmate check. An error otherwise with the name of

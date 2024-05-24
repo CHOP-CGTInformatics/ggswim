@@ -17,7 +17,7 @@ retrieve_original_aes(data, aes_mapping, aes_var)
 The original variable name as a character string
 }
 \description{
-Attempt to detect instances where users manipulate \code{aes()} names that ggswim
+Detect instances where users manipulate \code{aes()} names that ggswim
 requires to access and identify layer types downstream. In instances where
 such a coercion is detected, attempt to retrieve the original \code{aes()} name.
 }

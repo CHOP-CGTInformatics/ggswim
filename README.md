@@ -37,25 +37,26 @@ To help you get started, ggswim includes three sample datasets:
 de-identified datasets simulate real world data related to infusions,
 disease assessments, and study statuses for a clinical trial.
 
-By first calling the `ggswim()` function, we can set up the horizontal
-survival bars of our swimmer plot, i.e. the “lanes:”
+ggswim offers several geom-functions, and by using `geom_swim_lane()` we
+can set up the horizontal survival bars of our swimmer plot, i.e. the
+“lanes”. We’ll also set up corresponding arrows to indicate subjects
+that are still on the trial:
 
 ``` r
 library(ggswim)
 library(ggplot2)
 
 p <- patient_data |>
-  ggswim(
+  ggplot() +
+  geom_swim_lane(
     mapping = aes(
-      x = start_time, xend = end_time, y = pt_id,
+      x = start_time, y = pt_id, xend = end_time,
       color = disease_assessment
-    ),
-    linewidth = 5
+    )
   ) +
-  add_arrows(
+  geom_swim_arrow(
     data = arrow_data,
-    mapping = aes(x = start_time, xend = end_time, y = pt_id),
-    arrow = "status"
+    mapping = aes(xend = end_time, y = pt_id)
   ) +
   scale_color_brewer(
     name = "Overall Disease Assessment",
@@ -68,20 +69,21 @@ p
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
 
 Next we’ll add on events of interest: end of study updates, and
-infusions. We’ll refer to these as “markers”:
+infusions. We’ll refer to these as “markers” and call them with two more
+geom-functions: `geom_swim_point()` and `geom_swim_label()`.
 
 ``` r
 p <- p +
   new_scale_color() +
-  add_marker(
-    data = end_study_events,
-    aes(x = time_from_initial_infusion, y = pt_id, label_vals = end_study_label, label_names = end_study_name),
-    label.size = NA, fill = NA, size = 5
-  ) +
-  add_marker(
+  geom_swim_point(
     data = infusion_events,
     aes(x = time_from_initial_infusion, y = pt_id, color = infusion_type),
     size = 5
+  ) +
+  geom_swim_label(
+    data = end_study_events,
+    aes(x = time_from_initial_infusion, y = pt_id, label_vals = end_study_label, label_names = end_study_name),
+    label.size = NA, fill = NA, size = 5
   )
 
 p

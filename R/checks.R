@@ -5,7 +5,6 @@
 #' @param arg The name of the argument to include in an error message. Captured
 #' by `rlang::caller_arg()` by default
 #' @param call the calling environment to use in the error message
-#' @param req_cols required fields for `check_arg_is_supertbl()`
 #' @param ... additional arguments passed on to checkmate
 #'
 #' @return
@@ -161,14 +160,14 @@ check_marker_label_aes <- function(mapping) {
 }
 
 
-#' @title check add_arrows for arrow_fill and arrow_type arguments
+#' @title check geom_swim_arrow for arrow_fill and arrow_type arguments
 #'
 #' @description
 #' Supply users with a warning when `arrow_type` is not "closed" and an `arrow_fill`
 #' argument is specified. No error will occur, but nothing will indicate an issue
 #' in the output.
 #'
-#' @inheritParams ggswim
+#' @inheritParams geom_swim_arrow
 #'
 #' @keywords internal
 
@@ -188,13 +187,13 @@ check_arrow_fill_type <- function(arrow_type, arrow_fill) {
   }
 }
 
-#' @title check add_arrows for arrow_neck_length argument
+#' @title check geom_swim_arrow for arrow_neck_length argument
 #'
 #' @description
 #' Supply users with an error when `arrow_neck_length` is not an integer, a
 #' symbolic column from the parent dataset, or the default (`NULL`).
 #'
-#' @inheritParams ggswim
+#' @inheritParams geom_swim_arrow
 #'
 #' @keywords internal
 
@@ -260,7 +259,7 @@ check_ggswim_obj <- function(obj) {
 #' `rlang::get_expr()` will see the color mapping aesthetic as `factor(disp)`,
 #' and not `disp`.
 #'
-#' @param layer_aes a character vector to test for existence in the names of a
+#' @param expr a character vector to test for existence in the names of a
 #' dataset
 #'
 #' @keywords internal
@@ -342,71 +341,5 @@ check_missing_params <- function(mapping,
 
   if (!all(params %in% names(mapping))) {
     cli_abort(message = msg, call = caller_env(), class = cond_class)
-  }
-}
-
-#' @title Fixed Marker Scale Validation
-#'
-#' @description
-#' Check fixed markers for single scale use and for single title assignment.
-#'
-#' @details
-#' ggswim cannot currently support fixed markers with multiple scales or titles,
-#' this causes the legend to display incorrectly and for titles to be
-#' misattributed. Instead, we wish to catch this early and enforce behavior.
-#'
-#' @param ggswim_obj A ggswim object
-#' @param ref_layer_info internal reference layer list created in `build_ggswim()`
-#'
-#' @keywords internal
-
-check_valid_fixed_maker_scales <- function(ggswim_obj,
-                                           ref_layer_info) {
-  # Case 1: Multiple fixed_marker_name's supplied ------------------------------
-  fixed_marker_name <- unique(ref_layer_info$fixed_colours$fixed_marker_name)
-
-  if (length(fixed_marker_name) > 1) {
-    cli_abort(
-      message = c(
-        "x" = "Multiple legend titles applied to fixed markers.",
-        "i" = "ggswim cannot support multiple scales for fixed markers,
-                  please consider using a single `fixed_marker_name`."
-      ),
-      call = caller_env(),
-      class = c("ggswim_cond", "multi_fixed_marker_scales")
-    )
-  }
-
-  # Case 2: Multiple new_scale_color()s supplied -------------------------------
-  # Initialize an empty list to store the results
-  scale_list <- list()
-
-  # Iterate over each element i in ggswim_obj$scales$scales
-  for (i in seq_along(ggswim_obj$scales$scales)) {
-    # Extract the aesthetics value from the i-th element
-    aesthetics <- ggswim_obj$scales$scales[[i]]$aesthetics
-
-    # Extract other desired values and construct a data frame
-    # In this example, I assume you want the value and the index i
-    data <- data.frame(value = aesthetics, index = i)
-
-    # Store the data frame in the result list
-    scale_list[[i]] <- data
-  }
-
-  # Combine all data frames in the result list into a single data frame
-  scale_list_result <- do.call(rbind, scale_list)
-  has_multiple_colour_new <- sum(grepl("^colour_new", scale_list_result$value)) > 1
-
-  if (has_multiple_colour_new) {
-    cli_abort(
-      message = c(
-        "x" = "Multiple legend scales applied to fixed markers.",
-        "i" = "ggswim cannot support multiple scales for fixed markers,
-                  please consider reducing to a single `new_scale_color()` call."
-      ),
-      call = caller_env(),
-      class = c("ggswim_cond", "multi_fixed_marker_scales")
-    )
   }
 }

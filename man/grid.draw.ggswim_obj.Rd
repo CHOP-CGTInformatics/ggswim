@@ -21,15 +21,15 @@ These are implemented to allow users to directly call \code{ggplot2::ggsave()}
 on 'ggswim' figures.
 }
 \examples{
-ggswim(
-  data = patient_data,
-  mapping = aes(
-    x = start_time,
-    xend = end_time,
-    y = pt_id,
-    color = disease_assessment
+p <- ggplot2::ggplot(data = patient_data) +
+  geom_swim_lane(
+    mapping = aes(
+      x = start_time,
+      y = pt_id,
+      xend = end_time,
+      color = disease_assessment
+    )
   )
-) |>
-  grid.draw()
+grid.draw(p)
 }
 \keyword{internal}

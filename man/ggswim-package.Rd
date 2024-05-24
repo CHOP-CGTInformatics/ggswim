@@ -2,6 +2,7 @@
 % Please edit documentation in R/ggswim-package.R
 \docType{package}
 \name{ggswim-package}
+\alias{ggswim}
 \alias{ggswim-package}
 \title{ggswim: Create Swimmer Plots with ggplot2}
 \description{
