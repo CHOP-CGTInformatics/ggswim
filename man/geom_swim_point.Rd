@@ -4,7 +4,7 @@
 \name{geom_swim_point}
 \alias{geom_swim_point}
 \alias{GeomSwimPoint}
-\title{Add markers of interest swimmer plots - point}
+\title{Add point markers to swimmer plots}
 \usage{
 geom_swim_point(
   mapping = NULL,
@@ -107,7 +107,10 @@ that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 }
 \description{
-Add markers of interest swimmer plots - point
+Markers are specific symbols or indicators placed on the lanes of a swimmer plot
+to denote particular events, milestones, or statuses. They provide additional
+contextual information about significant occurrences during the timeline, such
+as treatment responses or adverse events.
 }
 \section{Aesthetics}{
 

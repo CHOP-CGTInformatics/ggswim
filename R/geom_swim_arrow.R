@@ -1,7 +1,9 @@
-#' @title Add arrows to a swimmer plot
+#' @title Add arrows to swimmer plot lanes
 #'
 #' @description
-#' Add arrows to the ends of swimmer plot lanes for continuation indication.
+#' Arrows attached to the end of swimmer plot lanes can be used to denote the
+#' continuation of events such as ongoing treatment, implying that the activity
+#' or status extends beyond the plotted period.
 #'
 #' @param data A dataframe prepared for use with [geom_swim_arrow()]
 #' @inheritParams ggplot2::geom_segment

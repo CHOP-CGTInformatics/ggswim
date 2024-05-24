@@ -8,7 +8,7 @@ template:
     text-muted: "#FFFFFF"
 
 home:
-  title: Create swimmer plots with - ggswim
+  title: Create swimmer plots with ggswim
 
 navbar:
   bg: primary
@@ -33,9 +33,9 @@ search:
   exclude: ['news/index.html']
 
 reference:
-- title: "Swimmer Plot Constructors"
+- title: "Geoms"
   descr: >
-    Create swimmer plots.
+    Swimmer plot geom and layering functions.
   contents:
   - geom_swim_lane
   - GeomSwimLane
@@ -47,15 +47,13 @@ reference:
   - GeomSwimArrow
   - new_scale_color
   - new_scale_colour
-  - build_ggswim
-- title: "Decorators & Themeing"
+- title: "Themes and Builders"
   descr: >
     Themes and options to add to swimmer plots.
   contents:
+  - build_ggswim
   - theme_ggswim
 - title: "Datasets"
-  descr: >
-    Internal datasets for use in testing.
   contents:
   - patient_data
   - infusion_events

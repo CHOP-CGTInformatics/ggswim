@@ -2,7 +2,7 @@
 % Please edit documentation in R/geom_swim_arrow.R
 \name{geom_swim_arrow}
 \alias{geom_swim_arrow}
-\title{Add arrows to a swimmer plot}
+\title{Add arrows to swimmer plot lanes}
 \usage{
 geom_swim_arrow(
   mapping = NULL,
@@ -106,7 +106,9 @@ that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 }
 \description{
-Add arrows to the ends of swimmer plot lanes for continuation indication.
+Arrows attached to the end of swimmer plot lanes can be used to denote the
+continuation of events such as ongoing treatment, implying that the activity
+or status extends beyond the plotted period.
 }
 \section{Aesthetics}{
 

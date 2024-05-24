@@ -1,4 +1,10 @@
-#' @title Add markers of interest swimmer plots - point
+#' @title Add point markers to swimmer plots
+#'
+#' @description
+#' Markers are specific symbols or indicators placed on the lanes of a swimmer plot
+#' to denote particular events, milestones, or statuses. They provide additional
+#' contextual information about significant occurrences during the timeline, such
+#' as treatment responses or adverse events.
 #'
 #' @inheritParams ggplot2::geom_point
 #'

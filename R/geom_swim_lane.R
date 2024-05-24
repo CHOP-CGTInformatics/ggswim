@@ -1,14 +1,9 @@
-#' @title Create swimmer survival plots
+#' @title Add lanes to swimmer plots
 #'
 #' @description
-#' Use ggplot2 architecture to create a swimmer plot showing subject survival
-#' timelines.
-#'
-#' @details
-#' A swimmer plot is a data visualization used to display individual
-#' subject data over time. It shows events or outcomes as points along a
-#' horizontal line for each subject, allowing easy comparison and pattern
-#' identification.
+#' Lanes in swimmer plots represent individual subjects or entities being tracked
+#' over time. Each lane is a horizontal track that displays the duration and
+#' sequence of events or activities for the corresponding subject.
 #'
 #' @param data a dataframe prepared for use with [geom_swim_lane()]
 #' @inheritParams ggplot2::geom_segment
