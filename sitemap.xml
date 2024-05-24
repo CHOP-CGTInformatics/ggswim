@@ -13,10 +13,7 @@
     <loc>https://chop-cgtinformatics.github.io/ggswim/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://chop-cgtinformatics.github.io/ggswim/articles/add_arrows.html</loc>
-  </url>
-  <url>
-    <loc>https://chop-cgtinformatics.github.io/ggswim/articles/fixed_markers.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/articles/adding_arrows.html</loc>
   </url>
   <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/articles/gallery.html</loc>
@@ -32,15 +29,6 @@
   </url>
   <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/index.html</loc>
-  </url>
-  <url>
-    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/add_arrows.html</loc>
-  </url>
-  <url>
-    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/add_marker.html</loc>
-  </url>
-  <url>
-    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/bind_layer_data.html</loc>
   </url>
   <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/build_ggswim.html</loc>
@@ -70,9 +58,6 @@
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/check_supported_position_args.html</loc>
   </url>
   <url>
-    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/check_valid_fixed_maker_scales.html</loc>
-  </url>
-  <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/checkmate.html</loc>
   </url>
   <url>
@@ -82,19 +67,22 @@
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/format_error_val.html</loc>
   </url>
   <url>
-    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/get_layer_data.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_arrow.html</loc>
   </url>
   <url>
-    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/get_overrides.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_label.html</loc>
   </url>
   <url>
-    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/get_ref_layer_info.html</loc>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_lane.html</loc>
+  </url>
+  <url>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_point.html</loc>
+  </url>
+  <url>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/get_label_override.html</loc>
   </url>
   <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/ggswim-package.html</loc>
-  </url>
-  <url>
-    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/ggswim.html</loc>
   </url>
   <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/grid.draw.ggswim_obj.html</loc>
@@ -107,6 +95,9 @@
   </url>
   <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/patient_data.html</loc>
+  </url>
+  <url>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/print.ggswim_layer.html</loc>
   </url>
   <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/print.ggswim_obj.html</loc>

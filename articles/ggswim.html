@@ -58,8 +58,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/add_arrows.html">Adding Arrows</a>
-    <a class="dropdown-item" href="../articles/fixed_markers.html">Fixed Mapping with Markers</a>
+    <a class="dropdown-item" href="../articles/adding_arrows.html">Adding Arrows</a>
     <a class="dropdown-item" href="../articles/gallery.html">Gallery</a>
   </div>
 </li>
@@ -99,24 +98,28 @@
 <p>The ggswim package eases the development of swimmer plots in R
 through integration with the ggplot2 framework. In this vignette, we’ll
 walk through how users can create visually striking swimmer plots.</p>
-<p>At the heart of ggswim are two core functions: <code><a href="../reference/ggswim.html">ggswim()</a></code>
-and <code><a href="../reference/add_marker.html">add_marker()</a></code>. The former, an extension of
-<code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">geom_segment()</a></code>, allows users to construct the horizontal
-bars, what we’ll sometimes refer to as “lanes.” Meanwhile,
-<code><a href="../reference/add_marker.html">add_marker()</a></code> wraps both <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point()</a></code> and
-<code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_label()</a></code> to effortlessly embed key events, or
-“markers,” onto the lanes. These can take the form of unicode shapes,
+<p>ggswim offers several layering functions that mimic other “geom”
+functions from core ggplot2:</p>
+<ul>
+<li><code><a href="../reference/geom_swim_lane.html">geom_swim_lane()</a></code></li>
+<li><code><a href="../reference/geom_swim_point.html">geom_swim_point()</a></code></li>
+<li><code><a href="../reference/geom_swim_label.html">geom_swim_label()</a></code></li>
+</ul>
+<p>The former, an extension of <code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">geom_segment()</a></code>, allows users
+to construct the horizontal bars, what we’ll sometimes refer to as
+“lanes.” Meanwhile, <code><a href="../reference/geom_swim_point.html">geom_swim_point()</a></code> and
+<code>geom_swim_label</code> wrap both <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point()</a></code> and
+<code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_label()</a></code>, respectively, to effortlessly embed key
+events, or “markers,” onto the lanes. These can take the form of shapes,
 symbols, or even emojis.</p>
 <p>Drawing from the well-established principles of ggplot2, ggswim
 allows users to apply familiar layer-building techniques, including the
 application of styles and themes.</p>
 <div class="section level3">
-<h3 id="building-swimmer-plots-with-aesthetic-mapping">Building swimmer plots with aesthetic mapping<a class="anchor" aria-label="anchor" href="#building-swimmer-plots-with-aesthetic-mapping"></a>
+<h3 id="adding-a-lane-layer">Adding a Lane Layer<a class="anchor" aria-label="anchor" href="#adding-a-lane-layer"></a>
 </h3>
-<p>To start, let’s build a swimmer plot using <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> and
-aesthetic mapped data (for fixed mapping, see <a href="https://chop-cgtinformatics.github.io/ggswim/articles/fixed_markers.html">Fixed
-Marker Mapping</a>). As with the README, we will be using ggswim’s
-internal datasets: <code>patient_data</code>,
+<p>Let’s get started building our swimmer plot! As with the README, we
+will be using ggswim’s internal datasets: <code>patient_data</code>,
 <code>infusion_events</code>, and <code>end_study_events</code>.</p>
 <p>Let’s start with observing <code>patient_data</code>’s structure:</p>
 <div data-pagedtable="false">
@@ -140,27 +143,36 @@ nomenclature along with some indicator of B-cell status (if applicable):
 </ul>
 </li>
 </ul>
-<p>Now, let’s make the plot using <code><a href="../reference/ggswim.html">ggswim()</a></code>:</p>
+<p>Now, let’s make the plot using <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot()</a></code> and
+<code><a href="../reference/geom_swim_lane.html">geom_swim_lane()</a></code>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ggswim.html">ggswim</a></span><span class="op">(</span></span>
-<span>  <span class="va">patient_data</span>,</span>
-<span>  mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
-<span>    x <span class="op">=</span> <span class="va">start_time</span>,</span>
-<span>    xend <span class="op">=</span> <span class="va">end_time</span>,</span>
-<span>    y <span class="op">=</span> <span class="va">pt_id</span>,</span>
-<span>    color <span class="op">=</span> <span class="va">disease_assessment</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  linewidth <span class="op">=</span> <span class="fl">5</span></span>
-<span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">patient_data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_swim_lane.html">geom_swim_lane</a></span><span class="op">(</span></span>
+<span>    mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
+<span>      x <span class="op">=</span> <span class="va">start_time</span>,</span>
+<span>      xend <span class="op">=</span> <span class="va">end_time</span>,</span>
+<span>      y <span class="op">=</span> <span class="va">pt_id</span>,</span>
+<span>      color <span class="op">=</span> <span class="va">disease_assessment</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    linewidth <span class="op">=</span> <span class="fl">5</span></span>
+<span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
 <p><img src="ggswim_files/figure-html/ggswim%20plot-1.png" width="100%"></p>
 <p>Here we have a simple line graph, showing infusions grouped by
-patients with a given disease assessment status. <code><a href="../reference/ggswim.html">ggswim()</a></code>
-does the work of setting up a <code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">geom_segment()</a></code> and readying
-our plot layers for additional ggswim-specific features such as the
-“markers” mentioned earlier. Let’s add a marker layer next from the
-<code>infusion_events</code> dataset:</p>
+patients with a given disease assessment status.
+<code><a href="../reference/geom_swim_lane.html">geom_swim_lane()</a></code> does the work of setting up a
+<code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">geom_segment()</a></code> and readying our plot layers for additional
+ggswim-specific features such as the “markers” mentioned earlier.</p>
+</div>
+<div class="section level2">
+<h2 id="adding-a-marker-layer-points">Adding a Marker Layer: Points<a class="anchor" aria-label="anchor" href="#adding-a-marker-layer-points"></a>
+</h2>
+<p>Let’s add a marker layer next from the <code>infusion_events</code>
+dataset:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">infusion_events</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">rmarkdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgs.rstudio.com/rmarkdown/reference/paged_table.html" class="external-link">paged_table</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -185,10 +197,11 @@ on to the next one.</p>
 <p>Because <code><a href="https://eliocamp.github.io/ggnewscale/reference/new_scale.html" class="external-link">new_scale_color()</a></code> establishes the start of a new
 scale, it is important to define any scale changes we want before
 calling it and moving on to the next one. It is a common workflow to use
-<code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual()</a></code> to change and update the colors and
-names of the visible elements in both the plot and the legend, so we’ll
-apply it here, just after our swim lane layer but before moving on to
-adding the markers.</p>
+<code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual()</a></code>, <code><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_brewer()</a></code>,
+<code><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_color_discrete()</a></code>, etc., to change and update the
+colors and names of the visible elements in both the plot and the
+legend, so we’ll apply it here, just after our swim lane layer but
+before moving on to adding the markers.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">p</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span></span>
@@ -196,13 +209,12 @@ adding the markers.</p>
 <span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#6394F3"</span>, <span class="st">"#F3C363"</span>, <span class="st">"#EB792F"</span>, <span class="st">"#d73a76"</span>, <span class="st">"#85a31e"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://eliocamp.github.io/ggnewscale/reference/new_scale.html" class="external-link">new_scale_color</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/add_marker.html">add_marker</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/geom_swim_point.html">geom_swim_point</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">infusion_events</span>,</span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
 <span>      x <span class="op">=</span> <span class="va">time_from_initial_infusion</span>,</span>
 <span>      y <span class="op">=</span> <span class="va">pt_id</span>,</span>
 <span>      color <span class="op">=</span> <span class="va">infusion_type</span>,</span>
-<span>      shape <span class="op">=</span> <span class="va">infusion_type</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    size <span class="op">=</span> <span class="fl">5</span></span>
 <span>  <span class="op">)</span></span>
@@ -211,6 +223,10 @@ adding the markers.</p>
 <p><img src="ggswim_files/figure-html/first%20marker%20plot-1.png" width="100%"></p>
 <p>Now we can see shapes have been added to establish our markers for
 infusions.</p>
+</div>
+<div class="section level2">
+<h2 id="adding-a-marker-layer-labels">Adding a Marker Layer: Labels<a class="anchor" aria-label="anchor" href="#adding-a-marker-layer-labels"></a>
+</h2>
 <p>Our last dataset involves end of study events, i.e. events that
 indicate a patient has left the study for various reasons.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -224,16 +240,16 @@ indicate a patient has left the study for various reasons.</p>
 <p>You’ll notice that this dataset includes use of emojis under
 <code>end_study_label</code>. In addition to shapes and symbols, ggswim
 supports the use of emojis when rendering swimmer plots.
-<code><a href="../reference/add_marker.html">add_marker()</a></code> allows users to specify shapes or emojis by
-using the appropriate <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> argument callouts:
+<code><a href="../reference/geom_swim_label.html">geom_swim_label()</a></code> allows users to specify shapes or emojis
+by using the appropriate <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> argument callouts:
 <code>label_vals</code> and <code>label_names</code>. These are unique
-mapping parameters to ggswim, letting it support and wrap both
-<code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_label()</a></code> at the same
-time. Let’s add a layer using emojis via the
+mapping parameters to ggswim, letting it support and
+<code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_label()</a></code> while handling manipulation of scales and
+layers. Let’s add a layer using emojis via the
 <code>end_study_events</code> dataset:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">p</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/add_marker.html">add_marker</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/geom_swim_label.html">geom_swim_label</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">end_study_events</span>,</span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
 <span>      x <span class="op">=</span> <span class="va">time_from_initial_infusion</span>,</span>
@@ -242,7 +258,8 @@ time. Let’s add a layer using emojis via the
 <span>      label_names <span class="op">=</span> <span class="va">end_study_name</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    label.size <span class="op">=</span> <span class="cn">NA</span>, fill <span class="op">=</span> <span class="cn">NA</span>, size <span class="op">=</span> <span class="fl">5</span></span>
-<span>  <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_brewer</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Study Events"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
 <p><img src="ggswim_files/figure-html/second%20marker%20plot-1.png" width="100%"></p>
@@ -254,15 +271,18 @@ typical in this workflow to call <code><a href="https://ggplot2.tidyverse.org/re
 fix up the names and colors of the plot, but be sure to do so in the
 proper order with the use of <code><a href="https://eliocamp.github.io/ggnewscale/reference/new_scale.html" class="external-link">new_scale_color()</a></code> mentioned
 earlier!</p>
+</div>
+<div class="section level2">
+<h2 id="a-full-swimmer-plot">A Full Swimmer Plot<a class="anchor" aria-label="anchor" href="#a-full-swimmer-plot"></a>
+</h2>
 <p>Let’s fix up this plot so it looks nicer on the eyes:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">p</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_colour_manual</a></span><span class="op">(</span></span>
-<span>    name <span class="op">=</span> <span class="st">"Markers"</span>,</span>
-<span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>, <span class="st">"#25DA6D"</span>, <span class="cn">NA</span>, <span class="st">"firebrick"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_brewer</a></span><span class="op">(</span></span>
+<span>    name <span class="op">=</span> <span class="st">"Study Events"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"My Swimmer Plot"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Time (Months)"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Patient ID"</span><span class="op">)</span></span>
@@ -274,22 +294,18 @@ earlier!</p>
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/theme_ggswim.html">theme_ggswim</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ggswim_files/figure-html/mapping%20with%20theme_ggswim-1.png" width="100%"></p>
-</div>
 <div class="section level3">
 <h3 id="additional-notes">Additional notes<a class="anchor" aria-label="anchor" href="#additional-notes"></a>
 </h3>
 <p>Some additional considerations to keep in mind when working with
 ggswim:</p>
 <ul>
-<li><p><strong>Handling Missing Data:</strong> ggswim does not support
-missing data for mapping aesthetics. If any are detected, developers
-will receive a warning, and the missing data may appear as
-<code>NA</code> values in the display, but will be excluded from the
-legend.</p></li>
-<li><p><strong>Rendering Emojis and Custom Shapes:</strong> To ensure
+<li>
+<strong>Rendering Emojis and Custom Shapes:</strong> To ensure
 emojis and other custom shapes display correctly, users may need to <a href="https://support.posit.co/hc/en-us/articles/360017886674-Troubleshooting-RStudio-Rendering-Errors" class="external-link">switch
-their graphics rendering device</a> to AGG.</p></li>
+their graphics rendering device</a> to AGG.</li>
 </ul>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
