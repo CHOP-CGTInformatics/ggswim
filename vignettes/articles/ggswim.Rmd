@@ -15,7 +15,13 @@ knitr::opts_chunk$set(
 
 The ggswim package eases the development of swimmer plots in R through integration with the ggplot2 framework. In this vignette, we'll walk through how users can create visually striking swimmer plots.
 
-ggswim offers several layering functions that mimic other "geom" functions from core ggplot2: `geom_swim_lane()`, `geom_swim_point()`, and `geom_swim_label()`. The former, an extension of `geom_segment()`, allows users to construct the horizontal bars, what we'll sometimes refer to as "lanes." Meanwhile, `geom_swim_point()` and `geom_swim_label` wrap both `geom_point()` and `geom_label()`, respectively, to effortlessly embed key events, or "markers," onto the lanes. These can take the form of shapes, symbols, or even emojis.
+ggswim offers several layering functions that mimic other "geom" functions from core ggplot2: 
+
+- `geom_swim_lane()`
+- `geom_swim_point()`
+- `geom_swim_label()`
+
+The former, an extension of `geom_segment()`, allows users to construct the horizontal bars, what we'll sometimes refer to as "lanes." Meanwhile, `geom_swim_point()` and `geom_swim_label` wrap both `geom_point()` and `geom_label()`, respectively, to effortlessly embed key events, or "markers," onto the lanes. These can take the form of shapes, symbols, or even emojis.
 
 Drawing from the well-established principles of ggplot2, ggswim allows users to apply familiar layer-building techniques, including the application of styles and themes.
 
