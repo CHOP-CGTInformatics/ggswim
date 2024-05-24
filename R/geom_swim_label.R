@@ -81,11 +81,9 @@ geom_swim_label <- function(mapping = NULL, data = NULL,
 #' @export
 ggplot_add.swim_label <- function(object, plot, object_name) {
   # Unpack vars ----
-  data <- attr(object, "data") # nolint object_usage_linter
-
-  # Enforce checks ----
   mapping <- attr(object, "mapping")
 
+  # Enforce checks ----
   check_supported_mapping_aes(
     mapping = mapping,
     unsupported_aes = "fill",

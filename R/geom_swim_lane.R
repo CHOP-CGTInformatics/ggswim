@@ -70,11 +70,11 @@ geom_swim_lane <- function(mapping = NULL, data = NULL,
 
 #' @export
 ggplot_add.swim_lane <- function(object, plot, object_name) {
-  # Enforce checks ----
+  # Unpack vars ----
   mapping <- attr(object, "mapping")
 
-  # TODO: Determine better standard method of stopping `fill`
-  # Is ignored in geom_segment
+  # Enforce checks ----
+  # TODO: Determine if custom error is better than standard ignore warning
   check_supported_mapping_aes(
     mapping = mapping,
     unsupported_aes = "fill",
