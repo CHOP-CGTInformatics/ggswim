@@ -311,7 +311,7 @@ check_supported_position_args <- function(position,
   }
 }
 
-#' @title check for missing params
+#' @title check for missing aes mappingparams
 #'
 #' @description
 #' Utility check to block users from submitting functions that are missing key
@@ -330,16 +330,43 @@ check_supported_position_args <- function(position,
 #'
 #' @keywords internal
 
-check_missing_params <- function(mapping,
-                                 params,
+check_missing_aes_params <- function(mapping,
+                                     params,
+                                     parent_func) {
+  msg <- c(
+    "x" = "Missing aes parameters in {.code {parent_func}}",
+    "i" = "{params} parameter{?s} are required for {.code {parent_func}}."
+  )
+  cond_class <- c("ggswim_cond", "missing_aes_params")
+
+  if (!all(params %in% names(mapping))) {
+    cli_abort(message = msg, call = caller_env(), class = cond_class)
+  }
+}
+
+#' @title check for missing params
+#'
+#' @description
+#' Utility check to block users from submitting functions that are missing key
+#' parameters. Tests a single parameter for being `NULL`.
+#'
+#' @param param A parameter to check for `NULL`
+#' @param name The name of the parameter checked
+#' @param parent_func The function in which this is being called, to be
+#' referenced in the message output
+#'
+#' @keywords internal
+
+check_missing_params <- function(param,
+                                 name,
                                  parent_func) {
   msg <- c(
     "x" = "Missing parameters in {.code {parent_func}}",
-    "i" = "{params} parameter{?s} are required for {.code {parent_func}}."
+    "i" = "Parameter `{name}` required for {.code {parent_func}}."
   )
   cond_class <- c("ggswim_cond", "missing_params")
 
-  if (!all(params %in% names(mapping))) {
+  if (is.null(param)) {
     cli_abort(message = msg, call = caller_env(), class = cond_class)
   }
 }

@@ -178,17 +178,37 @@ test_that("check_supported_position_args works", {
   )
 })
 
-test_that("check_missing_params works", {
+test_that("check_missing_aes_params works", {
   mapping <- tibble(test = "test", x = "x")
   params <- c("x", "y")
   parent_func <- "test_function()"
 
   expect_error(
-    check_missing_params(mapping, params, parent_func),
-    class = "missing_params"
+    check_missing_aes_params(mapping, params, parent_func),
+    class = "missing_aes_params"
   )
 
   expect_no_error(
-    check_missing_params(mapping, params = "x", parent_func)
+    check_missing_aes_params(mapping, params = "x", parent_func)
+  )
+})
+
+test_that("check_missing_aes_params works", {
+  data <- NULL
+  name <- "data"
+  parent_func <- "test_function()"
+
+  expect_error(
+    check_missing_params(
+      param = data,
+      name,
+      parent_func
+    ),
+    class = "missing_params"
+  )
+
+  data <- data.frame()
+  expect_no_error(
+    check_missing_params(param = data, name, parent_func)
   )
 })

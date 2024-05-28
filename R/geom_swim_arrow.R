@@ -115,6 +115,18 @@ ggplot_add.swim_arrow <- function(object, plot, object_name) {
   check_arrow_fill_type(arrow_type, arrow_fill)
   # Give error if arrow_neck_length not a name or numeric val
   check_arrow_neck_length(arrow_neck_length)
+  # Check that all params are provided due to inability to support inheritance (#44)
+  check_missing_aes_params(
+    mapping = mapping,
+    params = c("xend", "y"),
+    parent_func = "geom_swim_arrow()"
+  )
+
+  check_missing_params(
+    param = data,
+    name = "data",
+    parent_func = "geom_swim_arrow()"
+  )
 
   x_val <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "xend") # nolint: object_usage_linter
   y_val <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "y")
