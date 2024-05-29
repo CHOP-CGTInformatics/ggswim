@@ -13,15 +13,15 @@ knitr::opts_chunk$set(
 )
 ```
 
-The ggswim package eases the development of swimmer plots in R through integration with the ggplot2 framework. In this vignette, we'll walk through how users can create visually striking swimmer plots.
+The ggswim package eases the development of swimmer plots in R through extension of ggplot2 in combination with ggnewscale. In this vignette, we'll walk through how users can create visually striking swimmer plots.
 
-ggswim offers several layering functions that mimic other "geom" functions from core ggplot2: 
+ggswim offers several layering functions that mimic other "geom" functions from ggplot2: 
 
 - `geom_swim_lane()`
 - `geom_swim_point()`
 - `geom_swim_label()`
 
-The former, an extension of `geom_segment()`, allows users to construct the horizontal bars, what we'll sometimes refer to as "lanes." Meanwhile, `geom_swim_point()` and `geom_swim_label` wrap both `geom_point()` and `geom_label()`, respectively, to effortlessly embed key events, or "markers," onto the lanes. These can take the form of shapes, symbols, or even emojis.
+The former, an extension of `geom_segment()`, allows users to construct the horizontal bars, what we'll sometimes refer to as "lanes." Meanwhile, `geom_swim_point()` and `geom_swim_label` wrap both `geom_point()` and `geom_label()`, respectively, to effortlessly embed key events of interest, or "markers," onto the lanes. These can take the form of shapes, symbols, or even emojis.
 
 Drawing from the well-established principles of ggplot2, ggswim allows users to apply familiar layer-building techniques, including the application of styles and themes.
 
@@ -79,9 +79,9 @@ infusion_events |>
 
 This dataset is much simpler, having only 3 columns indicating the time from the initial infusion, where 0 is an initial infusion and reinfusions at some point beyond 0 (if a patient had any). These are also categorized under `infusion_type`. 
 
-In order to separate layers of identical types, in this case `color`s, we need a way to separate out the legend by lanes and markers. By default, ggplot2 will group these together, but by using `new_scale_color()` from the ggnewscale package we can specify that we want to actually keep these in their own scales. `new_scale_color()` can be used to make any number of separations you need, just be sure to call a separation at the top of each marker call and include any additional scale changes before moving on to the next one.
+In order to separate layers of identical types, in this case `color`s, we need a way to separate out the legend by lanes and markers. By default, ggplot2 will group these together, but by using `new_scale_color()` from the ggnewscale package we can specify that we want to actually keep these in separate scales. 
 
-Because `new_scale_color()` establishes the start of a new scale, it is important to define any scale changes we want before calling it and moving on to the next one. It is a common workflow to use `scale_color_manual()`, `scale_color_brewer()`, `scale_color_discrete()`, etc., to change and update the colors and names of the visible elements in both the plot and the legend, so we'll apply it here, just after our swim lane layer but before moving on to adding the markers.
+`new_scale_color()` can be used to make any number of separations you need, but because `new_scale_color()` establishes the start of a new scale, it is important to define any scale changes we want before calling it and moving on to the next one. It is a common workflow to use `scale_color_manual()`, `scale_color_brewer()`, `scale_color_discrete()`, etc., to change and update the colors and names of the visible elements in both the plot and the legend, so we'll apply a manual scale change here, just after our swim lane layer but before moving on to adding the markers.
 
 ```{r first marker plot, message=FALSE}
 p <- p +
@@ -137,7 +137,7 @@ We've successfully made a swimmer plot with lanes and two different kinds of mar
 
 ## A Full Swimmer Plot
 
-Let's fix up this plot so it looks nicer on the eyes:
+Let's fix up this plot so it looks a bit prettier:
 
 ```{r mapping finalizing, message=FALSE, warning=FALSE}
 library(ggplot2)

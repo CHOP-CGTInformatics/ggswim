@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 [![Codecov test coverage](https://codecov.io/gh/CHOP-CGTInformatics/ggswim/branch/main/graph/badge.svg)](https://app.codecov.io/gh/CHOP-CGTInformatics/ggswim?branch=main)
 <!-- badges: end -->
 
-The ggswim package provides a convenient set of commands to easily create swimmer plots. It integrates with the familiar ggplot2 framework and streamlines the process of generating legends that effectively communicate events of interest along individual subject trajectories.  
+The ggswim package provides a convenient set of commands to easily create swimmer plots. As an extension of ggplot2, it streamlines the process of generating legends that effectively communicate events of interest along subject response paths.  
 
 ggswim solves some of the headaches associated with layer management in ggplot2 by leveraging the [ggnewscale](https://eliocamp.github.io/ggnewscale/) package and presenting an optimized workflow to get a swimmer plot.
 
@@ -40,7 +40,7 @@ devtools::install_github("CHOP-CGTInformatics/ggswim")
 
 To help you get started, ggswim includes three sample datasets: `patient_data`, `infusion_events`, and `end_study_events`. These de-identified datasets simulate real world data related to infusions, disease assessments, and study statuses for a clinical trial.
 
-ggswim offers several geom-functions, and by using `geom_swim_lane()` we can set up the horizontal survival bars of our swimmer plot, i.e. the "lanes". We'll also set up corresponding arrows to indicate subjects that are still on the trial:
+ggswim offers several geom-functions, and by using `geom_swim_lane()` we can set up the horizontal response paths of our swimmer plot, i.e. the "lanes". We'll also set up corresponding arrows to indicate subjects that are still on the trial:
 
 ```{r, include=FALSE}
 library(ggswim)
@@ -79,7 +79,7 @@ p <- patient_data |>
 p
 ```
 
-Next we'll add on events of interest: end of study updates, and infusions. We'll refer to these as "markers" and call them with two more geom-functions: `geom_swim_point()` and `geom_swim_label()`.
+Next we'll add on events of interest: end of study updates and infusions. We'll refer to these as "markers" and call them with two more "geom" functions: `geom_swim_point()` and `geom_swim_label()`.
 
 ```{r, message=FALSE}
 p <- p +
@@ -110,6 +110,6 @@ p +
 
 ## Collaboration
 
-We invite you to give feedback and collaborate with us! If you are familiar with GitHub and R packages, please feel free to submit a [pull request](https://github.com/CHOP-CGTInformatics/ggswim/pulls). Please do let us know if ggswim fails for whatever reason with your database and submit a bug report by creating a GitHub [issue](https://github.com/CHOP-CGTInformatics/ggswim/issues).
+We invite you to give feedback and collaborate with us! If you are familiar with GitHub and R packages, please feel free to submit a [pull request](https://github.com/CHOP-CGTInformatics/ggswim/pulls). Please do let us know if ggswim fails for whatever reason with your use case and submit a bug report by creating a GitHub [issue](https://github.com/CHOP-CGTInformatics/ggswim/issues).
 
 Please note that this project is released with a Contributor Code of Conduct. By participating you agree to abide by its terms.

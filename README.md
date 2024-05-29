@@ -13,9 +13,9 @@ coverage](https://codecov.io/gh/CHOP-CGTInformatics/ggswim/branch/main/graph/bad
 <!-- badges: end -->
 
 The ggswim package provides a convenient set of commands to easily
-create swimmer plots. It integrates with the familiar ggplot2 framework
-and streamlines the process of generating legends that effectively
-communicate events of interest along individual subject trajectories.
+create swimmer plots. As an extension of ggplot2, it streamlines the
+process of generating legends that effectively communicate events of
+interest along subject response paths.
 
 ggswim solves some of the headaches associated with layer management in
 ggplot2 by leveraging the
@@ -38,7 +38,7 @@ de-identified datasets simulate real world data related to infusions,
 disease assessments, and study statuses for a clinical trial.
 
 ggswim offers several geom-functions, and by using `geom_swim_lane()` we
-can set up the horizontal survival bars of our swimmer plot, i.e. the
+can set up the horizontal response paths of our swimmer plot, i.e. the
 “lanes”. We’ll also set up corresponding arrows to indicate subjects
 that are still on the trial:
 
@@ -68,9 +68,9 @@ p
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
 
-Next we’ll add on events of interest: end of study updates, and
+Next we’ll add on events of interest: end of study updates and
 infusions. We’ll refer to these as “markers” and call them with two more
-geom-functions: `geom_swim_point()` and `geom_swim_label()`.
+“geom” functions: `geom_swim_point()` and `geom_swim_label()`.
 
 ``` r
 p <- p +
@@ -109,7 +109,7 @@ p +
 We invite you to give feedback and collaborate with us! If you are
 familiar with GitHub and R packages, please feel free to submit a [pull
 request](https://github.com/CHOP-CGTInformatics/ggswim/pulls). Please do
-let us know if ggswim fails for whatever reason with your database and
+let us know if ggswim fails for whatever reason with your use case and
 submit a bug report by creating a GitHub
 [issue](https://github.com/CHOP-CGTInformatics/ggswim/issues).
 
