@@ -34,6 +34,7 @@ Roxygen: list(markdown = TRUE)
 Suggests: 
     knitr,
     lintr,
+    ragg,
     rmarkdown,
     testthat (>= 3.0.0),
     vdiffr

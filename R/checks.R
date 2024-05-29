@@ -311,7 +311,7 @@ check_supported_position_args <- function(position,
   }
 }
 
-#' @title check for missing aes mappingparams
+#' @title check for missing aes mapping params
 #'
 #' @description
 #' Utility check to block users from submitting functions that are missing key

@@ -2,7 +2,7 @@
 % Please edit documentation in R/checks.R
 \name{check_missing_aes_params}
 \alias{check_missing_aes_params}
-\title{check for missing aes mappingparams}
+\title{check for missing aes mapping params}
 \usage{
 check_missing_aes_params(mapping, params, parent_func)
 }
