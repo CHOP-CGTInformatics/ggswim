@@ -89,17 +89,18 @@
       <img src="../logo.png" class="logo" alt=""><h1>Getting Started with ggswim</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/CHOP-CGTInformatics/ggswim/blob/HEAD/vignettes/articles/ggswim.Rmd" class="external-link"><code>vignettes/articles/ggswim.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/CHOP-CGTInformatics/ggswim/blob/HEAD/vignettes/ggswim.Rmd" class="external-link"><code>vignettes/ggswim.Rmd</code></a></small>
       <div class="d-none name"><code>ggswim.Rmd</code></div>
     </div>
 
     
     
 <p>The ggswim package eases the development of swimmer plots in R
-through integration with the ggplot2 framework. In this vignette, we’ll
-walk through how users can create visually striking swimmer plots.</p>
+through extension of ggplot2 in combination with ggnewscale. In this
+vignette, we’ll walk through how users can create visually striking
+swimmer plots.</p>
 <p>ggswim offers several layering functions that mimic other “geom”
-functions from core ggplot2:</p>
+functions from ggplot2:</p>
 <ul>
 <li><code><a href="../reference/geom_swim_lane.html">geom_swim_lane()</a></code></li>
 <li><code><a href="../reference/geom_swim_point.html">geom_swim_point()</a></code></li>
@@ -110,8 +111,8 @@ to construct the horizontal bars, what we’ll sometimes refer to as
 “lanes.” Meanwhile, <code><a href="../reference/geom_swim_point.html">geom_swim_point()</a></code> and
 <code>geom_swim_label</code> wrap both <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point()</a></code> and
 <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_label()</a></code>, respectively, to effortlessly embed key
-events, or “markers,” onto the lanes. These can take the form of shapes,
-symbols, or even emojis.</p>
+events of interest, or “markers,” onto the lanes. These can take the
+form of shapes, symbols, or even emojis.</p>
 <p>Drawing from the well-established principles of ggplot2, ggswim
 allows users to apply familiar layer-building techniques, including the
 application of styles and themes.</p>
@@ -189,19 +190,17 @@ also categorized under <code>infusion_type</code>.</p>
 <code>color</code>s, we need a way to separate out the legend by lanes
 and markers. By default, ggplot2 will group these together, but by using
 <code><a href="https://eliocamp.github.io/ggnewscale/reference/new_scale.html" class="external-link">new_scale_color()</a></code> from the ggnewscale package we can
-specify that we want to actually keep these in their own scales.
-<code><a href="https://eliocamp.github.io/ggnewscale/reference/new_scale.html" class="external-link">new_scale_color()</a></code> can be used to make any number of
-separations you need, just be sure to call a separation at the top of
-each marker call and include any additional scale changes before moving
-on to the next one.</p>
-<p>Because <code><a href="https://eliocamp.github.io/ggnewscale/reference/new_scale.html" class="external-link">new_scale_color()</a></code> establishes the start of a new
-scale, it is important to define any scale changes we want before
-calling it and moving on to the next one. It is a common workflow to use
-<code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual()</a></code>, <code><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_brewer()</a></code>,
-<code><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_color_discrete()</a></code>, etc., to change and update the
-colors and names of the visible elements in both the plot and the
-legend, so we’ll apply it here, just after our swim lane layer but
-before moving on to adding the markers.</p>
+specify that we want to actually keep these in separate scales.</p>
+<p><code><a href="https://eliocamp.github.io/ggnewscale/reference/new_scale.html" class="external-link">new_scale_color()</a></code> can be used to make any number of
+separations you need, but because <code><a href="https://eliocamp.github.io/ggnewscale/reference/new_scale.html" class="external-link">new_scale_color()</a></code>
+establishes the start of a new scale, it is important to define any
+scale changes we want before calling it and moving on to the next one.
+It is a common workflow to use <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual()</a></code>,
+<code><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_brewer()</a></code>, <code><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_color_discrete()</a></code>,
+etc., to change and update the colors and names of the visible elements
+in both the plot and the legend, so we’ll apply a manual scale change
+here, just after our swim lane layer but before moving on to adding the
+markers.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">p</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span></span>
@@ -275,7 +274,7 @@ earlier!</p>
 <div class="section level2">
 <h2 id="a-full-swimmer-plot">A Full Swimmer Plot<a class="anchor" aria-label="anchor" href="#a-full-swimmer-plot"></a>
 </h2>
-<p>Let’s fix up this plot so it looks nicer on the eyes:</p>
+<p>Let’s fix up this plot so it looks a bit prettier:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
