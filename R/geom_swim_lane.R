@@ -119,16 +119,36 @@ GeomSwimLane <- ggproto("GeomSwimLane", Geom,
     linewidth = 2,
     size = 2,
     linetype = 1,
-    alpha = NA
+    shape = 19,
+    fill = NA,
+    alpha = NA,
+    stroke = 1
   ),
   draw_panel = function(data, panel_params, coord,
-                        lineend = "butt", linejoin = "round", na.rm = FALSE) {
-    # Return all components
+                        lineend = "butt", linejoin = "round", na.rm = FALSE, ...) {
+
+    # Transform data (if necessary)
+    points <- transform(data)
+
+    # Capture Segment info and linewidth val
+    segment_info <- GeomSegment$draw_panel(data, panel_params, coord,
+                                           arrow = NULL, arrow.fill = NULL,
+                                           lineend = "butt", linejoin = "round", na.rm = FALSE
+    )
+    segment_linewidth <- segment_info$gp$lwd[[1]]
+
+    # Capture Point info and fontsize val
+    point_info <- GeomPoint$draw_panel(points, panel_params, coord, ...)
+    point_fontsize <- point_info$gp$fontsize[[1]]
+
+    # Apply point offset in y-direction for indicators
+    # Rough estimate function, works for shape 25. Not tested for other shapes
+    point_info$y <- point_info$y + 0.55 * unit(point_fontsize, "pt") +
+      unit((segment_linewidth * ggplot2::.pt) / ggplot2::.stroke * 0.5, "pt")
+
     grid::gList(
-      GeomSegment$draw_panel(data, panel_params, coord,
-        arrow = NULL, arrow.fill = NULL,
-        lineend = "butt", linejoin = "round", na.rm = FALSE
-      )
+      segment_info,
+      point_info
     )
   }
 )
