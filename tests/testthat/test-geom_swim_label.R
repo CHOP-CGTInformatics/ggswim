@@ -36,3 +36,20 @@ test_that("all expected attributes exist in geom_swim_label", {
 
   expect_true(all(expected_attrs %in% attrs))
 })
+
+test_that("geom_swim_label works when data is assigned from previous layer", {
+  p <- ggplot2::ggplot(data = end_study_events) +
+    geom_swim_label(
+      mapping = aes(
+        x = time_from_initial_infusion, y = pt_id,
+        label_vals = end_study_label,
+        label_names = end_study_name
+      )
+    )
+
+  skip_on_ci()
+  vdiffr::expect_doppelganger(
+    title = "geom_swim_label works with inherited data",
+    fig = p
+  )
+})
