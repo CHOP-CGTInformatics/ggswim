@@ -80,7 +80,7 @@ ggplot_add.swim_lane <- function(object, plot, object_name) {
     unsupported_aes = "fill",
     parent_func = "geom_swim_lane()"
   )
-
+# browser()
   new_layer <- layer(
     data = attr(object, "data"),
     mapping = mapping,
@@ -114,7 +114,9 @@ ggplot_add.swim_lane <- function(object, plot, object_name) {
 GeomSwimLane <- ggproto("GeomSwimLane", Geom,
   required_aes = c("x", "y", "xend"),
   non_missing_aes = c("linetype", "linewidth"),
+  extra_params = c("na.rm", "lineend", "linejoin"),
   default_aes = aes(
+    indicator_x = NULL,
     colour = "black",
     linewidth = 2,
     size = 2,
@@ -125,15 +127,25 @@ GeomSwimLane <- ggproto("GeomSwimLane", Geom,
     stroke = 1
   ),
   draw_panel = function(data, panel_params, coord,
-                        lineend = "butt", linejoin = "round", na.rm = FALSE, ...) {
-
+                        lineend = lineend, linejoin = linejoin,
+                        indicator_x = NULL,
+                        na.rm = FALSE, ...) {
+# browser()
     # Transform data (if necessary)
     points <- transform(data)
+    points$x <- points$indicator_x
+
+    # TODO: Determine better way to pass and handle these values
+    # Capture lineend and linejoin
+    # lineend <- data$lineend
+    # linejoin <- data$linejoin
 
     # Capture Segment info and linewidth val
     segment_info <- GeomSegment$draw_panel(data, panel_params, coord,
                                            arrow = NULL, arrow.fill = NULL,
-                                           lineend = "butt", linejoin = "round", na.rm = FALSE
+                                           # lineend = lineend, linejoin = linejoin,
+                                           na.rm = FALSE,
+                                           ...
     )
     segment_linewidth <- segment_info$gp$lwd[[1]]
 
