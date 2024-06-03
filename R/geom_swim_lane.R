@@ -80,7 +80,7 @@ ggplot_add.swim_lane <- function(object, plot, object_name) {
     unsupported_aes = "fill",
     parent_func = "geom_swim_lane()"
   )
-# browser()
+
   new_layer <- layer(
     data = attr(object, "data"),
     mapping = mapping,
@@ -114,9 +114,10 @@ ggplot_add.swim_lane <- function(object, plot, object_name) {
 GeomSwimLane <- ggproto("GeomSwimLane", Geom,
   required_aes = c("x", "y", "xend"),
   non_missing_aes = c("linetype", "linewidth"),
-  extra_params = c("na.rm", "lineend", "linejoin"),
+  optional_aes = c("indicator_x", "indicator_col"),
   default_aes = aes(
     indicator_x = NULL,
+    indicator_col = NULL,
     colour = "black",
     linewidth = 2,
     size = 2,
@@ -126,41 +127,44 @@ GeomSwimLane <- ggproto("GeomSwimLane", Geom,
     alpha = NA,
     stroke = 1
   ),
-  draw_panel = function(data, panel_params, coord,
-                        lineend = lineend, linejoin = linejoin,
-                        indicator_x = NULL,
-                        na.rm = FALSE, ...) {
-# browser()
-    # Transform data (if necessary)
-    points <- transform(data)
-    points$x <- points$indicator_x
+  draw_panel = function(self, data, panel_params, coord,
+                        lineend = "butt", linejoin = "round",
+                        na.rm = FALSE) {
 
-    # TODO: Determine better way to pass and handle these values
-    # Capture lineend and linejoin
-    # lineend <- data$lineend
-    # linejoin <- data$linejoin
+    # Construct info list
+    out_info <- list()
 
     # Capture Segment info and linewidth val
     segment_info <- GeomSegment$draw_panel(data, panel_params, coord,
-                                           arrow = NULL, arrow.fill = NULL,
-                                           # lineend = lineend, linejoin = linejoin,
-                                           na.rm = FALSE,
-                                           ...
+                                           lineend = lineend, linejoin = linejoin,
+                                           na.rm = FALSE
     )
     segment_linewidth <- segment_info$gp$lwd[[1]]
 
-    # Capture Point info and fontsize val
-    point_info <- GeomPoint$draw_panel(points, panel_params, coord, ...)
-    point_fontsize <- point_info$gp$fontsize[[1]]
+    out_info <- append(out_info, list(segment_info))
 
-    # Apply point offset in y-direction for indicators
-    # Rough estimate function, works for shape 25. Not tested for other shapes
-    point_info$y <- point_info$y + 0.55 * unit(point_fontsize, "pt") +
-      unit((segment_linewidth * ggplot2::.pt) / ggplot2::.stroke * 0.5, "pt")
+    # Transform point data for indicators (if necessary)
 
-    grid::gList(
-      segment_info,
-      point_info
-    )
+    if (!is.null(data$indicator_x)) {
+      points <- transform(data)
+      points$x <- points$indicator_x
+      points$colour <- if (all(is.null(points$indicator_col))) {
+        points$colour
+      } else {
+        points$indicator_col
+      }
+
+      # Capture Point info and fontsize val
+      point_info <- GeomPoint$draw_panel(points, panel_params, coord)
+      point_fontsize <- point_info$gp$fontsize[[1]]
+
+      # Apply point offset in y-direction for indicators
+      # Rough estimate function, works for shape 25. Not tested for other shapes
+      point_info$y <- point_info$y + 0.55 * unit(point_fontsize, "pt") +
+        unit((segment_linewidth * ggplot2::.pt) / ggplot2::.stroke * 0.5, "pt")
+
+      out_info <- append(out_info, list(point_info))
+    }
+    do.call(grid::gList, out_info)
   }
 )
