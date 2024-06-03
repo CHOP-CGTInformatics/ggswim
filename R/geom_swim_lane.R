@@ -127,7 +127,7 @@ GeomSwimLane <- ggproto("GeomSwimLane", Geom,
     grid::gList(
       GeomSegment$draw_panel(data, panel_params, coord,
         arrow = NULL, arrow.fill = NULL,
-        lineend = "butt", linejoin = "round", na.rm = FALSE
+        lineend = lineend, linejoin = linejoin, na.rm = FALSE
       )
     )
   }
