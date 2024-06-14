@@ -45,33 +45,42 @@
 geom_swim_lane <- function(mapping = NULL, data = NULL,
                            stat = "identity", position = "identity",
                            ...,
+                           arrow = NULL,
+                           arrow.fill = NULL,
                            lineend = "butt",
                            linejoin = "round",
                            na.rm = FALSE,
                            show.legend = NA,
                            inherit.aes = TRUE) {
-  structure(
-    "geom_swim_lane",
-    class = c("swim_lane", "ggswim_layer"),
-    stat = stat,
-    position = position,
-    mapping = mapping,
+  layer_obj <- layer(
     data = data,
+    mapping = mapping,
+    stat = stat,
+    geom = GeomSwimLane,
+    position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params = list(
-      na.rm = na.rm,
+    params = list2(
+      arrow = arrow,
+      arrow.fill = arrow.fill,
       lineend = lineend,
       linejoin = linejoin,
-      ... = ...
+      na.rm = na.rm,
+      ...
     )
   )
+
+  # Add custom attribute and modify class
+  attr(layer_obj, "swim_class") <- "swim_lane"
+  class(layer_obj) <- c("swim_lane", class(layer_obj))
+
+  layer_obj
 }
 
 #' @export
 ggplot_add.swim_lane <- function(object, plot, object_name) {
   # Unpack vars ----
-  mapping <- attr(object, "mapping")
+  mapping <- object$mapping
 
   # Enforce checks ----
   # TODO: Determine if custom error is better than standard ignore warning
@@ -81,23 +90,8 @@ ggplot_add.swim_lane <- function(object, plot, object_name) {
     parent_func = "geom_swim_lane()"
   )
 
-  new_layer <- layer(
-    data = attr(object, "data"),
-    mapping = mapping,
-    stat = attr(object, "stat"),
-    geom = GeomSwimLane,
-    position = attr(object, "position"),
-    show.legend = attr(object, "show.legend"),
-    key_glyph = "path",
-    inherit.aes = attr(object, "inherit.aes"),
-    params = attr(object, "params")
-  )
-
-  # Add a reference class to the layer attributes
-  new_layer$swim_class <- "swim_lane"
-
   # TODO: Determine if below better than just:   plot <- plot + new_layer
-  plot$layers <- append(plot$layers, new_layer)
+  plot$layers <- append(plot$layers, object)
 
   # Return
   if (!"ggswim_obj" %in% class(plot)) {
@@ -111,7 +105,7 @@ ggplot_add.swim_lane <- function(object, plot, object_name) {
 #' @format NULL
 #' @usage NULL
 #' @export
-GeomSwimLane <- ggproto("GeomSwimLane", Geom,
+GeomSwimLane <- ggproto("GeomSwimLane", GeomSegment,
   required_aes = c("x", "y", "xend"),
   non_missing_aes = c("linetype", "linewidth"),
   optional_aes = c("indicator_x", "indicator_col"),
@@ -127,17 +121,15 @@ GeomSwimLane <- ggproto("GeomSwimLane", Geom,
     alpha = NA,
     stroke = 1
   ),
-  draw_panel = function(self, data, panel_params, coord,
-                        lineend = "butt", linejoin = "round",
-                        na.rm = FALSE) {
-
+  draw_panel = function(self, data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
+                        lineend = "butt", linejoin = "round", na.rm = FALSE) {
     # Construct info list
     out_info <- list()
 
     # Capture Segment info and linewidth val
     segment_info <- GeomSegment$draw_panel(data, panel_params, coord,
-                                           lineend = lineend, linejoin = linejoin,
-                                           na.rm = FALSE
+      lineend = lineend, linejoin = linejoin,
+      na.rm = FALSE
     )
     segment_linewidth <- segment_info$gp$lwd[[1]]
 

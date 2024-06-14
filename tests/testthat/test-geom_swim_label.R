@@ -8,7 +8,12 @@ test_that("geom_swim_label is the right class", {
     )
   )
 
-  expect_setequal(attr(layer, "class"), c("swim_label", "ggswim_layer"))
+  expected_classes <- c(
+    "swim_label", "LayerInstance", "Layer", "ggproto", "gg"
+  )
+
+
+  expect_setequal(attr(layer, "class"), expected_classes)
 })
 
 test_that("all expected attributes exist in geom_swim_label", {
@@ -25,13 +30,7 @@ test_that("all expected attributes exist in geom_swim_label", {
 
   expected_attrs <- c(
     "class",
-    "stat",
-    "position",
-    "mapping",
-    "data",
-    "show.legend",
-    "inherit.aes",
-    "params"
+    "swim_class"
   )
 
   expect_true(all(expected_attrs %in% attrs))

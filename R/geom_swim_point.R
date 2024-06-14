@@ -45,26 +45,31 @@ geom_swim_point <- function(mapping = NULL, data = NULL,
                             na.rm = FALSE,
                             show.legend = NA,
                             inherit.aes = TRUE) {
-  structure(
-    "geom_swim_point",
-    class = c("swim_point", "ggswim_layer"),
-    stat = stat,
-    position = position,
-    mapping = mapping,
+  layer_obj <- layer(
     data = data,
+    mapping = mapping,
+    stat = stat,
+    geom = GeomSwimPoint,
+    position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params = list(
+    params = list2(
       na.rm = na.rm,
-      ... = ...
+      ...
     )
   )
+
+  # Add custom attribute and modify class
+  attr(layer_obj, "swim_class") <- "swim_point"
+  class(layer_obj) <- c("swim_point", class(layer_obj))
+
+  layer_obj
 }
 
 #' @export
 ggplot_add.swim_point <- function(object, plot, object_name) {
   # Unpack vars ----
-  mapping <- attr(object, "mapping")
+  mapping <- object$mapping
 
   # Enforce checks ----
   check_supported_mapping_aes(
@@ -73,21 +78,9 @@ ggplot_add.swim_point <- function(object, plot, object_name) {
     parent_func = "geom_swim_point()"
   )
 
-  new_layer <- layer(
-    data = attr(object, "data"),
-    mapping = mapping,
-    stat = attr(object, "stat"),
-    geom = GeomSwimPoint,
-    position = attr(object, "position"),
-    show.legend = attr(object, "show.legend"),
-    inherit.aes = attr(object, "inherit.aes"),
-    params = attr(object, "params")
-  )
+  object$mapping <- mapping
 
-  # Tag the layer with a reference attribute
-  new_layer$swim_class <- "marker_point"
-
-  plot$layers <- append(plot$layers, new_layer)
+  plot$layers <- append(plot$layers, object)
 
   # Return
   if (!"ggswim_obj" %in% class(plot)) {
@@ -101,14 +94,14 @@ ggplot_add.swim_point <- function(object, plot, object_name) {
 #' @format NULL
 #' @usage NULL
 #' @export
-GeomSwimPoint <- ggproto("GeomSwimPoint", Geom,
+GeomSwimPoint <- ggproto("GeomSwimPoint", GeomPoint,
   required_aes = c("x", "y"),
   non_missing_aes = c("size", "shape", "colour"),
   default_aes = aes(
     shape = 19, colour = "black", size = 1.5, fill = NA,
     alpha = NA, stroke = 0.5
   ),
-  draw_panel = function(data, panel_params, coord, ...) {
+  draw_panel = function(self, data, panel_params, coord, ...) {
     # Return all components
     grid::gList(
       GeomPoint$draw_panel(data, panel_params, coord, ...)

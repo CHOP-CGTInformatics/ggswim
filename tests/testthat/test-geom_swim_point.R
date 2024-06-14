@@ -7,7 +7,12 @@ test_that("geom_swim_point is the right class", {
     )
   )
 
-  expect_setequal(attr(layer, "class"), c("swim_point", "ggswim_layer"))
+  expected_classes <- c(
+    "swim_point", "LayerInstance", "Layer", "ggproto", "gg"
+  )
+
+
+  expect_setequal(attr(layer, "class"), expected_classes)
 })
 
 test_that("all expected attributes exist in geom_swim_point", {
@@ -23,13 +28,7 @@ test_that("all expected attributes exist in geom_swim_point", {
 
   expected_attrs <- c(
     "class",
-    "stat",
-    "position",
-    "mapping",
-    "data",
-    "show.legend",
-    "inherit.aes",
-    "params"
+    "swim_class"
   )
 
   expect_true(all(expected_attrs %in% attrs))
