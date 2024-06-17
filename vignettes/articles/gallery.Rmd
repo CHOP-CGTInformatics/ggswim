@@ -62,7 +62,7 @@ ggplot2::ggplot() +
   geom_swim_label(
     data = single_row_data,
     mapping = aes(x = m2_time, y = record, label_vals = m2, label_names = m2_name),
-    label.size = NA, size = 5
+    label.size = NA, size = 5, fill = NA
   ) +
   scale_color_discrete(name = "Marker Labels") +
   theme_minimal()

@@ -11,7 +11,11 @@ test_that("geom_swim_arrow is the right class", {
     arrow_fill = "cyan"
   )
 
-  expect_setequal(attr(layer, "class"), c("swim_arrow", "ggswim_layer"))
+  expected_classes <- c(
+    "swim_arrow", "LayerInstance", "Layer", "ggproto", "gg"
+  )
+
+  expect_setequal(attr(layer, "class"), expected_classes)
 })
 
 test_that("all expected attributes exist in geom_swim_arrow", {
@@ -31,21 +35,10 @@ test_that("all expected attributes exist in geom_swim_arrow", {
 
   expected_attrs <- c(
     "class",
-    "stat",
-    "position",
-    "mapping",
-    "data",
-    "show.legend",
-    "inherit.aes",
-    "params",
-    "arrow_colour",
-    "arrow_head_length",
-    "arrow_neck_length",
-    "arrow_type"
+    "swim_class"
   )
 
   expect_true(all(expected_attrs %in% attrs))
-  expect_setequal(class(layer), c("swim_arrow", "ggswim_layer"))
 })
 
 test_that("geom_swim_arrow makes expected plot", {

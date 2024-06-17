@@ -3,9 +3,6 @@
 \name{print.ggswim_layer}
 \alias{print.ggswim_layer}
 \title{Print ggswim layer object}
-\usage{
-\method{print}{ggswim_layer}(x, ..., flat = TRUE)
-}
 \arguments{
 \item{x}{a ggswim layer object}
 

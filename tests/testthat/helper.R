@@ -19,7 +19,7 @@ simple_plot <- function() {
         x = time_from_initial_infusion, y = pt_id, # nolint: object_usage_linter
         label_vals = end_study_label, label_names = end_study_name # nolint object_usage_linter
       ),
-      label.size = NA, size = 5
+      label.size = NA, size = 5, fill = NA
     ) +
     ggplot2::scale_color_brewer(name = "Labels", palette = 1) +
     theme_ggswim()

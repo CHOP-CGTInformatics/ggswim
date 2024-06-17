@@ -57,62 +57,53 @@ geom_swim_label <- function(mapping = NULL, data = NULL,
                             na.rm = FALSE,
                             show.legend = NA,
                             inherit.aes = TRUE) {
-  structure(
-    "geom_swim_label",
-    class = c("swim_label", "ggswim_layer"),
-    stat = stat,
-    position = position,
-    mapping = mapping,
+  mapping$label <- mapping$label_vals
+  mapping$colour <- mapping$label_names
+
+  layer_obj <- layer(
     data = data,
+    mapping = mapping,
+    stat = stat,
+    geom = GeomSwimLabel,
+    position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params = list(
-      na.rm = na.rm,
+    params = list2(
       parse = parse,
       label.padding = label.padding,
       label.r = label.r,
       label.size = label.size,
       size.unit = size.unit,
-      ... = ...
+      na.rm = na.rm,
+      ...
     )
   )
+
+  # Add custom attribute and modify class
+  attr(layer_obj, "swim_class") <- "swim_label"
+  class(layer_obj) <- c("swim_label", class(layer_obj))
+
+  layer_obj
 }
 
 #' @export
 ggplot_add.swim_label <- function(object, plot, object_name) {
   # Unpack vars ----
-  mapping <- attr(object, "mapping")
+  mapping <- object$mapping
 
   # Enforce checks ----
   check_supported_mapping_aes(
     mapping = mapping,
     unsupported_aes = "fill",
-    parent_func = "geom_swim_point()"
+    parent_func = "geom_swim_label()"
   )
 
-  # Convert label mapping params to linked standard params for intuitive API
-  names(mapping)[names(mapping) == "label_vals"] <- "label"
-  names(mapping)[names(mapping) == "label_names"] <- "colour"
+  object$mapping <- mapping
 
-  new_layer <- layer(
-    data = attr(object, "data"),
-    mapping = mapping,
-    stat = attr(object, "stat"),
-    geom = GeomSwimLabel,
-    position = attr(object, "position"),
-    key_glyph = "label",
-    show.legend = attr(object, "show.legend"),
-    inherit.aes = attr(object, "inherit.aes"),
-    params = attr(object, "params")
-  )
-
-  # Tag the layer with a reference attribute
-  new_layer$swim_class <- "marker_label"
-
-  plot$layers <- append(plot$layers, new_layer)
+  plot$layers <- append(plot$layers, object)
 
   # Fix legend ----
-  label_override <- get_label_override(plot, new_layer)
+  label_override <- get_label_override(plot, object)
 
   plot <- plot +
     guides(
@@ -135,14 +126,10 @@ ggplot_add.swim_label <- function(object, plot, object_name) {
 #' @format NULL
 #' @usage NULL
 #' @export
-GeomSwimLabel <- ggproto("GeomSwimLabel", Geom,
-  required_aes = c("x", "y", "label"),
-  default_aes = aes(
-    colour = NA, fill = NA, size = 3.88, angle = 0,
-    hjust = 0.5, vjust = 0.5, alpha = NA, family = "", fontface = 1,
-    lineheight = 1.2
-  ),
-  draw_panel = function(data, panel_params, coord, parse = FALSE,
+GeomSwimLabel <- ggproto("GeomSwimLabel", GeomLabel,
+  required_aes = c("x", "y", "label_vals", "label_names"),
+  optional_aes = c("label"),
+  draw_panel = function(self, data, panel_params, coord, parse = FALSE,
                         na.rm = FALSE,
                         label.padding = unit(0.25, "lines"),
                         label.r = unit(0.15, "lines"),
