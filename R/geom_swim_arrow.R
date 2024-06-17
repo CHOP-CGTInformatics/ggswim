@@ -70,107 +70,46 @@ geom_swim_arrow <- function(mapping = NULL, data = NULL,
                             na.rm = FALSE,
                             show.legend = FALSE,
                             inherit.aes = TRUE) {
-  structure(
-    "geom_swim_arrow",
-    class = c("swim_arrow", "ggswim_layer"),
-    stat = stat,
-    position = position,
-    mapping = mapping,
+  # Set proportional default for arrow_neck_length
+  x_val <- retrieve_original_aes(data = data, aes_mapping = mapping, aes_var = "xend")
+
+  if (is.null(arrow_neck_length)) {
+    arrow_neck_length <- max(data[[x_val]]) * 0.15
+  }
+
+  layer_obj <- layer(
     data = data,
+    mapping = mapping,
+    stat = stat,
+    geom = GeomSwimArrow,
+    position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
-    arrow_colour = arrow_colour,
-    arrow_head_length = arrow_head_length,
-    arrow_neck_length = arrow_neck_length,
-    arrow_type = arrow_type,
-    params = list(
-      na.rm = na.rm,
+    params = list2(
+      arrow = arrow,
+      arrow.fill = arrow_fill,
+      arrow_colour = arrow_colour,
+      arrow_head_length = arrow_head_length,
+      arrow_neck_length = arrow_neck_length,
+      arrow_type = arrow_type,
       lineend = lineend,
       linejoin = linejoin,
-      arrow = NULL,
-      arrow.fill = arrow_fill,
-      ... = ...
+      na.rm = na.rm,
+      ...
     )
   )
+
+  # Add custom attribute and modify class
+  attr(layer_obj, "swim_class") <- "swim_arrow"
+  class(layer_obj) <- c("swim_arrow", class(layer_obj))
+
+  layer_obj
 }
 
 #' @export
 ggplot_add.swim_arrow <- function(object, plot, object_name) {
-  # Unpack vars ----
-  data <- attr(object, "data")
-  mapping <- attr(object, "mapping")
-  position <- attr(object, "position") # nolint: object_usage_linter
-  arrow_neck_length <- attr(object, "arrow_neck_length")
-  arrow_fill <- attr(object, "params")$arrow.fill
-  arrow_type <- attr(object, "arrow_type")
-  arrow_head_length <- attr(object, "arrow_head_length")
-
-  attr(object, "params")$arrow <- arrow(
-    type = arrow_type,
-    length = arrow_head_length
-  )
-
-  # Implement UI checks ----
-  # Give warning supplied if `arrow_fill` !NULL and `arrow_type` "open"
-  check_arrow_fill_type(arrow_type, arrow_fill)
-  # Give error if arrow_neck_length not a name or numeric val
-  check_arrow_neck_length(arrow_neck_length)
-  # Check that all params are provided due to inability to support inheritance (#44)
-  check_missing_aes_params(
-    mapping = mapping,
-    params = c("xend", "y"),
-    parent_func = "geom_swim_arrow()"
-  )
-
-  check_missing_params(
-    param = data,
-    name = "data",
-    parent_func = "geom_swim_arrow()"
-  )
-
-  x_val <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "xend") # nolint: object_usage_linter
-  y_val <- retrieve_original_aes(data, aes_mapping = unlist(mapping), aes_var = "y")
-
-  xend <- NULL # define to avoid global variable note
-
-  new_arrow_data <- data |>
-    mutate(
-      .by = all_of(y_val),
-      xend = case_when(
-        position == "identity" ~ max(.data[[x_val]], na.rm = TRUE),
-        position == "stack" ~ sum(.data[[x_val]], na.rm = TRUE),
-        TRUE ~ NA
-      )
-    )
-
-  # If NULL, neck length to be a 0.15 proportion
-  if (is.null(arrow_neck_length)) {
-    arrow_neck_length <- max(new_arrow_data$xend) * 0.15
-  }
-
-  # Change mapping vals
-  new_arrow_mapping <- aes(
-    x = xend,
-    y = .data[[y_val]],
-    xend = arrow_neck_length + xend
-  )
-
-  new_layer <- layer(
-    data = new_arrow_data,
-    mapping = new_arrow_mapping,
-    stat = attr(object, "stat"),
-    geom = GeomSwimArrow,
-    position = attr(object, "position"),
-    show.legend = attr(object, "show.legend"),
-    inherit.aes = attr(object, "inherit.aes"),
-    params = attr(object, "params")
-  )
-
-  # Add a reference class to the layer attributes
-  new_layer$swim_class <- "swim_arrow"
-
   # TODO: Determine if below better than just:   plot <- plot + new_layer
-  plot$layers <- append(plot$layers, new_layer)
+  plot$layers <- append(plot$layers, object)
 
   # Return
   if (!"ggswim_obj" %in% class(plot)) {
@@ -184,9 +123,10 @@ ggplot_add.swim_arrow <- function(object, plot, object_name) {
 #' @format NULL
 #' @usage NULL
 #' @export
-GeomSwimArrow <- ggproto("GeomSwimArrow", Geom,
-  required_aes = c("x", "y", "xend"),
+GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
+  required_aes = c("y", "xend"),
   non_missing_aes = c("linetype", "linewidth"),
+  optional_aes = c("arrow_colour", "arrow_head_length", "arrow_type", "arrow_neck_length"),
   default_aes = aes(
     colour = "black",
     linewidth = 0.5,
@@ -194,8 +134,25 @@ GeomSwimArrow <- ggproto("GeomSwimArrow", Geom,
     linetype = 1,
     alpha = NA
   ),
+  setup_data = function(data, params) {
+    arrow_neck_length <- params$arrow_neck_length
+
+    # If NULL, neck length to be a 0.15 proportion
+    if (is.null(params$arrow_neck_length)) {
+      arrow_neck_length <- max(data$xend) * 0.15
+    }
+
+    data <- data |>
+      mutate(
+        x = xend,
+        xend = arrow_neck_length + xend
+      )
+  },
   draw_panel = function(data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
                         lineend = "butt", linejoin = "round", na.rm = FALSE) {
+    arrow <- arrow(type = data$arrow_type, length = data$arrow_head_length) # Change arrow type and head length
+    data$colour <- data$arrow_colour # Change arrow neck and outline color
+
     # Return all components
     grid::gList(
       GeomSegment$draw_panel(data, panel_params, coord,

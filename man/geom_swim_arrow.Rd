@@ -12,7 +12,7 @@ geom_swim_arrow(
   ...,
   arrow_colour = "black",
   arrow_head_length = unit(0.25, "inches"),
-  arrow_neck_length = NULL,
+  arrow_neck_length = 15,
   arrow_fill = NULL,
   arrow_type = "closed",
   lineend = "butt",
