@@ -108,7 +108,6 @@ ggplot_add.swim_lane <- function(object, plot, object_name) {
 GeomSwimLane <- ggproto("GeomSwimLane", GeomSegment,
   required_aes = c("x", "y", "xend"),
   non_missing_aes = c("linetype", "linewidth"),
-  optional_aes = c("indicator_x", "indicator_col"),
   default_aes = aes(
     indicator_x = NULL,
     indicator_col = NULL,
@@ -123,40 +122,12 @@ GeomSwimLane <- ggproto("GeomSwimLane", GeomSegment,
   ),
   draw_panel = function(self, data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
                         lineend = "butt", linejoin = "round", na.rm = FALSE) {
-    # Construct info list
-    out_info <- list()
-
-    # Capture Segment info and linewidth val
-    segment_info <- GeomSegment$draw_panel(data, panel_params, coord,
-      lineend = lineend, linejoin = linejoin,
-      na.rm = FALSE
+    # Return all components
+    grid::gList(
+      GeomSegment$draw_panel(data, panel_params, coord,
+        arrow = NULL, arrow.fill = NULL,
+        lineend = lineend, linejoin = linejoin, na.rm = FALSE
+      )
     )
-    segment_linewidth <- segment_info$gp$lwd[[1]]
-
-    out_info <- append(out_info, list(segment_info))
-
-    # Transform point data for indicators (if necessary)
-
-    if (!is.null(data$indicator_x)) {
-      points <- transform(data)
-      points$x <- points$indicator_x
-      points$colour <- if (all(is.null(points$indicator_col))) {
-        points$colour
-      } else {
-        points$indicator_col
-      }
-
-      # Capture Point info and fontsize val
-      point_info <- GeomPoint$draw_panel(points, panel_params, coord)
-      point_fontsize <- point_info$gp$fontsize[[1]]
-
-      # Apply point offset in y-direction for indicators
-      # Rough estimate function, works for shape 25. Not tested for other shapes
-      point_info$y <- point_info$y + 0.55 * unit(point_fontsize, "pt") +
-        unit((segment_linewidth * ggplot2::.pt) / ggplot2::.stroke * 0.5, "pt")
-
-      out_info <- append(out_info, list(point_info))
-    }
-    do.call(grid::gList, out_info)
   }
 )

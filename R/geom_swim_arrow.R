@@ -5,7 +5,11 @@
 #' continuation of events such as ongoing treatment, implying that the activity
 #' or status extends beyond the plotted period.
 #'
-#' @param data A dataframe prepared for use with [geom_swim_arrow()]
+#' @details
+#' Please note that [geom_swim_arrow()] requires a `data` argument and does not
+#' inherit data like other functions.
+#'
+#' @param data A dataframe prepared for use with [geom_swim_arrow()]. Required.
 #' @inheritParams ggplot2::geom_segment
 #' @param position Position adjustment. ggswim accepts either "stack", or "identity"
 #' depending on the use case. Default "identity".
@@ -21,7 +25,6 @@
 #' @section Aesthetics:
 #' [geom_swim_arrow()] understands the following aesthetics (required aesthetics are in bold):
 #'
-#' - **`x`**
 #' - **`y`**
 #' - **xend**
 #' - `alpha`
@@ -57,7 +60,7 @@
 #'
 #' @export
 
-geom_swim_arrow <- function(mapping = NULL, data = NULL,
+geom_swim_arrow <- function(mapping = NULL, data,
                             stat = "identity", position = "identity",
                             ...,
                             arrow_colour = "black",
@@ -68,8 +71,7 @@ geom_swim_arrow <- function(mapping = NULL, data = NULL,
                             lineend = "butt",
                             linejoin = "round",
                             na.rm = FALSE,
-                            show.legend = FALSE,
-                            inherit.aes = TRUE) {
+                            show.legend = FALSE) {
   # Set proportional default for arrow_neck_length
   x_val <- retrieve_original_aes(data = data, aes_mapping = mapping, aes_var = "xend")
 
@@ -84,7 +86,6 @@ geom_swim_arrow <- function(mapping = NULL, data = NULL,
     geom = GeomSwimArrow,
     position = position,
     show.legend = show.legend,
-    inherit.aes = inherit.aes,
     params = list2(
       arrow = arrow,
       arrow.fill = arrow_fill,
@@ -119,7 +120,7 @@ ggplot_add.swim_arrow <- function(object, plot, object_name) {
   plot
 }
 
-#' @rdname geom_swim_lane
+#' @rdname geom_swim_arrow
 #' @format NULL
 #' @usage NULL
 #' @export
@@ -147,8 +148,10 @@ GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
         x = xend,
         xend = arrow_neck_length + xend
       )
+
+    data
   },
-  draw_panel = function(data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
+  draw_panel = function(self, data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
                         lineend = "butt", linejoin = "round", na.rm = FALSE) {
     arrow <- arrow(type = data$arrow_type, length = data$arrow_head_length) # Change arrow type and head length
     data$colour <- data$arrow_colour # Change arrow neck and outline color
