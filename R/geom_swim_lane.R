@@ -15,7 +15,7 @@
 #'
 #' - **`x`**
 #' - **`y`**
-#' - **xend _or_ yend**
+#' - **xend**
 #' - `alpha`
 #' - `colour`
 #' - `group`

@@ -107,7 +107,7 @@ sequence of events or activities for the corresponding subject.
 \itemize{
 \item \strong{\code{x}}
 \item \strong{\code{y}}
-\item \strong{xend \emph{or} yend}
+\item \strong{xend}
 \item \code{alpha}
 \item \code{colour}
 \item \code{group}
