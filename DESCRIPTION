@@ -26,6 +26,7 @@ Imports:
     grid,
     purrr,
     rlang,
+    stringr,
     tibble,
     tidyr,
     tidyselect

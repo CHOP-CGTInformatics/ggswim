@@ -24,28 +24,6 @@ NULL
 #' @export
 #' @rdname print.ggswim_obj
 print.ggswim_obj <- function(x, ...) {
-  build_ggswim(x) |> print()
+  try_ggswim(build_ggswim(x) |> print())
+  invisible(x) # Used for pkgdown example rendering
 }
-
-#' @title Print ggswim layer object
-#'
-#' @param x a ggswim layer object
-#' @param ... not used
-#'
-#' @name print.ggswim_layer
-#' @return a layer object
-#' @keywords internal
-#'
-#' @examples
-#' print(
-#'   geom_swim_lane(
-#'     data = patient_data,
-#'     mapping = aes(
-#'       x = start_time,
-#'       y = pt_id,
-#'       xend = end_time,
-#'       color = disease_assessment
-#'     )
-#'   )
-#' )
-NULL
