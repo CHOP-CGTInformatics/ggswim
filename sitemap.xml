@@ -100,9 +100,6 @@
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/patient_data.html</loc>
   </url>
   <url>
-    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/print.ggswim_layer.html</loc>
-  </url>
-  <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/print.ggswim_obj.html</loc>
   </url>
   <url>
@@ -113,5 +110,8 @@
   </url>
   <url>
     <loc>https://chop-cgtinformatics.github.io/ggswim/reference/theme_ggswim.html</loc>
+  </url>
+  <url>
+    <loc>https://chop-cgtinformatics.github.io/ggswim/reference/try_ggswim.html</loc>
   </url>
 </urlset>
