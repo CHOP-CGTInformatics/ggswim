@@ -109,8 +109,6 @@ GeomSwimLane <- ggproto("GeomSwimLane", GeomSegment,
   required_aes = c("x", "y", "xend"),
   non_missing_aes = c("linetype", "linewidth"),
   default_aes = aes(
-    indicator_x = NULL,
-    indicator_col = NULL,
     colour = "black",
     linewidth = 2,
     size = 2,
