@@ -32,3 +32,16 @@ test_that("all expected attributes exist in geom_swim_lane", {
 
   expect_true(all(expected_attrs %in% attrs))
 })
+
+test_that("geom_swim_lane works when inheriting data and associated params", {
+  p <- patient_data |>
+    ggplot(mapping = aes(x = start_time, y = pt_id, xend = end_time,
+                         colour = disease_assessment)) +
+    geom_swim_lane()
+
+  skip_on_ci()
+  vdiffr::expect_doppelganger(
+    title = "geom_swim_lane works with inherited data and params",
+    fig = p
+  )
+})

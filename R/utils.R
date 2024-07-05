@@ -48,18 +48,31 @@ try_ggswim <- function(expr, call = caller_env()) {
   quo <- enquo(expr)
 
   condition <- list()
+
+  # Defaults for other error components
+  # condition$message <- c("x" = "An unexpected error occurred.")
+  # condition$class <- "ggswim_cond"
+  # condition$info <- c(
+  #   "i" = "Please consider submitting a bug report here: {.href https://github.com/CHOP-CGTInformatics/ggswim/issues}." # nolint: line_length_linter
+  # )
+
   condition$call <- call
 
   try_fetch(
     eval_tidy(quo),
     error = function(cnd) {
       if (str_detect(cnd$message, "replacement has \\d+ rows, data has \\d+")) {
+        condition$parent <- cnd
         condition$info <- c(
           "x" = paste0(c(cnd$call, cnd$message), collapse = " "),
           "!" = "Scale misalignment detected when rendering ggswim.",
           "i" = "This can often be resolved by calling {.code new_scale_color()} or reordering point and label geoms."
         )
         condition$class <- c("scale_replacement_error", condition$class)
+      } else {
+        # browser()
+        # condition$parent <- cnd
+        # condition$class <- c("unexpected_error", condition$class)
       }
       cli_abort(
         c(condition$message, condition$info),

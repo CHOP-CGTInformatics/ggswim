@@ -52,3 +52,16 @@ test_that("geom_swim_label works when data is assigned from previous layer", {
     fig = p
   )
 })
+
+test_that("geom_swim_label works when inheriting data and associated params", {
+  p <- end_study_events |>
+    ggplot(mapping = aes(x = time_from_initial_infusion, y = pt_id,
+                         label_vals = end_study_label, label_names = end_study_name)) +
+    geom_swim_label(size = 5)
+
+  skip_on_ci()
+  vdiffr::expect_doppelganger(
+    title = "geom_swim_label works with inherited data and params",
+    fig = p
+  )
+})

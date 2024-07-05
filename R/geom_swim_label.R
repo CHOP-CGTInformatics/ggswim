@@ -88,8 +88,22 @@ geom_swim_label <- function(mapping = NULL, data = NULL,
 
 #' @export
 ggplot_add.swim_label <- function(object, plot, object_name) {
+
   # Unpack vars ----
   mapping <- object$mapping
+
+  # Handling for inherited data from ggplot()
+  if (is.null(mapping)) {
+    mapping <- aes()
+  }
+
+  if (is.null(mapping$label)) {
+    mapping$label <- plot$mapping$label_vals
+  }
+
+  if (is.null(mapping$color) & is.null(mapping$colour)) {
+    mapping$colour <- plot$mapping$label_names
+  }
 
   # Enforce checks ----
   check_supported_mapping_aes(
@@ -127,26 +141,26 @@ ggplot_add.swim_label <- function(object, plot, object_name) {
 #' @usage NULL
 #' @export
 GeomSwimLabel <- ggproto("GeomSwimLabel", GeomLabel,
-  required_aes = c("x", "y", "label_vals", "label_names"),
-  optional_aes = c("label"),
-  draw_panel = function(self, data, panel_params, coord, parse = FALSE,
-                        na.rm = FALSE,
-                        label.padding = unit(0.25, "lines"),
-                        label.r = unit(0.15, "lines"),
-                        label.size = 0.25,
-                        size.unit = "mm") {
-    # Return all components
-    grid::gList(
-      GeomLabel$draw_panel(data, panel_params, coord,
-        parse = FALSE,
-        na.rm = na.rm,
-        label.padding = label.padding,
-        label.r = label.r,
-        label.size = label.size,
-        size.unit = size.unit
-      )
-    )
-  }
+                         required_aes = c("x", "y", "label_vals", "label_names"),
+                         optional_aes = c("label"),
+                         draw_panel = function(self, data, panel_params, coord, parse = FALSE,
+                                               na.rm = FALSE,
+                                               label.padding = unit(0.25, "lines"),
+                                               label.r = unit(0.15, "lines"),
+                                               label.size = 0.25,
+                                               size.unit = "mm") {
+                           # Return all components
+                           grid::gList(
+                             GeomLabel$draw_panel(data, panel_params, coord,
+                                                  parse = FALSE,
+                                                  na.rm = na.rm,
+                                                  label.padding = label.padding,
+                                                  label.r = label.r,
+                                                  label.size = label.size,
+                                                  size.unit = size.unit
+                             )
+                           )
+                         }
 )
 
 #' @title Fix Label Legend
@@ -169,11 +183,26 @@ get_label_override <- function(plot, layer) {
 
   label_layer_values <- g$plot$scales$scales[[current_scale]]$get_labels()
 
+  # In case where labels are not defined in this layer, grab from top-level data
+  if (is_empty(label_layer_values)) {
+    label_layer_values <- g$plot$scales$scales[[1]]$get_labels()
+  }
+
   # In case where data not assigned at this layer, grab from top-level data
   layer_data <- if (is_empty(layer$data)) {
     plot$data
   } else {
     layer$data
+  }
+
+  # In case where color/label defined in ggplot(), grab from top-level data
+
+  if (is.null(layer$mapping$label_vals)) {
+    layer$mapping$label_vals <- plot$mapping$label_vals
+  }
+
+  if (is.null(layer$mapping$label_names)) {
+    layer$mapping$label_names <- plot$mapping$label_names
   }
 
   original_colour_var <- retrieve_original_aes(layer_data, aes_mapping = unlist(layer$mapping), aes_var = "colour")
