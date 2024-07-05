@@ -49,13 +49,6 @@ try_ggswim <- function(expr, call = caller_env()) {
 
   condition <- list()
 
-  # Defaults for other error components
-  # condition$message <- c("x" = "An unexpected error occurred.")
-  # condition$class <- "ggswim_cond"
-  # condition$info <- c(
-  #   "i" = "Please consider submitting a bug report here: {.href https://github.com/CHOP-CGTInformatics/ggswim/issues}." # nolint: line_length_linter
-  # )
-
   condition$call <- call
 
   try_fetch(
@@ -69,10 +62,6 @@ try_ggswim <- function(expr, call = caller_env()) {
           "i" = "This can often be resolved by calling {.code new_scale_color()} or reordering point and label geoms."
         )
         condition$class <- c("scale_replacement_error", condition$class)
-      } else {
-        # browser()
-        # condition$parent <- cnd
-        # condition$class <- c("unexpected_error", condition$class)
       }
       cli_abort(
         c(condition$message, condition$info),

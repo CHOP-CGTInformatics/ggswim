@@ -88,22 +88,8 @@ geom_swim_label <- function(mapping = NULL, data = NULL,
 
 #' @export
 ggplot_add.swim_label <- function(object, plot, object_name) {
-
   # Unpack vars ----
-  mapping <- object$mapping
-
-  # Handling for inherited data from ggplot()
-  if (is.null(mapping)) {
-    mapping <- aes()
-  }
-
-  if (is.null(mapping$label)) {
-    mapping$label <- plot$mapping$label_vals
-  }
-
-  if (is.null(mapping$color) & is.null(mapping$colour)) {
-    mapping$colour <- plot$mapping$label_names
-  }
+  mapping <- get_mapping_obj(object$mapping, plot$mapping)
 
   # Enforce checks ----
   check_supported_mapping_aes(
@@ -141,27 +127,69 @@ ggplot_add.swim_label <- function(object, plot, object_name) {
 #' @usage NULL
 #' @export
 GeomSwimLabel <- ggproto("GeomSwimLabel", GeomLabel,
-                         required_aes = c("x", "y", "label_vals", "label_names"),
-                         optional_aes = c("label"),
-                         draw_panel = function(self, data, panel_params, coord, parse = FALSE,
-                                               na.rm = FALSE,
-                                               label.padding = unit(0.25, "lines"),
-                                               label.r = unit(0.15, "lines"),
-                                               label.size = 0.25,
-                                               size.unit = "mm") {
-                           # Return all components
-                           grid::gList(
-                             GeomLabel$draw_panel(data, panel_params, coord,
-                                                  parse = FALSE,
-                                                  na.rm = na.rm,
-                                                  label.padding = label.padding,
-                                                  label.r = label.r,
-                                                  label.size = label.size,
-                                                  size.unit = size.unit
-                             )
-                           )
-                         }
+  required_aes = c("x", "y", "label_vals", "label_names"),
+  optional_aes = c("label"),
+  draw_panel = function(self, data, panel_params, coord, parse = FALSE,
+                        na.rm = FALSE,
+                        label.padding = unit(0.25, "lines"),
+                        label.r = unit(0.15, "lines"),
+                        label.size = 0.25,
+                        size.unit = "mm") {
+    # Return all components
+    grid::gList(
+      GeomLabel$draw_panel(data, panel_params, coord,
+        parse = FALSE,
+        na.rm = na.rm,
+        label.padding = label.padding,
+        label.r = label.r,
+        label.size = label.size,
+        size.unit = size.unit
+      )
+    )
+  }
 )
+
+#' @title Create mapping object
+#'
+#' @description To assist with label legend fixing, the mapping object helps
+#' pass mapped data from [aes()] down to [get_label_override()], including
+#' in instances when data is inherited from [ggplot()].
+#'
+#' @param object_mapping `mapping` from the layer object
+#' @param plot_mapping `mapping` from the plot object
+#'
+#' @returns a [aes()] frame
+#'
+#' @keywords internal
+
+get_mapping_obj <- function(object_mapping, plot_mapping) {
+  mapping <- as.list(object_mapping)
+
+  # Grab only vars required for geom_swim_label, referncing required_aes
+  plot_mapping <- plot_mapping[names(plot_mapping) %in% GeomSwimLabel$required_aes]
+  # Remove existing vals that may be used by other inherited geoms
+  plot_mapping <- plot_mapping[!names(plot_mapping) %in% names(object_mapping)]
+
+  missing_aes <- as.list(setdiff(plot_mapping, mapping))
+
+  # Merge the lists
+  merged_list <- c(mapping, missing_aes)
+
+  # Convert the merged list back to an aesthetic mapping object
+  mapping <- do.call(aes, merged_list)
+
+  # Convert label_vals to label
+  if (is.null(mapping$label)) {
+    mapping$label <- plot_mapping$label_vals
+  }
+
+  # Convert label_names to colour
+  if (is.null(mapping$color) && is.null(mapping$colour)) {
+    mapping$colour <- plot_mapping$label_names
+  }
+
+  mapping
+}
 
 #' @title Fix Label Legend
 #'

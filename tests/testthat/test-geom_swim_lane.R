@@ -35,8 +35,10 @@ test_that("all expected attributes exist in geom_swim_lane", {
 
 test_that("geom_swim_lane works when inheriting data and associated params", {
   p <- patient_data |>
-    ggplot(mapping = aes(x = start_time, y = pt_id, xend = end_time,
-                         colour = disease_assessment)) +
+    ggplot(mapping = aes(
+      x = start_time, y = pt_id, xend = end_time,
+      colour = disease_assessment
+    )) +
     geom_swim_lane()
 
   skip_on_ci()
