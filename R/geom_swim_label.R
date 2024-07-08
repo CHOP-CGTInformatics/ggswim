@@ -165,7 +165,7 @@ GeomSwimLabel <- ggproto("GeomSwimLabel", GeomLabel,
 get_mapping_obj <- function(object_mapping, plot_mapping) {
   mapping <- as.list(object_mapping)
 
-  # Grab only vars required for geom_swim_label, referncing required_aes
+  # Grab only vars required for geom_swim_label, referencing required_aes
   plot_mapping <- plot_mapping[names(plot_mapping) %in% GeomSwimLabel$required_aes]
   # Remove existing vals that may be used by other inherited geoms
   plot_mapping <- plot_mapping[!names(plot_mapping) %in% names(object_mapping)]

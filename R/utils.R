@@ -48,27 +48,50 @@ try_ggswim <- function(expr, call = caller_env()) {
   quo <- enquo(expr)
 
   condition <- list()
-
   condition$call <- call
 
   try_fetch(
     eval_tidy(quo),
     error = function(cnd) {
       if (str_detect(cnd$message, "replacement has \\d+ rows, data has \\d+")) {
-        condition$parent <- cnd
         condition$info <- c(
           "x" = paste0(c(cnd$call, cnd$message), collapse = " "),
           "!" = "Scale misalignment detected when rendering ggswim.",
           "i" = "This can often be resolved by calling {.code new_scale_color()} or reordering point and label geoms."
         )
         condition$class <- c("scale_replacement_error", condition$class)
+
+        cli_abort(
+          c(condition$message, condition$info),
+          call = condition$call,
+          parent = condition$parent,
+          class = condition$class
+        )
+      } else {
+        eval_tidy(quo)
       }
-      cli_abort(
-        c(condition$message, condition$info),
-        call = condition$call,
-        parent = condition$parent,
-        class = condition$class
-      )
     }
   )
+}
+
+#' @title Error Capturing and Testing
+#'
+#' @description
+#' Internal function for testing error handling in the test suite.
+#'
+#' @param expr An expression to test
+#'
+#' @keywords internal
+
+capture_error <- function(expr) {
+  result <- tryCatch(
+    {
+      expr
+      NULL # return NULL if no error
+    },
+    error = function(e) {
+      e
+    }
+  )
+  return(result)
 }
