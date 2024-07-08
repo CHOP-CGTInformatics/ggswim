@@ -89,7 +89,7 @@ geom_swim_label <- function(mapping = NULL, data = NULL,
 #' @export
 ggplot_add.swim_label <- function(object, plot, object_name) {
   # Unpack vars ----
-  mapping <- object$mapping
+  mapping <- get_mapping_obj(object$mapping, plot$mapping)
 
   # Enforce checks ----
   check_supported_mapping_aes(
@@ -149,6 +149,48 @@ GeomSwimLabel <- ggproto("GeomSwimLabel", GeomLabel,
   }
 )
 
+#' @title Create mapping object
+#'
+#' @description To assist with label legend fixing, the mapping object helps
+#' pass mapped data from [aes()] down to [get_label_override()], including
+#' in instances when data is inherited from [ggplot()].
+#'
+#' @param object_mapping `mapping` from the layer object
+#' @param plot_mapping `mapping` from the plot object
+#'
+#' @returns a [aes()] frame
+#'
+#' @keywords internal
+
+get_mapping_obj <- function(object_mapping, plot_mapping) {
+  mapping <- as.list(object_mapping)
+
+  # Grab only vars required for geom_swim_label, referencing required_aes
+  plot_mapping <- plot_mapping[names(plot_mapping) %in% GeomSwimLabel$required_aes]
+  # Remove existing vals that may be used by other inherited geoms
+  plot_mapping <- plot_mapping[!names(plot_mapping) %in% names(object_mapping)]
+
+  missing_aes <- as.list(setdiff(plot_mapping, mapping))
+
+  # Merge the lists
+  merged_list <- c(mapping, missing_aes)
+
+  # Convert the merged list back to an aesthetic mapping object
+  mapping <- do.call(aes, merged_list)
+
+  # Convert label_vals to label
+  if (is.null(mapping$label)) {
+    mapping$label <- plot_mapping$label_vals
+  }
+
+  # Convert label_names to colour
+  if (is.null(mapping$color) && is.null(mapping$colour)) {
+    mapping$colour <- plot_mapping$label_names
+  }
+
+  mapping
+}
+
 #' @title Fix Label Legend
 #'
 #' @description
@@ -169,11 +211,26 @@ get_label_override <- function(plot, layer) {
 
   label_layer_values <- g$plot$scales$scales[[current_scale]]$get_labels()
 
+  # In case where labels are not defined in this layer, grab from top-level data
+  if (is_empty(label_layer_values)) {
+    label_layer_values <- g$plot$scales$scales[[1]]$get_labels()
+  }
+
   # In case where data not assigned at this layer, grab from top-level data
   layer_data <- if (is_empty(layer$data)) {
     plot$data
   } else {
     layer$data
+  }
+
+  # In case where color/label defined in ggplot(), grab from top-level data
+
+  if (is.null(layer$mapping$label_vals)) {
+    layer$mapping$label_vals <- plot$mapping$label_vals
+  }
+
+  if (is.null(layer$mapping$label_names)) {
+    layer$mapping$label_names <- plot$mapping$label_names
   }
 
   original_colour_var <- retrieve_original_aes(layer_data, aes_mapping = unlist(layer$mapping), aes_var = "colour")

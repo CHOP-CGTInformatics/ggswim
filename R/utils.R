@@ -60,13 +60,38 @@ try_ggswim <- function(expr, call = caller_env()) {
           "i" = "This can often be resolved by calling {.code new_scale_color()} or reordering point and label geoms."
         )
         condition$class <- c("scale_replacement_error", condition$class)
+
+        cli_abort(
+          c(condition$message, condition$info),
+          call = condition$call,
+          parent = condition$parent,
+          class = condition$class
+        )
+      } else {
+        eval_tidy(quo)
       }
-      cli_abort(
-        c(condition$message, condition$info),
-        call = condition$call,
-        parent = condition$parent,
-        class = condition$class
-      )
     }
   )
+}
+
+#' @title Error Capturing and Testing
+#'
+#' @description
+#' Internal function for testing error handling in the test suite.
+#'
+#' @param expr An expression to test
+#'
+#' @keywords internal
+
+capture_error <- function(expr) {
+  result <- tryCatch(
+    {
+      expr
+      NULL # return NULL if no error
+    },
+    error = function(e) {
+      e
+    }
+  )
+  return(result)
 }

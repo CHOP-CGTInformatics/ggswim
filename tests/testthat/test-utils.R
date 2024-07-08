@@ -27,6 +27,22 @@ test_that("retrieve_original_aes works", {
   )) == 1)
 })
 
+test_that("capture_error works", {
+  out <- capture_error(1*"A")
+
+  expect_setequal(class(out), c("simpleError", "error", "condition"))
+  expect_equal(out$message, "non-numeric argument to binary operator")
+  expect_setequal(paste0(out$call), c("*", "1", "A"))
+})
+
+test_that("try_ggswim returns original errors if not special cases", {
+  out <- capture_error(try_ggswim(1*"A"))
+
+  expected_out <- capture_error(1*"A")
+
+  expect_equal(out, expected_out)
+})
+
 test_that("try_ggswim captures expected errors", {
   tbl <- tibble::tribble(
     ~"record", ~"status", ~"start_time", ~"end_time", ~"marker1", ~"marker1_time",
@@ -67,4 +83,34 @@ test_that("try_ggswim captures expected errors", {
     geom_swim_point(mapping = aes(x = marker1_time, y = record, colour = marker1))
 
   expect_error(print(p), class = "scale_replacement_error")
+})
+
+test_that("Special ggswim error cases - generalized aes for multiple varied geoms", {
+
+  # Compare to original ggplot error
+  p_ggplot <- patient_data |>
+    ggplot(mapping = aes(x = start_time, y = pt_id, label = end_study_label)) +
+    geom_label(data = end_study_events,
+               mapping = aes(x = time_from_initial_infusion, y = pt_id),
+               size = 5) +
+    geom_point(data = infusion_events,
+               mapping = aes(x = time_from_initial_infusion, y = pt_id, colour = infusion_type),
+               size = 5)
+
+  error_ggplot <- capture_error(print(p_ggplot))
+
+  p_ggswim <- patient_data |>
+    ggplot(mapping = aes(x = start_time, y = pt_id, label_vals = end_study_label, label_names = end_study_name)) +
+    geom_swim_label(data = end_study_events,
+                    mapping = aes(x = time_from_initial_infusion, y = pt_id),
+                    size = 5) +
+    geom_swim_point(data = infusion_events,
+                    mapping = aes(x = time_from_initial_infusion, y = pt_id, colour = infusion_type),
+                    size = 5)
+
+  error_ggswim <- capture_error(print(p_ggswim))
+
+  expect_equal(c(error_ggplot$message, error_ggplot$parent$message),
+               c(error_ggswim$message, error_ggswim$parent$message))
+
 })
