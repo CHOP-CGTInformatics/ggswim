@@ -97,8 +97,9 @@ last finishing touch with `theme_ggswim()`:
 ``` r
 p +
   scale_color_brewer(name = "Markers", palette = "Set2") +
-  labs(title = "My Swimmer Plot") +
-  xlab("Time Since Infusion (Months)") + ylab("Patient ID") +
+  labs(title = "My Swimmer Plot",
+       x = "Time Since Infusion (Months)",
+       y = "Patient ID") +
   theme_ggswim()
 ```
 
