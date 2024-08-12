@@ -42,8 +42,11 @@ To help you get started, ggswim includes three sample datasets: `patient_data`, 
 
 ggswim offers several geom-functions, and by using `geom_swim_lane()` we can set up the horizontal response paths of our swimmer plot, i.e. the "lanes". We'll also set up corresponding arrows to indicate subjects that are still on the trial:
 
-```{r, include=FALSE}
+```{r, message=FALSE}
 library(ggswim)
+library(ggplot2)
+
+# Construct arrow_data for arrow display later
 arrow_data <- patient_data |>
   dplyr::left_join(
     end_study_events |>
@@ -53,11 +56,6 @@ arrow_data <- patient_data |>
   dplyr::select(pt_id, end_time, end_study_name) |>
   dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
   unique()
-```
-
-```{r, message=FALSE}
-library(ggswim)
-library(ggplot2)
 
 p <- patient_data |>
   ggplot() +

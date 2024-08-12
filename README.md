@@ -46,6 +46,17 @@ that are still on the trial:
 library(ggswim)
 library(ggplot2)
 
+# Construct arrow_data for arrow display later
+arrow_data <- patient_data |>
+  dplyr::left_join(
+    end_study_events |>
+      dplyr::select(pt_id, end_study_name),
+    by = "pt_id"
+  ) |>
+  dplyr::select(pt_id, end_time, end_study_name) |>
+  dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
+  unique()
+
 p <- patient_data |>
   ggplot() +
   geom_swim_lane(
@@ -66,7 +77,7 @@ p <- patient_data |>
 p
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
 Next we’ll add on events of interest: end of study updates and
 infusions. We’ll refer to these as “markers” and call them with two more
@@ -89,7 +100,7 @@ p <- p +
 p
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
 
 Finally, we’ll beautify the plot with familiar ggplot2 techniques and a
 last finishing touch with `theme_ggswim()`:
@@ -102,7 +113,7 @@ p +
   theme_ggswim()
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
 
 ## Collaboration
 
