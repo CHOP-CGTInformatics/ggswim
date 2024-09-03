@@ -205,7 +205,7 @@ get_mapping_obj <- function(object_mapping, plot_mapping) {
 #' @keywords internal
 
 get_label_override <- function(plot, layer) {
-  g <- ggplot_build(plot)
+  g <- try_ggswim(ggplot_build(plot))
 
   current_scale <- length(g$plot$scales$scales)
 

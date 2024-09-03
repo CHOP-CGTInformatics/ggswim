@@ -28,7 +28,7 @@ test_that("retrieve_original_aes works", {
 })
 
 test_that("capture_error works", {
-  out <- capture_error(1*"A")
+  out <- capture_error(1 * "A")
 
   expect_setequal(class(out), c("simpleError", "error", "condition"))
   expect_equal(out$message, "non-numeric argument to binary operator")
@@ -36,9 +36,9 @@ test_that("capture_error works", {
 })
 
 test_that("try_ggswim returns original errors if not special cases", {
-  out <- capture_error(try_ggswim(1*"A"))
+  out <- capture_error(try_ggswim(1 * "A"))
 
-  expected_out <- capture_error(1*"A")
+  expected_out <- capture_error(1 * "A")
 
   expect_equal(out, expected_out)
 })
