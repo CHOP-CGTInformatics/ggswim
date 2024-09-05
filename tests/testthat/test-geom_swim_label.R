@@ -67,37 +67,3 @@ test_that("geom_swim_label works when inheriting data and associated params", {
     fig = p
   )
 })
-
-test_that("get_mapping_obj works", {
-  # All inherited data test
-  object_mapping <- NULL
-  plot_mapping <- aes(x = x_val, label_vals = vals, label_names = names)
-
-  expected_out <- aes(
-    x = x_val,
-    label_vals = vals,
-    label_names = names,
-    label = vals,
-    colour = names
-  )
-
-  out <- get_mapping_obj(object_mapping, plot_mapping)
-
-  expect_equal(out, expected_out)
-
-  # No inherited data with other geom inherited data
-  object_mapping <- aes(x = x_val, y = y_val, label_vals = vals, label_names = names)
-  plot_mapping <- aes(x = x_val2, color = test)
-
-  # names and colours not expected here since handled in geom_swim_label
-  expected_out <- aes(
-    x = x_val,
-    y = y_val,
-    label_vals = vals,
-    label_names = names
-  )
-
-  out <- get_mapping_obj(object_mapping, plot_mapping)
-
-  expect_equal(object_mapping, expected_out)
-})

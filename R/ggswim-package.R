@@ -17,6 +17,7 @@
 #' @importFrom tidyr pivot_longer
 #' @importFrom tidyselect all_of
 #' @importFrom tibble tibble tribble enframe
+#' @importFrom utils modifyList
 "_PACKAGE"
 
 ## usethis namespace: start
