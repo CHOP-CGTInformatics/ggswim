@@ -52,6 +52,11 @@ geom_swim_lane <- function(mapping = NULL, data = NULL,
                            na.rm = FALSE,
                            show.legend = NA,
                            inherit.aes = TRUE) {
+  # Set default mapping if not provided and inherit.aes is TRUE
+  if (is.null(mapping) && inherit.aes) {
+    mapping <- aes()
+  }
+
   layer_obj <- layer(
     data = data,
     mapping = mapping,
@@ -79,8 +84,8 @@ geom_swim_lane <- function(mapping = NULL, data = NULL,
 
 #' @export
 ggplot_add.swim_lane <- function(object, plot, object_name) {
-  # Unpack vars ----
-  mapping <- object$mapping
+  # Combine object and plot mappings; plot mapping takes precedence if both exist
+  mapping <- modifyList(plot$mapping, object$mapping, keep.null = TRUE)
 
   # Enforce checks ----
   # TODO: Determine if custom error is better than standard ignore warning
