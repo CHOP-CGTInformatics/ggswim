@@ -57,6 +57,13 @@ geom_swim_label <- function(mapping = NULL, data = NULL,
                             na.rm = FALSE,
                             show.legend = NA,
                             inherit.aes = TRUE) {
+
+  # Set default mapping if not provided and inherit.aes is TRUE
+  if (is.null(mapping) && inherit.aes) {
+    mapping <- aes()
+  }
+
+  # Modify the mapping to match expected aesthetics
   mapping$label <- mapping$label_vals
   mapping$colour <- mapping$label_names
 
@@ -88,21 +95,25 @@ geom_swim_label <- function(mapping = NULL, data = NULL,
 
 #' @export
 ggplot_add.swim_label <- function(object, plot, object_name) {
-  # Unpack vars ----
-  mapping <- get_mapping_obj(object$mapping, plot$mapping)
+  # Combine object and plot mappings; plot mapping takes precedence if both exist
+  mapping <- modifyList(plot$mapping, object$mapping, keep.null = TRUE)
+  mapping$label <- mapping$label_vals
+  mapping$colour <- mapping$label_names
 
-  # Enforce checks ----
+  # Ensure the combined mapping is set in the object
+  object$mapping <- mapping
+
+  # Enforce checks on the combined mapping
   check_supported_mapping_aes(
-    mapping = mapping,
+    mapping = object$mapping,
     unsupported_aes = "fill",
     parent_func = "geom_swim_label()"
   )
 
-  object$mapping <- mapping
-
+  # Append the object layer to the plot
   plot$layers <- append(plot$layers, object)
 
-  # Fix legend ----
+  # Fix legend handling
   label_override <- get_label_override(plot, object)
 
   plot <- plot +
@@ -114,7 +125,7 @@ ggplot_add.swim_label <- function(object, plot, object_name) {
       )
     )
 
-  # Return
+  # Add custom class if not already set
   if (!"ggswim_obj" %in% class(plot)) {
     class(plot) <- c("ggswim_obj", class(plot))
   }
@@ -148,48 +159,6 @@ GeomSwimLabel <- ggproto("GeomSwimLabel", GeomLabel,
     )
   }
 )
-
-#' @title Create mapping object
-#'
-#' @description To assist with label legend fixing, the mapping object helps
-#' pass mapped data from [aes()] down to [get_label_override()], including
-#' in instances when data is inherited from [ggplot()].
-#'
-#' @param object_mapping `mapping` from the layer object
-#' @param plot_mapping `mapping` from the plot object
-#'
-#' @returns a [aes()] frame
-#'
-#' @keywords internal
-
-get_mapping_obj <- function(object_mapping, plot_mapping) {
-  mapping <- as.list(object_mapping)
-
-  # Grab only vars required for geom_swim_label, referencing required_aes
-  plot_mapping <- plot_mapping[names(plot_mapping) %in% GeomSwimLabel$required_aes]
-  # Remove existing vals that may be used by other inherited geoms
-  plot_mapping <- plot_mapping[!names(plot_mapping) %in% names(object_mapping)]
-
-  missing_aes <- as.list(setdiff(plot_mapping, mapping))
-
-  # Merge the lists
-  merged_list <- c(mapping, missing_aes)
-
-  # Convert the merged list back to an aesthetic mapping object
-  mapping <- do.call(aes, merged_list)
-
-  # Convert label_vals to label
-  if (is.null(mapping$label)) {
-    mapping$label <- plot_mapping$label_vals
-  }
-
-  # Convert label_names to colour
-  if (is.null(mapping$color) && is.null(mapping$colour)) {
-    mapping$colour <- plot_mapping$label_names
-  }
-
-  mapping
-}
 
 #' @title Fix Label Legend
 #'
