@@ -61,6 +61,25 @@ test_that("geom_swim_arrow makes expected plot", {
   )
 })
 
+test_that("geom_swim_arrow makes expected plot when inheriting data", {
+  arrow_data <- sample_arrow_data()
+
+  p <- arrow_data |>
+    ggplot() +
+    geom_swim_arrow(
+      mapping = aes(xend = end_time, y = pt_id),
+      linewidth = .1,
+      arrow_head_length = unit(0.25, "inches"),
+      arrow_colour = "slateblue",
+      arrow_fill = "cyan"
+    )
+
+  vdiffr::expect_doppelganger(
+    title = "Arrows work with inherited data",
+    fig = p
+  )
+})
+
 test_that("geom_swim_arrow creates a ggswim_obj", {
   arrow_data <- sample_arrow_data()
 

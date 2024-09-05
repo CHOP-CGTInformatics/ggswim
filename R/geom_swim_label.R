@@ -57,7 +57,6 @@ geom_swim_label <- function(mapping = NULL, data = NULL,
                             na.rm = FALSE,
                             show.legend = NA,
                             inherit.aes = TRUE) {
-
   # Set default mapping if not provided and inherit.aes is TRUE
   if (is.null(mapping) && inherit.aes) {
     mapping <- aes()

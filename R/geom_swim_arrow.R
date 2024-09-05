@@ -60,7 +60,7 @@
 #'
 #' @export
 
-geom_swim_arrow <- function(mapping = NULL, data,
+geom_swim_arrow <- function(mapping = NULL, data = NULL,
                             stat = "identity", position = "identity",
                             ...,
                             arrow_colour = "black",
@@ -71,13 +71,8 @@ geom_swim_arrow <- function(mapping = NULL, data,
                             lineend = "butt",
                             linejoin = "round",
                             na.rm = FALSE,
-                            show.legend = FALSE) {
-  # Set proportional default for arrow_neck_length
-  x_val <- retrieve_original_aes(data = data, aes_mapping = mapping, aes_var = "xend")
-
-  if (is.null(arrow_neck_length)) {
-    arrow_neck_length <- max(data[[x_val]]) * 0.15
-  }
+                            show.legend = FALSE,
+                            inherit.aes = TRUE) {
 
   layer_obj <- layer(
     data = data,
@@ -86,8 +81,8 @@ geom_swim_arrow <- function(mapping = NULL, data,
     geom = GeomSwimArrow,
     position = position,
     show.legend = show.legend,
+    inherit.aes = inherit.aes,
     params = list2(
-      arrow = arrow,
       arrow.fill = arrow_fill,
       arrow_colour = arrow_colour,
       arrow_head_length = arrow_head_length,
@@ -127,7 +122,6 @@ ggplot_add.swim_arrow <- function(object, plot, object_name) {
 GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
   required_aes = c("y", "xend"),
   non_missing_aes = c("linetype", "linewidth"),
-  optional_aes = c("arrow_colour", "arrow_head_length", "arrow_type", "arrow_neck_length"),
   default_aes = aes(
     colour = "black",
     linewidth = 0.5,
@@ -142,7 +136,6 @@ GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
     if (is.null(params$arrow_neck_length)) {
       arrow_neck_length <- max(data$xend) * 0.15
     }
-
     data <- data |>
       mutate(
         x = xend,
@@ -152,9 +145,11 @@ GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
     data
   },
   draw_panel = function(self, data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
+                        arrow_colour = "black", arrow_head_length = unit(0.25, "inches"), arrow_neck_length = NULL,
+                        arrow_type = "closed",
                         lineend = "butt", linejoin = "round", na.rm = FALSE) {
-    arrow <- arrow(type = data$arrow_type, length = data$arrow_head_length) # Change arrow type and head length
-    data$colour <- data$arrow_colour # Change arrow neck and outline color
+    arrow <- arrow(type = arrow_type, length = arrow_head_length) # Change arrow type and head length
+    data$colour <- arrow_colour # Change arrow neck and outline color
 
     # Return all components
     grid::gList(

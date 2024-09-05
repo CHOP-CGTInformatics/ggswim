@@ -8,7 +8,7 @@
 \usage{
 geom_swim_arrow(
   mapping = NULL,
-  data,
+  data = NULL,
   stat = "identity",
   position = "identity",
   ...,
@@ -20,7 +20,8 @@ geom_swim_arrow(
   lineend = "butt",
   linejoin = "round",
   na.rm = FALSE,
-  show.legend = FALSE
+  show.legend = FALSE,
+  inherit.aes = TRUE
 )
 }
 \arguments{
@@ -100,6 +101,11 @@ a warning. If \code{TRUE}, missing values are silently removed.}
 \code{FALSE} never includes, and \code{TRUE} always includes.
 It can also be a named logical vector to finely select the aesthetics to
 display.}
+
+\item{inherit.aes}{If \code{FALSE}, overrides the default aesthetics,
+rather than combining with them. This is most useful for helper functions
+that define both data and aesthetics and shouldn't inherit behaviour from
+the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 }
 \description{
 Arrows attached to the end of swimmer plot lanes can be used to denote the
