@@ -54,8 +54,8 @@ arrow_data <- patient_data |>
     by = "pt_id"
   ) |>
   dplyr::select(pt_id, end_time, end_study_name) |>
-  dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
-  unique()
+  dplyr::filter(.by = pt_id, end_time == max(end_time), 
+                is.na(end_study_name))
 
 p <- patient_data |>
   ggplot() +
