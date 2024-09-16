@@ -10,15 +10,13 @@
 #'
 #' @export
 
-geom_swim_marker <- function(mapping = NULL, data = NULL,
+geom_swim_marker2 <- function(mapping = NULL, data = NULL,
                              stat = "identity", position = "identity",
                              ...,
                              color = NULL,
                              glyph = NULL,
-                             parse = FALSE,
                              nudge_x = 0,
                              nudge_y = 0,
-                             check_overlap = FALSE,
                              size.unit = "mm",
                              na.rm = FALSE,
                              show.legend = NA,
@@ -39,21 +37,21 @@ geom_swim_marker <- function(mapping = NULL, data = NULL,
 
   marker_key <- data.frame(
     marker_labels = marker_labels,
-    marker_colors = color,
-    marker_glyphs = glyph
+    label_marquee = paste0("{.", color, " ", marker_labels, "}"),
+    marker_glyphs = glyph,
+    label_glyph = paste0("{.", color, " ", glyph, "}"),
+    marker_colors = color
   ) |> distinct()
 
   layer_obj <- layer(
     data = data,
     mapping = mapping,
     stat = stat,
-    geom = GeomSwimMarker,
+    geom = GeomSwimMarker2,
     position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list2(
-      parse = parse,
-      check_overlap = check_overlap,
       size.unit = size.unit,
       marker_key = marker_key,
       na.rm = na.rm,
@@ -62,47 +60,53 @@ geom_swim_marker <- function(mapping = NULL, data = NULL,
   )
 
   # Combine the layer with the color scale adjustment
-  class(layer_obj) <- c("swim_marker", class(layer_obj))
+  class(layer_obj) <- c("swim_marker2", class(layer_obj))
   layer_obj$marker_key <- marker_key
   layer_obj
 }
 
 #' @export
-ggplot_add.swim_marker <- function(object, plot, object_name) {
+ggplot_add.swim_marker2 <- function(object, plot, object_name) {
   # Combine object and plot mappings; plot mapping takes precedence if both exist
 
-  marker_key <- object$marker_key
+  marker_key <- object$marker_key |>
+    # TODO: Check if standard, are labels always in alphabetical order in legend display
+    # Here required to correctly map guide colors to labels
+    arrange(marker_labels)
 
   # TODO: Determine if below better than just:   plot <- plot + new_layer
   plot$layers <- append(plot$layers, object)
 
   plot +
-    scale_fill_manual(
+    scale_color_manual(
       aesthetics = "label",
+      name = plot$layers[[2]]$mapping$label |> rlang::as_label(), # TODO: Standardize
       values = setNames(marker_key$marker_glyphs, marker_key$marker_labels),
       guide = guide_legend(override.aes = list(color = marker_key$marker_colors))
     )
 }
 
-#' @rdname geom_swim_marker
+#' @rdname geom_swim_marker2
 #' @format NULL
 #' @usage NULL
 #' @export
-GeomSwimMarker <- ggproto("GeomSwimMarker", GeomText,
+GeomSwimMarker2 <- ggproto("GeomSwimMarker2", marquee::GeomMarquee,
                           required_aes = c("x", "y", "label"),
                           setup_data = function(data, params) {
+
                             data <- left_join(data, params$marker_key, by = c("label" = "marker_labels"))
                             data
                           },
-                          draw_panel = function(self, data, panel_params, coord, parse = FALSE,
-                                                na.rm = FALSE, check_overlap = FALSE, marker_key = NULL) {
+                          draw_panel = function(self, data, panel_params, coord, size.unit = "mm",
+                                                na.rm = FALSE, marker_key = NULL) {
+
                             data <- data |>
                               mutate(
-                                colour = marker_colors
+                                label = label_glyph
                               ) |>
                               select(-c(starts_with("marker_")))
 
-                            GeomText$draw_panel(data, panel_params, coord,
-                                                parse = parse, na.rm = na.rm, check_overlap = check_overlap)
+                            marquee::GeomMarquee$draw_panel(data, panel_params, coord,
+                                                size.unit = size.unit, na.rm = na.rm)
                           }
 )
