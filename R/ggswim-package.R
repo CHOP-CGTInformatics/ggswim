@@ -5,6 +5,7 @@
 #'   %+replace% theme_minimal theme element_text element_blank margin
 #'   element_line element_rect get_guide_data unit ggproto layer ggplot_build
 #'   Geom GeomSegment GeomLabel GeomPoint ggplot_add GeomText
+#' @importFrom marquee geom_marquee GeomMarquee
 #' @importFrom dplyr case_when left_join arrange bind_rows select arrange any_of
 #' mutate pull if_else filter
 #' @importFrom cli cli_abort cli_vec cli_warn

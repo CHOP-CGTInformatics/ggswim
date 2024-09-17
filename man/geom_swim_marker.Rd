@@ -14,10 +14,8 @@ geom_swim_marker(
   ...,
   color = NULL,
   glyph = NULL,
-  parse = FALSE,
   nudge_x = 0,
   nudge_y = 0,
-  check_overlap = FALSE,
   size.unit = "mm",
   na.rm = FALSE,
   show.legend = NA,
@@ -99,18 +97,9 @@ lists which parameters it can accept.
 \link[ggplot2:draw_key]{key glyphs}, to change the display of the layer in the legend.
 }}
 
-\item{parse}{If \code{TRUE}, the labels will be parsed into expressions and
-displayed as described in \code{?plotmath}.}
-
 \item{nudge_x, nudge_y}{Horizontal and vertical adjustment to nudge labels by.
 Useful for offsetting text from points, particularly on discrete scales.
 Cannot be jointly specified with \code{position}.}
-
-\item{check_overlap}{If \code{TRUE}, text that overlaps previous text in the
-same layer will not be plotted. \code{check_overlap} happens at draw time and in
-the order of the data. Therefore data should be arranged by the label
-column before calling \code{geom_text()}. Note that this argument is not
-supported by \code{geom_label()}.}
 
 \item{size.unit}{How the \code{size} aesthetic is interpreted: as millimetres
 (\code{"mm"}, default), points (\code{"pt"}), centimetres (\code{"cm"}), inches (\code{"in"}),
