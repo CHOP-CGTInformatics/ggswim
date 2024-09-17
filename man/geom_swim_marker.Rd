@@ -14,8 +14,6 @@ geom_swim_marker(
   ...,
   color = NULL,
   glyph = NULL,
-  nudge_x = 0,
-  nudge_y = 0,
   size.unit = "mm",
   na.rm = FALSE,
   show.legend = NA,
@@ -96,10 +94,6 @@ lists which parameters it can accept.
 \code{...}. This can be one of the functions described as
 \link[ggplot2:draw_key]{key glyphs}, to change the display of the layer in the legend.
 }}
-
-\item{nudge_x, nudge_y}{Horizontal and vertical adjustment to nudge labels by.
-Useful for offsetting text from points, particularly on discrete scales.
-Cannot be jointly specified with \code{position}.}
 
 \item{size.unit}{How the \code{size} aesthetic is interpreted: as millimetres
 (\code{"mm"}, default), points (\code{"pt"}), centimetres (\code{"cm"}), inches (\code{"in"}),

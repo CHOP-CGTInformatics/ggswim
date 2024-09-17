@@ -15,29 +15,16 @@ geom_swim_marker <- function(mapping = NULL, data = NULL,
                              ...,
                              color = NULL,
                              glyph = NULL,
-                             nudge_x = 0,
-                             nudge_y = 0,
                              size.unit = "mm",
                              na.rm = FALSE,
                              show.legend = NA,
                              inherit.aes = TRUE) {
-  # Copied from geom_text
-  if (!missing(nudge_x) || !missing(nudge_y)) {
-    if (!missing(position)) {
-      cli::cli_abort(c(
-        "Both {.arg position} and {.arg nudge_x}/{.arg nudge_y} are supplied.",
-        "i" = "Only use one approach to alter the position."
-      ))
-    }
-
-    position <- position_nudge(nudge_x, nudge_y)
-  }
-
+  # Set up marker_key object containing information for the legend setup
+  # and color overwriting in the setup_data portion of GeomSwimMarker
   marker_labels <- rlang::eval_tidy(data = data, expr = mapping$label)
 
   marker_key <- data.frame(
     marker_labels = marker_labels,
-    label_marquee = paste0("{.", color, " ", marker_labels, "}"),
     marker_glyphs = glyph,
     label_glyph = paste0("{.", color, " ", glyph, "}"),
     marker_colors = color
@@ -54,12 +41,13 @@ geom_swim_marker <- function(mapping = NULL, data = NULL,
     params = list2(
       size.unit = size.unit,
       marker_key = marker_key,
+      glyph = glyph,
       na.rm = na.rm,
       ...
     )
   )
 
-  # Combine the layer with the color scale adjustment
+  # Reclass the layer to trigger ggplot_add and apply manual scale/guide
   class(layer_obj) <- c("swim_marker", class(layer_obj))
   layer_obj$marker_key <- marker_key
   layer_obj
@@ -67,8 +55,6 @@ geom_swim_marker <- function(mapping = NULL, data = NULL,
 
 #' @export
 ggplot_add.swim_marker <- function(object, plot, object_name) {
-  # Combine object and plot mappings; plot mapping takes precedence if both exist
-
   marker_key <- object$marker_key |>
     # TODO: Check if standard, are labels always in alphabetical order in legend display
     # Here required to correctly map guide colors to labels
@@ -76,6 +62,7 @@ ggplot_add.swim_marker <- function(object, plot, object_name) {
 
   plot$layers <- append(plot$layers, object)
 
+  # Add manual color/guide changes to the scale
   plot +
     scale_color_manual(
       aesthetics = "label",
@@ -93,14 +80,14 @@ GeomSwimMarker <- ggproto("GeomSwimMarker", GeomMarquee,
                           required_aes = c("x", "y", "label"),
 
                           setup_data = function(data, params) {
-
+                            # Expose expected color data from the marker_key
                             data <- left_join(data, params$marker_key, by = c("label" = "marker_labels"))
                             data
                           },
 
                           draw_panel = function(self, data, panel_params, coord, size.unit = "mm",
-                                                na.rm = FALSE, marker_key = NULL) {
-
+                                                na.rm = FALSE, marker_key = NULL, glyph = NULL) {
+                            # Overwrite lost color data with marker_key color data
                             data <- data |>
                               mutate(
                                 label = label_glyph
