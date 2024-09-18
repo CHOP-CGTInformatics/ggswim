@@ -26,7 +26,6 @@ geom_swim_marker <- function(mapping = NULL, data = NULL,
   marker_key <- data.frame(
     marker_labels = marker_labels,
     marker_glyphs = glyph,
-    # label_glyph = paste0("{.", color, " ", glyph, "}"),
     marker_colors = color
   ) |> distinct()
 
