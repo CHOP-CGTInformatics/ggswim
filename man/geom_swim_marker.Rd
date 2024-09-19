@@ -3,13 +3,8 @@
 \docType{data}
 \name{geom_swim_marker}
 \alias{geom_swim_marker}
-\alias{StatMarker}
-\alias{compute_marker_group}
 \alias{GeomSwimMarker}
 \title{Add markers to swimmer plots}
-\format{
-An object of class \code{StatMarker} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 3.
-}
 \usage{
 geom_swim_marker(
   mapping = NULL,
@@ -17,21 +12,12 @@ geom_swim_marker(
   stat = "identity",
   position = "identity",
   ...,
-  color = NULL,
-  glyph = NULL,
-  parse = FALSE,
-  nudge_x = 0,
-  nudge_y = 0,
   check_overlap = FALSE,
   size.unit = "mm",
   na.rm = FALSE,
   show.legend = NA,
   inherit.aes = TRUE
 )
-
-StatMarker
-
-compute_marker_group(data, scales, marker_key)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}}. If specified and
@@ -108,13 +94,6 @@ lists which parameters it can accept.
 \link[ggplot2:draw_key]{key glyphs}, to change the display of the layer in the legend.
 }}
 
-\item{parse}{If \code{TRUE}, the labels will be parsed into expressions and
-displayed as described in \code{?plotmath}.}
-
-\item{nudge_x, nudge_y}{Horizontal and vertical adjustment to nudge labels by.
-Useful for offsetting text from points, particularly on discrete scales.
-Cannot be jointly specified with \code{position}.}
-
 \item{check_overlap}{If \code{TRUE}, text that overlaps previous text in the
 same layer will not be plotted. \code{check_overlap} happens at draw time and in
 the order of the data. Therefore data should be arranged by the label
@@ -146,4 +125,3 @@ contextual information about significant occurrences during the timeline, such
 as treatment responses or adverse events.
 }
 \keyword{datasets}
-\keyword{internal}
