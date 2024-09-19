@@ -29,7 +29,8 @@ Imports:
     stringr,
     tibble,
     tidyr,
-    tidyselect
+    tidyselect,
+    vctrs
 RoxygenNote: 7.3.1
 Roxygen: list(markdown = TRUE)
 Suggests: 
