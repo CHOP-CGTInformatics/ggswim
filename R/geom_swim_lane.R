@@ -75,36 +75,8 @@ geom_swim_lane <- function(mapping = NULL, data = NULL,
     )
   )
 
-  # Add custom attribute and modify class
-  # attr(layer_obj, "swim_class") <- "swim_lane"
-  # class(layer_obj) <- c("swim_lane", class(layer_obj))
-
   layer_obj
 }
-
-# #' #' @export
-# #' ggplot_add.swim_lane <- function(object, plot, object_name) {
-# #'   # Combine object and plot mappings; plot mapping takes precedence if both exist
-# #'   mapping <- modifyList(plot$mapping, object$mapping, keep.null = TRUE)
-# #'
-# #'   # Enforce checks ----
-# #'   # TODO: Determine if custom error is better than standard ignore warning
-# #'   check_supported_mapping_aes(
-# #'     mapping = mapping,
-# #'     unsupported_aes = "fill",
-# #'     parent_func = "geom_swim_lane()"
-# #'   )
-# #'
-# #'   # TODO: Determine if below better than just:   plot <- plot + new_layer
-# #'   plot$layers <- append(plot$layers, object)
-# #'
-# #'   # Return
-# #'   if (!"ggswim_obj" %in% class(plot)) {
-# #'     class(plot) <- c("ggswim_obj", class(plot))
-# #'   }
-# #'
-# #'   plot
-# #' }
 
 #' @rdname geom_swim_lane
 #' @format NULL
