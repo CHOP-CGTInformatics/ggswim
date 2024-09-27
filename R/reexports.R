@@ -13,16 +13,3 @@ ggplot2::`%+%`
 #' @importFrom ggplot2 %+%
 #' @export
 ggplot2::aes
-
-#' @importFrom ggnewscale new_scale_color
-#' @export
-ggnewscale::new_scale_color
-
-#' @importFrom ggnewscale new_scale_colour
-#' @export
-ggnewscale::new_scale_colour
-
-
-#' @importFrom ggplot2 ggplot_add
-#' @export
-ggplot2::ggplot_add

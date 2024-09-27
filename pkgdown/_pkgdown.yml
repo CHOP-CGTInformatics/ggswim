@@ -39,22 +39,24 @@ reference:
   contents:
   - geom_swim_lane
   - GeomSwimLane
-  - geom_swim_point
-  - GeomSwimPoint
-  - geom_swim_label
-  - GeomSwimLabel
+  - geom_swim_marker
+  - GeomSwimMarker
   - geom_swim_arrow
   - GeomSwimArrow
-  - new_scale_color
-  - new_scale_colour
-- title: "Themes and Builders"
+- title: "Scales"
+  descr: >
+    Scales for cleaning up swimmer plot displays and legend mapping.
+  contents:
+  - scale_marker_discrete
+- title: "Themeing"
   descr: >
     Themes and options to add to swimmer plots.
   contents:
-  - build_ggswim
   - theme_ggswim
 - title: "Datasets"
   contents:
   - patient_data
   - infusion_events
   - end_study_events
+  - .default_glyphs
+  - .default_colours
