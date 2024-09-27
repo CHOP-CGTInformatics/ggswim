@@ -100,18 +100,19 @@ neck and head length, along with options for color, fill, and type
 <span><span class="va">arrow_data</span> <span class="op">&lt;-</span> <span class="va">patient_data</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span></span>
 <span>    <span class="va">end_study_events</span> <span class="op">|&gt;</span></span>
-<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">pt_id</span>, <span class="va">end_study_name</span><span class="op">)</span>,</span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">pt_id</span>, <span class="va">label</span><span class="op">)</span>,</span>
 <span>    by <span class="op">=</span> <span class="st">"pt_id"</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">pt_id</span>, <span class="va">end_time</span>, <span class="va">end_study_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span>.by <span class="op">=</span> <span class="va">pt_id</span>, <span class="va">end_time</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">end_time</span><span class="op">)</span>, </span>
-<span>                <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">end_study_name</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">pt_id</span>, <span class="va">end_time</span>, <span class="va">label</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span>.by <span class="op">=</span> <span class="va">pt_id</span>, <span class="va">end_time</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">end_time</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">label</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">arrow_data</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">rmarkdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgs.rstudio.com/rmarkdown/reference/paged_table.html" class="external-link">paged_table</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["pt_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["end_time"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["end_study_name"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"04","2":"9.0","3":"NA"},{"1":"05","2":"8.9","3":"NA"},{"1":"09","2":"8.3","3":"NA"},{"1":"13","2":"-0.2","3":"NA"},{"1":"17","2":"0.9","3":"NA"},{"1":"18","2":"0.9","3":"NA"},{"1":"19","2":"3.0","3":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["pt_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["end_time"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["label"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"01","2":"2.0","3":"Other End Study Reason"},{"1":"02","2":"0.2","3":"Deceased"},{"1":"03","2":"11.9","3":"Completed Study Follow-Up"},{"1":"05","2":"14.1","3":"Completed Study Follow-Up"},{"1":"06","2":"4.8","3":"Other End Study Reason"},{"1":"08","2":"11.7","3":"Other End Study Reason"},{"1":"12","2":"9.7","3":"Other End Study Reason"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>This should look familiar, a pared-down dataset with a
@@ -148,7 +149,7 @@ to make a swimmer plot:</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>

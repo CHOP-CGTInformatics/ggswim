@@ -1,11 +1,11 @@
 pandoc: 3.1.11
-pkgdown: 2.1.0
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   articles/adding_arrows: adding_arrows.html
   articles/gallery: gallery.html
   ggswim: ggswim.html
-last_built: 2024-09-09T16:15Z
+last_built: 2024-09-27T21:09Z
 urls:
   reference: https://chop-cgtinformatics.github.io/ggswim/reference
   article: https://chop-cgtinformatics.github.io/ggswim/articles
