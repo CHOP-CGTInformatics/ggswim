@@ -46,7 +46,6 @@ geom_swim_lane <- function(mapping = NULL, data = NULL,
                            na.rm = FALSE,
                            show.legend = NA,
                            inherit.aes = TRUE) {
-
   layer(
     data = data,
     mapping = mapping,
@@ -71,21 +70,20 @@ geom_swim_lane <- function(mapping = NULL, data = NULL,
 #' @usage NULL
 #' @export
 GeomSwimLane <- ggproto("GeomSwimLane", GeomSegment,
-                        required_aes = c("x", "y", "xend"),
-                        non_missing_aes = c("linetype", "linewidth"),
-                        default_aes = aes(
-                          colour = "black",
-                          linewidth = 2,
-                          size = 2,
-                          linetype = 1,
-                          alpha = NA,
-                        ),
-                        draw_panel = function(self, data, panel_params, coord, arrow, arrow.fill,
-                                              lineend = "butt", linejoin = "round", na.rm = FALSE) {
-
-                          GeomSegment$draw_panel(data, panel_params, coord,
-                                                 arrow = arrow, arrow.fill = arrow.fill,
-                                                 lineend = lineend, linejoin = linejoin, na.rm = FALSE
-                          )
-                        }
+  required_aes = c("x", "y", "xend"),
+  non_missing_aes = c("linetype", "linewidth"),
+  default_aes = aes(
+    colour = "black",
+    linewidth = 2,
+    size = 2,
+    linetype = 1,
+    alpha = NA,
+  ),
+  draw_panel = function(self, data, panel_params, coord, arrow, arrow.fill,
+                        lineend = "butt", linejoin = "round", na.rm = FALSE) {
+    GeomSegment$draw_panel(data, panel_params, coord,
+      arrow = arrow, arrow.fill = arrow.fill,
+      lineend = lineend, linejoin = linejoin, na.rm = FALSE
+    )
+  }
 )

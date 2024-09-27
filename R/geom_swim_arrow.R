@@ -74,7 +74,6 @@ geom_swim_arrow <- function(mapping = NULL, data = NULL,
                             na.rm = FALSE,
                             show.legend = FALSE,
                             inherit.aes = TRUE) {
-
   layer(
     data = data,
     mapping = mapping,
@@ -102,43 +101,43 @@ geom_swim_arrow <- function(mapping = NULL, data = NULL,
 #' @usage NULL
 #' @export
 GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
-                         required_aes = c("y", "xend"),
-                         non_missing_aes = c("linetype", "linewidth"),
-                         default_aes = aes(
-                           colour = "black",
-                           linewidth = 0.5,
-                           size = 2,
-                           linetype = 1,
-                           alpha = NA
-                         ),
-                         setup_data = function(data, params) {
-                           arrow_neck_length <- params$arrow_neck_length
+  required_aes = c("y", "xend"),
+  non_missing_aes = c("linetype", "linewidth"),
+  default_aes = aes(
+    colour = "black",
+    linewidth = 0.5,
+    size = 2,
+    linetype = 1,
+    alpha = NA
+  ),
+  setup_data = function(data, params) {
+    arrow_neck_length <- params$arrow_neck_length
 
-                           # If NULL, neck length to be a 0.15 proportion
-                           if (is.null(params$arrow_neck_length)) {
-                             arrow_neck_length <- max(data$xend) * 0.15
-                           }
-                           data <- data |>
-                             mutate(
-                               x = xend,
-                               xend = arrow_neck_length + xend
-                             )
+    # If NULL, neck length to be a 0.15 proportion
+    if (is.null(params$arrow_neck_length)) {
+      arrow_neck_length <- max(data$xend) * 0.15
+    }
+    data <- data |>
+      mutate(
+        x = xend,
+        xend = arrow_neck_length + xend
+      )
 
-                           data
-                         },
-                         draw_panel = function(self, data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
-                                               arrow_colour = "black", arrow_head_length = unit(0.25, "inches"), arrow_neck_length = NULL,
-                                               arrow_type = "closed",
-                                               lineend = "butt", linejoin = "round", na.rm = FALSE) {
-                           arrow <- arrow(type = arrow_type, length = arrow_head_length) # Change arrow type and head length
-                           data$colour <- arrow_colour # Change arrow neck and outline color
+    data
+  },
+  draw_panel = function(self, data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
+                        arrow_colour = "black", arrow_head_length = unit(0.25, "inches"), arrow_neck_length = NULL,
+                        arrow_type = "closed",
+                        lineend = "butt", linejoin = "round", na.rm = FALSE) {
+    arrow <- arrow(type = arrow_type, length = arrow_head_length) # Change arrow type and head length
+    data$colour <- arrow_colour # Change arrow neck and outline color
 
-                           # Return all components
-                           grid::gList(
-                             GeomSegment$draw_panel(data, panel_params, coord,
-                                                    arrow = arrow, arrow.fill = arrow.fill,
-                                                    lineend = lineend, linejoin = linejoin, na.rm = na.rm
-                             )
-                           )
-                         }
+    # Return all components
+    grid::gList(
+      GeomSegment$draw_panel(data, panel_params, coord,
+        arrow = arrow, arrow.fill = arrow.fill,
+        lineend = lineend, linejoin = linejoin, na.rm = na.rm
+      )
+    )
+  }
 )

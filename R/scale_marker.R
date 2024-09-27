@@ -23,14 +23,15 @@ scale_marker_discrete <- function(glyphs = NULL, colors = NULL, limits = NULL, .
     n_values = nrow(markers)
   )
 
-  discrete_scale("marker", rlang::missing_arg(), palette = palette,
-                 limits = markers$labels, ..., na.translate = FALSE)
+  discrete_scale("marker", rlang::missing_arg(),
+    palette = palette,
+    limits = markers$labels, ..., na.translate = FALSE
+  )
 }
 
 #' @noRd
 #' @keywords internal
 pal_markers <- function(glyphs = NULL, colors = NULL, n_values = NULL) {
-
   # Define colour and glyph lengths via markers supplied or default values
   n_values <- n_values %||% max(length(glyphs), length(colors))
   if (n_values == 0) n_values <- length(.default_glyphs)
@@ -63,10 +64,9 @@ pal_markers <- function(glyphs = NULL, colors = NULL, n_values = NULL) {
 #' ggswim::.default_glyphs
 #' ggswim::.default_colours
 #'
-#'
 #' @export
 # Set default glyphs and colours
-.default_glyphs <- c("●", "■", "▲", "⬥" ,"▼", "▢", "□", "△", "◇")
+.default_glyphs <- c("●", "■", "▲", "⬥", "▼", "▢", "□", "△", "◇")
 
 #' @rdname dot-default_glyphs
 #' @export

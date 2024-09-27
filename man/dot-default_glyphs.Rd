@@ -22,6 +22,5 @@ ggswim marker defaults
 ggswim::.default_glyphs
 ggswim::.default_colours
 
-
 }
 \keyword{datasets}

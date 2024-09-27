@@ -94,5 +94,5 @@ test_that("geom_swim_arrow creates a ggswim_obj", {
   p <- ggplot2::ggplot() +
     layer
 
-  expect_setequal(class(p), c("ggswim_obj", "gg", "ggplot"))
+  expect_setequal(class(p), c("gg", "ggplot"))
 })

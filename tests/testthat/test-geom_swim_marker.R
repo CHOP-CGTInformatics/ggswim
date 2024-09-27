@@ -1,9 +1,9 @@
-test_that("geom_swim_lane is the right class", {
-  layer <- geom_swim_lane(
-    data = patient_data,
+test_that("geom_swim_marker is the right class", {
+  layer <- geom_swim_marker(
+    data = infusion_events,
     mapping = aes(
-      x = start_time, y = pt_id,
-      xend = end_time, color = disease_assessment
+      x = time_from_initial_infusion, y = pt_id,
+      marker = label
     )
   )
 
@@ -15,11 +15,11 @@ test_that("geom_swim_lane is the right class", {
 })
 
 test_that("all expected attributes exist in geom_swim_lane", {
-  layer <- geom_swim_lane(
-    data = patient_data,
+  layer <- geom_swim_marker(
+    data = infusion_events,
     mapping = aes(
-      x = start_time, y = pt_id,
-      xend = end_time, color = disease_assessment
+      x = time_from_initial_infusion, y = pt_id,
+      marker = label
     )
   )
 
@@ -34,11 +34,14 @@ test_that("all expected attributes exist in geom_swim_lane", {
 
 test_that("geom_swim_lane works when inheriting data and associated params", {
   p <- patient_data |>
-    ggplot(mapping = aes(
-      x = start_time, y = pt_id, xend = end_time,
-      colour = disease_assessment
-    )) +
-    geom_swim_lane()
+    ggplot(
+      data = infusion_events,
+      mapping = aes(
+        x = time_from_initial_infusion, y = pt_id,
+        marker = label
+      )
+    ) +
+    geom_swim_marker()
 
   skip_on_ci()
   vdiffr::expect_doppelganger(

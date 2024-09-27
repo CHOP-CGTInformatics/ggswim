@@ -1,13 +1,13 @@
 # nolint start
 # Load Libraries ----
 # Uncomment below to load libraries (avoids renv)
-library(REDCapTidieR)
-library(purrr)
-library(dplyr)
-library(lubridate)
-library(tidyr)
-library(ggplot2)
-library(stringr)
+# library(REDCapTidieR)
+# library(purrr)
+# library(dplyr)
+# library(lubridate)
+# library(tidyr)
+# library(ggplot2)
+# library(stringr)
 devtools::load_all(".")
 
 # Set Up CGTTrialsReporter Fnctns ----
@@ -78,11 +78,13 @@ db_tbls <- db |>
   db_list_select(tbls = c(infusion_sequence, infusion, disease_assessment, end_of_study)) |>
   join_data()
 
-infseq_ids <- c("22CT011-01.0", "22CT011-01.1", "22CT011-02.0", "22CT011-02.1", "22CT011-03.0",
-                "22CT011-03.1", "22CT011-04.0", "22CT011-05.0", "22CT011-06.0", "22CT011-07.0",
-                "22CT011-08.0", "22CT011-09.0", "22CT011-10.0", "22CT011-11.0", "22CT011-12.0",
-                "22CT011-13.0", "22CT011-14.0", "22CT011-15.0", "22CT011-16.0", "22CT011-17.0",
-                "22CT011-18.0", "22CT011-19.0", "22CT011-20.0")
+infseq_ids <- c(
+  "22CT011-01.0", "22CT011-01.1", "22CT011-02.0", "22CT011-02.1", "22CT011-03.0",
+  "22CT011-03.1", "22CT011-04.0", "22CT011-05.0", "22CT011-06.0", "22CT011-07.0",
+  "22CT011-08.0", "22CT011-09.0", "22CT011-10.0", "22CT011-11.0", "22CT011-12.0",
+  "22CT011-13.0", "22CT011-14.0", "22CT011-15.0", "22CT011-16.0", "22CT011-17.0",
+  "22CT011-18.0", "22CT011-19.0", "22CT011-20.0"
+)
 
 prodigy <- db_tbls |>
   select(

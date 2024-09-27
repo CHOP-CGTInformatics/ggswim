@@ -43,12 +43,10 @@ GeomSwimMarker <- ggproto(
   "GeomSwimMarker", GeomText,
   default_aes = GeomText$default_aes[names(GeomText$default_aes) != "colour"],
   required_aes = c("x", "y", "marker"),
-
   draw_panel = function(self, data, panel_params, coord, size.unit = "mm",
                         check_overlap = FALSE, na.rm = FALSE) {
-
     data$colour <- vctrs::field(data$marker, "colour")
-    data$label  <- vctrs::field(data$marker, "glyphs")
+    data$label <- vctrs::field(data$marker, "glyphs")
     data$marker <- NULL
 
     GeomText$draw_panel(
@@ -57,11 +55,9 @@ GeomSwimMarker <- ggproto(
       size.unit = size.unit, na.rm = na.rm
     )
   },
-
   draw_key = function(data, params, size) {
-
     data$colour <- vctrs::field(data$marker, "colour")
-    data$label  <- vctrs::field(data$marker, "glyphs")
+    data$label <- vctrs::field(data$marker, "glyphs")
     data$marker <- NULL
 
     draw_key_text(data, params, size)
