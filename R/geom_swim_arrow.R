@@ -46,6 +46,7 @@
 #'   ) |>
 #'   dplyr::select(pt_id, end_time, end_study_name) |>
 #'   dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
+#'   dplyr::filter(!is.na(end_study_name)) |>
 #'   unique()
 #'
 #' geom_swim_arrow(
@@ -74,7 +75,7 @@ geom_swim_arrow <- function(mapping = NULL, data = NULL,
                             show.legend = FALSE,
                             inherit.aes = TRUE) {
 
-  layer_obj <- layer(
+  layer(
     data = data,
     mapping = mapping,
     stat = stat,
@@ -94,25 +95,6 @@ geom_swim_arrow <- function(mapping = NULL, data = NULL,
       ...
     )
   )
-
-  # Add custom attribute and modify class
-  attr(layer_obj, "swim_class") <- "swim_arrow"
-  class(layer_obj) <- c("swim_arrow", class(layer_obj))
-
-  layer_obj
-}
-
-#' @export
-ggplot_add.swim_arrow <- function(object, plot, object_name) {
-  # TODO: Determine if below better than just:   plot <- plot + new_layer
-  plot$layers <- append(plot$layers, object)
-
-  # Return
-  if (!"ggswim_obj" %in% class(plot)) {
-    class(plot) <- c("ggswim_obj", class(plot))
-  }
-
-  plot
 }
 
 #' @rdname geom_swim_arrow
@@ -120,43 +102,43 @@ ggplot_add.swim_arrow <- function(object, plot, object_name) {
 #' @usage NULL
 #' @export
 GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
-  required_aes = c("y", "xend"),
-  non_missing_aes = c("linetype", "linewidth"),
-  default_aes = aes(
-    colour = "black",
-    linewidth = 0.5,
-    size = 2,
-    linetype = 1,
-    alpha = NA
-  ),
-  setup_data = function(data, params) {
-    arrow_neck_length <- params$arrow_neck_length
+                         required_aes = c("y", "xend"),
+                         non_missing_aes = c("linetype", "linewidth"),
+                         default_aes = aes(
+                           colour = "black",
+                           linewidth = 0.5,
+                           size = 2,
+                           linetype = 1,
+                           alpha = NA
+                         ),
+                         setup_data = function(data, params) {
+                           arrow_neck_length <- params$arrow_neck_length
 
-    # If NULL, neck length to be a 0.15 proportion
-    if (is.null(params$arrow_neck_length)) {
-      arrow_neck_length <- max(data$xend) * 0.15
-    }
-    data <- data |>
-      mutate(
-        x = xend,
-        xend = arrow_neck_length + xend
-      )
+                           # If NULL, neck length to be a 0.15 proportion
+                           if (is.null(params$arrow_neck_length)) {
+                             arrow_neck_length <- max(data$xend) * 0.15
+                           }
+                           data <- data |>
+                             mutate(
+                               x = xend,
+                               xend = arrow_neck_length + xend
+                             )
 
-    data
-  },
-  draw_panel = function(self, data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
-                        arrow_colour = "black", arrow_head_length = unit(0.25, "inches"), arrow_neck_length = NULL,
-                        arrow_type = "closed",
-                        lineend = "butt", linejoin = "round", na.rm = FALSE) {
-    arrow <- arrow(type = arrow_type, length = arrow_head_length) # Change arrow type and head length
-    data$colour <- arrow_colour # Change arrow neck and outline color
+                           data
+                         },
+                         draw_panel = function(self, data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
+                                               arrow_colour = "black", arrow_head_length = unit(0.25, "inches"), arrow_neck_length = NULL,
+                                               arrow_type = "closed",
+                                               lineend = "butt", linejoin = "round", na.rm = FALSE) {
+                           arrow <- arrow(type = arrow_type, length = arrow_head_length) # Change arrow type and head length
+                           data$colour <- arrow_colour # Change arrow neck and outline color
 
-    # Return all components
-    grid::gList(
-      GeomSegment$draw_panel(data, panel_params, coord,
-        arrow = arrow, arrow.fill = arrow.fill,
-        lineend = lineend, linejoin = linejoin, na.rm = na.rm
-      )
-    )
-  }
+                           # Return all components
+                           grid::gList(
+                             GeomSegment$draw_panel(data, panel_params, coord,
+                                                    arrow = arrow, arrow.fill = arrow.fill,
+                                                    lineend = lineend, linejoin = linejoin, na.rm = na.rm
+                             )
+                           )
+                         }
 )

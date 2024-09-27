@@ -143,6 +143,7 @@ arrow_data <- patient_data |>
   ) |>
   dplyr::select(pt_id, end_time, end_study_name) |>
   dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
+  dplyr::filter(!is.na(end_study_name)) |>
   unique()
 
 geom_swim_arrow(
