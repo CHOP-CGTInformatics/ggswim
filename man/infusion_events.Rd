@@ -5,7 +5,7 @@
 \alias{infusion_events}
 \title{Infusion Events dataset}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 16 rows and 3 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 18 rows and 5 columns.
 }
 \source{
 This dataset is for demonstration purposes only.
@@ -20,7 +20,7 @@ study events. Trial data has been de-identified and randomized for general use.
 \details{
 \code{infusion_events} contains pre-formatted time series data related to infusions
 and reinfusions for patients in \code{patient_data}. This dataset is most applicable
-for use with \code{add_marker()}.
+for use with \code{geom_swim_marker()}.
 }
 \examples{
 infusion_events

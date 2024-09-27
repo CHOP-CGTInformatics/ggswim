@@ -13,8 +13,8 @@
 #' @inheritParams ggplot2::geom_segment
 #' @param position Position adjustment. ggswim accepts either "stack", or "identity"
 #' depending on the use case. Default "identity".
-#' @param arrow_colour The color of the arrow head
-#' @param arrow_fill The fill color of the arrow head
+#' @param arrow_colour The colour of the arrow head
+#' @param arrow_fill The fill colour of the arrow head
 #' @param arrow_head_length A unit specifying the length of the arrow head
 #' (from tip to base).
 #' @param arrow_neck_length Value specifying neck length from end of segment
@@ -41,11 +41,12 @@
 #' arrow_data <- patient_data |>
 #'   dplyr::left_join(
 #'     end_study_events |>
-#'       dplyr::select(pt_id, end_study_name),
+#'       dplyr::select(pt_id, label),
 #'     by = "pt_id"
 #'   ) |>
-#'   dplyr::select(pt_id, end_time, end_study_name) |>
+#'   dplyr::select(pt_id, end_time, label) |>
 #'   dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
+#'   dplyr::filter(!is.na(label)) |>
 #'   unique()
 #'
 #' geom_swim_arrow(
@@ -73,8 +74,7 @@ geom_swim_arrow <- function(mapping = NULL, data = NULL,
                             na.rm = FALSE,
                             show.legend = FALSE,
                             inherit.aes = TRUE) {
-
-  layer_obj <- layer(
+  layer(
     data = data,
     mapping = mapping,
     stat = stat,
@@ -94,25 +94,6 @@ geom_swim_arrow <- function(mapping = NULL, data = NULL,
       ...
     )
   )
-
-  # Add custom attribute and modify class
-  attr(layer_obj, "swim_class") <- "swim_arrow"
-  class(layer_obj) <- c("swim_arrow", class(layer_obj))
-
-  layer_obj
-}
-
-#' @export
-ggplot_add.swim_arrow <- function(object, plot, object_name) {
-  # TODO: Determine if below better than just:   plot <- plot + new_layer
-  plot$layers <- append(plot$layers, object)
-
-  # Return
-  if (!"ggswim_obj" %in% class(plot)) {
-    class(plot) <- c("ggswim_obj", class(plot))
-  }
-
-  plot
 }
 
 #' @rdname geom_swim_arrow
@@ -149,7 +130,7 @@ GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
                         arrow_type = "closed",
                         lineend = "butt", linejoin = "round", na.rm = FALSE) {
     arrow <- arrow(type = arrow_type, length = arrow_head_length) # Change arrow type and head length
-    data$colour <- arrow_colour # Change arrow neck and outline color
+    data$colour <- arrow_colour # Change arrow neck and outline colour
 
     # Return all components
     grid::gList(

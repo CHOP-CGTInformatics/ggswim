@@ -7,8 +7,6 @@
 #'
 #' @param data a dataframe prepared for use with [geom_swim_lane()]
 #' @inheritParams ggplot2::geom_segment
-#' @param position Position adjustment. ggswim accepts either "stack", or "identity"
-#' depending on the use case. Default "identity".
 #'
 #' @section Aesthetics:
 #' [geom_swim_lane()] understands the following aesthetics (required aesthetics are in bold):
@@ -22,12 +20,8 @@
 #' - `linetype`
 #' - `linewidth`
 #'
-#' [geom_swim_lane()] is a wrapper for [geom_segment()] and can support much of the same
+#' [geom_swim_lane()] is a wrapper for [geom_segment()] and supports much of the same
 #' functionality.
-#'
-#' **Notes**:
-#'
-#' - [geom_swim_lane()] **does not** support mapping using `fill`.
 #'
 #' @section Arrows:
 #' Arrows can be added to the ends of swimmer plot lanes as specified in
@@ -40,7 +34,7 @@
 #'   ggplot2::ggplot() +
 #'   geom_swim_lane(mapping = aes(
 #'     x = start_time, y = pt_id, xend = end_time,
-#'     color = disease_assessment
+#'     colour = disease_assessment
 #'   ))
 geom_swim_lane <- function(mapping = NULL, data = NULL,
                            stat = "identity", position = "identity",
@@ -52,12 +46,7 @@ geom_swim_lane <- function(mapping = NULL, data = NULL,
                            na.rm = FALSE,
                            show.legend = NA,
                            inherit.aes = TRUE) {
-  # Set default mapping if not provided and inherit.aes is TRUE
-  if (is.null(mapping) && inherit.aes) {
-    mapping <- aes()
-  }
-
-  layer_obj <- layer(
+  layer(
     data = data,
     mapping = mapping,
     stat = stat,
@@ -74,36 +63,6 @@ geom_swim_lane <- function(mapping = NULL, data = NULL,
       ...
     )
   )
-
-  # Add custom attribute and modify class
-  attr(layer_obj, "swim_class") <- "swim_lane"
-  class(layer_obj) <- c("swim_lane", class(layer_obj))
-
-  layer_obj
-}
-
-#' @export
-ggplot_add.swim_lane <- function(object, plot, object_name) {
-  # Combine object and plot mappings; plot mapping takes precedence if both exist
-  mapping <- modifyList(plot$mapping, object$mapping, keep.null = TRUE)
-
-  # Enforce checks ----
-  # TODO: Determine if custom error is better than standard ignore warning
-  check_supported_mapping_aes(
-    mapping = mapping,
-    unsupported_aes = "fill",
-    parent_func = "geom_swim_lane()"
-  )
-
-  # TODO: Determine if below better than just:   plot <- plot + new_layer
-  plot$layers <- append(plot$layers, object)
-
-  # Return
-  if (!"ggswim_obj" %in% class(plot)) {
-    class(plot) <- c("ggswim_obj", class(plot))
-  }
-
-  plot
 }
 
 #' @rdname geom_swim_lane
@@ -118,19 +77,13 @@ GeomSwimLane <- ggproto("GeomSwimLane", GeomSegment,
     linewidth = 2,
     size = 2,
     linetype = 1,
-    shape = 19,
-    fill = NA,
     alpha = NA,
-    stroke = 1
   ),
-  draw_panel = function(self, data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
+  draw_panel = function(self, data, panel_params, coord, arrow, arrow.fill,
                         lineend = "butt", linejoin = "round", na.rm = FALSE) {
-    # Return all components
-    grid::gList(
-      GeomSegment$draw_panel(data, panel_params, coord,
-        arrow = NULL, arrow.fill = NULL,
-        lineend = lineend, linejoin = linejoin, na.rm = FALSE
-      )
+    GeomSegment$draw_panel(data, panel_params, coord,
+      arrow = arrow, arrow.fill = arrow.fill,
+      lineend = lineend, linejoin = linejoin, na.rm = FALSE
     )
   }
 )

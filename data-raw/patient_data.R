@@ -78,6 +78,14 @@ db_tbls <- db |>
   db_list_select(tbls = c(infusion_sequence, infusion, disease_assessment, end_of_study)) |>
   join_data()
 
+infseq_ids <- c(
+  "22CT011-01.0", "22CT011-01.1", "22CT011-02.0", "22CT011-02.1", "22CT011-03.0",
+  "22CT011-03.1", "22CT011-04.0", "22CT011-05.0", "22CT011-06.0", "22CT011-07.0",
+  "22CT011-08.0", "22CT011-09.0", "22CT011-10.0", "22CT011-11.0", "22CT011-12.0",
+  "22CT011-13.0", "22CT011-14.0", "22CT011-15.0", "22CT011-16.0", "22CT011-17.0",
+  "22CT011-18.0", "22CT011-19.0", "22CT011-20.0"
+)
+
 prodigy <- db_tbls |>
   select(
     infseq_id,
@@ -92,6 +100,10 @@ prodigy <- db_tbls |>
     # End of Study Vars
     end_study_date,
     end_study_reason # Death
+  ) |>
+  # Keep to a specific subset
+  filter(
+    infseq_id %in% infseq_ids
   ) |>
   # Randomize
   mutate(
@@ -185,7 +197,8 @@ patient_data <- prodigy |>
   mutate(
     start_time = round(start_time / 30.417, digit = 1), # average days in a month.
     end_time = round(end_time / 30.417, digit = 1)
-  )
+  ) |>
+  filter(!is.na(disease_assessment))
 
 # infusion_events ----
 
@@ -213,7 +226,14 @@ infusion_events <- prodigy |>
     !is.na(initial_infusion_date)) |>
   select(pt_id, time_from_initial_infusion) |>
   unique() |>
-  mutate(infusion_type = dplyr::if_else(time_from_initial_infusion == 0, "Initial Infusion", "Reinfusion"))
+  mutate(label = dplyr::if_else(time_from_initial_infusion == 0, "Initial Infusion", "Reinfusion")) |>
+  mutate(
+    glyph = "⬤",
+    colour = case_when(
+      label == "Initial Infusion" ~ "red",
+      .default = "blue"
+    )
+  )
 
 # end_study_events ----
 
@@ -228,70 +248,27 @@ end_study_events <- prodigy |>
     time_from_initial_infusion = interval(initial_infusion_date, end_study_date) %/% days(1),
     # Convert to months
     time_from_initial_infusion = round(time_from_initial_infusion / 30.417, digit = 1), # average days in a month
-    end_study_label = case_when(
+    glyph = case_when(
       end_study_reason == "Completed study follow-up" ~ "✅",
       end_study_reason == "Death" ~ "❌",
       is.na(end_study_reason) ~ NA,
       TRUE ~ "⚠️"
     ),
-    end_study_name = case_when(
+    label = case_when(
       end_study_reason == "Completed study follow-up" ~ "Completed Study Follow-Up",
       end_study_reason == "Death" ~ "Deceased",
       is.na(end_study_reason) ~ NA,
       TRUE ~ "Other End Study Reason"
     )
   ) |>
-  filter(!is.na(end_study_label) &
+  filter(!is.na(label) &
     !is.na(initial_infusion_date)) |> # Remove Screen Fail
   unique() |>
   dplyr::filter(pt_id %in% patient_data$pt_id) |>
-  select(pt_id, time_from_initial_infusion, end_study_label, end_study_name)
+  select(pt_id, time_from_initial_infusion, label, glyph)
 
 # Save data ----
 usethis::use_data(patient_data, overwrite = TRUE)
 usethis::use_data(infusion_events, overwrite = TRUE)
 usethis::use_data(end_study_events, overwrite = TRUE)
-
-# Uncomment below for proofing and testing
-# POC: geom_segment ----
-# Cant work with legend because shares layer type with color, not fill
-# p <- patient_data |>
-#   # ggswim(aes(x = final_time, y = pt_id, fill = disease_assessment), position = "identity")
-#   ggplot() +
-#   geom_segment(aes(x = start_time, xend = end_time,  y = pt_id, colour = disease_assessment), linewidth = 10) +
-#   geom_point(data = infusion_events,
-#              aes(x = time_from_initial_infusion, y = pt_id)) +
-#   geom_label(data = end_study_events,
-#              aes(x = time_from_initial_infusion, y = pt_id, label = end_study_label), show.legend = TRUE)
-#
-# p
-
-# ggswim ----
-# Uncomment for testing
-# ggswim(
-#   patient_data |> arrange(desc(delta_t0)),
-#   mapping = aes(x = delta_t0_months, y = pt_id, fill = disease_assessment),
-#   arrow = arrow_status,
-#   arrow_head_length = unit(.25, "inches"),
-#   arrow_neck_length = delta_today,
-#   width = 0.25, position = "identity"
-# ) +
-#   add_marker(
-#     data = end_study_events |> dplyr::rename("Status Markers" = end_study_name),
-#     aes(x = delta_t0_months, y = pt_id, label_vals = end_study_label, label_names = `Status Markers`),
-#     label.size = NA, fill = NA, size = 5
-#   )  +
-#   add_marker(
-#     data = infusion_events,
-#     aes(x = delta_t0_months, y = pt_id, name = "Infusion"), color = "#25DA6D",
-#     size = 5, position = "identity", alpha = .75
-#   ) +
-#   scale_fill_manual(
-#     name = "Overall Disease Assessment",
-#     values = c("#6394F3", "#F3C363", "#EB792F")
-#   ) +
-#   labs(title = "Prodigy Swimmer Plot", subtitle = "Test", caption = "Test") +
-#   xlab("Time Since Infusion (Months)") + ylab("Patient ID") +
-#   theme_ggswim()
-
 # nolint end

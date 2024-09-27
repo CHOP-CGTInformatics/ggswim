@@ -19,51 +19,5 @@ library(ggplot2)
 library(dplyr)
 ```
 
-This gallery will showcase different datasets and ways to interact with ggswim.
+This gallery is under development and will showcase different datasets and ways to interact with ggswim.
 
-## Single-Row Dataset
-
-Some common swimmer plot data structures may involve single-row observations where each record or lane corresponds to a single status classification and contains all associated points of interest. Let's look at an example of what we mean by this:
-
-```{r single row dataset}
-single_row_data <- tibble::tribble(
-  ~"record", ~"status", ~"start_time", ~"end_time", ~"m1", ~"m1_time", ~"m2", ~"m2_time", ~"m2_name",
-  1, "status1", 0, 5, "m1", 3, "❌", 5, "Negative",
-  2, "status1", -2, 7, "m1", 4, "✅", 6, "Positive",
-  3, "status2", 2, 15, "m2", 10, "❌", 15, "Negative"
-)
-
-# Convert to factor
-single_row_data$record <- factor(single_row_data$record)
-
-single_row_data |>
-  rmarkdown::paged_table()
-```
-
-In this dataset, we have a combination of statuses and markers where each `record` is a single row observation. Notice that we have markers defined as both points and label value/name pairs. 
-
-For this example, we'll add two additional new scales to separate out the marker points and the marker labels. Notice how we must still refer to `data` to `single_row_data` due to the scale splits:
-
-```{r}
-ggplot2::ggplot() +
-  geom_swim_lane(
-    data = single_row_data,
-    mapping = aes(x = start_time, xend = end_time, y = record, colour = status), linewidth = 2
-  ) +
-  scale_color_manual(name = "Lanes", values = c("firebrick", "steelblue")) +
-  new_scale_color() +
-  geom_swim_point(
-    data = single_row_data,
-    mapping = aes(x = m1_time, y = record, colour = m1),
-    size = 5
-  ) +
-  scale_color_manual(name = "Marker Points", values = c("green", "orange")) +
-  new_scale_color() +
-  geom_swim_label(
-    data = single_row_data,
-    mapping = aes(x = m2_time, y = record, label_vals = m2, label_names = m2_name),
-    label.size = NA, size = 5, fill = NA
-  ) +
-  scale_color_discrete(name = "Marker Labels") +
-  theme_minimal()
-```

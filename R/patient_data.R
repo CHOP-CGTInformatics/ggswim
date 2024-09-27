@@ -7,7 +7,7 @@
 #' @details
 #' `patient_data` contains pre-formatted time series data related to disease status
 #' markers and status markers that can support arrows. This dataset is most
-#' applicable for use with `ggswim()` and `add_marker()`.
+#' applicable for use with `geom_swim_lane()`.
 #'
 #' @usage data(patient_data)
 #' @docType data
@@ -26,7 +26,7 @@
 #' @details
 #' `infusion_events` contains pre-formatted time series data related to infusions
 #' and reinfusions for patients in `patient_data`. This dataset is most applicable
-#' for use with `add_marker()`.
+#' for use with `geom_swim_marker()`.
 #'
 #' @usage data(infusion_events)
 #' @docType data
@@ -44,7 +44,7 @@
 #' @details
 #' `end_study_events` contains pre-formatted time series data related to end of
 #' study events where patients left the trial for varying reasons. This dataset
-#' contains emojis for label use and is most applicable with `add_marker()`.
+#' is most applicable for use with `geom_swim_marker()`.
 #'
 #' @usage data(end_study_events)
 #' @docType data

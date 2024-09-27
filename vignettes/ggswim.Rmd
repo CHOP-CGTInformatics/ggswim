@@ -25,10 +25,10 @@ The ggswim package eases the development of swimmer plots in R through extension
 ggswim offers several layering functions that mimic other "geom" functions from ggplot2: 
 
 - `geom_swim_lane()`
-- `geom_swim_point()`
-- `geom_swim_label()`
+- `geom_swim_marker()`
+- `scale_marker_discrete()`
 
-The former, an extension of `geom_segment()`, allows users to construct the horizontal bars, what we'll sometimes refer to as "lanes." Meanwhile, `geom_swim_point()` and `geom_swim_label` wrap both `geom_point()` and `geom_label()`, respectively, to effortlessly embed key events of interest, or "markers," onto the lanes. These can take the form of shapes, symbols, or even emojis.
+The former, an extension of `geom_segment()`, allows users to construct the horizontal bars, what we'll sometimes refer to as "lanes." Meanwhile, `geom_swim_marker()` wraps `geom_text()` to effortlessly embed key events of interest, or "markers," onto the lanes. These can take the form of shapes, symbols, or even emojis.
 
 Drawing from the well-established principles of ggplot2, ggswim allows users to apply familiar layer-building techniques, including the application of styles and themes.
 
@@ -58,16 +58,16 @@ Now, let's make the plot using `ggplot()` and `geom_swim_lane()`:
 ```{r ggswim plot}
 library(ggplot2)
 
-p <- patient_data |>
-  ggplot() +
+p <- ggplot() +
   geom_swim_lane(
+    data = patient_data,
     mapping = aes(
       x = start_time,
       xend = end_time,
       y = pt_id,
       color = disease_assessment
     ),
-    linewidth = 5
+    linewidth = 3
   )
 
 p
@@ -84,63 +84,59 @@ infusion_events |>
   rmarkdown::paged_table()
 ```
 
-This dataset is much simpler, having only 3 columns indicating the time from the initial infusion, where 0 is an initial infusion and reinfusions at some point beyond 0 (if a patient had any). These are also categorized under `infusion_type`. 
+This dataset is much simpler, indicating the time from the initial infusion, where 0 is an initial infusion and reinfusions at some point beyond 0 (if a patient had any). These are also categorized under `label`. `glyph` and `colour` will serve as helpful specifiers when we add our markers onto our swimmer plot.
 
-In order to separate layers of identical types, in this case `color`s, we need a way to separate out the legend by lanes and markers. By default, ggplot2 will group these together, but by using `new_scale_color()` from the ggnewscale package we can specify that we want to actually keep these in separate scales. 
 
-`new_scale_color()` can be used to make any number of separations you need, but because `new_scale_color()` establishes the start of a new scale, it is important to define any scale changes we want before calling it and moving on to the next one. It is a common workflow to use `scale_color_manual()`, `scale_color_brewer()`, `scale_color_discrete()`, etc., to change and update the colors and names of the visible elements in both the plot and the legend, so we'll apply a manual scale change here, just after our swim lane layer but before moving on to adding the markers.
-
-```{r first marker plot, message=FALSE}
-p <- p +
-  scale_color_manual(
-    name = "Overall Disease Assessment",
-    values = c("#6394F3", "#F3C363", "#EB792F", "#d73a76", "#85a31e")
-  ) +
-  new_scale_color() +
-  geom_swim_point(
-    data = infusion_events,
-    aes(
-      x = time_from_initial_infusion,
-      y = pt_id,
-      color = infusion_type,
-    ),
-    size = 5
-  )
-
-p
-```
-
-Now we can see shapes have been added to establish our markers for infusions.
-
-## Adding a Marker Layer: Labels
-
-Our last dataset involves end of study events, i.e. events that indicate a patient has left the study for various reasons.
+Next, let's look at our end of study events, i.e. events that indicate a patient has left the study for various reasons.
 
 ```{r end_study_events}
 end_study_events |>
   rmarkdown::paged_table()
 ```
 
-You'll notice that this dataset includes use of emojis under `end_study_label`. In addition to shapes and symbols, ggswim supports the use of emojis when rendering swimmer plots. `geom_swim_label()` allows users to specify shapes or emojis by using the appropriate `aes()` argument callouts: `label_vals` and `label_names`. These are unique mapping parameters to ggswim, letting it support and `geom_label()` while handling manipulation of scales and layers. Let's add a layer using emojis via the `end_study_events` dataset:
+You'll notice that this dataset includes use of emojis under `glyph`. In addition to shapes and symbols, ggswim supports the use of emojis when rendering swimmer plots. If issues arise in rendering, you may need to check your options settings and ensure a proper graphics device like "AGG". 
+
+While it's common to encounter these as separate datasets in the wild, it will make our lives much easier to combine `end_study_events` and `infusion_events` together since it's relatively straightforward to do and the markers exist on the same timeline.
+
+```{r combine events, message=FALSE}
+all_events <- dplyr::bind_rows(
+  infusion_events,
+  end_study_events
+)
+
+all_events
+```
+
+Let's now call `geom_swim_marker()` and add the events onto our plot:
 
 ```{r second marker plot, message=FALSE, warning=FALSE}
 p <- p +
-  geom_swim_label(
-    data = end_study_events,
+  geom_swim_marker(
+    data = all_events,
     aes(
       x = time_from_initial_infusion,
       y = pt_id,
-      label_vals = end_study_label,
-      label_names = end_study_name
+      marker = label
     ),
-    label.size = NA, fill = NA, size = 5
-  ) +
-  scale_color_brewer(name = "Study Events")
+    size = 4
+  )
 
 p
 ```
 
-We've successfully made a swimmer plot with lanes and two different kinds of marker layers. Recall that ggswim works within the ggplot2 framework, therefore customization can be done using the same ggplot2 theme and styling functions users may already be familiar with. It is typical in this workflow to call `scale_color_manual()` to fix up the names and colors of the plot, but be sure to do so in the proper order with the use of `new_scale_color()` mentioned earlier!
+We've successfully made a swimmer plot with lanes and two different kinds of marker layers. However, let's take it one step further and make use of the `glyph` and `colour` columns we specified. After all, who doesn't love some emojis?
+
+## A Sense of Scale
+
+`scale_marker_discrete()` makes it easy to specify and take finer control over your markers and their appearance in the legend. Typically, it can be difficult to have emojis or labels appear in the place of legend glyphs, but thanks to ggswim we can specify what belongs in the glyph versus text elements of our legend. Additionally, we are able to use the "colour" scales under the `marker` definition so ggswim can use the same colour scale under the hood, but keep the identity of "markers" and "lanes" separate.
+
+```{r}
+p <- p +
+  scale_marker_discrete(glyphs = all_events$glyph, colours = all_events$colour, limits = all_events$label)
+
+p
+```
+
 
 ## A Full Swimmer Plot
 
@@ -152,7 +148,8 @@ library(ggplot2)
 p <- p +
   theme_minimal() +
   scale_color_brewer(
-    name = "Study Events"
+    name = "Study Events",
+    palette = "Set1"
   ) +
   labs(title = "My Swimmer Plot") +
   xlab("Time (Months)") + ylab("Patient ID")

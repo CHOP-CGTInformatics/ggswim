@@ -48,28 +48,29 @@ library(ggplot2)
 
 # Construct arrow_data for arrow display later
 arrow_data <- patient_data |>
-  dplyr::left_join(
-    end_study_events |>
-      dplyr::select(pt_id, end_study_name),
-    by = "pt_id"
-  ) |>
-  dplyr::select(pt_id, end_time, end_study_name) |>
-  dplyr::filter(.by = pt_id, end_time == max(end_time), 
-                is.na(end_study_name))
+    dplyr::left_join(
+      end_study_events |>
+        dplyr::select(pt_id, label),
+      by = "pt_id"
+    ) |>
+    dplyr::select(pt_id, end_time, label) |>
+    dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
+    dplyr::filter(!is.na(label)) |>
+    unique()
 
 p <- patient_data |>
   ggplot() +
   geom_swim_lane(
     mapping = aes(
       x = start_time, y = pt_id, xend = end_time,
-      color = disease_assessment
+      colour = disease_assessment
     )
   ) +
   geom_swim_arrow(
     data = arrow_data,
     mapping = aes(xend = end_time, y = pt_id)
   ) +
-  scale_color_brewer(
+  scale_colour_brewer(
     name = "Overall Disease Assessment",
     palette = "Set1"
   )
@@ -80,21 +81,22 @@ p
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
 Next we’ll add on events of interest: end of study updates and
-infusions. We’ll refer to these as “markers” and call them with two more
-“geom” functions: `geom_swim_point()` and `geom_swim_label()`.
+infusions. We’ll refer to these as “markers” and call them with the next
+main “geom” function: `geom_swim_marker()`. While it is often common to
+see these datasets as separate components in the wild, we’ll make our
+lives a little easier during plotting by combining them first.
 
 ``` r
+all_events <- dplyr::bind_rows(
+  infusion_events,
+  end_study_events
+)
+
 p <- p +
-  new_scale_color() +
-  geom_swim_point(
-    data = infusion_events,
-    aes(x = time_from_initial_infusion, y = pt_id, color = infusion_type),
-    size = 5
-  ) +
-  geom_swim_label(
-    data = end_study_events,
-    aes(x = time_from_initial_infusion, y = pt_id, label_vals = end_study_label, label_names = end_study_name),
-    label.size = NA, fill = NA, size = 5
+  geom_swim_marker(
+    data = all_events,
+    aes(x = time_from_initial_infusion, y = pt_id, marker = label),
+    size = 3
   )
 
 p
@@ -102,18 +104,31 @@ p
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
 
+This looks OK as a default, but it’s not quite as nice as we’d like it
+to be. Let’s specify that we have particular `glyph`s and `colour`s we’d
+like to use for the markers with ggswim’s `scale_marker_discrete()`.
+
+``` r
+p <- p +
+  with(all_events, scale_marker_discrete(glyphs = glyph, colours = colour, limits = label, name = "Markers"))
+
+p
+```
+
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+
 Finally, we’ll beautify the plot with familiar ggplot2 techniques and a
 last finishing touch with `theme_ggswim()`:
 
 ``` r
 p +
-  scale_color_brewer(name = "Markers", palette = "Set2") +
-  labs(title = "My Swimmer Plot") +
+  scale_colour_brewer(name = "Lanes", palette = "Set1") +
+  labs(title = "My Swimmer Plot", ) +
   xlab("Time Since Infusion (Months)") + ylab("Patient ID") +
   theme_ggswim()
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
 
 ## Collaboration
 

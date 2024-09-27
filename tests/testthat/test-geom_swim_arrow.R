@@ -12,7 +12,7 @@ test_that("geom_swim_arrow is the right class", {
   )
 
   expected_classes <- c(
-    "swim_arrow", "LayerInstance", "Layer", "ggproto", "gg"
+    "LayerInstance", "Layer", "ggproto", "gg"
   )
 
   expect_setequal(attr(layer, "class"), expected_classes)
@@ -34,8 +34,7 @@ test_that("all expected attributes exist in geom_swim_arrow", {
   attrs <- names(attributes(layer))
 
   expected_attrs <- c(
-    "class",
-    "swim_class"
+    "class"
   )
 
   expect_true(all(expected_attrs %in% attrs))
@@ -95,5 +94,5 @@ test_that("geom_swim_arrow creates a ggswim_obj", {
   p <- ggplot2::ggplot() +
     layer
 
-  expect_setequal(class(p), c("ggswim_obj", "gg", "ggplot"))
+  expect_setequal(class(p), c("gg", "ggplot"))
 })

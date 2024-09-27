@@ -42,8 +42,18 @@ give the stat as \code{"count"}.
 \link[ggplot2:layer_stats]{layer stat} documentation.
 }}
 
-\item{position}{Position adjustment. ggswim accepts either "stack", or "identity"
-depending on the use case. Default "identity".}
+\item{position}{A position adjustment to use on the data for this layer. This
+can be used in various ways, including to prevent overplotting and
+improving the display. The \code{position} argument accepts the following:
+\itemize{
+\item The result of calling a position function, such as \code{position_jitter()}.
+This method allows for passing extra arguments to the position.
+\item A string naming the position adjustment. To give the position as a
+string, strip the function name of the \code{position_} prefix. For example,
+to use \code{position_jitter()}, give the position as \code{"jitter"}.
+\item For more information and other ways to specify the position, see the
+\link[ggplot2:layer_positions]{layer position} documentation.
+}}
 
 \item{...}{Other arguments passed on to \code{\link[ggplot2:layer]{layer()}}'s \code{params} argument. These
 arguments broadly fall into one of 4 categories below. Notably, further
@@ -115,13 +125,8 @@ sequence of events or activities for the corresponding subject.
 \item \code{linewidth}
 }
 
-\code{\link[=geom_swim_lane]{geom_swim_lane()}} is a wrapper for \code{\link[=geom_segment]{geom_segment()}} and can support much of the same
+\code{\link[=geom_swim_lane]{geom_swim_lane()}} is a wrapper for \code{\link[=geom_segment]{geom_segment()}} and supports much of the same
 functionality.
-
-\strong{Notes}:
-\itemize{
-\item \code{\link[=geom_swim_lane]{geom_swim_lane()}} \strong{does not} support mapping using \code{fill}.
-}
 }
 
 \section{Arrows}{
@@ -135,7 +140,7 @@ patient_data |>
   ggplot2::ggplot() +
   geom_swim_lane(mapping = aes(
     x = start_time, y = pt_id, xend = end_time,
-    color = disease_assessment
+    colour = disease_assessment
   ))
 }
 \keyword{datasets}
