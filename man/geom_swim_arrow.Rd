@@ -76,7 +76,7 @@ lists which parameters it can accept.
 \link[ggplot2:draw_key]{key glyphs}, to change the display of the layer in the legend.
 }}
 
-\item{arrow_colour}{The color of the arrow head}
+\item{arrow_colour}{The colour of the arrow head}
 
 \item{arrow_head_length}{A unit specifying the length of the arrow head
 (from tip to base).}
@@ -84,7 +84,7 @@ lists which parameters it can accept.
 \item{arrow_neck_length}{Value specifying neck length from end of segment
 to arrow head base}
 
-\item{arrow_fill}{The fill color of the arrow head}
+\item{arrow_fill}{The fill colour of the arrow head}
 
 \item{arrow_type}{One of "open" or "closed" indicating whether the arrow head
 should be a closed triangle.}

@@ -140,7 +140,7 @@ patient_data |>
   ggplot2::ggplot() +
   geom_swim_lane(mapping = aes(
     x = start_time, y = pt_id, xend = end_time,
-    color = disease_assessment
+    colour = disease_assessment
   ))
 }
 \keyword{datasets}

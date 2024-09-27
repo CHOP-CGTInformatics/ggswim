@@ -18,26 +18,27 @@
 #' @export
 #'
 #' @examples
-#' p <- ggplot2::ggplot(data = patient_data) +
-#'   geom_swim_lane(
-#'     mapping = aes(
-#'       x = start_time,
-#'       y = pt_id,
-#'       xend = end_time,
-#'       color = disease_assessment
-#'     )
-#'   ) +
-#'   ggplot2::scale_color_brewer(name = "Lanes", palette = "Set1") +
-#'   new_scale_color() +
-#'   geom_swim_point(
-#'     data = infusion_events,
-#'     mapping = aes(
+#' p <- ggplot2::ggplot() +
+#' geom_swim_lane(
+#'   data = patient_data,
+#'   mapping = aes(
+#'     x = start_time,
+#'     xend = end_time,
+#'     y = pt_id,
+#'     colour = disease_assessment
+#'   ),
+#'   linewidth = 3
+#' ) +
+#'   geom_swim_marker(
+#'     data = all_events,
+#'     aes(
 #'       x = time_from_initial_infusion,
-#'       y = pt_id, color = infusion_type
-#'     ), # nolint: object_usage_linter
-#'     size = 5
+#'       y = pt_id,
+#'       marker = label
+#'     ),
+#'     size = 4
 #'   ) +
-#'   ggplot2::scale_color_manual(name = "Markers", values = c("red", "green"))
+#'   scale_marker_discrete(glyphs = all_events$glyph, colours = all_events$colour, limits = all_events$label)
 #'
 #' p +
 #'   theme_ggswim()

@@ -2,7 +2,7 @@
 #' @aliases ggswim-package
 #' @importFrom ggplot2 aes layer_data ggplot scale_color_manual geom_segment arrow
 #'   %+replace% theme_minimal theme element_text element_blank margin unit
-#'   element_line element_rect unit ggproto layer
+#'   element_line element_rect unit ggproto layer scale_colour_manual
 #'   Geom GeomSegment GeomText discrete_scale draw_key_text
 #' @importFrom marquee geom_marquee GeomMarquee
 #' @importFrom dplyr case_when left_join arrange bind_rows select arrange any_of

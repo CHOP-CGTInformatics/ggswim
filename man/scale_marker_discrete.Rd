@@ -4,15 +4,15 @@
 \alias{scale_marker_discrete}
 \title{Position scales for discrete marker data}
 \usage{
-scale_marker_discrete(glyphs = NULL, colors = NULL, limits = NULL, ...)
+scale_marker_discrete(glyphs = NULL, colours = NULL, limits = NULL, ...)
 }
 \arguments{
 \item{glyphs}{Marker glyphs passed to the marker layer, taking on the form of
 emojis or ASCII shapes. Default glyphs are provided in the absence of defined
 ones.}
 
-\item{colors}{Marker colors passed to the marker layer for non-emojis.
-Default colors are provided in the absence of defined ones.}
+\item{colours}{Marker colours passed to the marker layer for non-emojis.
+Default colours are provided in the absence of defined ones.}
 
 \item{...}{
   Arguments passed on to \code{\link[ggplot2:discrete_scale]{discrete_scale}}

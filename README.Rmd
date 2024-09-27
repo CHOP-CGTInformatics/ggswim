@@ -63,14 +63,14 @@ p <- patient_data |>
   geom_swim_lane(
     mapping = aes(
       x = start_time, y = pt_id, xend = end_time,
-      color = disease_assessment
+      colour = disease_assessment
     )
   ) +
   geom_swim_arrow(
     data = arrow_data,
     mapping = aes(xend = end_time, y = pt_id)
   ) +
-  scale_color_brewer(
+  scale_colour_brewer(
     name = "Overall Disease Assessment",
     palette = "Set1"
   )
@@ -100,7 +100,7 @@ This looks OK as a default, but it's not quite as nice as we'd like it to be. Le
 
 ```{r, message = FALSE}
 p <- p +
-  with(all_events, scale_marker_discrete(glyphs = glyph, colors = colour, limits = label, name = "Markers"))
+  with(all_events, scale_marker_discrete(glyphs = glyph, colours = colour, limits = label, name = "Markers"))
 
 p
 ```
@@ -110,7 +110,7 @@ Finally, we'll beautify the plot with familiar ggplot2 techniques and a last fin
 
 ```{r, message=FALSE}
 p +
-  scale_color_brewer(name = "Lanes", palette = "Set1") +
+  scale_colour_brewer(name = "Lanes", palette = "Set1") +
   labs(title = "My Swimmer Plot", ) +
   xlab("Time Since Infusion (Months)") + ylab("Patient ID") +
   theme_ggswim()

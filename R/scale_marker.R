@@ -7,19 +7,19 @@
 #' @param glyphs Marker glyphs passed to the marker layer, taking on the form of
 #' emojis or ASCII shapes. Default glyphs are provided in the absence of defined
 #' ones.
-#' @param colors Marker colors passed to the marker layer for non-emojis.
-#' Default colors are provided in the absence of defined ones.
+#' @param colours Marker colours passed to the marker layer for non-emojis.
+#' Default colours are provided in the absence of defined ones.
 #' @inheritParams ggplot2::scale_x_discrete
 #'
 #' @export
 
-scale_marker_discrete <- function(glyphs = NULL, colors = NULL, limits = NULL, ...) {
-  markers <- data.frame(glyphs = glyphs, colors = colors, labels = limits) |>
+scale_marker_discrete <- function(glyphs = NULL, colours = NULL, limits = NULL, ...) {
+  markers <- data.frame(glyphs = glyphs, colours = colours, labels = limits) |>
     distinct()
 
   palette <- pal_markers(
     glyphs = markers$glyphs,
-    colors = markers$colors,
+    colours = markers$colours,
     n_values = nrow(markers)
   )
 
@@ -31,15 +31,15 @@ scale_marker_discrete <- function(glyphs = NULL, colors = NULL, limits = NULL, .
 
 #' @noRd
 #' @keywords internal
-pal_markers <- function(glyphs = NULL, colors = NULL, n_values = NULL) {
+pal_markers <- function(glyphs = NULL, colours = NULL, n_values = NULL) {
   # Define colour and glyph lengths via markers supplied or default values
-  n_values <- n_values %||% max(length(glyphs), length(colors))
+  n_values <- n_values %||% max(length(glyphs), length(colours))
   if (n_values == 0) n_values <- length(.default_glyphs)
 
   # Create a vctrs list to store colour and glyph values
   markers <- vctrs::new_rcrd(
     list(
-      colour = rep(colors %||% .default_colours, length.out = n_values),
+      colour = rep(colours %||% .default_colours, length.out = n_values),
       glyphs = rep(glyphs %||% .default_glyphs, length.out = n_values)
     ),
     class = "marker"

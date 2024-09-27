@@ -13,8 +13,8 @@
 #' @inheritParams ggplot2::geom_segment
 #' @param position Position adjustment. ggswim accepts either "stack", or "identity"
 #' depending on the use case. Default "identity".
-#' @param arrow_colour The color of the arrow head
-#' @param arrow_fill The fill color of the arrow head
+#' @param arrow_colour The colour of the arrow head
+#' @param arrow_fill The fill colour of the arrow head
 #' @param arrow_head_length A unit specifying the length of the arrow head
 #' (from tip to base).
 #' @param arrow_neck_length Value specifying neck length from end of segment
@@ -130,7 +130,7 @@ GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
                         arrow_type = "closed",
                         lineend = "butt", linejoin = "round", na.rm = FALSE) {
     arrow <- arrow(type = arrow_type, length = arrow_head_length) # Change arrow type and head length
-    data$colour <- arrow_colour # Change arrow neck and outline color
+    data$colour <- arrow_colour # Change arrow neck and outline colour
 
     # Return all components
     grid::gList(
