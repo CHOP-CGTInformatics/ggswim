@@ -5,7 +5,7 @@
 \alias{end_study_events}
 \title{End of Study Events dataset}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 6 rows and 4 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 7 rows and 4 columns.
 }
 \source{
 This dataset is for demonstration purposes only.
@@ -20,7 +20,7 @@ study events. Trial data has been de-identified and randomized for general use.
 \details{
 \code{end_study_events} contains pre-formatted time series data related to end of
 study events where patients left the trial for varying reasons. This dataset
-contains emojis for label use and is most applicable with \code{add_marker()}.
+is most applicable for use with \code{geom_swim_marker()}.
 }
 \examples{
 end_study_events

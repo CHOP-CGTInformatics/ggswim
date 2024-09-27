@@ -5,7 +5,7 @@
 \alias{patient_data}
 \title{Patient Data dataset}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 53 rows and 4 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 75 rows and 4 columns.
 }
 \source{
 This dataset is for demonstration purposes only.
@@ -20,7 +20,7 @@ study events. Trial data has been de-identified and randomized for general use.
 \details{
 \code{patient_data} contains pre-formatted time series data related to disease status
 markers and status markers that can support arrows. This dataset is most
-applicable for use with \code{ggswim()} and \code{add_marker()}.
+applicable for use with \code{geom_swim_lane()}.
 }
 \examples{
 patient_data
