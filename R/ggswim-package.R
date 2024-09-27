@@ -8,7 +8,7 @@
 #' mutate pull if_else filter distinct
 #' @importFrom cli cli_abort cli_vec cli_warn
 #' @importFrom rlang caller_arg caller_env as_label is_atomic get_expr .data
-#'   is_empty := enquo quo_is_symbolic quo list2 try_fetch eval_tidy
+#'   is_empty := enquo quo_is_symbolic quo list2 try_fetch eval_tidy %||%
 #' @importFrom purrr map_lgl walk discard
 #' @importFrom stats setNames
 #' @importFrom stringr str_detect
