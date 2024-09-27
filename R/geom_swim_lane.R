@@ -7,8 +7,6 @@
 #'
 #' @param data a dataframe prepared for use with [geom_swim_lane()]
 #' @inheritParams ggplot2::geom_segment
-#' @param position Position adjustment. ggswim accepts either "stack", or "identity"
-#' depending on the use case. Default "identity".
 #'
 #' @section Aesthetics:
 #' [geom_swim_lane()] understands the following aesthetics (required aesthetics are in bold):
@@ -22,12 +20,8 @@
 #' - `linetype`
 #' - `linewidth`
 #'
-#' [geom_swim_lane()] is a wrapper for [geom_segment()] and can support much of the same
+#' [geom_swim_lane()] is a wrapper for [geom_segment()] and supports much of the same
 #' functionality.
-#'
-#' **Notes**:
-#'
-#' - [geom_swim_lane()] **does not** support mapping using `fill`.
 #'
 #' @section Arrows:
 #' Arrows can be added to the ends of swimmer plot lanes as specified in
@@ -52,12 +46,8 @@ geom_swim_lane <- function(mapping = NULL, data = NULL,
                            na.rm = FALSE,
                            show.legend = NA,
                            inherit.aes = TRUE) {
-  # Set default mapping if not provided and inherit.aes is TRUE
-  if (is.null(mapping) && inherit.aes) {
-    mapping <- aes()
-  }
 
-  layer_obj <- layer(
+  layer(
     data = data,
     mapping = mapping,
     stat = stat,
@@ -74,8 +64,6 @@ geom_swim_lane <- function(mapping = NULL, data = NULL,
       ...
     )
   )
-
-  layer_obj
 }
 
 #' @rdname geom_swim_lane
@@ -83,26 +71,21 @@ geom_swim_lane <- function(mapping = NULL, data = NULL,
 #' @usage NULL
 #' @export
 GeomSwimLane <- ggproto("GeomSwimLane", GeomSegment,
-  required_aes = c("x", "y", "xend"),
-  non_missing_aes = c("linetype", "linewidth"),
-  default_aes = aes(
-    colour = "black",
-    linewidth = 2,
-    size = 2,
-    linetype = 1,
-    shape = 19,
-    fill = NA,
-    alpha = NA,
-    stroke = 1
-  ),
-  draw_panel = function(self, data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
-                        lineend = "butt", linejoin = "round", na.rm = FALSE) {
-    # Return all components
-    grid::gList(
-      GeomSegment$draw_panel(data, panel_params, coord,
-        arrow = NULL, arrow.fill = NULL,
-        lineend = lineend, linejoin = linejoin, na.rm = FALSE
-      )
-    )
-  }
+                        required_aes = c("x", "y", "xend"),
+                        non_missing_aes = c("linetype", "linewidth"),
+                        default_aes = aes(
+                          colour = "black",
+                          linewidth = 2,
+                          size = 2,
+                          linetype = 1,
+                          alpha = NA,
+                        ),
+                        draw_panel = function(self, data, panel_params, coord, arrow, arrow.fill,
+                                              lineend = "butt", linejoin = "round", na.rm = FALSE) {
+
+                          GeomSegment$draw_panel(data, panel_params, coord,
+                                                 arrow = arrow, arrow.fill = arrow.fill,
+                                                 lineend = lineend, linejoin = linejoin, na.rm = FALSE
+                          )
+                        }
 )
