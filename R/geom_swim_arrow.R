@@ -41,12 +41,12 @@
 #' arrow_data <- patient_data |>
 #'   dplyr::left_join(
 #'     end_study_events |>
-#'       dplyr::select(pt_id, end_study_name),
+#'       dplyr::select(pt_id, label),
 #'     by = "pt_id"
 #'   ) |>
-#'   dplyr::select(pt_id, end_time, end_study_name) |>
+#'   dplyr::select(pt_id, end_time, label) |>
 #'   dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
-#'   dplyr::filter(!is.na(end_study_name)) |>
+#'   dplyr::filter(!is.na(label)) |>
 #'   unique()
 #'
 #' geom_swim_arrow(

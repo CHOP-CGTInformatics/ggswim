@@ -18,10 +18,8 @@ BugReports: https://github.com/CHOP-CGTInformatics/ggswim/issues
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    checkmate,
     cli,
     dplyr,
-    ggnewscale,
     ggplot2,
     grid,
     purrr,

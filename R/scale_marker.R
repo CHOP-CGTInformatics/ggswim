@@ -10,6 +10,7 @@
 #' @param colours Marker colours passed to the marker layer for non-emojis.
 #' Default colours are provided in the absence of defined ones.
 #' @inheritParams ggplot2::scale_x_discrete
+#' @inheritParams ggplot2::discrete_scale
 #'
 #' @export
 

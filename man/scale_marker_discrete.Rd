@@ -14,6 +14,16 @@ ones.}
 \item{colours}{Marker colours passed to the marker layer for non-emojis.
 Default colours are provided in the absence of defined ones.}
 
+\item{limits}{One of:
+\itemize{
+\item \code{NULL} to use the default scale values
+\item A character vector that defines possible values of the scale and their
+order
+\item A function that accepts the existing (automatic) values and returns
+new ones. Also accepts rlang \link[rlang:as_function]{lambda} function
+notation.
+}}
+
 \item{...}{
   Arguments passed on to \code{\link[ggplot2:discrete_scale]{discrete_scale}}
   \describe{

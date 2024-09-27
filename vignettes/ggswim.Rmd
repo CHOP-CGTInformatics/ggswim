@@ -132,7 +132,7 @@ We've successfully made a swimmer plot with lanes and two different kinds of mar
 
 ```{r}
 p <- p +
-  scale_marker_discrete(glyphs = all_events$glyph, colors = all_events$colour, limits = all_events$label)
+  scale_marker_discrete(glyphs = all_events$glyph, colours = all_events$colour, limits = all_events$label)
 
 p
 ```

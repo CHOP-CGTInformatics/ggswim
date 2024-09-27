@@ -17,7 +17,7 @@ simple_plot <- function() {
       aes(x = .data$time_from_initial_infusion, y = .data$pt_id, marker = .data$label),
       size = 4,
     ) +
-    with(all_events, scale_marker_discrete(glyphs = glyph, colors = colour, limits = label, name = "Marker")) +
+    with(all_events, scale_marker_discrete(glyphs = glyph, colours = colour, limits = label, name = "Marker")) +
     ggplot2::scale_color_brewer(
       name = "Lanes",
       palette = "Set1"
