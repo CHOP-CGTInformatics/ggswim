@@ -81,18 +81,18 @@ status, such as whether or not a subject is still on a given study.</p>
 <code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> function as a way to tack on these
 continuation indicators to your swimmer plot lanes. Behind the scenes,
 the inclusion of arrows is facilitated by a call to
-<code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">ggplot2::geom_segment()</a></code>, setting 0 length segment so that
+<code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">ggplot2::geom_segment()</a></code>, setting 0 length segments so that
 assigned arrows are always placed on the right side of indicated lanes.
-<code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> gives users have full control over arrow
-neck and head length, along with options for color, fill, and type
-(refer to <code><a href="../reference/geom_swim_arrow.html">?geom_swim_arrow</a></code> for detailed information).</p>
+<code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> gives users full control over arrow neck
+and head length, along with options for color, fill, and type (refer to
+<code><a href="../reference/geom_swim_arrow.html">?geom_swim_arrow</a></code> for detailed information).</p>
 <div class="section level2">
 <h2 id="adding-arrows-using-geom_swim_arrow">Adding arrows using <code>geom_swim_arrow()</code><a class="anchor" aria-label="anchor" href="#adding-arrows-using-geom_swim_arrow"></a>
 </h2>
 <p>To demonstrate how you might add arrows onto the
 <code>patient_data</code> dataset, let’s take a subset of
 <code>patient_data</code> that would help us make use of
-<code>add_arrows()</code>:</p>
+<code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://chop-cgtinformatics.github.io/ggswim/">ggswim</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
@@ -105,21 +105,23 @@ neck and head length, along with options for color, fill, and type
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">pt_id</span>, <span class="va">end_time</span>, <span class="va">label</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span>.by <span class="op">=</span> <span class="va">pt_id</span>, <span class="va">end_time</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">end_time</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">label</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">label</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">arrow_data</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">rmarkdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgs.rstudio.com/rmarkdown/reference/paged_table.html" class="external-link">paged_table</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["pt_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["end_time"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["label"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"01","2":"2.0","3":"Other End Study Reason"},{"1":"02","2":"0.2","3":"Deceased"},{"1":"03","2":"11.9","3":"Completed Study Follow-Up"},{"1":"05","2":"14.1","3":"Completed Study Follow-Up"},{"1":"06","2":"4.8","3":"Other End Study Reason"},{"1":"08","2":"11.7","3":"Other End Study Reason"},{"1":"12","2":"9.7","3":"Other End Study Reason"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["pt_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["end_time"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["label"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"04","2":"9.0","3":"NA"},{"1":"09","2":"12.0","3":"NA"},{"1":"13","2":"2.5","3":"NA"},{"1":"14","2":"0.9","3":"NA"},{"1":"15","2":"0.9","3":"NA"},{"1":"17","2":"2.8","3":"NA"},{"1":"18","2":"3.3","3":"NA"},{"1":"19","2":"6.0","3":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<p>This should look familiar, a pared-down dataset with a
-<code>status</code> column that we’ll use to flag which lanes of our
-swimmer plot should have arrows. Now let’s use
-<code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> in combination with <code><a href="../reference/ggswim-package.html">ggswim()</a></code>
-to make a swimmer plot:</p>
+<p>This should look familiar as a pared-down subset of
+<code>end_study_events</code> without an indicated <code>label</code>.
+Since filled out label statuses from <code>end_study_events</code>
+dataset mean a subject went off study, arrows are only applicable for
+subjects with no end study status. Now let’s use
+<code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> in combination with
+<code><a href="../reference/geom_swim_lane.html">geom_swim_lane()</a></code> to make a swimmer plot:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">patient_data</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>

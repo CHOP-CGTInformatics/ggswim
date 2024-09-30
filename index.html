@@ -71,7 +71,7 @@
 <!-- badges: start -->
 
 <p>The ggswim package provides a convenient set of commands to easily create swimmer plots. As an extension of ggplot2, it streamlines the process of generating legends that effectively communicate events of interest along subject response paths.</p>
-<p>ggswim solves some of the headaches associated with layer management in ggplot2 by leveraging the <a href="https://eliocamp.github.io/ggnewscale/" class="external-link">ggnewscale</a> package and presenting an optimized workflow to get a swimmer plot.</p>
+<p>ggswim solves some of the headaches associated with layer management in ggplot2 by organizing and classifying data into “markers” and “lanes.” While nothing changes about the data itself, the way it’s presented winds up being much closer to what’s expected to communicate a swimmer plot’s contents.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -90,15 +90,15 @@
 <span></span>
 <span><span class="co"># Construct arrow_data for arrow display later</span></span>
 <span><span class="va">arrow_data</span> <span class="op">&lt;-</span> <span class="va">patient_data</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span></span>
-<span>      <span class="va">end_study_events</span> <span class="op">|&gt;</span></span>
-<span>        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">pt_id</span>, <span class="va">label</span><span class="op">)</span>,</span>
-<span>      by <span class="op">=</span> <span class="st">"pt_id"</span></span>
-<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">pt_id</span>, <span class="va">end_time</span>, <span class="va">label</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span>.by <span class="op">=</span> <span class="va">pt_id</span>, <span class="va">end_time</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">end_time</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">label</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span></span>
+<span>    <span class="va">end_study_events</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">pt_id</span>, <span class="va">label</span><span class="op">)</span>,</span>
+<span>    by <span class="op">=</span> <span class="st">"pt_id"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">pt_id</span>, <span class="va">end_time</span>, <span class="va">label</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span>.by <span class="op">=</span> <span class="va">pt_id</span>, <span class="va">end_time</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">end_time</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">label</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">patient_data</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -113,7 +113,7 @@
 <span>    mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>xend <span class="op">=</span> <span class="va">end_time</span>, y <span class="op">=</span> <span class="va">pt_id</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_colour_brewer</a></span><span class="op">(</span></span>
-<span>    name <span class="op">=</span> <span class="st">"Overall Disease Assessment"</span>,</span>
+<span>    name <span class="op">=</span> <span class="st">"Disease Assessments"</span>,</span>
 <span>    palette <span class="op">=</span> <span class="st">"Set1"</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
@@ -130,7 +130,7 @@
 <span>  <span class="fu"><a href="reference/geom_swim_marker.html">geom_swim_marker</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">all_events</span>,</span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time_from_initial_infusion</span>, y <span class="op">=</span> <span class="va">pt_id</span>, marker <span class="op">=</span> <span class="va">label</span><span class="op">)</span>,</span>
-<span>    size <span class="op">=</span> <span class="fl">3</span></span>
+<span>    size <span class="op">=</span> <span class="fl">5</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
@@ -138,15 +138,20 @@
 <p>This looks OK as a default, but it’s not quite as nice as we’d like it to be. Let’s specify that we have particular <code>glyph</code>s and <code>colour</code>s we’d like to use for the markers with ggswim’s <code><a href="reference/scale_marker_discrete.html">scale_marker_discrete()</a></code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">p</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">all_events</span>, <span class="fu"><a href="reference/scale_marker_discrete.html">scale_marker_discrete</a></span><span class="op">(</span>glyphs <span class="op">=</span> <span class="va">glyph</span>, colours <span class="op">=</span> <span class="va">colour</span>, limits <span class="op">=</span> <span class="va">label</span>, name <span class="op">=</span> <span class="st">"Markers"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="reference/scale_marker_discrete.html">scale_marker_discrete</a></span><span class="op">(</span></span>
+<span>    glyphs <span class="op">=</span> <span class="va">all_events</span><span class="op">$</span><span class="va">glyph</span>,</span>
+<span>    colours <span class="op">=</span> <span class="va">all_events</span><span class="op">$</span><span class="va">colour</span>,</span>
+<span>    limits <span class="op">=</span> <span class="va">all_events</span><span class="op">$</span><span class="va">label</span>,</span>
+<span>    name <span class="op">=</span> <span class="st">"Study Events"</span></span>
+<span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-4-1.png" width="100%"></p>
-<p>Finally, we’ll beautify the plot with familiar ggplot2 techniques and a last finishing touch with <code><a href="reference/theme_ggswim.html">theme_ggswim()</a></code>:</p>
+<p>Using the custom <code>marker</code> <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> in <code><a href="reference/geom_swim_marker.html">geom_swim_marker()</a></code> in combination with specific scale definitions helps us keep the markesr and lanes separate in the legend. Finally, we’ll beautify the plot with familiar ggplot2 techniques and a last finishing touch with <code><a href="reference/theme_ggswim.html">theme_ggswim()</a></code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_colour_brewer</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Lanes"</span>, palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"My Swimmer Plot"</span>, <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"My Swimmer Plot"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Time Since Infusion (Months)"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Patient ID"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/theme_ggswim.html">theme_ggswim</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-5-1.png" width="100%"></p>
