@@ -3,3 +3,9 @@ test_that("theme_ggswim works", {
     class() |>
     expect_setequal(c("theme", "gg"))
 })
+
+test_that("theme_ggswim_dark works", {
+  theme_ggswim_dark() |>
+    class() |>
+    expect_setequal(c("theme", "gg"))
+})

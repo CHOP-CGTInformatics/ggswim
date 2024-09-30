@@ -2,9 +2,12 @@
 % Please edit documentation in R/theme_ggswim.R
 \name{theme_ggswim}
 \alias{theme_ggswim}
+\alias{theme_ggswim_dark}
 \title{Apply custom theme styling for ggplot2 plots}
 \usage{
 theme_ggswim(base_size = 12, base_family = "")
+
+theme_ggswim_dark(base_size = 12, base_family = "")
 }
 \arguments{
 \item{base_size}{The base font size to use for the plot elements. Default is 12.}
@@ -38,4 +41,7 @@ geom_swim_lane(
 
 p +
   theme_ggswim()
+
+p +
+  theme_ggswim_dark()
 }

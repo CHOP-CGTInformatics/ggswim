@@ -72,7 +72,7 @@ p <- patient_data |>
     mapping = aes(xend = end_time, y = pt_id)
   ) +
   scale_colour_brewer(
-    name = "Overall Disease Assessment",
+    name = "Disease Assessments",
     palette = "Set1"
   )
 
@@ -97,7 +97,7 @@ p <- p +
   geom_swim_marker(
     data = all_events,
     aes(x = time_from_initial_infusion, y = pt_id, marker = label),
-    size = 3
+    size = 5
   )
 
 p
@@ -111,7 +111,10 @@ like to use for the markers with ggswim’s `scale_marker_discrete()`.
 
 ``` r
 p <- p +
-  with(all_events, scale_marker_discrete(glyphs = glyph, colours = colour, limits = label, name = "Markers"))
+  scale_marker_discrete(glyphs = all_events$glyph, 
+                        colours = all_events$colour, 
+                        limits = all_events$label, 
+                        name = "Study Events")
 
 p
 ```
@@ -126,7 +129,7 @@ ggplot2 techniques and a last finishing touch with `theme_ggswim()`:
 ``` r
 p +
   scale_colour_brewer(name = "Lanes", palette = "Set1") +
-  labs(title = "My Swimmer Plot", ) +
+  labs(title = "My Swimmer Plot") +
   xlab("Time Since Infusion (Months)") + ylab("Patient ID") +
   theme_ggswim()
 ```

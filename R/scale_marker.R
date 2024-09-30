@@ -32,7 +32,13 @@
 #' @export
 
 scale_marker_discrete <- function(glyphs = NULL, colours = NULL, limits = NULL, ...) {
-  markers <- data.frame(glyphs = glyphs, colours = colours, labels = limits) |>
+  n_values <- max(length(glyphs), length(colours))
+
+  markers <- data.frame(
+    colours = rep(colours %||% .default_colours, length.out = n_values),
+    glyphs = rep(glyphs %||% .default_glyphs, length.out = n_values),
+    labels = limits
+  ) |>
     distinct()
 
   palette <- pal_markers(
@@ -42,8 +48,8 @@ scale_marker_discrete <- function(glyphs = NULL, colours = NULL, limits = NULL, 
   )
 
   discrete_scale("marker", rlang::missing_arg(),
-    palette = palette,
-    limits = markers$labels, ..., na.translate = FALSE
+                 palette = palette,
+                 limits = markers$labels, ..., na.translate = FALSE
   )
 }
 
