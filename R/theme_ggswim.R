@@ -19,16 +19,16 @@
 #'
 #' @examples
 #' p <- ggplot2::ggplot() +
-#' geom_swim_lane(
-#'   data = patient_data,
-#'   mapping = aes(
-#'     x = start_time,
-#'     xend = end_time,
-#'     y = pt_id,
-#'     colour = disease_assessment
-#'   ),
-#'   linewidth = 3
-#' )
+#'   geom_swim_lane(
+#'     data = patient_data,
+#'     mapping = aes(
+#'       x = start_time,
+#'       xend = end_time,
+#'       y = pt_id,
+#'       colour = disease_assessment
+#'     ),
+#'     linewidth = 3
+#'   )
 #'
 #' p +
 #'   theme_ggswim()
@@ -47,7 +47,7 @@ theme_ggswim <- function(base_size = 12, base_family = "") {
 
       # Axis text
       axis.text = element_text(size = 10, face = "bold", colour = "#0D2C54"),
-      axis.text.x = element_text(margin = margin(t =10)),
+      axis.text.x = element_text(margin = margin(t = 10)),
       axis.text.y = element_text(margin = margin(r = 10)),
 
       # Axis titles
@@ -56,7 +56,7 @@ theme_ggswim <- function(base_size = 12, base_family = "") {
       axis.title.y = element_text(size = 14, face = "bold", margin = margin(r = 10)),
 
       # Axis tick marks
-      axis.ticks = element_line(size = 0.75, colour = "steelblue"),
+      axis.ticks = element_line(linewidth = 0.75, colour = "steelblue"),
       axis.ticks.length = unit(0.3, "cm"),
 
       # Legend
@@ -85,37 +85,37 @@ theme_ggswim_dark <- function(base_size = 12, base_family = "") {
   theme_minimal(base_size = base_size, base_family = base_family) +
     theme(
       # Background
-      plot.background = element_rect(fill = "#232234", color = NA),  # Dark blue background
-      panel.background = element_rect(fill = "#232234", color = NA),  # Dark blue panel background
+      plot.background = element_rect(fill = "#232234", color = NA),
+      panel.background = element_rect(fill = "#232234", color = NA),
 
       # Title and subtitle
-      plot.title = element_text(size = 18, face = "bold", hjust = 0, margin = margin(b = 10), colour = "#FE9000"),  # Orange title
-      plot.subtitle = element_text(size = 14, face = "bold", hjust = 0, margin = margin(b = 10), colour = "#D67A00"),  # Light orange subtitle
+      plot.title = element_text(size = 18, face = "bold", hjust = 0, margin = margin(b = 10), colour = "#FE9000"),
+      plot.subtitle = element_text(size = 14, face = "bold", hjust = 0, margin = margin(b = 10), colour = "#D67A00"),
 
       # Caption
-      plot.caption = element_text(size = 10, hjust = 1, colour = "#F0F0F0"),  # Light caption text
+      plot.caption = element_text(size = 10, hjust = 1, colour = "#F0F0F0"),
 
       # Axis text
-      axis.text = element_text(size = 10, face = "bold", colour = "#F0F0F0"),  # Light gray axis text
-      axis.text.x = element_text(margin = margin(t = 10), colour = "#F0F0F0"),  # Light gray axis text for x-axis
-      axis.text.y = element_text(margin = margin(r = 10), colour = "#F0F0F0"),  # Light gray axis text for y-axis
+      axis.text = element_text(size = 10, face = "bold", colour = "#F0F0F0"),
+      axis.text.x = element_text(margin = margin(t = 10), colour = "#F0F0F0"),
+      axis.text.y = element_text(margin = margin(r = 10), colour = "#F0F0F0"),
 
       # Axis titles
-      axis.title = element_text(size = 12, face = "bold", colour = "#FE9000"),  # Orange axis titles
+      axis.title = element_text(size = 12, face = "bold", colour = "#FE9000"),
       axis.title.x = element_text(size = 14, face = "bold", margin = margin(t = 10), colour = "#FE9000"),
       axis.title.y = element_text(size = 14, face = "bold", margin = margin(r = 10), colour = "#FE9000"),
 
       # Axis tick marks
-      axis.ticks = element_line(size = 0.75, colour = "#FE9000"),  # Orange axis ticks
+      axis.ticks = element_line(linewidth = 0.75, colour = "#FE9000"),
       axis.ticks.length = unit(0.3, "cm"),
 
       # Legend
-      legend.text = element_text(size = 10, colour = "#F0F0F0"),  # Light gray legend text
-      legend.title = element_text(size = 12, face = "bold", colour = "#FE9000"),  # Orange legend title
+      legend.text = element_text(size = 10, colour = "#F0F0F0"),
+      legend.title = element_text(size = 12, face = "bold", colour = "#FE9000"),
 
       # Axis line
       axis.line = element_line(
-        color = "#FE9000",  # Orange axis line
+        color = "#FE9000", # Orange axis line
         linewidth = 1,
         arrow = arrow(
           type = "closed",
@@ -128,4 +128,3 @@ theme_ggswim_dark <- function(base_size = 12, base_family = "") {
       panel.grid.minor = element_blank()
     )
 }
-

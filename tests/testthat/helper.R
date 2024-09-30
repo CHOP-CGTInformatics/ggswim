@@ -9,8 +9,10 @@ simple_plot <- function() {
   ggplot() +
     geom_swim_lane(
       data = patient_data,
-      aes(x = .data$start_time, xend = .data$end_time, y = .data$pt_id,
-          colour = .data$disease_assessment)
+      aes(
+        x = .data$start_time, xend = .data$end_time, y = .data$pt_id,
+        colour = .data$disease_assessment
+      )
     ) +
     geom_swim_marker(
       data = all_events,

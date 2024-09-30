@@ -125,20 +125,23 @@ contextual information about significant occurrences during the timeline, such
 as treatment responses or adverse events.
 }
 \examples{
+\dontrun{
 all_events <- dplyr::bind_rows(
   infusion_events,
   end_study_events
 )
 
-ggplot() +
-  geom_swim_lane(data = patient_data,
-                 aes(x = start_time, xend = end_time, y = pt_id, colour = disease_assessment)) +
+ggplot2::ggplot() +
+  geom_swim_lane(
+    data = patient_data,
+    aes(x = start_time, xend = end_time, y = pt_id, colour = disease_assessment)
+  ) +
   geom_swim_marker(
     data = all_events,
     aes(x = time_from_initial_infusion, y = pt_id, marker = label),
     size = 10
   )
-
+}
 
 }
 \keyword{datasets}

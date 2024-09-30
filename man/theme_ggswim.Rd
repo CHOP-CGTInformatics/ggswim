@@ -28,16 +28,16 @@ specific theme elements to provide a customized look and feel for plots.
 }
 \examples{
 p <- ggplot2::ggplot() +
-geom_swim_lane(
-  data = patient_data,
-  mapping = aes(
-    x = start_time,
-    xend = end_time,
-    y = pt_id,
-    colour = disease_assessment
-  ),
-  linewidth = 3
-)
+  geom_swim_lane(
+    data = patient_data,
+    mapping = aes(
+      x = start_time,
+      xend = end_time,
+      y = pt_id,
+      colour = disease_assessment
+    ),
+    linewidth = 3
+  )
 
 p +
   theme_ggswim()

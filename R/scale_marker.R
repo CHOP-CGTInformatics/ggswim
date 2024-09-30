@@ -13,32 +13,29 @@
 #' @inheritParams ggplot2::discrete_scale
 #'
 #' @examples
-#'
+#' \dontrun{
 #' all_events <- dplyr::bind_rows(
 #'   infusion_events,
 #'   end_study_events
 #' )
 #'
-#' ggplot() +
-#'  geom_swim_marker(
-#'    data = all_events,
-#'    aes(x = time_from_initial_infusion, y = pt_id, marker = label),
-#'    size = 5
-#'  ) +
-#'  scale_marker_discrete(glyphs = all_events$glyph,
-#'                        colours = all_events$colour,
-#'                        limits = all_events$label)
+#' ggplot2::ggplot() +
+#'   geom_swim_marker(
+#'     data = all_events,
+#'     aes(x = time_from_initial_infusion, y = pt_id, marker = label),
+#'     size = 5
+#'   ) +
+#'   scale_marker_discrete(
+#'     glyphs = all_events$glyph,
+#'     colours = all_events$colour,
+#'     limits = all_events$label
+#'   )
+#'}
 #'
 #' @export
 
 scale_marker_discrete <- function(glyphs = NULL, colours = NULL, limits = NULL, ...) {
-  n_values <- max(length(glyphs), length(colours))
-
-  markers <- data.frame(
-    colours = rep(colours %||% .default_colours, length.out = n_values),
-    glyphs = rep(glyphs %||% .default_glyphs, length.out = n_values),
-    labels = limits
-  ) |>
+  markers <- data.frame(glyphs = glyphs, colours = colours, labels = limits) |>
     distinct()
 
   palette <- pal_markers(
@@ -48,8 +45,8 @@ scale_marker_discrete <- function(glyphs = NULL, colours = NULL, limits = NULL, 
   )
 
   discrete_scale("marker", rlang::missing_arg(),
-                 palette = palette,
-                 limits = markers$labels, ..., na.translate = FALSE
+    palette = palette,
+    limits = markers$labels, ..., na.translate = FALSE
   )
 }
 

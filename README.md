@@ -49,15 +49,15 @@ library(ggplot2)
 
 # Construct arrow_data for arrow display later
 arrow_data <- patient_data |>
-    dplyr::left_join(
-      end_study_events |>
-        dplyr::select(pt_id, label),
-      by = "pt_id"
-    ) |>
-    dplyr::select(pt_id, end_time, label) |>
-    dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
-    dplyr::filter(is.na(label)) |>
-    unique()
+  dplyr::left_join(
+    end_study_events |>
+      dplyr::select(pt_id, label),
+    by = "pt_id"
+  ) |>
+  dplyr::select(pt_id, end_time, label) |>
+  dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
+  dplyr::filter(is.na(label)) |>
+  unique()
 
 p <- patient_data |>
   ggplot() +
@@ -111,10 +111,12 @@ like to use for the markers with ggswim’s `scale_marker_discrete()`.
 
 ``` r
 p <- p +
-  scale_marker_discrete(glyphs = all_events$glyph, 
-                        colours = all_events$colour, 
-                        limits = all_events$label, 
-                        name = "Study Events")
+  scale_marker_discrete(
+    glyphs = all_events$glyph,
+    colours = all_events$colour,
+    limits = all_events$label,
+    name = "Study Events"
+  )
 
 p
 ```
