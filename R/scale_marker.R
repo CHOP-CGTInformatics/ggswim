@@ -12,6 +12,23 @@
 #' @inheritParams ggplot2::scale_x_discrete
 #' @inheritParams ggplot2::discrete_scale
 #'
+#' @examples
+#'
+#' all_events <- dplyr::bind_rows(
+#'   infusion_events,
+#'   end_study_events
+#' )
+#'
+#' ggplot() +
+#'  geom_swim_marker(
+#'    data = all_events,
+#'    aes(x = time_from_initial_infusion, y = pt_id, marker = label),
+#'    size = 5
+#'  ) +
+#'  scale_marker_discrete(glyphs = all_events$glyph,
+#'                        colours = all_events$colour,
+#'                        limits = all_events$label)
+#'
 #' @export
 
 scale_marker_discrete <- function(glyphs = NULL, colours = NULL, limits = NULL, ...) {
