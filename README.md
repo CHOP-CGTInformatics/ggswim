@@ -18,9 +18,10 @@ process of generating legends that effectively communicate events of
 interest along subject response paths.
 
 ggswim solves some of the headaches associated with layer management in
-ggplot2 by leveraging the
-[ggnewscale](https://eliocamp.github.io/ggnewscale/) package and
-presenting an optimized workflow to get a swimmer plot.
+ggplot2 by organizing and classifying data into “markers” and “lanes.”
+While nothing changes about the data itself, the way it’s presented
+winds up being much closer to what’s expected to communicate a swimmer
+plot’s contents.
 
 ## Installation
 
@@ -55,7 +56,7 @@ arrow_data <- patient_data |>
     ) |>
     dplyr::select(pt_id, end_time, label) |>
     dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
-    dplyr::filter(!is.na(label)) |>
+    dplyr::filter(is.na(label)) |>
     unique()
 
 p <- patient_data |>
@@ -117,8 +118,10 @@ p
 
 <img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
 
-Finally, we’ll beautify the plot with familiar ggplot2 techniques and a
-last finishing touch with `theme_ggswim()`:
+Using the custom `marker` `aes()` in `geom_swim_marker()` in combination
+with specific scale definitions helps us keep the markesr and lanes
+separate in the legend. Finally, we’ll beautify the plot with familiar
+ggplot2 techniques and a last finishing touch with `theme_ggswim()`:
 
 ``` r
 p +
