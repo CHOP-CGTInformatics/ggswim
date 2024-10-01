@@ -35,8 +35,19 @@
 #' @export
 
 scale_marker_discrete <- function(glyphs = NULL, colours = NULL, limits = NULL, ...) {
-  markers <- data.frame(glyphs = glyphs, colours = colours, labels = limits) |>
-    distinct()
+  # Define max value lengths for core params
+  n_values <- max(c(length(glyphs), length(colours), length(limits)))
+
+  # If no params assigned (default when using geom_swim_marker), return empty
+  # Else, intelligently create equal length core vectors
+  if (n_values == 0) {
+    markers <- data.frame()
+  } else {
+    markers <- data.frame(glyphs = glyphs %||% .default_glyphs[0:n_values],
+                          colours = colours %||% .default_colours[0:n_values],
+                          labels = limits %||% .default_limits[0:n_values]) |>
+      distinct()
+  }
 
   palette <- pal_markers(
     glyphs = markers$glyphs,
@@ -84,6 +95,7 @@ pal_markers <- function(glyphs = NULL, colours = NULL, n_values = NULL) {
 #' @examples
 #' ggswim::.default_glyphs
 #' ggswim::.default_colours
+#' ggswim::.default_limits
 #'
 #' @export
 # Set default glyphs and colours
@@ -92,3 +104,7 @@ pal_markers <- function(glyphs = NULL, colours = NULL, n_values = NULL) {
 #' @rdname dot-default_glyphs
 #' @export
 .default_colours <- scales::brewer_pal(palette = "Set1")(9) # 9 is max for brewer
+
+#' @rdname dot-default_glyphs
+#' @export
+.default_limits <- c("val1", "val2", "val3", "val4", "val5", "val6", "val7", "val8", "val9")

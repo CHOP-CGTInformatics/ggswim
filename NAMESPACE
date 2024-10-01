@@ -3,6 +3,7 @@
 export("%+%")
 export(.default_colours)
 export(.default_glyphs)
+export(.default_limits)
 export(GeomSwimArrow)
 export(GeomSwimLane)
 export(GeomSwimMarker)

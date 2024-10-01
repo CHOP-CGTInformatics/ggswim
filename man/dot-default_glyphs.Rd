@@ -4,8 +4,11 @@
 \name{.default_glyphs}
 \alias{.default_glyphs}
 \alias{.default_colours}
+\alias{.default_limits}
 \title{ggswim marker defaults}
 \format{
+An object of class \code{character} of length 9.
+
 An object of class \code{character} of length 9.
 
 An object of class \code{character} of length 9.
@@ -14,6 +17,8 @@ An object of class \code{character} of length 9.
 .default_glyphs
 
 .default_colours
+
+.default_limits
 }
 \description{
 ggswim marker defaults
@@ -21,6 +26,7 @@ ggswim marker defaults
 \examples{
 ggswim::.default_glyphs
 ggswim::.default_colours
+ggswim::.default_limits
 
 }
 \keyword{datasets}

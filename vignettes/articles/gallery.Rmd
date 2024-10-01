@@ -19,9 +19,70 @@ library(ggplot2)
 library(dplyr)
 ```
 
-To support some of these visuals, we'll set up some of the datasets similar to the README:
+## Random Data Sets
 
-```{r setup data}
+In this example, we'll set up a random dataset for reproducibility by separately defining a dataframe for our lanes and our markers.
+
+```{r}
+set.seed(123)  
+lane_data <- tibble(
+  x = 0,
+  xend = sample(5:20, 30, replace = TRUE),
+  y = factor(rep(1:15, each = 2)),
+  colour = sample(c('red', 'blue', 'green', 'yellow', 'purple'), 30, replace = TRUE)
+)
+
+set.seed(123)  
+marker_data <- tibble(
+  x = sample(5:20, 30, replace = TRUE),
+  y = factor(rep(1:15, each = 2)),
+  label = sample(c("A", "B", "C", "D", "E"), 30, replace = TRUE),
+  glyph = sample(c("😊", "🎉", "✅", "💥", "✨"), 30, replace = TRUE)
+) |> 
+  mutate(
+    glyph = dplyr::case_when(
+      label == "A" ~ "😊",
+      label == "B" ~ "🎉",
+      label == "C" ~ "✅",
+      label == "D" ~ "💥",
+      label == "E" ~ "✨",
+      .default = NA
+    )
+  )
+
+lane_data |> 
+  rmarkdown::paged_table()
+marker_data |> 
+  rmarkdown::paged_table()
+```
+
+And then we'll call those datasets into their appropriate swim and marker geom functions:
+
+```{r}
+ggplot() +
+  geom_swim_lane(
+    data = lane_data,
+    aes(x = x, xend = xend, y = y, colour = colour),
+    linewidth = 3
+  ) +
+  geom_swim_marker(
+    data = marker_data,
+    aes(x = x, y = y, marker = label),
+    size = 8
+  ) +
+  scale_colour_brewer(name = "Lanes", palette = "Set1") +
+  with(marker_data,
+       scale_marker_discrete(glyphs = glyph, limits = label, name = "Markers")) +
+  labs(title = "Sample Swimmer Plot",
+       x = "Time", y = "Record ID") +
+  theme_ggswim()
+```
+
+## Themeing with ggswim
+
+Here are some example of the themeing functions available in ggswim using the dataset examples from the README:
+
+```{r}
 arrow_data <- patient_data |>
   dplyr::left_join(
     end_study_events |>
@@ -37,13 +98,7 @@ all_events <- dplyr::bind_rows(
   infusion_events,
   end_study_events
 )
-```
 
-## Themeing with ggswim
-
-Here are some example of the themeing functions available in ggswim using the dataset examples from the README:
-
-```{r}
 p <- patient_data |>
   ggplot() +
   geom_swim_lane(
@@ -91,4 +146,3 @@ p + theme_ggswim()
 ```{r}
 p + theme_ggswim_dark()
 ```
-

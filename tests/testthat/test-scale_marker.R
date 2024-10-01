@@ -73,3 +73,23 @@ test_that("scale_marker_discrete warns when more markers are requested than avai
   expect_error(scale$palette(5), "Can't subset elements past the end.") |>
     suppressWarnings()
 })
+
+test_that("scale_marker_discrete uses default glyphs when missing", {
+  colours <- c("red", "green", "blue")
+  limits <- c("A", "B", "C")
+
+  scale <- scale_marker_discrete(glyphs = NULL, colours = colours, limits = limits)
+
+  expect_equal(length(scale$palette(3)), 3)
+  expect_equal(vctrs::field(scale$palette(3), "glyphs"), .default_glyphs[1:3]) # First 3 default glyphs
+})
+
+test_that("scale_marker_discrete uses default colours when missing", {
+  glyphs <- c("●", "■", "▲")
+  limits <- c("A", "B", "C")
+
+  scale <- scale_marker_discrete(glyphs = glyphs, colours = NULL, limits = limits)
+
+  expect_equal(length(scale$palette(3)), 3)
+  expect_equal(vctrs::field(scale$palette(3), "colour"), .default_colours[1:3]) # First 3 default glyphs
+})
