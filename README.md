@@ -132,7 +132,7 @@ ggplot2 techniques and a last finishing touch with `theme_ggswim()`:
 p +
   scale_colour_brewer(name = "Lanes", palette = "Set1") +
   labs(title = "My Swimmer Plot") +
-  xlab("Time Since Infusion (Months)") + ylab("Patient ID") +
+  xlab("Time Since Initial Infusion (Months)") + ylab("Patient ID") +
   theme_ggswim()
 ```
 

@@ -39,19 +39,19 @@ theme_ggswim <- function(base_size = 12, base_family = "") {
   theme_minimal(base_size = base_size, base_family = base_family) +
     theme(
       # Title and subtitle
-      plot.title = element_text(size = 18, face = "bold", hjust = 0, margin = margin(b = 10), colour = "#D67A00"),
-      plot.subtitle = element_text(size = 14, face = "bold", hjust = 0, margin = margin(b = 10), colour = "#FE9000"),
+      plot.title = element_text(size = 18, face = "bold", hjust = 0, margin = margin(b = 10), colour = "#000000"),
+      plot.subtitle = element_text(size = 14, face = "bold", hjust = 0, margin = margin(b = 10), colour = "#000000"),
 
       # Caption
       plot.caption = element_text(size = 10, hjust = 1),
 
       # Axis text
-      axis.text = element_text(size = 10, face = "bold", colour = "#0D2C54"),
+      axis.text = element_text(size = 10, face = "bold", colour = "#000000"),
       axis.text.x = element_text(margin = margin(t = 10)),
       axis.text.y = element_text(margin = margin(r = 10)),
 
       # Axis titles
-      axis.title = element_text(size = 12, face = "bold", colour = "#0D2C54"),
+      axis.title = element_text(size = 12, face = "bold", colour = "#000000"),
       axis.title.x = element_text(size = 14, face = "bold", margin = margin(t = 10)),
       axis.title.y = element_text(size = 14, face = "bold", margin = margin(r = 10)),
 
@@ -60,17 +60,13 @@ theme_ggswim <- function(base_size = 12, base_family = "") {
       axis.ticks.length = unit(0.3, "cm"),
 
       # Legend
-      legend.text = element_text(size = 10, colour = "#0D2C54"),
-      legend.title = element_text(size = 12, face = "bold", colour = "#D67A00"),
+      legend.text = element_text(size = 10, colour = "#000000"),
+      legend.title = element_text(size = 12, face = "bold", colour = "#000000"),
 
       # Axis line
       axis.line = element_line(
         color = "steelblue",
-        linewidth = 1,
-        arrow = arrow(
-          type = "closed",
-          length = unit(0.1, "inches"),
-        )
+        linewidth = 1
       ),
 
       # Remove grid lines
@@ -89,8 +85,8 @@ theme_ggswim_dark <- function(base_size = 12, base_family = "") {
       panel.background = element_rect(fill = "#232234", color = NA),
 
       # Title and subtitle
-      plot.title = element_text(size = 18, face = "bold", hjust = 0, margin = margin(b = 10), colour = "#FE9000"),
-      plot.subtitle = element_text(size = 14, face = "bold", hjust = 0, margin = margin(b = 10), colour = "#D67A00"),
+      plot.title = element_text(size = 18, face = "bold", hjust = 0, margin = margin(b = 10), colour = "#F0F0F0"),
+      plot.subtitle = element_text(size = 14, face = "bold", hjust = 0, margin = margin(b = 10), colour = "#F0F0F0"),
 
       # Caption
       plot.caption = element_text(size = 10, hjust = 1, colour = "#F0F0F0"),
@@ -101,26 +97,22 @@ theme_ggswim_dark <- function(base_size = 12, base_family = "") {
       axis.text.y = element_text(margin = margin(r = 10), colour = "#F0F0F0"),
 
       # Axis titles
-      axis.title = element_text(size = 12, face = "bold", colour = "#FE9000"),
-      axis.title.x = element_text(size = 14, face = "bold", margin = margin(t = 10), colour = "#FE9000"),
-      axis.title.y = element_text(size = 14, face = "bold", margin = margin(r = 10), colour = "#FE9000"),
+      axis.title = element_text(size = 12, face = "bold", colour = "#F0F0F0"),
+      axis.title.x = element_text(size = 14, face = "bold", margin = margin(t = 10), colour = "#F0F0F0"),
+      axis.title.y = element_text(size = 14, face = "bold", margin = margin(r = 10), colour = "#F0F0F0"),
 
       # Axis tick marks
-      axis.ticks = element_line(linewidth = 0.75, colour = "#FE9000"),
+      axis.ticks = element_line(linewidth = 0.75, colour = "#F0F0F0"),
       axis.ticks.length = unit(0.3, "cm"),
 
       # Legend
       legend.text = element_text(size = 10, colour = "#F0F0F0"),
-      legend.title = element_text(size = 12, face = "bold", colour = "#FE9000"),
+      legend.title = element_text(size = 12, face = "bold", colour = "#F0F0F0"),
 
       # Axis line
       axis.line = element_line(
-        color = "#FE9000", # Orange axis line
-        linewidth = 1,
-        arrow = arrow(
-          type = "closed",
-          length = unit(0.1, "inches")
-        )
+        color = "#F0F0F0", # Orange axis line
+        linewidth = 1
       ),
 
       # Remove grid lines

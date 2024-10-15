@@ -117,7 +117,7 @@ Using the custom `marker` `aes()` in `geom_swim_marker()` in combination with sp
 p +
   scale_colour_brewer(name = "Lanes", palette = "Set1") +
   labs(title = "My Swimmer Plot") +
-  xlab("Time Since Infusion (Months)") + ylab("Patient ID") +
+  xlab("Time Since Initial Infusion (Months)") + ylab("Patient ID") +
   theme_ggswim()
 ```
 

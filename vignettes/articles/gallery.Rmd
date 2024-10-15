@@ -24,21 +24,21 @@ library(dplyr)
 In this example, we'll set up a random dataset for reproducibility by separately defining a dataframe for our lanes and our markers.
 
 ```{r}
-set.seed(123)  
+set.seed(123)
 lane_data <- tibble(
   x = 0,
   xend = sample(5:20, 30, replace = TRUE),
   y = factor(rep(1:15, each = 2)),
-  colour = sample(c('red', 'blue', 'green', 'yellow', 'purple'), 30, replace = TRUE)
+  colour = sample(c("red", "blue", "green", "yellow", "purple"), 30, replace = TRUE)
 )
 
-set.seed(123)  
+set.seed(123)
 marker_data <- tibble(
   x = sample(5:20, 30, replace = TRUE),
   y = factor(rep(1:15, each = 2)),
   label = sample(c("A", "B", "C", "D", "E"), 30, replace = TRUE),
   glyph = sample(c("😊", "🎉", "✅", "💥", "✨"), 30, replace = TRUE)
-) |> 
+) |>
   mutate(
     glyph = dplyr::case_when(
       label == "A" ~ "😊",
@@ -50,9 +50,9 @@ marker_data <- tibble(
     )
   )
 
-lane_data |> 
+lane_data |>
   rmarkdown::paged_table()
-marker_data |> 
+marker_data |>
   rmarkdown::paged_table()
 ```
 
