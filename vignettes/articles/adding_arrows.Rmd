@@ -15,6 +15,8 @@ It can be useful to visually indicate the continuation of specific records in a 
 
 To facilitate the addition of arrows, we provide the `geom_swim_arrow()` function as a way to tack on these continuation indicators to your swimmer plot lanes. Behind the scenes, the inclusion of arrows is facilitated by a call to `ggplot2::geom_segment()`, setting 0 length segments so that assigned arrows are always placed on the right side of indicated lanes. `geom_swim_arrow()` gives users full control over arrow neck and head length, along with options for color, fill, and type (refer to `?geom_swim_arrow` for detailed information).
 
+`geom_swim_arrow()` does not replace the ability to separately call arrows using the `arrow` parameter in `geom_swim_lane()`. As mentioned, `geom_swim_lane()` comes with nearly all of the same capabilities as `geom_segment()`, but it may be more challenging to apply arrows as expected depending on how your data is structured.
+
 ## Adding arrows using `geom_swim_arrow()`
 
 To demonstrate how you might add arrows onto the `patient_data` dataset, let's take a subset of `patient_data` that would help us make use of `geom_swim_arrow()`:
@@ -34,8 +36,7 @@ arrow_data <- patient_data |>
   dplyr::filter(is.na(label)) |>
   unique()
 
-arrow_data |>
-  rmarkdown::paged_table()
+arrow_data
 ```
 
 This should look familiar as a pared-down subset of `end_study_events` without an indicated `label`. Since filled out label statuses from `end_study_events` dataset mean a subject went off study, arrows are only applicable for subjects with no end study status. Now let's use `geom_swim_arrow()` in combination with `geom_swim_lane()` to make a swimmer plot:
@@ -54,7 +55,9 @@ patient_data |>
     data = arrow_data,
     mapping = aes(xend = end_time, y = pt_id),
     arrow_neck_length = 5,
-    arrow_colour = "slateblue",
-    arrow_fill = "cyan"
+    arrow_colour = "firebrick",
+    arrow_fill = "gold"
   )
 ```
+
+Here we've correctly assigned arrows to only the subset of patients that have not met an end of study event. Note that `geom_swim_arrow()` gives plenty of control to the arrow head and neck color, shape, and even length.

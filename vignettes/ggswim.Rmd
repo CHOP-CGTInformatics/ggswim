@@ -42,13 +42,12 @@ Let's start with observing `patient_data`'s structure:
 library(ggswim)
 library(ggplot2)
 
-patient_data |>
-  rmarkdown::paged_table()
+patient_data
 ```
 
-`patient_data` contains a long pivoted dataset where patient ID's (`pt_id`) can be repeated. These rows are differentiated by `disease_assessments`s combined with corresponding start and end times, representing months. Together, these rows signify a patient survival timeline.
+`patient_data` contains a long dataset where patient ID's (`pt_id`) can be repeated. These rows are differentiated by `disease_assessments`s combined with corresponding start and end times, representing months. Together, these rows detail clinical trial timelines for a given patient.
 
-- `disease_assessment` is broken down by the following nomenclature along with some indicator of B-cell status (if applicable):
+- `disease_assessment` is broken down into a few categories where:
    - CR = "Complete Response"
    - CRi = "Complete Response with Incomplete Blood Count Recovery"
    - RD = "Relapsed Disease"
@@ -73,25 +72,23 @@ p <- ggplot() +
 p
 ```
 
-Here we have a simple segment graph, showing infusions grouped by patients with a given disease assessment status. `geom_swim_lane()` does the work of setting up `geom_segment()` and readying our plot layers for additional ggswim-specific features such as the "markers" mentioned earlier. It's worth noting that `geom_swim_lane()` is a very thin wrapper around `geom_segment()` and supports the same functionality apart from a `yend`.
+Here we have a simple bar graph showing infusions grouped by patients with a given disease assessment status. `geom_swim_lane()` does the work of setting up `geom_segment()` and readying our plot layers for additional ggswim-specific features such as the "markers" mentioned earlier. It's worth noting that `geom_swim_lane()` is a very thin wrapper around `geom_segment()` and supports the same functionality apart from a `yend` since swimmer plots tend to be horizontal.
 
 ## Adding a Marker Layer: Points
 
 Now, let's add a marker layer by first inspecting the `infusion_events` and `end_study_events` datasets:
 
 ```{r infusion_events}
-infusion_events |>
-  rmarkdown::paged_table()
+infusion_events
 ```
 
-This dataset is much simpler, indicating the time from the initial infusion, where 0 is an initial infusion and reinfusions at some point beyond 0 (if a patient had any). These are also categorized under `label`. `glyph` and `colour` will serve as helpful specifiers when we add our markers onto our swimmer plot.
+This dataset is much simpler, indicating the time from the initial infusion (0), and reinfusions at some point beyond 0 (if a patient had any). These are also categorized under `label`. `glyph` and `colour` will serve as helpful specifiers when we add our markers onto our swimmer plot. Initial infusions aren't a part of this dataset since the plot itself is centered around them, and having markers for all segments at month 0 would be relatively meaningless.
 
 
 Next, let's look at our end of study events, i.e. events that indicate a patient has left the study for various reasons.
 
 ```{r end_study_events}
-end_study_events |>
-  rmarkdown::paged_table()
+end_study_events
 ```
 
 You'll notice that this dataset includes use of emojis under `glyph`. In addition to shapes and symbols, ggswim supports the use of emojis when rendering swimmer plots. <span style="color:red">If issues arise in rendering, you may need to check your options settings and ensure a proper graphics device like "AGG".</span>
@@ -124,11 +121,13 @@ p <- p +
 p
 ```
 
-We've successfully made a swimmer plot with lanes and two different kinds of marker layers! Notice how even though both the lanes and markers use the color scale, they are separated in the legend output. Let's take it one step further and make use of the `glyph` and `colour` columns we specified. After all, who doesn't love some emojis?
+We've successfully made a swimmer plot with lanes and two different kinds of marker layers! Notice how even though both the lanes and markers use the color scale, they are separated in the legend output. Let's take it one step further and make use of the `glyph` and `colour` columns we specified.
 
 ## A Sense of Scale
 
-`scale_marker_discrete()` makes it easy to specify and take finer control over your markers and their appearance in the legend. Typically, it can be difficult to have emojis or labels appear in the place of legend glyphs. Let's take a look at a typical output using base ggplot2 with `geom_text()`:
+Scales are a unique component of the ggplot2 framework. For more information on them and understanding how they work, you are encouraged to read the "Scales" chapter from [ggplot2: Elegant Graphics for Data Analysis](https://ggplot2-book.org/scales). In short, scales are responsible for connecting data with aesthetics and communicating those connections through elements like the plot legend.
+
+`scale_marker_discrete()` makes it easy to specify and take finer control over your markers and their appearance in the legend. Typically, it can be difficult to have emojis and labels appear in the place of legend glyphs. Let's take a look at a typical output using base ggplot2 with `geom_text()`:
 
 ```{r}
 ggplot() +
@@ -139,7 +138,7 @@ ggplot() +
   )
 ```
 
-`geom_text()` does a decent job, and is actually what `geom_swim_marker()` wraps. However, at it's base level it doesn't quite set up the use of glyphs the way we would like to see them in the legend display. Additionally, those glyphs don't appear in the plot. You could try to rework this with `geom_point()` or `geom_label()`, but would still run into issues with scale assignment. 
+`geom_text()` does a decent job, and is actually what `geom_swim_marker()` wraps. However, at it's base level it doesn't quite set up the use of glyphs the way we would like to see them in the legend display. Additionally, those glyphs don't appear in the plot. You could try to rework this with `geom_point()` or `geom_label()`, but would still run into issues with scale assignment. This pain point is one of the foundational reasons we made ggswim in the first place!
 
 Thanks to ggswim we can specify what belongs in the glyph versus text elements of our legend. Additionally, we are able to use the "colour" scales under the `marker` definition so ggswim can use the same colour scale under the hood, but keep the identity of "markers" and "lanes" separate in the output:
 
@@ -173,7 +172,7 @@ p <- p +
 p
 ```
 
-We can also apply the `theme_ggswim()` function:
+We can also apply the `theme_ggswim()` function to give it some additional beautification:
 
 ```{r mapping with theme_ggswim, message=FALSE, warning=FALSE}
 p +

@@ -33,9 +33,9 @@ search:
   exclude: ['news/index.html']
 
 reference:
-- title: "Geoms"
+- title: "Layer Functions"
   descr: >
-    Swimmer plot geom and layering functions.
+    Functions that allow you to add layers to your plot, such as lanes and markers.
   contents:
   - geom_swim_lane
   - GeomSwimLane
@@ -43,17 +43,20 @@ reference:
   - GeomSwimMarker
   - geom_swim_arrow
   - GeomSwimArrow
-- title: "Scales"
+- title: "Scale Functions"
   descr: >
-    Scales for cleaning up swimmer plot displays and legend mapping.
+    Functions that assist with cleaning up the legend and assigning aesthetic connections.
   contents:
   - scale_marker_discrete
-- title: "Themeing"
+- title: "Theme Functions"
   descr: >
-    Themes and options to add to swimmer plots.
+    Functions to change the theme and make your swimmer plot pop!
   contents:
   - theme_ggswim
+  - theme_ggswim_dark
 - title: "Datasets"
+  descr: >
+    Example datasets for testing the package, resembling a sample longitudinal clinical trial.
   contents:
   - patient_data
   - infusion_events

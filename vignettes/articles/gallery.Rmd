@@ -21,7 +21,7 @@ library(dplyr)
 
 ## Random Data Sets
 
-In this example, we'll set up a random dataset for reproducibility by separately defining a dataframe for our lanes and our markers.
+In this example, we'll set up some random data for reproducibility by defining dataframes for our lanes and our markers.
 
 ```{r}
 set.seed(123)
@@ -49,14 +49,9 @@ marker_data <- tibble(
       .default = NA
     )
   )
-
-lane_data |>
-  rmarkdown::paged_table()
-marker_data |>
-  rmarkdown::paged_table()
 ```
 
-And then we'll call those datasets into their appropriate swim and marker geom functions:
+And then we'll call those dataframes into their appropriate swim and marker geom functions:
 
 ```{r}
 ggplot() +
@@ -80,9 +75,9 @@ ggplot() +
 
 ## Themeing with ggswim
 
-Here are some example of the themeing functions available in ggswim using the dataset examples from the README:
+Here we'll demonstrate some of the theme functions available with ggswim. These examples will use the same plot setup from the README, starting with the original output:
 
-```{r}
+```{r, eval=TRUE, include=FALSE}
 arrow_data <- patient_data |>
   dplyr::left_join(
     end_study_events |>
@@ -131,7 +126,9 @@ p <- patient_data |>
   labs(title = "Clinical Trial Swimmer Plot", subtitle = "Example Swimmer Plot") +
   xlab("Time Since Infusion (Months)") +
   ylab("Patient ID")
+```
 
+```{r}
 p
 ```
 
