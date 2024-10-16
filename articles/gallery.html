@@ -61,8 +61,8 @@
 
 
 
-<link href="gallery_files/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
-<script src="gallery_files/pagedtable-1.1/js/pagedtable.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Gallery</h1>
             
@@ -80,8 +80,8 @@
 <div class="section level2">
 <h2 id="random-data-sets">Random Data Sets<a class="anchor" aria-label="anchor" href="#random-data-sets"></a>
 </h2>
-<p>In this example, we’ll set up a random dataset for reproducibility by
-separately defining a dataframe for our lanes and our markers.</p>
+<p>In this example, we’ll set up some random data for reproducibility by
+defining dataframes for our lanes and our markers.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="va">lane_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
@@ -107,26 +107,10 @@ separately defining a dataframe for our lanes and our markers.</p>
 <span>      <span class="va">label</span> <span class="op">==</span> <span class="st">"E"</span> <span class="op">~</span> <span class="st">"✨"</span>,</span>
 <span>      .default <span class="op">=</span> <span class="cn">NA</span></span>
 <span>    <span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
-<span></span>
-<span><span class="va">lane_data</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">rmarkdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgs.rstudio.com/rmarkdown/reference/paged_table.html" class="external-link">paged_table</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["x"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["xend"],"name":[2],"type":["int"],"align":["right"]},{"label":["y"],"name":[3],"type":["fct"],"align":["left"]},{"label":["colour"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"0","2":"19","3":"1","4":"red"},{"1":"0","2":"19","3":"1","4":"green"},{"1":"0","2":"7","3":"2","4":"yellow"},{"1":"0","2":"18","3":"2","4":"red"},{"1":"0","2":"7","3":"3","4":"green"},{"1":"0","2":"14","3":"3","4":"purple"},{"1":"0","2":"6","3":"4","4":"yellow"},{"1":"0","2":"10","3":"4","4":"blue"},{"1":"0","2":"15","3":"5","4":"purple"},{"1":"0","2":"9","3":"5","4":"red"},{"1":"0","2":"8","3":"6","4":"red"},{"1":"0","2":"18","3":"6","4":"blue"},{"1":"0","2":"10","3":"7","4":"green"},{"1":"0","2":"13","3":"7","4":"yellow"},{"1":"0","2":"14","3":"8","4":"purple"},{"1":"0","2":"15","3":"8","4":"purple"},{"1":"0","2":"20","3":"9","4":"green"},{"1":"0","2":"9","3":"9","4":"red"},{"1":"0","2":"7","3":"10","4":"blue"},{"1":"0","2":"15","3":"10","4":"purple"},{"1":"0","2":"13","3":"11","4":"purple"},{"1":"0","2":"16","3":"11","4":"yellow"},{"1":"0","2":"13","3":"12","4":"purple"},{"1":"0","2":"13","3":"12","4":"blue"},{"1":"0","2":"17","3":"13","4":"red"},{"1":"0","2":"7","3":"13","4":"red"},{"1":"0","2":"12","3":"14","4":"green"},{"1":"0","2":"14","3":"14","4":"red"},{"1":"0","2":"11","3":"15","4":"purple"},{"1":"0","2":"14","3":"15","4":"red"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">marker_data</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">rmarkdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgs.rstudio.com/rmarkdown/reference/paged_table.html" class="external-link">paged_table</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["x"],"name":[1],"type":["int"],"align":["right"]},{"label":["y"],"name":[2],"type":["fct"],"align":["left"]},{"label":["label"],"name":[3],"type":["chr"],"align":["left"]},{"label":["glyph"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"19","2":"1","3":"A","4":"😊"},{"1":"19","2":"1","3":"C","4":"✅"},{"1":"7","2":"2","3":"D","4":"💥"},{"1":"18","2":"2","3":"A","4":"😊"},{"1":"7","2":"3","3":"C","4":"✅"},{"1":"14","2":"3","3":"E","4":"✨"},{"1":"6","2":"4","3":"D","4":"💥"},{"1":"10","2":"4","3":"B","4":"🎉"},{"1":"15","2":"5","3":"E","4":"✨"},{"1":"9","2":"5","3":"A","4":"😊"},{"1":"8","2":"6","3":"A","4":"😊"},{"1":"18","2":"6","3":"B","4":"🎉"},{"1":"10","2":"7","3":"C","4":"✅"},{"1":"13","2":"7","3":"D","4":"💥"},{"1":"14","2":"8","3":"E","4":"✨"},{"1":"15","2":"8","3":"E","4":"✨"},{"1":"20","2":"9","3":"C","4":"✅"},{"1":"9","2":"9","3":"A","4":"😊"},{"1":"7","2":"10","3":"B","4":"🎉"},{"1":"15","2":"10","3":"E","4":"✨"},{"1":"13","2":"11","3":"E","4":"✨"},{"1":"16","2":"11","3":"D","4":"💥"},{"1":"13","2":"12","3":"E","4":"✨"},{"1":"13","2":"12","3":"B","4":"🎉"},{"1":"17","2":"13","3":"A","4":"😊"},{"1":"7","2":"13","3":"A","4":"😊"},{"1":"12","2":"14","3":"C","4":"✅"},{"1":"14","2":"14","3":"A","4":"😊"},{"1":"11","2":"15","3":"E","4":"✨"},{"1":"14","2":"15","3":"A","4":"😊"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
-<p>And then we’ll call those datasets into their appropriate swim and
+<span>  <span class="op">)</span></span></code></pre></div>
+<p>And then we’ll call those dataframes into their appropriate swim and
 marker geom functions:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/geom_swim_lane.html">geom_swim_lane</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">lane_data</span>,</span>
@@ -149,75 +133,27 @@ marker geom functions:</p>
 <div class="section level2">
 <h2 id="themeing-with-ggswim">Themeing with ggswim<a class="anchor" aria-label="anchor" href="#themeing-with-ggswim"></a>
 </h2>
-<p>Here are some example of the themeing functions available in ggswim
-using the dataset examples from the README:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">arrow_data</span> <span class="op">&lt;-</span> <span class="va">patient_data</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span></span>
-<span>    <span class="va">end_study_events</span> <span class="op">|&gt;</span></span>
-<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">pt_id</span>, <span class="va">label</span><span class="op">)</span>,</span>
-<span>    by <span class="op">=</span> <span class="st">"pt_id"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">pt_id</span>, <span class="va">end_time</span>, <span class="va">label</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span>.by <span class="op">=</span> <span class="va">pt_id</span>, <span class="va">end_time</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">end_time</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">label</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">all_events</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
-<span>  <span class="va">infusion_events</span>,</span>
-<span>  <span class="va">end_study_events</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">patient_data</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/geom_swim_lane.html">geom_swim_lane</a></span><span class="op">(</span></span>
-<span>    mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
-<span>      x <span class="op">=</span> <span class="va">start_time</span>, y <span class="op">=</span> <span class="va">pt_id</span>, xend <span class="op">=</span> <span class="va">end_time</span>,</span>
-<span>      colour <span class="op">=</span> <span class="va">disease_assessment</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/geom_swim_arrow.html">geom_swim_arrow</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">arrow_data</span>,</span>
-<span>    mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>xend <span class="op">=</span> <span class="va">end_time</span>, y <span class="op">=</span> <span class="va">pt_id</span><span class="op">)</span>,</span>
-<span>    arrow_colour <span class="op">=</span> <span class="st">"red"</span>,</span>
-<span>    arrow_fill <span class="op">=</span> <span class="st">"white"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/geom_swim_marker.html">geom_swim_marker</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">all_events</span>,</span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time_from_initial_infusion</span>, y <span class="op">=</span> <span class="va">pt_id</span>, marker <span class="op">=</span> <span class="va">label</span><span class="op">)</span>,</span>
-<span>    size <span class="op">=</span> <span class="fl">5</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_colour_brewer</a></span><span class="op">(</span></span>
-<span>    name <span class="op">=</span> <span class="st">"Disease Assessments"</span>,</span>
-<span>    palette <span class="op">=</span> <span class="st">"Set1"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/scale_marker_discrete.html">scale_marker_discrete</a></span><span class="op">(</span></span>
-<span>    glyphs <span class="op">=</span> <span class="va">all_events</span><span class="op">$</span><span class="va">glyph</span>,</span>
-<span>    colours <span class="op">=</span> <span class="va">all_events</span><span class="op">$</span><span class="va">colour</span>,</span>
-<span>    limits <span class="op">=</span> <span class="va">all_events</span><span class="op">$</span><span class="va">label</span>,</span>
-<span>    name <span class="op">=</span> <span class="st">"Study Events"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Clinical Trial Swimmer Plot"</span>, subtitle <span class="op">=</span> <span class="st">"Example Swimmer Plot"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Time Since Infusion (Months)"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Patient ID"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">p</span></span></code></pre></div>
-<p><img src="gallery_files/figure-html/unnamed-chunk-4-1.png" width="100%"></p>
+<p>Here we’ll demonstrate some of the theme functions available with
+ggswim. These examples will use the same plot setup from the README,
+starting with the original output:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span></span></code></pre></div>
+<p><img src="gallery_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
 <div class="section level3">
 <h3 id="theme_ggswim">
 <code>theme_ggswim()</code><a class="anchor" aria-label="anchor" href="#theme_ggswim"></a>
 </h3>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="../reference/theme_ggswim.html">theme_ggswim</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gallery_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
+<p><img src="gallery_files/figure-html/unnamed-chunk-6-1.png" width="100%"></p>
 </div>
 <div class="section level3">
 <h3 id="theme_ggswim_dark">
 <code>theme_ggswim_dark()</code><a class="anchor" aria-label="anchor" href="#theme_ggswim_dark"></a>
 </h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="../reference/theme_ggswim.html">theme_ggswim_dark</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gallery_files/figure-html/unnamed-chunk-6-1.png" width="100%"></p>
+<p><img src="gallery_files/figure-html/unnamed-chunk-7-1.png" width="100%"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

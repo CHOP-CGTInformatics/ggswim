@@ -61,8 +61,8 @@
 
 
 
-<link href="adding_arrows_files/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
-<script src="adding_arrows_files/pagedtable-1.1/js/pagedtable.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Adding arrows to ggswim</h1>
             
@@ -86,6 +86,13 @@ assigned arrows are always placed on the right side of indicated lanes.
 <code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> gives users full control over arrow neck
 and head length, along with options for color, fill, and type (refer to
 <code><a href="../reference/geom_swim_arrow.html">?geom_swim_arrow</a></code> for detailed information).</p>
+<p><code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> does not replace the ability to
+separately call arrows using the <code>arrow</code> parameter in
+<code><a href="../reference/geom_swim_lane.html">geom_swim_lane()</a></code>. As mentioned,
+<code><a href="../reference/geom_swim_lane.html">geom_swim_lane()</a></code> comes with nearly all of the same
+capabilities as <code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">geom_segment()</a></code>, but it may be more
+challenging to apply arrows as expected depending on how your data is
+structured.</p>
 <div class="section level2">
 <h2 id="adding-arrows-using-geom_swim_arrow">Adding arrows using <code>geom_swim_arrow()</code><a class="anchor" aria-label="anchor" href="#adding-arrows-using-geom_swim_arrow"></a>
 </h2>
@@ -108,13 +115,18 @@ and head length, along with options for color, fill, and type (refer to
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">label</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">arrow_data</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">rmarkdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgs.rstudio.com/rmarkdown/reference/paged_table.html" class="external-link">paged_table</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["pt_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["end_time"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["label"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"04","2":"9.0","3":"NA"},{"1":"09","2":"12.0","3":"NA"},{"1":"13","2":"2.5","3":"NA"},{"1":"14","2":"0.9","3":"NA"},{"1":"15","2":"0.9","3":"NA"},{"1":"17","2":"2.8","3":"NA"},{"1":"18","2":"3.3","3":"NA"},{"1":"19","2":"6.0","3":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<span><span class="va">arrow_data</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 8 × 3</span></span></span>
+<span><span class="co">#&gt;   pt_id end_time label</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 04         9   <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 09        12   <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 13         2.5 <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 14         0.9 <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 15         0.9 <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 17         2.8 <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> 18         3.3 <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> 19         6   <span style="color: #BB0000;">NA</span></span></span></code></pre></div>
 <p>This should look familiar as a pared-down subset of
 <code>end_study_events</code> without an indicated <code>label</code>.
 Since filled out label statuses from <code>end_study_events</code>
@@ -136,10 +148,14 @@ subjects with no end study status. Now let’s use
 <span>    data <span class="op">=</span> <span class="va">arrow_data</span>,</span>
 <span>    mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>xend <span class="op">=</span> <span class="va">end_time</span>, y <span class="op">=</span> <span class="va">pt_id</span><span class="op">)</span>,</span>
 <span>    arrow_neck_length <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>    arrow_colour <span class="op">=</span> <span class="st">"slateblue"</span>,</span>
-<span>    arrow_fill <span class="op">=</span> <span class="st">"cyan"</span></span>
+<span>    arrow_colour <span class="op">=</span> <span class="st">"firebrick"</span>,</span>
+<span>    arrow_fill <span class="op">=</span> <span class="st">"gold"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="adding_arrows_files/figure-html/unnamed-chunk-3-1.png" width="1152"></p>
+<p>Here we’ve correctly assigned arrows to only the subset of patients
+that have not met an end of study event. Note that
+<code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> gives plenty of control to the arrow head
+and neck color, shape, and even length.</p>
 </div>
   </main>
 </div>
