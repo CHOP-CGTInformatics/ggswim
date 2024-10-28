@@ -93,3 +93,11 @@ test_that("scale_marker_discrete uses default colours when missing", {
   expect_equal(length(scale$palette(3)), 3)
   expect_equal(vctrs::field(scale$palette(3), "colour"), .default_colours[1:3]) # First 3 default glyphs
 })
+
+test_that("format.marker works", {
+  out <- format.marker(x = vctrs::new_rcrd(list(colour = "red", glyphs = "test"),
+                                           class = "marker"))
+
+  expect_equal(out, "Glyph: test, Colour: red")
+  expect_equal(class(out), "character")
+})

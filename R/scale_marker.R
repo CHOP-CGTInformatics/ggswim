@@ -67,7 +67,6 @@ pal_markers <- function(glyphs = NULL, colours = NULL, n_values = NULL) {
   # Define colour and glyph lengths via markers supplied or default values
   n_values <- n_values %||% max(length(glyphs), length(colours))
   if (n_values == 0) n_values <- length(.default_glyphs)
-
   # Create a vctrs list to store colour and glyph values
   markers <- vctrs::new_rcrd(
     list(
@@ -99,7 +98,15 @@ pal_markers <- function(glyphs = NULL, colours = NULL, n_values = NULL) {
 #'
 #' @export
 # Set default glyphs and colours
-.default_glyphs <- c("●", "■", "▲", "⬥", "▼", "▢", "□", "△", "◇")
+.default_glyphs <- c("\u25CF",  # ● BLACK CIRCLE
+                     "\u25A0",  # ■ BLACK SQUARE
+                     "\u25B2",  # ▲ BLACK UP-POINTING TRIANGLE
+                     "\u2B25",  # ⬥ BLACK DIAMOND
+                     "\u25BC",  # ▼ BLACK DOWN-POINTING TRIANGLE
+                     "\u25A2",  # ▢ WHITE SQUARE WITH ROUNDED CORNERS
+                     "\u25A1",  # □ WHITE SQUARE
+                     "\u25B3",  # △ WHITE UP-POINTING TRIANGLE
+                     "\u25C7")  # ◇ WHITE DIAMOND
 
 #' @rdname dot-default_glyphs
 #' @export
@@ -108,3 +115,18 @@ pal_markers <- function(glyphs = NULL, colours = NULL, n_values = NULL) {
 #' @rdname dot-default_glyphs
 #' @export
 .default_limits <- c("val1", "val2", "val3", "val4", "val5", "val6", "val7", "val8", "val9")
+
+#' @noRd
+#' @export
+# Define the format method for marker class
+format.marker <- function(x, ...) {
+  # Extract the colour and glyph components
+  colours <- vctrs::field(x, "colour")
+  glyphs <- vctrs::field(x, "glyphs")
+
+  # Create a formatted string for each marker
+  formatted_markers <- paste0("Glyph: ", glyphs, ", Colour: ", colours)
+
+  # Return the formatted markers as a character vector
+  return(formatted_markers)
+}
