@@ -123,10 +123,14 @@ marker geom functions:</p>
 <span>    size <span class="op">=</span> <span class="fl">8</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_colour_brewer</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Lanes"</span>, palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">marker_data</span>,</span>
-<span>       <span class="fu"><a href="../reference/scale_marker_discrete.html">scale_marker_discrete</a></span><span class="op">(</span>glyphs <span class="op">=</span> <span class="va">glyph</span>, limits <span class="op">=</span> <span class="va">label</span>, name <span class="op">=</span> <span class="st">"Markers"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Sample Swimmer Plot"</span>,</span>
-<span>       x <span class="op">=</span> <span class="st">"Time"</span>, y <span class="op">=</span> <span class="st">"Record ID"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span></span>
+<span>    <span class="va">marker_data</span>,</span>
+<span>    <span class="fu"><a href="../reference/scale_marker_discrete.html">scale_marker_discrete</a></span><span class="op">(</span>glyphs <span class="op">=</span> <span class="va">glyph</span>, limits <span class="op">=</span> <span class="va">label</span>, name <span class="op">=</span> <span class="st">"Markers"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Sample Swimmer Plot"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Time"</span>, y <span class="op">=</span> <span class="st">"Record ID"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/theme_ggswim.html">theme_ggswim</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="gallery_files/figure-html/unnamed-chunk-3-1.png" width="100%"></p>
 </div>

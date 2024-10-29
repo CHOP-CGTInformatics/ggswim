@@ -306,10 +306,12 @@ same colour scale under the hood, but keep the identity of “markers” and
 “lanes” separate in the output:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">p</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/scale_marker_discrete.html">scale_marker_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Study Events"</span>,</span>
-<span>                        glyphs <span class="op">=</span> <span class="va">all_events</span><span class="op">$</span><span class="va">glyph</span>,</span>
-<span>                        colours <span class="op">=</span> <span class="va">all_events</span><span class="op">$</span><span class="va">colour</span>,</span>
-<span>                        limits <span class="op">=</span> <span class="va">all_events</span><span class="op">$</span><span class="va">label</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/scale_marker_discrete.html">scale_marker_discrete</a></span><span class="op">(</span></span>
+<span>    name <span class="op">=</span> <span class="st">"Study Events"</span>,</span>
+<span>    glyphs <span class="op">=</span> <span class="va">all_events</span><span class="op">$</span><span class="va">glyph</span>,</span>
+<span>    colours <span class="op">=</span> <span class="va">all_events</span><span class="op">$</span><span class="va">colour</span>,</span>
+<span>    limits <span class="op">=</span> <span class="va">all_events</span><span class="op">$</span><span class="va">label</span></span>
+<span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
 <p><img src="ggswim_files/figure-html/unnamed-chunk-3-1.png" width="100%"></p>
@@ -319,7 +321,7 @@ same colour scale under the hood, but keep the identity of “markers” and
 </h2>
 <p>As mentioned in the README, all of the same ggplot2 techniques you
 would apply to your usual plots apply here. Below, we update the lanes
-to match a nicer pallete with a new name and add on some plot
+to match a nicer palette with a new name and add on some plot
 labels:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
