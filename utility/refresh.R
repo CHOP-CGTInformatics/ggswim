@@ -58,10 +58,9 @@ devtools::check( # Equivalent of R-hub
   incoming  = TRUE
 )
 
-# devtools::check_rhub(email="richardshanna91@gmail.com")
-# devtools::check_win_devel(email = "richardshanna91@gmail.com") # CRAN submission policies encourage the development version
 # Note: Must be off of VPN
-revdepcheck::revdep_check(num_workers = 4)
+# rhub::rhub_check(platforms = c("linux", "windows", "ubuntu-next", "ubuntu-release")) # These will be available in GitHub Actions
+# devtools::check_win_devel(email = "richardshanna91@gmail.com") # CRAN submission policies encourage the development version
 # Careful, the last question ultimately uploads it to CRAN, where you can't delete/reverse your decision.
 # Run as not CRAN to build full vignettes
 # withr::with_envvar(

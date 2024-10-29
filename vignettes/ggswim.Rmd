@@ -144,10 +144,12 @@ Thanks to ggswim we can specify what belongs in the glyph versus text elements o
 
 ```{r}
 p <- p +
-  scale_marker_discrete(name = "Study Events",
-                        glyphs = all_events$glyph,
-                        colours = all_events$colour,
-                        limits = all_events$label)
+  scale_marker_discrete(
+    name = "Study Events",
+    glyphs = all_events$glyph,
+    colours = all_events$colour,
+    limits = all_events$label
+  )
 
 p
 ```
@@ -155,7 +157,7 @@ p
 
 ## A Full Swimmer Plot
 
-As mentioned in the README, all of the same ggplot2 techniques you would apply to your usual plots apply here. Below, we update the lanes to match a nicer pallete with a new name and add on some plot labels:
+As mentioned in the README, all of the same ggplot2 techniques you would apply to your usual plots apply here. Below, we update the lanes to match a nicer palette with a new name and add on some plot labels:
 
 ```{r mapping finalizing, message=FALSE, warning=FALSE}
 library(ggplot2)

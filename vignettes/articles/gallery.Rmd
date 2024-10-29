@@ -66,10 +66,14 @@ ggplot() +
     size = 8
   ) +
   scale_colour_brewer(name = "Lanes", palette = "Set1") +
-  with(marker_data,
-       scale_marker_discrete(glyphs = glyph, limits = label, name = "Markers")) +
-  labs(title = "Sample Swimmer Plot",
-       x = "Time", y = "Record ID") +
+  with(
+    marker_data,
+    scale_marker_discrete(glyphs = glyph, limits = label, name = "Markers")
+  ) +
+  labs(
+    title = "Sample Swimmer Plot",
+    x = "Time", y = "Record ID"
+  ) +
   theme_ggswim()
 ```
 

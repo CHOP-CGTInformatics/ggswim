@@ -30,7 +30,7 @@
 #'     colours = all_events$colour,
 #'     limits = all_events$label
 #'   )
-#'}
+#' }
 #'
 #' @export
 
@@ -43,9 +43,11 @@ scale_marker_discrete <- function(glyphs = NULL, colours = NULL, limits = NULL, 
   if (n_values == 0) {
     markers <- data.frame()
   } else {
-    markers <- data.frame(glyphs = glyphs %||% .default_glyphs[0:n_values],
-                          colours = colours %||% .default_colours[0:n_values],
-                          labels = limits %||% .default_limits[0:n_values]) |>
+    markers <- data.frame(
+      glyphs = glyphs %||% .default_glyphs[0:n_values],
+      colours = colours %||% .default_colours[0:n_values],
+      labels = limits %||% .default_limits[0:n_values]
+    ) |>
       distinct()
   }
 
@@ -98,15 +100,17 @@ pal_markers <- function(glyphs = NULL, colours = NULL, n_values = NULL) {
 #'
 #' @export
 # Set default glyphs and colours
-.default_glyphs <- c("\u25CF",  # ● BLACK CIRCLE
-                     "\u25A0",  # ■ BLACK SQUARE
-                     "\u25B2",  # ▲ BLACK UP-POINTING TRIANGLE
-                     "\u2B25",  # ⬥ BLACK DIAMOND
-                     "\u25BC",  # ▼ BLACK DOWN-POINTING TRIANGLE
-                     "\u25A2",  # ▢ WHITE SQUARE WITH ROUNDED CORNERS
-                     "\u25A1",  # □ WHITE SQUARE
-                     "\u25B3",  # △ WHITE UP-POINTING TRIANGLE
-                     "\u25C7")  # ◇ WHITE DIAMOND
+.default_glyphs <- c(
+  "\u25CF", # ● BLACK CIRCLE
+  "\u25A0", # ■ BLACK SQUARE
+  "\u25B2", # ▲ BLACK UP-POINTING TRIANGLE
+  "\u2B25", # ⬥ BLACK DIAMOND
+  "\u25BC", # ▼ BLACK DOWN-POINTING TRIANGLE
+  "\u25A2", # ▢ WHITE SQUARE WITH ROUNDED CORNERS
+  "\u25A1", # □ WHITE SQUARE
+  "\u25B3", # △ WHITE UP-POINTING TRIANGLE
+  "\u25C7"
+) # ◇ WHITE DIAMOND
 
 #' @rdname dot-default_glyphs
 #' @export

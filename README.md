@@ -124,7 +124,7 @@ p
 <img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
 
 Using the custom `marker` `aes()` in `geom_swim_marker()` in combination
-with specific scale definitions helps us keep the markesr and lanes
+with specific scale definitions helps us keep the markers and lanes
 separate in the legend. Finally, we’ll beautify the plot with familiar
 ggplot2 techniques and a last finishing touch with `theme_ggswim()`:
 

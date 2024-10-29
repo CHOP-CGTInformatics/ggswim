@@ -25,7 +25,7 @@
 #'     aes(x = time_from_initial_infusion, y = pt_id, marker = label),
 #'     size = 10
 #'   )
-#'}
+#' }
 #'
 #' @export
 

@@ -5,6 +5,7 @@ Codecov
 Lifecycle
 ORCID
 README
+Themeing
 behaviour
 centimetres
 colour
@@ -12,7 +13,6 @@ colours
 de
 geom's
 geoms
-ggnewscale
 ggplot
 ggproto
 ggswim's
@@ -25,6 +25,7 @@ picas
 plotmath
 pre
 reinfusions
+reproducibility
 rlang
 unmapped
 xend
