@@ -56,7 +56,7 @@ theme_ggswim <- function(base_size = 12, base_family = "") {
       axis.title.y = element_text(size = 14, face = "bold", margin = margin(r = 10)),
 
       # Axis tick marks
-      axis.ticks = element_line(linewidth = 0.75, colour = "steelblue"),
+      axis.ticks = element_line(linewidth = 0.75, colour = "#000000"),
       axis.ticks.length = unit(0.3, "cm"),
 
       # Legend
@@ -65,7 +65,7 @@ theme_ggswim <- function(base_size = 12, base_family = "") {
 
       # Axis line
       axis.line = element_line(
-        color = "steelblue",
+        color = "#000000",
         linewidth = 1
       ),
 
