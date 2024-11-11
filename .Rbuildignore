@@ -39,3 +39,5 @@ inst/testdata/create_test_data.R
 ^updating-mocks\.md$
 ^vignettes/articles$
 ^CONDUCT\.md$
+
+.venv/

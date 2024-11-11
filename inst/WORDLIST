@@ -5,12 +5,14 @@ Codecov
 Lifecycle
 ORCID
 README
+TTF
 Themeing
 behaviour
 centimetres
 colour
 colours
 de
+fontawesome
 geom's
 geoms
 ggplot
@@ -27,5 +29,6 @@ pre
 reinfusions
 reproducibility
 rlang
+unicode
 unmapped
 xend

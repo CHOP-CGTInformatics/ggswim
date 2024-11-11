@@ -9,9 +9,12 @@
 #' @importFrom cli cli_abort cli_vec cli_warn
 #' @importFrom rlang caller_arg caller_env as_label is_atomic get_expr .data
 #'   is_empty := enquo quo_is_symbolic quo list2 try_fetch eval_tidy %||%
+#' @importFrom proto proto
 #' @importFrom purrr map_lgl walk discard
+#' @importFrom showtext showtext_auto
 #' @importFrom stats setNames
 #' @importFrom stringr str_detect
+#' @importFrom sysfonts font_add
 #' @importFrom tidyr pivot_longer
 #' @importFrom tidyselect all_of
 #' @importFrom tibble tibble tribble enframe
