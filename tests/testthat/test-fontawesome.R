@@ -6,7 +6,7 @@ test_that("search_fontawesome works", {
   all_vals <- search_fontawesome()
   specific_vals <- search_fontawesome(str = "fa-car")
 
-  expect_equal(length(all_vals), nrow(FontAwesome))
+  expect_equal(length(all_vals), nrow(FontAwesome[["fa-solid-900"]]))
   expect_true(all(stringr::str_detect(specific_vals, "car")))
 })
 
