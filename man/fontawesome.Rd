@@ -2,18 +2,21 @@
 % Please edit documentation in R/fontawesome.R
 \name{fontawesome}
 \alias{fontawesome}
-\title{Retrieve fontawesome unicode}
+\title{Retrieve FontAwesome unicode}
 \usage{
-fontawesome(aliases)
+fontawesome(aliases, type = "solid")
 }
 \arguments{
 \item{aliases}{A string or vector of strings to retrieve}
+
+\item{type}{A character string denoting which FontAwesome library to search.
+One of "solid", "regular", or "brands". Default "solid".}
 }
 \value{
 Unicode text
 }
 \description{
-When assigning fontawesome icons as glyphs, \code{\link[=fontawesome]{fontawesome()}} should be used to
+When assigning FontAwesome icons as glyphs, \code{\link[=fontawesome]{fontawesome()}} should be used to
 convert the alias string to the appropriate Unicode format.
 
 All \code{aliases} should be prepended with "fa".

@@ -1,41 +1,53 @@
-#' @title Search for fontawesome aliases to include in ggswim
+#' @title Search for FontAwesome aliases to include in ggswim
 #' @description
-#' Check strings against the available aliases for fontawesome icons.
-#' @param str A character string alias to search the fontawesome data available.
+#' Check strings against the available aliases for FontAwesome icons.
+#' @param str A character string alias to search the FontAwesome data available.
 #' If left empty, the default, will return all possibilities.
+#' @param type A character string denoting which FontAwesome library to search.
+#' One of "solid", "regular", or "brands". Default "solid".
 #' @param approximate Use approximate or exact matching, TRUE/FALSE. Default `FALSE`.
-#' @returns Matching aliases from the available fontawesome data
+#' @returns Matching aliases from the available FontAwesome data
 #' @examples
 #' search_fontawesome("fa-car")
 #'
 #' @export
-search_fontawesome <- function(str = "", approximate = FALSE) {
+search_fontawesome <- function(str = "", type = "solid", approximate = FALSE) {
+  df <- case_when(type == "regular" ~ "fa-regular-400",
+                  type == "brands" ~ "fa-brands-400",
+                  .default = "fa-solid-900")
+
   if (approximate) {
-    hits <- agrep(str, FontAwesome[["aliases"]])
+    hits <- agrep(str, FontAwesome[[df]][["aliases"]])
   } else {
-    hits <- grep(str, FontAwesome[["aliases"]])
+    hits <- grep(str, FontAwesome[[df]][["aliases"]])
   }
-  out <- unlist(FontAwesome[["aliases"]][hits])
+  out <- unlist(FontAwesome[[df]][["aliases"]][hits])
 
   # Sort values to better identify instances of multiple hits
   out |>
     sort()
 }
 
-#' @title Retrieve fontawesome unicode
+#' @title Retrieve FontAwesome unicode
 #' @description
-#' When assigning fontawesome icons as glyphs, [fontawesome()] should be used to
+#' When assigning FontAwesome icons as glyphs, [fontawesome()] should be used to
 #' convert the alias string to the appropriate Unicode format.
 #'
 #' All `aliases` should be prepended with "fa".
 #'
 #' @param aliases A string or vector of strings to retrieve
+#' @param type A character string denoting which FontAwesome library to search.
+#' One of "solid", "regular", or "brands". Default "solid".
 #' @returns Unicode text
 #' @export
 #' @examples
 #' fontawesome('fa-car')
-fontawesome <- function(aliases) {
-  matched_rows <- which(FontAwesome$aliases %in% aliases)
+fontawesome <- function(aliases, type = "solid") {
+  df <- case_when(type == "regular" ~ "fa-regular-400",
+                  type == "brands" ~ "fa-brands-400",
+                  .default = "fa-solid-900")
+
+  matched_rows <- which(FontAwesome[[df]]$aliases %in% aliases)
 
   result <- if (length(matched_rows) > 0) {
     matched_rows
@@ -46,7 +58,7 @@ fontawesome <- function(aliases) {
   if (all(is.na(result))) {
     out <- NA
   } else {
-    out <- FontAwesome[result, 1][["fa"]]
+    out <- FontAwesome[[df]][result, 1][["fa"]]
   }
 
   result <- is.na(out)
@@ -61,7 +73,9 @@ fontawesome <- function(aliases) {
 #' @keywords internal
 .load_fonts <- function(verbose = TRUE) {
   custom_names <- c(
-    "fa-solid-900" = "FontAwesome"
+    "fa-brands-400" = "FontAwesome-Brands",
+    "fa-regular-400" = "FontAwesome-Regular",
+    "fa-solid-900" = "FontAwesome-Solid"
   )
 
   .load_pkg_font <- function(family) {

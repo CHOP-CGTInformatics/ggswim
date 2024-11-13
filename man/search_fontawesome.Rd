@@ -2,21 +2,24 @@
 % Please edit documentation in R/fontawesome.R
 \name{search_fontawesome}
 \alias{search_fontawesome}
-\title{Search for fontawesome aliases to include in ggswim}
+\title{Search for FontAwesome aliases to include in ggswim}
 \usage{
-search_fontawesome(str = "", approximate = FALSE)
+search_fontawesome(str = "", type = "solid", approximate = FALSE)
 }
 \arguments{
-\item{str}{A character string alias to search the fontawesome data available.
+\item{str}{A character string alias to search the FontAwesome data available.
 If left empty, the default, will return all possibilities.}
+
+\item{type}{A character string denoting which FontAwesome library to search.
+One of "solid", "regular", or "brands". Default "solid".}
 
 \item{approximate}{Use approximate or exact matching, TRUE/FALSE. Default \code{FALSE}.}
 }
 \value{
-Matching aliases from the available fontawesome data
+Matching aliases from the available FontAwesome data
 }
 \description{
-Check strings against the available aliases for fontawesome icons.
+Check strings against the available aliases for FontAwesome icons.
 }
 \examples{
 search_fontawesome("fa-car")

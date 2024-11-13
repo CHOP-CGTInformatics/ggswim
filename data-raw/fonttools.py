@@ -4,9 +4,9 @@ import pyreadr
 import os as os
 
 
-def create_fontawesome_rda():
+def create_fontawesome_rda(sub_folder, file_name):
     # Path to FontAwesome .TTF file
-    ttf_path = "inst/fonts/FontAwesome/fa-solid-900.ttf"
+    ttf_path = "inst/fonts/" + sub_folder + "/" + file_name + ".ttf"
 
     # Load the TTF file
     font = ttLib.TTFont(ttf_path)
@@ -56,10 +56,12 @@ def create_fontawesome_rda():
     df = pd.DataFrame({"fa": fa_chars, "aliases": aliases, "html": html_entities})
 
     # Out path for rda files
-    out_path = "inst/fonts/FontAwesome/fa-solid-900.rda"
-    df_name = "fa-solid-900"
+    out_path = "inst/fonts/" + sub_folder + "/" + file_name + ".rda"
+    df_name = file_name
 
     pyreadr.write_rdata(out_path, df, df_name)
 
 
-create_fontawesome_rda()
+create_fontawesome_rda("FontAwesome", "fa-solid-900")
+create_fontawesome_rda("FontAwesome", "fa-regular-400")
+create_fontawesome_rda("FontAwesome", "fa-brands-400")
