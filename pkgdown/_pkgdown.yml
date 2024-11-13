@@ -53,7 +53,6 @@ reference:
     Functions to use icons, change the theme, and make your swimmer plot pop!
   contents:
   - fontawesome
-  - load.fa
   - search_fontawesome
   - theme_ggswim
   - theme_ggswim_dark
