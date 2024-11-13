@@ -67,25 +67,25 @@ fontawesome <- function(aliases) {
   .load_pkg_font <- function(family) {
     font_dir <- system.file("fonts", family, package = "ggswim")
     font_paths <- dir(font_dir, full.names = TRUE)
-    font_names <- stringr::str_remove(dir(font_dir), "\\..*$")
+    font_names <- str_remove(dir(font_dir), "\\..*$")
 
     if (all(font_names %in% names(custom_names))) {
       font_names <- unname(custom_names[font_names])
     }
 
-    purrr::walk2(
+    walk2(
       font_names, font_paths,
       function(name, path) {
         features <- list("kern" = 1, "zero" = 0)
-        if (stringr::str_detect(name, "^Inter-")) {
+        if (str_detect(name, "^Inter-")) {
           features <- c(features, "numbers" = "tabular")
-        } else if (stringr::str_detect(name, "^Piazzolla-")) {
+        } else if (str_detect(name, "^Piazzolla-")) {
           features <- c(features, "numbers" = "proportional")
-        } else if (stringr::str_detect(name, "^AtkinsonHyperlegible-")) {
+        } else if (str_detect(name, "^AtkinsonHyperlegible-")) {
           features <- c(features, "numbers" = "proportional")
         }
-        feature_spec <- do.call(systemfonts::font_feature, features)
-        systemfonts::register_font(name = name, plain = path)
+        feature_spec <- do.call(font_feature, features)
+        register_font(name = name, plain = path)
       }
     )
     if (verbose) {
@@ -98,10 +98,10 @@ fontawesome <- function(aliases) {
   }
 
   pkg_fonts <- dir(system.file("fonts", package = "ggswim"))
-  purrr::walk(pkg_fonts, .load_pkg_font)
+  walk(pkg_fonts, .load_pkg_font)
   if (verbose) {
     cli::cli_rule()
-    cli::cli_alert_info("Done! Check {.code systemfonts::registry_fonts()} for more details.")
+    cli::cli_alert_info("Done! Check {.code registry_fonts()} for more details.")
   }
   invisible(systemfonts::registry_fonts())
 }
