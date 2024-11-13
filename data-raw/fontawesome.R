@@ -2,7 +2,7 @@
 # them into usable styles
 
 # Force reticulate to look for virtual env. Python executable
-reticulate::use_virtualenv('./.venv', required=TRUE)
+reticulate::use_virtualenv("./.venv", required = TRUE)
 # Source and create RDA files
 reticulate::source_python("data-raw/fonttools.py")
 

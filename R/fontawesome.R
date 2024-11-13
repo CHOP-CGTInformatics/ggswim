@@ -9,7 +9,7 @@
 #' search_fontawesome("fa-car")
 #'
 #' @export
-search_fontawesome <- function(str = "", approximate=FALSE) {
+search_fontawesome <- function(str = "", approximate = FALSE) {
   if (approximate) {
     hits <- agrep(str, FontAwesome[["aliases"]])
   } else {
@@ -46,13 +46,13 @@ fontawesome <- function(aliases) {
   if (all(is.na(result))) {
     out <- NA
   } else {
-    out <- FontAwesome[result,1][["fa"]]
+    out <- FontAwesome[result, 1][["fa"]]
   }
 
   result <- is.na(out)
 
   if (any(result)) {
-    message('Invalid: ', paste(aliases[result], collapse=', '))
+    message("Invalid: ", paste(aliases[result], collapse = ", "))
   }
   return(out)
 }
@@ -85,7 +85,7 @@ fontawesome <- function(aliases) {
           features <- c(features, "numbers" = "proportional")
         }
         feature_spec <- do.call(font_feature, features)
-        register_font(name = name, plain = path)
+        register_font(name = name, plain = path, features = feature_spec)
       }
     )
     if (verbose) {
