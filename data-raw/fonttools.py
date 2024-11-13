@@ -6,7 +6,7 @@ import os as os
 
 def create_fontawesome_rda():
     # Path to FontAwesome .TTF file
-    ttf_path = "inst/fontawesome/solid/fa.ttf"
+    ttf_path = "inst/fonts/FontAwesome/fa-solid-900.ttf"
 
     # Load the TTF file
     font = ttLib.TTFont(ttf_path)
@@ -56,8 +56,8 @@ def create_fontawesome_rda():
     df = pd.DataFrame({"fa": fa_chars, "aliases": aliases, "html": html_entities})
 
     # Out path for rda files
-    out_path = "inst/fontawesome/solid/fa.rda"
-    df_name = "fa.solid"
+    out_path = "inst/fonts/FontAwesome/fa-solid-900.rda"
+    df_name = "fa-solid-900"
 
     pyreadr.write_rdata(out_path, df, df_name)
 

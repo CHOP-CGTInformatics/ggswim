@@ -1,3 +1,3 @@
 .onAttach <- function(libname, pkgname) {
-  load.fa()
+  .load_fonts(verbose = FALSE)
 }
