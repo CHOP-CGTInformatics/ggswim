@@ -28,6 +28,30 @@ search_fontawesome <- function(str = "", type = "solid", approximate = FALSE) {
     sort()
 }
 
+#' @title Search for Bootstrap aliases to include in ggswim
+#' @description
+#' Check strings against the available aliases for Bootstrap icons.
+#' @inheritParams search_fontawesome
+#' @returns Matching aliases from the available Bootstrap data
+#' @examples
+#' search_bootstrap("bs-car-front")
+#'
+#' @export
+search_bootstrap <- function(str = "", approximate = FALSE) {
+  df <- "bootstrap-icons"
+
+  if (approximate) {
+    hits <- agrep(str, Bootstrap[[df]][["aliases"]])
+  } else {
+    hits <- grep(str, Bootstrap[[df]][["aliases"]])
+  }
+  out <- unlist(Bootstrap[[df]][["aliases"]][hits])
+
+  # Sort values to better identify instances of multiple hits
+  out |>
+    sort()
+}
+
 #' @title Retrieve FontAwesome unicode
 #' @description
 #' When assigning FontAwesome icons as glyphs, [fontawesome()] should be used to
@@ -41,7 +65,7 @@ search_fontawesome <- function(str = "", type = "solid", approximate = FALSE) {
 #' @returns Unicode text
 #' @export
 #' @examples
-#' fontawesome('fa-car')
+#' fontawesome("fa-car")
 fontawesome <- function(aliases, type = "solid") {
   df <- case_when(type == "regular" ~ "fa-regular-400",
                   type == "brands" ~ "fa-brands-400",
@@ -69,10 +93,48 @@ fontawesome <- function(aliases, type = "solid") {
   return(out)
 }
 
+#' @title Retrieve Bootstrap unicode
+#' @description
+#' When assigning Bootstrap icons as glyphs, [bootstrap()] should be used to
+#' convert the alias string to the appropriate Unicode format.
+#'
+#' All `aliases` should be prepended with "bs".
+#'
+#' @inheritParams fontawesome
+#' @returns Unicode text
+#' @export
+#' @examples
+#' boostrap("bs-car-front")
+bootstrap <- function(aliases) {
+  df <- "bootstrap-icons"
+
+  matched_rows <- which(Bootstrap[[df]]$aliases %in% aliases)
+
+  result <- if (length(matched_rows) > 0) {
+    matched_rows
+  } else {
+    NA
+  }
+
+  if (all(is.na(result))) {
+    out <- NA
+  } else {
+    out <- Bootstrap[[df]][result, 1][["fa"]]
+  }
+
+  result <- is.na(out)
+
+  if (any(result)) {
+    message("Invalid: ", paste(aliases[result], collapse = ", "))
+  }
+  return(out)
+}
+
 #' @noRd
 #' @keywords internal
 .load_fonts <- function(verbose = TRUE) {
   custom_names <- c(
+    "bootstrap-icons" = "Bootstrap",
     "fa-brands-400" = "FontAwesome-Brands",
     "fa-regular-400" = "FontAwesome-Regular",
     "fa-solid-900" = "FontAwesome-Solid"
@@ -91,13 +153,6 @@ fontawesome <- function(aliases, type = "solid") {
       font_names, font_paths,
       function(name, path) {
         features <- list("kern" = 1, "zero" = 0)
-        if (str_detect(name, "^Inter-")) {
-          features <- c(features, "numbers" = "tabular")
-        } else if (str_detect(name, "^Piazzolla-")) {
-          features <- c(features, "numbers" = "proportional")
-        } else if (str_detect(name, "^AtkinsonHyperlegible-")) {
-          features <- c(features, "numbers" = "proportional")
-        }
         feature_spec <- do.call(font_feature, features)
         register_font(name = name, plain = path, features = feature_spec)
       }

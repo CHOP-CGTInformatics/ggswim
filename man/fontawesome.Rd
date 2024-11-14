@@ -22,5 +22,5 @@ convert the alias string to the appropriate Unicode format.
 All \code{aliases} should be prepended with "fa".
 }
 \examples{
-fontawesome('fa-car')
+fontawesome("fa-car")
 }

@@ -1,10 +1,13 @@
+# This file used to unpack TTF files using the Python fontTools library
+# Tailor the end commands to add additional files for conversion
+
 from fontTools import ttLib
 import pandas as pd
 import pyreadr
 import os as os
 
 
-def create_fontawesome_rda(sub_folder, file_name):
+def create_font_rda(sub_folder, file_name):
     # Path to FontAwesome .TTF file
     ttf_path = "inst/fonts/" + sub_folder + "/" + file_name + ".ttf"
 
@@ -62,6 +65,7 @@ def create_fontawesome_rda(sub_folder, file_name):
     pyreadr.write_rdata(out_path, df, df_name)
 
 
-create_fontawesome_rda("FontAwesome", "fa-solid-900")
-create_fontawesome_rda("FontAwesome", "fa-regular-400")
-create_fontawesome_rda("FontAwesome", "fa-brands-400")
+create_font_rda("FontAwesome", "fa-solid-900")
+create_font_rda("FontAwesome", "fa-regular-400")
+create_font_rda("FontAwesome", "fa-brands-400")
+create_font_rda("Bootstrap", "bootstrap-icons")
