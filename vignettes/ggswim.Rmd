@@ -186,3 +186,4 @@ p +
 Some additional considerations to keep in mind when working with ggswim:
 
 - **Rendering Emojis and Custom Shapes:** To ensure emojis and other custom shapes display correctly, users may need to [switch their graphics rendering device](https://support.posit.co/hc/en-us/articles/360017886674-Troubleshooting-RStudio-Rendering-Errors) to AGG.
+- ggswim supports use of FontAwesome and Bootstrap icons for glyph definition in addition to shapes and emojis. Check out the Gallery for examples on how to add them to your plots!
