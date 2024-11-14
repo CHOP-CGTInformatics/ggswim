@@ -54,6 +54,8 @@ reference:
   contents:
   - fontawesome
   - search_fontawesome
+  - bootstrap
+  - search_bootstrap
   - theme_ggswim
   - theme_ggswim_dark
 - title: "Datasets"

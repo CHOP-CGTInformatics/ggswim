@@ -6,7 +6,7 @@
 #'   Geom GeomSegment GeomText discrete_scale draw_key_text
 #' @importFrom dplyr case_when left_join arrange bind_rows select arrange any_of
 #' mutate pull if_else filter distinct
-#' @importFrom cli cli_abort cli_vec cli_warn
+#' @importFrom cli cli_abort cli_vec cli_warn cli_rule cli_h2 cli_alert_info
 #' @importFrom rlang caller_arg caller_env as_label is_atomic get_expr .data
 #'   is_empty := enquo quo_is_symbolic quo list2 try_fetch eval_tidy %||%
 #' @importFrom purrr map_lgl walk discard walk walk2
