@@ -96,7 +96,7 @@ defining dataframes for our lanes and our markers.</p>
 <span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">5</span><span class="op">:</span><span class="fl">20</span>, <span class="fl">30</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>, <span class="st">"E"</span><span class="op">)</span>, <span class="fl">30</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>  glyph <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"😊"</span>, <span class="st">"🎉"</span>, <span class="st">"✅"</span>, <span class="st">"💥"</span>, <span class="st">"✨"</span><span class="op">)</span>, <span class="fl">30</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  glyph <span class="op">=</span> <span class="cn">NA</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    glyph <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
@@ -135,29 +135,132 @@ marker geom functions:</p>
 <p><img src="gallery_files/figure-html/unnamed-chunk-3-1.png" width="100%"></p>
 </div>
 <div class="section level2">
+<h2 id="using-fontawesome-icons">Using FontAwesome Icons<a class="anchor" aria-label="anchor" href="#using-fontawesome-icons"></a>
+</h2>
+<p>Next, we’ll replace the emojis above with calls to
+<code><a href="../reference/fontawesome.html">fontawesome()</a></code> icons:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">marker_data</span> <span class="op">&lt;-</span> <span class="va">marker_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    glyph <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>      <span class="va">label</span> <span class="op">==</span> <span class="st">"A"</span> <span class="op">~</span> <span class="fu"><a href="../reference/fontawesome.html">fontawesome</a></span><span class="op">(</span><span class="st">"fa-car"</span><span class="op">)</span>,</span>
+<span>      <span class="va">label</span> <span class="op">==</span> <span class="st">"B"</span> <span class="op">~</span> <span class="fu"><a href="../reference/fontawesome.html">fontawesome</a></span><span class="op">(</span><span class="st">"fa-check"</span><span class="op">)</span>,</span>
+<span>      <span class="va">label</span> <span class="op">==</span> <span class="st">"C"</span> <span class="op">~</span> <span class="fu"><a href="../reference/fontawesome.html">fontawesome</a></span><span class="op">(</span><span class="st">"fa-user"</span><span class="op">)</span>,</span>
+<span>      <span class="va">label</span> <span class="op">==</span> <span class="st">"D"</span> <span class="op">~</span> <span class="fu"><a href="../reference/fontawesome.html">fontawesome</a></span><span class="op">(</span><span class="st">"fa-cat"</span><span class="op">)</span>,</span>
+<span>      <span class="va">label</span> <span class="op">==</span> <span class="st">"E"</span> <span class="op">~</span> <span class="fu"><a href="../reference/fontawesome.html">fontawesome</a></span><span class="op">(</span><span class="st">"fa-dog"</span><span class="op">)</span>,</span>
+<span>      .default <span class="op">=</span> <span class="cn">NA</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_swim_lane.html">geom_swim_lane</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">lane_data</span>,</span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, xend <span class="op">=</span> <span class="va">xend</span>, y <span class="op">=</span> <span class="va">y</span>, colour <span class="op">=</span> <span class="va">colour</span><span class="op">)</span>,</span>
+<span>    linewidth <span class="op">=</span> <span class="fl">3</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_swim_marker.html">geom_swim_marker</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">marker_data</span>,</span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, marker <span class="op">=</span> <span class="va">label</span><span class="op">)</span>,</span>
+<span>    size <span class="op">=</span> <span class="fl">8</span>, family <span class="op">=</span> <span class="st">"FontAwesome-Solid"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_colour_brewer</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Lanes"</span>, palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span></span>
+<span>    <span class="va">marker_data</span>,</span>
+<span>    <span class="fu"><a href="../reference/scale_marker_discrete.html">scale_marker_discrete</a></span><span class="op">(</span>glyphs <span class="op">=</span> <span class="va">glyph</span>, limits <span class="op">=</span> <span class="va">label</span>, name <span class="op">=</span> <span class="st">"Markers"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Sample Swimmer Plot"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Time"</span>, y <span class="op">=</span> <span class="st">"Record ID"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/theme_ggswim.html">theme_ggswim</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="gallery_files/figure-html/unnamed-chunk-4-1.png" width="100%"></p>
+<p>Be sure to specify the appropriate <code>family</code> argument in
+<code><a href="../reference/geom_swim_marker.html">geom_swim_marker()</a></code>. For FontAwesome the following are
+available:</p>
+<ul>
+<li>“FontAwesome-Solid”</li>
+<li>“FontAwesome-Regular”</li>
+<li>“FontAwesome-Brands”</li>
+</ul>
+<p>You can use <code><a href="../reference/search_fontawesome.html">search_fontawesome()</a></code> to check what icons are
+available to use.</p>
+<blockquote>
+<p>ggswim supports FontAwesome free icons through the open source <a href="https://fontawesome.com/license/free" class="external-link">license</a>.</p>
+</blockquote>
+</div>
+<div class="section level2">
+<h2 id="using-bootstrap-icons">Using Bootstrap Icons<a class="anchor" aria-label="anchor" href="#using-bootstrap-icons"></a>
+</h2>
+<p>We can similarly use Bootstrap icons with
+<code><a href="../reference/bootstrap.html">bootstrap()</a></code>:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">marker_data</span> <span class="op">&lt;-</span> <span class="va">marker_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    glyph <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>      <span class="va">label</span> <span class="op">==</span> <span class="st">"A"</span> <span class="op">~</span> <span class="fu"><a href="../reference/bootstrap.html">bootstrap</a></span><span class="op">(</span><span class="st">"bs-car-front"</span><span class="op">)</span>,</span>
+<span>      <span class="va">label</span> <span class="op">==</span> <span class="st">"B"</span> <span class="op">~</span> <span class="fu"><a href="../reference/bootstrap.html">bootstrap</a></span><span class="op">(</span><span class="st">"bs-folder-fill"</span><span class="op">)</span>,</span>
+<span>      <span class="va">label</span> <span class="op">==</span> <span class="st">"C"</span> <span class="op">~</span> <span class="fu"><a href="../reference/bootstrap.html">bootstrap</a></span><span class="op">(</span><span class="st">"bs-clock-fill"</span><span class="op">)</span>,</span>
+<span>      <span class="va">label</span> <span class="op">==</span> <span class="st">"D"</span> <span class="op">~</span> <span class="fu"><a href="../reference/bootstrap.html">bootstrap</a></span><span class="op">(</span><span class="st">"bs-check-circle-fill"</span><span class="op">)</span>,</span>
+<span>      <span class="va">label</span> <span class="op">==</span> <span class="st">"E"</span> <span class="op">~</span> <span class="fu"><a href="../reference/bootstrap.html">bootstrap</a></span><span class="op">(</span><span class="st">"bs-chat-fill"</span><span class="op">)</span>,</span>
+<span>      .default <span class="op">=</span> <span class="cn">NA</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_swim_lane.html">geom_swim_lane</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">lane_data</span>,</span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, xend <span class="op">=</span> <span class="va">xend</span>, y <span class="op">=</span> <span class="va">y</span>, colour <span class="op">=</span> <span class="va">colour</span><span class="op">)</span>,</span>
+<span>    linewidth <span class="op">=</span> <span class="fl">3</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_swim_marker.html">geom_swim_marker</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">marker_data</span>,</span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, marker <span class="op">=</span> <span class="va">label</span><span class="op">)</span>,</span>
+<span>    size <span class="op">=</span> <span class="fl">8</span>, family <span class="op">=</span> <span class="st">"Bootstrap"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_colour_brewer</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Lanes"</span>, palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span></span>
+<span>    <span class="va">marker_data</span>,</span>
+<span>    <span class="fu"><a href="../reference/scale_marker_discrete.html">scale_marker_discrete</a></span><span class="op">(</span>glyphs <span class="op">=</span> <span class="va">glyph</span>, limits <span class="op">=</span> <span class="va">label</span>, name <span class="op">=</span> <span class="st">"Markers"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Sample Swimmer Plot"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Time"</span>, y <span class="op">=</span> <span class="st">"Record ID"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/theme_ggswim.html">theme_ggswim</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="gallery_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
+<p>Be sure to specify the appropriate <code>family</code> argument in
+<code><a href="../reference/geom_swim_marker.html">geom_swim_marker()</a></code>. For Bootstrap you only need to specify
+“Bootstrap”.</p>
+<p>You can use <code><a href="../reference/search_bootstrap.html">search_bootstrap()</a></code> to check what icons are
+available to use.</p>
+<blockquote>
+<p>ggswim supports Bootstrap free icons through the open source <a href="https://github.com/twbs/bootstrap/blob/main/LICENSE" class="external-link">license</a>.</p>
+</blockquote>
+</div>
+<div class="section level2">
 <h2 id="themeing-with-ggswim">Themeing with ggswim<a class="anchor" aria-label="anchor" href="#themeing-with-ggswim"></a>
 </h2>
 <p>Here we’ll demonstrate some of the theme functions available with
 ggswim. These examples will use the same plot setup from the README,
 starting with the original output:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span></span></code></pre></div>
-<p><img src="gallery_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
+<p><img src="gallery_files/figure-html/unnamed-chunk-7-1.png" width="100%"></p>
 <div class="section level3">
 <h3 id="theme_ggswim">
 <code>theme_ggswim()</code><a class="anchor" aria-label="anchor" href="#theme_ggswim"></a>
 </h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="../reference/theme_ggswim.html">theme_ggswim</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gallery_files/figure-html/unnamed-chunk-6-1.png" width="100%"></p>
+<p><img src="gallery_files/figure-html/unnamed-chunk-8-1.png" width="100%"></p>
 </div>
 <div class="section level3">
 <h3 id="theme_ggswim_dark">
 <code>theme_ggswim_dark()</code><a class="anchor" aria-label="anchor" href="#theme_ggswim_dark"></a>
 </h3>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="../reference/theme_ggswim.html">theme_ggswim_dark</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gallery_files/figure-html/unnamed-chunk-7-1.png" width="100%"></p>
+<p><img src="gallery_files/figure-html/unnamed-chunk-9-1.png" width="100%"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
