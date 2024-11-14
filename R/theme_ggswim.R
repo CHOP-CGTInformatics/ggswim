@@ -46,14 +46,14 @@ theme_ggswim <- function(base_size = 12, base_family = "") {
       plot.caption = element_text(size = 10, hjust = 1),
 
       # Axis text
-      axis.text = element_text(size = 10, face = "bold", colour = "#000000"),
+      axis.text = element_text(size = 10, colour = "#000000"),
       axis.text.x = element_text(margin = margin(t = 10)),
       axis.text.y = element_text(margin = margin(r = 10)),
 
       # Axis titles
       axis.title = element_text(size = 12, face = "bold", colour = "#000000"),
-      axis.title.x = element_text(size = 14, face = "bold", margin = margin(t = 10)),
-      axis.title.y = element_text(size = 14, face = "bold", margin = margin(r = 10)),
+      axis.title.x = element_text(size = 14, margin = margin(t = 10)),
+      axis.title.y = element_text(size = 14, margin = margin(r = 10)),
 
       # Axis tick marks
       axis.ticks = element_line(linewidth = 0.75, colour = "#000000"),
@@ -66,7 +66,7 @@ theme_ggswim <- function(base_size = 12, base_family = "") {
       # Axis line
       axis.line = element_line(
         color = "#000000",
-        linewidth = 1
+        linewidth = .5
       ),
 
       # Remove grid lines
@@ -92,14 +92,14 @@ theme_ggswim_dark <- function(base_size = 12, base_family = "") {
       plot.caption = element_text(size = 10, hjust = 1, colour = "#F0F0F0"),
 
       # Axis text
-      axis.text = element_text(size = 10, face = "bold", colour = "#F0F0F0"),
+      axis.text = element_text(size = 10, colour = "#F0F0F0"),
       axis.text.x = element_text(margin = margin(t = 10), colour = "#F0F0F0"),
       axis.text.y = element_text(margin = margin(r = 10), colour = "#F0F0F0"),
 
       # Axis titles
       axis.title = element_text(size = 12, face = "bold", colour = "#F0F0F0"),
-      axis.title.x = element_text(size = 14, face = "bold", margin = margin(t = 10), colour = "#F0F0F0"),
-      axis.title.y = element_text(size = 14, face = "bold", margin = margin(r = 10), colour = "#F0F0F0"),
+      axis.title.x = element_text(size = 14, margin = margin(t = 10), colour = "#F0F0F0"),
+      axis.title.y = element_text(size = 14, margin = margin(r = 10), colour = "#F0F0F0"),
 
       # Axis tick marks
       axis.ticks = element_line(linewidth = 0.75, colour = "#F0F0F0"),
@@ -112,7 +112,7 @@ theme_ggswim_dark <- function(base_size = 12, base_family = "") {
       # Axis line
       axis.line = element_line(
         color = "#F0F0F0", # Orange axis line
-        linewidth = 1
+        linewidth = .5
       ),
 
       # Remove grid lines

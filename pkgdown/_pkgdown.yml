@@ -48,10 +48,14 @@ reference:
     Functions that assist with cleaning up the legend and assigning aesthetic connections.
   contents:
   - scale_marker_discrete
-- title: "Theme Functions"
+- title: "Aesthetic and Theme Functions"
   descr: >
-    Functions to change the theme and make your swimmer plot pop!
+    Functions to use icons, change the theme, and make your swimmer plot pop!
   contents:
+  - fontawesome
+  - search_fontawesome
+  - bootstrap
+  - search_bootstrap
   - theme_ggswim
   - theme_ggswim_dark
 - title: "Datasets"

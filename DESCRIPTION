@@ -25,6 +25,7 @@ Imports:
     purrr,
     rlang,
     stringr,
+    systemfonts,
     tibble,
     tidyr,
     tidyselect,

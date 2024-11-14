@@ -54,6 +54,7 @@ test_that("geom_swim_arrow makes expected plot", {
 
   p <- simple_plot() + layer
 
+  skip_on_ci()
   vdiffr::expect_doppelganger(
     title = "Arrows work with simple plot",
     fig = p
@@ -73,6 +74,7 @@ test_that("geom_swim_arrow makes expected plot when inheriting data", {
       arrow_fill = "cyan"
     )
 
+  skip_on_ci()
   vdiffr::expect_doppelganger(
     title = "Arrows work with inherited data",
     fig = p

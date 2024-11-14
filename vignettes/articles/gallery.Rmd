@@ -37,7 +37,7 @@ marker_data <- tibble(
   x = sample(5:20, 30, replace = TRUE),
   y = factor(rep(1:15, each = 2)),
   label = sample(c("A", "B", "C", "D", "E"), 30, replace = TRUE),
-  glyph = sample(c("😊", "🎉", "✅", "💥", "✨"), 30, replace = TRUE)
+  glyph = NA
 ) |>
   mutate(
     glyph = dplyr::case_when(
@@ -76,6 +76,102 @@ ggplot() +
   ) +
   theme_ggswim()
 ```
+
+## Using FontAwesome Icons
+
+Next, we'll replace the emojis above with calls to `fontawesome()` icons:
+
+```{r}
+marker_data <- marker_data |> 
+  mutate(
+    glyph = dplyr::case_when(
+      label == "A" ~ fontawesome("fa-car"),
+      label == "B" ~ fontawesome("fa-check"),
+      label == "C" ~ fontawesome("fa-user"),
+      label == "D" ~ fontawesome("fa-cat"),
+      label == "E" ~ fontawesome("fa-dog"),
+      .default = NA
+    )
+  )
+
+ggplot() +
+  geom_swim_lane(
+    data = lane_data,
+    aes(x = x, xend = xend, y = y, colour = colour),
+    linewidth = 3
+  ) +
+  geom_swim_marker(
+    data = marker_data,
+    aes(x = x, y = y, marker = label),
+    size = 8, family = "FontAwesome-Solid"
+  ) +
+  scale_colour_brewer(name = "Lanes", palette = "Set1") +
+  with(
+    marker_data,
+    scale_marker_discrete(glyphs = glyph, limits = label, name = "Markers")
+  ) +
+  labs(
+    title = "Sample Swimmer Plot",
+    x = "Time", y = "Record ID"
+  ) +
+  theme_ggswim()
+```
+
+Be sure to specify the appropriate `family` argument in `geom_swim_marker()`. For FontAwesome the following are available:
+
+- "FontAwesome-Solid"
+- "FontAwesome-Regular"
+- "FontAwesome-Brands"
+
+You can use `search_fontawesome()` to check what icons are available to use.
+
+> ggswim supports FontAwesome free icons through the open source [license](https://fontawesome.com/license/free).
+
+## Using Bootstrap Icons
+
+We can similarly use Bootstrap icons with `bootstrap()`:
+
+```{r}
+marker_data <- marker_data |> 
+  mutate(
+    glyph = dplyr::case_when(
+      label == "A" ~ bootstrap("bs-car-front"),
+      label == "B" ~ bootstrap("bs-folder-fill"),
+      label == "C" ~ bootstrap("bs-clock-fill"),
+      label == "D" ~ bootstrap("bs-check-circle-fill"),
+      label == "E" ~ bootstrap("bs-chat-fill"),
+      .default = NA
+    )
+  )
+
+ggplot() +
+  geom_swim_lane(
+    data = lane_data,
+    aes(x = x, xend = xend, y = y, colour = colour),
+    linewidth = 3
+  ) +
+  geom_swim_marker(
+    data = marker_data,
+    aes(x = x, y = y, marker = label),
+    size = 8, family = "Bootstrap"
+  ) +
+  scale_colour_brewer(name = "Lanes", palette = "Set1") +
+  with(
+    marker_data,
+    scale_marker_discrete(glyphs = glyph, limits = label, name = "Markers")
+  ) +
+  labs(
+    title = "Sample Swimmer Plot",
+    x = "Time", y = "Record ID"
+  ) +
+  theme_ggswim()
+```
+
+Be sure to specify the appropriate `family` argument in `geom_swim_marker()`. For Bootstrap you only need to specify "Bootstrap".
+
+You can use `search_bootstrap()` to check what icons are available to use.
+
+> ggswim supports Bootstrap free icons through the open source [license](https://github.com/twbs/bootstrap/blob/main/LICENSE).
 
 ## Themeing with ggswim
 
