@@ -6,6 +6,16 @@
 #' contextual information about significant occurrences during the timeline, such
 #' as treatment responses or adverse events.
 #'
+#' @details
+#' If using font families via [fontawesome] or [bootstrap], ggswim enables the
+#' following `family` arguments:
+#'
+#' - "Bootstrap"
+#' - "FontAwesome-Brands"
+#' - "FontAwesome-Regular"
+#' - "FontAwesome-Solid"
+#'
+#'
 #' @inheritParams ggplot2::geom_text
 #'
 #' @examples
@@ -24,6 +34,17 @@
 #'     data = all_events,
 #'     aes(x = time_from_initial_infusion, y = pt_id, marker = label),
 #'     size = 10
+#'   )
+#'
+#' ggplot2::ggplot() +
+#'   geom_swim_lane(
+#'     data = patient_data,
+#'     aes(x = start_time, xend = end_time, y = pt_id, colour = disease_assessment)
+#'   ) +
+#'   geom_swim_marker(
+#'     data = all_events,
+#'     aes(x = time_from_initial_infusion, y = pt_id, marker = label),
+#'     size = 10, family = "FontAwesome-Solid"
 #'   )
 #' }
 #'

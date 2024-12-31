@@ -18,6 +18,13 @@ Convert Bootstrap alias strings to their corresponding Unicode format.
 
 All \code{aliases} should be prepended with "bs".
 }
+\details{
+When using \link{bootstrap} outputs with \link{geom_swim_marker}, the following options
+are available for the \code{family} argument:
+\itemize{
+\item "Bootstrap"
+}
+}
 \examples{
 bootstrap(c("bs-car-front", "bs-heart"))
 }

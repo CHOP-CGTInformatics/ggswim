@@ -103,14 +103,14 @@ pal_markers <- function(glyphs = NULL, colours = NULL, n_values = NULL) {
 .default_glyphs <- c(
   "\u25CF", # ● BLACK CIRCLE
   "\u25A0", # ■ BLACK SQUARE
-  "\u25B2", # ▲ BLACK UP-POINTING TRIANGLE
+  "\u25B0", # ▰ BLACK PARALLELOGRAM
   "\u2B25", # ⬥ BLACK DIAMOND
   "\u25BC", # ▼ BLACK DOWN-POINTING TRIANGLE
   "\u25A2", # ▢ WHITE SQUARE WITH ROUNDED CORNERS
   "\u25A1", # □ WHITE SQUARE
-  "\u25B3", # △ WHITE UP-POINTING TRIANGLE
-  "\u25C7"
-) # ◇ WHITE DIAMOND
+  "\u25B1", # ▱ WHITE PARALLELOGRAM
+  "\u25C7" # ◇ WHITE DIAMOND
+)
 
 #' @rdname dot-default_glyphs
 #' @export

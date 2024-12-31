@@ -8,13 +8,15 @@ reticulate::source_python("data-raw/fonttools.py")
 
 paths <- c("inst/fonts/FontAwesome", "inst/fonts/Bootstrap")
 rda_files <- list.files(paths, pattern = "\\.rda$", full.names = TRUE)
-purrr::walk(rda_files, ~load(.x, envir = .GlobalEnv))
-purrr::walk(rda_files, ~file.remove(.x))
+purrr::walk(rda_files, ~ load(.x, envir = .GlobalEnv))
+purrr::walk(rda_files, ~ file.remove(.x))
 
 # Create the FontAwesome rds for sysdata.rda
-FontAwesome <- list("fa-solid-900" = `fa-solid-900`,
-                    "fa-regular-400" = `fa-regular-400`,
-                    "fa-brands-400" = `fa-brands-400`)
+FontAwesome <- list(
+  "fa-solid-900" = `fa-solid-900`,
+  "fa-regular-400" = `fa-regular-400`,
+  "fa-brands-400" = `fa-brands-400`
+)
 
 # Create Bootstrap rds for sysdata.rda
 Bootstrap <- list("bootstrap-icons" = `bootstrap-icons`)

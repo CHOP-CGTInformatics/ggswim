@@ -82,7 +82,7 @@ ggplot() +
 Next, we'll replace the emojis above with calls to `fontawesome()` icons:
 
 ```{r}
-marker_data <- marker_data |> 
+marker_data <- marker_data |>
   mutate(
     glyph = dplyr::case_when(
       label == "A" ~ fontawesome("fa-car"),
@@ -132,7 +132,7 @@ You can use `search_fontawesome()` to check what icons are available to use.
 We can similarly use Bootstrap icons with `bootstrap()`:
 
 ```{r}
-marker_data <- marker_data |> 
+marker_data <- marker_data |>
   mutate(
     glyph = dplyr::case_when(
       label == "A" ~ bootstrap("bs-car-front"),

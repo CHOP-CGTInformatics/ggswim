@@ -21,6 +21,15 @@ Convert FontAwesome alias strings to their corresponding Unicode format.
 
 All \code{aliases} should be prepended with "fa".
 }
+\details{
+When using \link{fontawesome} outputs with \link{geom_swim_marker}, the following options
+are available for the \code{family} argument:
+\itemize{
+\item "FontAwesome-Brands"
+\item "FontAwesome-Regular"
+\item "FontAwesome-Solid"
+}
+}
 \examples{
 fontawesome(c("fa-car", "fa-user"))
 }

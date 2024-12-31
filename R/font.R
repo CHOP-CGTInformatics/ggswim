@@ -13,10 +13,12 @@
 #' @export
 search_fontawesome <- function(str = "", type = "solid", approximate = FALSE) {
   # Delegate the search to the utility function
-  search_aliases(str = str,
-                 dataset = "FontAwesome",
-                 type = type,
-                 approximate = approximate)
+  search_aliases(
+    str = str,
+    dataset = "FontAwesome",
+    type = type,
+    approximate = approximate
+  )
 }
 
 #' @title Search for Bootstrap aliases to include in ggswim
@@ -30,10 +32,12 @@ search_fontawesome <- function(str = "", type = "solid", approximate = FALSE) {
 #' @export
 search_bootstrap <- function(str = "", approximate = FALSE) {
   # Delegate the search to the utility function
-  search_aliases(str = str,
-                 dataset = "Bootstrap",
-                 type = NULL,  # 'type' is irrelevant for Bootstrap
-                 approximate = approximate)
+  search_aliases(
+    str = str,
+    dataset = "Bootstrap",
+    type = NULL, # 'type' is irrelevant for Bootstrap
+    approximate = approximate
+  )
 }
 
 #' @title Utility Function to Search Aliases Across Icon Libraries
@@ -60,22 +64,21 @@ search_aliases <- function(str = "",
   if (dataset == "FontAwesome") {
     # Determine the specific FontAwesome dataframe based on 'type'
     fa_df <- switch(type,
-                    "regular" = "fa-regular-400",
-                    "brands" = "fa-brands-400",
-                    "solid" = "fa-solid-900",
-                    # Fallback to "fa-solid-900" if 'type' is unrecognized
-                    "fa-solid-900")
+      "regular" = "fa-regular-400",
+      "brands" = "fa-brands-400",
+      "solid" = "fa-solid-900",
+      # Fallback to "fa-solid-900" if 'type' is unrecognized
+      "fa-solid-900"
+    )
 
     # Retrieve the aliases vector from the selected FontAwesome dataframe
     aliases <- FontAwesome[[fa_df]][["aliases"]]
-
   } else if (dataset == "Bootstrap") {
     # For Bootstrap, there's no 'type' differentiation
     bs_df <- "bootstrap-icons"
 
     # Retrieve the aliases vector from the Bootstrap dataframe
     aliases <- Bootstrap[[bs_df]][["aliases"]]
-
   } else {
     stop("Unsupported dataset. Choose either 'FontAwesome' or 'Bootstrap'.")
   }
@@ -107,6 +110,14 @@ search_aliases <- function(str = "",
 #'
 #' All `aliases` should be prepended with "fa".
 #'
+#' @details
+#' When using [fontawesome] outputs with [geom_swim_marker], the following options
+#' are available for the `family` argument:
+#'
+#' - "FontAwesome-Brands"
+#' - "FontAwesome-Regular"
+#' - "FontAwesome-Solid"
+#'
 #' @param aliases A string or vector of strings to retrieve Unicode values for.
 #' @param type A character string denoting which FontAwesome library subset to search.
 #' One of "solid", "regular", or "brands". Default is "solid".
@@ -120,9 +131,11 @@ fontawesome <- function(aliases, type = "solid") {
   aliases <- as.character(aliases)
 
   # Retrieve Unicode using the utility function
-  unicode <- retrieve_unicode(aliases = aliases,
-                              dataset = "FontAwesome",
-                              type = type)
+  unicode <- retrieve_unicode(
+    aliases = aliases,
+    dataset = "FontAwesome",
+    type = type
+  )
 
   return(unicode)
 }
@@ -132,6 +145,12 @@ fontawesome <- function(aliases, type = "solid") {
 #' Convert Bootstrap alias strings to their corresponding Unicode format.
 #'
 #' All `aliases` should be prepended with "bs".
+#'
+#' @details
+#' When using [bootstrap] outputs with [geom_swim_marker], the following options
+#' are available for the `family` argument:
+#'
+#' - "Bootstrap"
 #'
 #' @inheritParams fontawesome
 #' @returns A named character vector of Unicode values corresponding to the provided aliases.
@@ -144,8 +163,10 @@ bootstrap <- function(aliases) {
   aliases <- as.character(aliases)
 
   # Retrieve Unicode using the utility function
-  unicode <- retrieve_unicode(aliases = aliases,
-                              dataset = "Bootstrap")
+  unicode <- retrieve_unicode(
+    aliases = aliases,
+    dataset = "Bootstrap"
+  )
 
   return(unicode)
 }
@@ -179,10 +200,11 @@ retrieve_unicode <- function(aliases,
   if (dataset == "FontAwesome") {
     # Map the 'type' to the corresponding FontAwesome dataframe
     fa_df <- switch(type,
-                    "regular" = "fa-regular-400",
-                    "brands"  = "fa-brands-400",
-                    "solid"   = "fa-solid-900",
-                    "fa-solid-900") # Default fallback
+      "regular" = "fa-regular-400",
+      "brands"  = "fa-brands-400",
+      "solid"   = "fa-solid-900",
+      "fa-solid-900"
+    ) # Default fallback
 
     # Check if the dataframe exists within FontAwesome
     if (!fa_df %in% names(FontAwesome)) {
@@ -191,7 +213,6 @@ retrieve_unicode <- function(aliases,
 
     # Access the FontAwesome dataframe
     df_data <- FontAwesome[[fa_df]]
-
   } else if (dataset == "Bootstrap") {
     # Bootstrap does not have different types
     bs_df <- "bootstrap-icons"
@@ -203,15 +224,16 @@ retrieve_unicode <- function(aliases,
 
     # Access the Bootstrap dataframe
     df_data <- Bootstrap[[bs_df]]
-
   } else {
     stop("Unsupported dataset. Choose either 'FontAwesome' or 'Bootstrap'.")
   }
 
   # Ensure the dataframe has the necessary columns
   if (!all(c("aliases", "fa") %in% colnames(df_data))) {
-    stop(sprintf("Dataframe '%s' must contain 'aliases' and 'fa' columns.",
-                 ifelse(dataset == "FontAwesome", fa_df, bs_df)))
+    stop(sprintf(
+      "Dataframe '%s' must contain 'aliases' and 'fa' columns.",
+      ifelse(dataset == "FontAwesome", fa_df, bs_df)
+    ))
   }
 
   # Create a named vector for efficient lookup: names are aliases, values are Unicode

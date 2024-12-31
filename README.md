@@ -107,14 +107,15 @@ p
 
 This looks OK as a default, but it’s not quite as nice as we’d like it
 to be. Let’s specify that we have particular `glyph`s and `colour`s we’d
-like to use for the markers with ggswim’s `scale_marker_discrete()`.
+like to use in a certain order for the markers with ggswim’s
+`scale_marker_discrete()`.
 
 ``` r
 p <- p +
   scale_marker_discrete(
-    glyphs = all_events$glyph,
-    colours = all_events$colour,
-    limits = all_events$label,
+    glyphs = c("⬤", "⬤", "⚠️", "❌", "✅"),
+    colours = c("#ffde00", "#ed207f", NA, NA, NA),
+    limits = c("First Reinfusion", "Second Reinfusion", "Other End Study Reason", "Deceased", "Completed Study Follow-Up"),
     name = "Study Events"
   )
 
