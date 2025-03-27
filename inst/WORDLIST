@@ -2,17 +2,17 @@ AGG
 CMD
 CRi
 Codecov
+FontAwesome
 Lifecycle
 ORCID
 README
-TTF
 Themeing
 behaviour
+bs
 centimetres
 colour
 colours
 de
-fontawesome
 geom's
 geoms
 ggplot
@@ -29,6 +29,5 @@ pre
 reinfusions
 reproducibility
 rlang
-unicode
 unmapped
 xend
