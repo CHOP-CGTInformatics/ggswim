@@ -36,7 +36,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../index.html"><span class="fa fa-home"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="../index.html" aria-label="Home"><span class="fa fa-home"></span></a></li>
 <li class="nav-item"><a class="nav-link" href="../articles/ggswim.html">Get Started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
@@ -102,8 +102,6 @@ structured.</p>
 <code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://chop-cgtinformatics.github.io/ggswim/">ggswim</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
-<span><span class="co">#&gt;   object 'type_sum.accel' not found</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">arrow_data</span> <span class="op">&lt;-</span> <span class="va">patient_data</span> <span class="op">|&gt;</span></span>
@@ -153,7 +151,7 @@ subjects with no end study status. Now let’s use
 <span>    arrow_colour <span class="op">=</span> <span class="st">"firebrick"</span>,</span>
 <span>    arrow_fill <span class="op">=</span> <span class="st">"gold"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="adding_arrows_files/figure-html/unnamed-chunk-3-1.png" width="1152"></p>
+<p><img src="adding_arrows_files/figure-html/unnamed-chunk-3-1.png" alt="Swimmer plot display with arrow specification." width="1152"></p>
 <p>Here we’ve correctly assigned arrows to only the subset of patients
 that have not met an end of study event. Note that
 <code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> gives plenty of control to the arrow head

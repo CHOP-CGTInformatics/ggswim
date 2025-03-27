@@ -41,7 +41,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../index.html"><span class="fa fa-home"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="../index.html" aria-label="Home"><span class="fa fa-home"></span></a></li>
 <li class="active nav-item"><a class="nav-link" href="../articles/ggswim.html">Get Started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
@@ -106,9 +106,7 @@ are still accessible with ggswim such as auto-completing
 will be using ggswim’s internal datasets: <code>patient_data</code>,
 <code>infusion_events</code>, and <code>end_study_events</code>.</p>
 <p>Let’s start with observing <code>patient_data</code>’s structure:</p>
-<pre><code><span><span class="co">#&gt; Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
-<span><span class="co">#&gt;   object 'type_sum.accel' not found</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 75 × 4</span></span></span>
+<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 75 × 4</span></span></span>
 <span><span class="co">#&gt;    pt_id disease_assessment       start_time end_time</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 01    CR/CRi + B Cell Recovery       -<span style="color: #BB0000;">2.8</span>      0  </span></span>
@@ -156,7 +154,7 @@ layer with <code><a href="../reference/geom_swim_lane.html">geom_swim_lane()</a>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
-<p><img src="ggswim_files/figure-html/ggswim%20plot-1.png" width="100%"></p>
+<p><img src="ggswim_files/figure-html/ggswim%20plot-1.png" alt="Initial swimmer plot with lanes." width="100%"></p>
 <p>Here we have a simple bar graph showing infusions grouped by patients
 with a given disease assessment status. <code><a href="../reference/geom_swim_lane.html">geom_swim_lane()</a></code>
 does the work of setting up <code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">geom_segment()</a></code> and readying our
@@ -264,7 +262,7 @@ custom <code>marker</code> <code><a href="https://ggplot2.tidyverse.org/referenc
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
-<p><img src="ggswim_files/figure-html/second%20marker%20plot-1.png" width="100%"></p>
+<p><img src="ggswim_files/figure-html/second%20marker%20plot-1.png" alt="Updated swimmer plot with markers." width="100%"></p>
 <p>We’ve successfully made a swimmer plot with lanes and two different
 kinds of marker layers! Notice how even though both the lanes and
 markers use the color scale, they are separated in the legend output.
@@ -292,7 +290,7 @@ ggplot2 with <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.ht
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time_from_initial_infusion</span>, y <span class="op">=</span> <span class="va">pt_id</span>, label <span class="op">=</span> <span class="va">label</span>, colour <span class="op">=</span> <span class="va">glyph</span><span class="op">)</span>,</span>
 <span>    size <span class="op">=</span> <span class="fl">4</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="ggswim_files/figure-html/unnamed-chunk-2-1.png" width="100%"></p>
+<p><img src="ggswim_files/figure-html/unnamed-chunk-2-1.png" alt="Example display of markers without scale_marker_discrete, leading to incorrect output." width="100%"></p>
 <p><code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text()</a></code> does a decent job, and is actually what
 <code><a href="../reference/geom_swim_marker.html">geom_swim_marker()</a></code> wraps. However, at it’s base level it
 doesn’t quite set up the use of glyphs the way we would like to see them
@@ -316,7 +314,7 @@ same colour scale under the hood, but keep the identity of “markers” and
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
-<p><img src="ggswim_files/figure-html/unnamed-chunk-3-1.png" width="100%"></p>
+<p><img src="ggswim_files/figure-html/unnamed-chunk-3-1.png" alt="Updated swimmer plot with correctly used scale_marker_discrete for marker output." width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="a-full-swimmer-plot">A Full Swimmer Plot<a class="anchor" aria-label="anchor" href="#a-full-swimmer-plot"></a>
@@ -338,13 +336,13 @@ labels:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Time (Months)"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Patient ID"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
-<p><img src="ggswim_files/figure-html/mapping%20finalizing-1.png" width="100%"></p>
+<p><img src="ggswim_files/figure-html/mapping%20finalizing-1.png" alt="Updated swimmer plot with updated color scales." width="100%"></p>
 <p>We can also apply the <code><a href="../reference/theme_ggswim.html">theme_ggswim()</a></code> function to give it
 some additional beautification:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/theme_ggswim.html">theme_ggswim</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggswim_files/figure-html/mapping%20with%20theme_ggswim-1.png" width="100%"></p>
+<p><img src="ggswim_files/figure-html/mapping%20with%20theme_ggswim-1.png" alt="Updated swimmer plot with themeing." width="100%"></p>
 <div class="section level3">
 <h3 id="additional-notes">Additional notes<a class="anchor" aria-label="anchor" href="#additional-notes"></a>
 </h3>
