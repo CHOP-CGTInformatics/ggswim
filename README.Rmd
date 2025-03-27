@@ -42,7 +42,7 @@ To help you get started, ggswim includes three sample datasets: `patient_data`, 
 
 ggswim offers several geom-functions, and by using `geom_swim_lane()` we can set up the horizontal response paths of our swimmer plot, i.e. the "lanes". We'll also set up corresponding arrows to indicate subjects that are still on the trial:
 
-```{r, message=FALSE}
+```{r, message=FALSE, fig.alt="Initial swimmer plot with lanes and arows."}
 library(ggswim)
 library(ggplot2)
 
@@ -80,7 +80,7 @@ p
 
 Next we'll add on events of interest: end of study updates and infusions. We'll refer to these as "markers" and call them with the next main "geom" function: `geom_swim_marker()`. While it is often common to see these datasets as separate components in the wild, we'll make our lives a little easier during plotting by combining them first.
 
-```{r, message=FALSE}
+```{r, message=FALSE, fig.alt="Updated swimmer plot with event markers."}
 all_events <- dplyr::bind_rows(
   infusion_events,
   end_study_events
@@ -98,7 +98,7 @@ p
 
 This looks OK as a default, but it's not quite as nice as we'd like it to be. Let's specify that we have particular `glyph`s and `colour`s we'd like to use in a certain order for the markers with ggswim's `scale_marker_discrete()`.
 
-```{r, message = FALSE}
+```{r, message = FALSE, fig.alt="Updated swimmer plot with event markers applied using scale_marker_discrete."}
 p <- p +
   scale_marker_discrete(
     glyphs = c("⬤", "⬤", "⚠️", "❌", "✅"),
@@ -113,7 +113,7 @@ p
 
 Using the custom `marker` `aes()` in `geom_swim_marker()` in combination with specific scale definitions helps us keep the markers and lanes separate in the legend. Finally, we'll beautify the plot with familiar ggplot2 techniques and a last finishing touch with `theme_ggswim()`:
 
-```{r, message=FALSE}
+```{r, message=FALSE, fig.alt="Final swimmer plot with themeing."}
 p +
   scale_colour_brewer(name = "Lanes", palette = "Set1") +
   labs(title = "My Swimmer Plot") +

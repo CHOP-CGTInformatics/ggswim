@@ -41,7 +41,7 @@ arrow_data
 
 This should look familiar as a pared-down subset of `end_study_events` without an indicated `label`. Since filled out label statuses from `end_study_events` dataset mean a subject went off study, arrows are only applicable for subjects with no end study status. Now let's use `geom_swim_arrow()` in combination with `geom_swim_lane()` to make a swimmer plot:
 
-```{r}
+```{r, fig.alt="Swimmer plot display with arrow specification."}
 patient_data |>
   ggplot() +
   geom_swim_lane(

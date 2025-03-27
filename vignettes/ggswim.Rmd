@@ -54,7 +54,7 @@ patient_data
 
 Now, let's make the plot using `ggplot()` and our first layer with `geom_swim_lane()`:
 
-```{r ggswim plot}
+```{r ggswim plot, fig.alt="Initial swimmer plot with lanes."}
 library(ggplot2)
 
 p <- ggplot() +
@@ -106,7 +106,7 @@ all_events
 
 Let's now call `geom_swim_marker()` and add the events onto our plot. To do this, we will use `geom_swim_marker()`'s custom `marker` `aes()` parameter:
 
-```{r second marker plot, message=FALSE, warning=FALSE}
+```{r second marker plot, message=FALSE, warning=FALSE, fig.alt="Updated swimmer plot with markers."}
 p <- p +
   geom_swim_marker(
     data = all_events,
@@ -129,7 +129,7 @@ Scales are a unique component of the ggplot2 framework. For more information on 
 
 `scale_marker_discrete()` makes it easy to specify and take finer control over your markers and their appearance in the legend. Typically, it can be difficult to have emojis and labels appear in the place of legend glyphs. Let's take a look at a typical output using base ggplot2 with `geom_text()`:
 
-```{r}
+```{r, fig.alt="Example display of markers without scale_marker_discrete, leading to incorrect output."}
 ggplot() +
   geom_text(
     data = all_events,
@@ -142,7 +142,7 @@ ggplot() +
 
 Thanks to ggswim we can specify what belongs in the glyph versus text elements of our legend. Additionally, we are able to use the "colour" scales under the `marker` definition so ggswim can use the same colour scale under the hood, but keep the identity of "markers" and "lanes" separate in the output:
 
-```{r}
+```{r, fig.alt="Updated swimmer plot with correctly used scale_marker_discrete for marker output."}
 p <- p +
   scale_marker_discrete(
     name = "Study Events",
@@ -159,7 +159,7 @@ p
 
 As mentioned in the README, all of the same ggplot2 techniques you would apply to your usual plots apply here. Below, we update the lanes to match a nicer palette with a new name and add on some plot labels:
 
-```{r mapping finalizing, message=FALSE, warning=FALSE}
+```{r mapping finalizing, message=FALSE, warning=FALSE, fig.alt="Updated swimmer plot with updated color scales."}
 library(ggplot2)
 
 p <- p +
@@ -176,7 +176,7 @@ p
 
 We can also apply the `theme_ggswim()` function to give it some additional beautification:
 
-```{r mapping with theme_ggswim, message=FALSE, warning=FALSE}
+```{r mapping with theme_ggswim, message=FALSE, warning=FALSE, fig.alt="Updated swimmer plot with themeing."}
 p +
   theme_ggswim()
 ```

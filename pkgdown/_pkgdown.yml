@@ -17,6 +17,7 @@ navbar:
     right: [search, github]
   left:
     - icon: fa-home
+      aria-label: "Home"
       href: index.html
     - text: Get Started
       href: articles/ggswim.html

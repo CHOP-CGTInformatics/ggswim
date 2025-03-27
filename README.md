@@ -79,7 +79,7 @@ p <- patient_data |>
 p
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-2-1.png" alt="Initial swimmer plot with lanes and arows." width="100%" />
 
 Next we’ll add on events of interest: end of study updates and
 infusions. We’ll refer to these as “markers” and call them with the next
@@ -103,7 +103,7 @@ p <- p +
 p
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-3-1.png" alt="Updated swimmer plot with event markers." width="100%" />
 
 This looks OK as a default, but it’s not quite as nice as we’d like it
 to be. Let’s specify that we have particular `glyph`s and `colour`s we’d
@@ -122,7 +122,7 @@ p <- p +
 p
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" alt="Updated swimmer plot with event markers applied using scale_marker_discrete." width="100%" />
 
 Using the custom `marker` `aes()` in `geom_swim_marker()` in combination
 with specific scale definitions helps us keep the markers and lanes
@@ -137,7 +137,7 @@ p +
   theme_ggswim()
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" alt="Final swimmer plot with themeing." width="100%" />
 
 ## Collaboration
 

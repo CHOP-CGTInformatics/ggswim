@@ -53,7 +53,7 @@ marker_data <- tibble(
 
 And then we'll call those dataframes into their appropriate swim and marker geom functions:
 
-```{r}
+```{r, fig.alt="A swimmer plot displaying use of emojis for event markers."}
 ggplot() +
   geom_swim_lane(
     data = lane_data,
@@ -81,7 +81,7 @@ ggplot() +
 
 Next, we'll replace the emojis above with calls to `fontawesome()` icons:
 
-```{r}
+```{r, fig.alt="A swimmer plot displaying use of FontAwesome icons for event markers."}
 marker_data <- marker_data |>
   mutate(
     glyph = dplyr::case_when(
@@ -131,7 +131,7 @@ You can use `search_fontawesome()` to check what icons are available to use.
 
 We can similarly use Bootstrap icons with `bootstrap()`:
 
-```{r}
+```{r fig.alt="A swimmer plot displaying use of Bootstrap icons for event markers."}
 marker_data <- marker_data |>
   mutate(
     glyph = dplyr::case_when(
@@ -228,18 +228,18 @@ p <- patient_data |>
   ylab("Patient ID")
 ```
 
-```{r}
+```{r, fig.alt="A swimmer plot displaying use of the default datasets in ggswim."}
 p
 ```
 
 ### `theme_ggswim()`
 
-```{r}
+```{r, fig.alt="A swimmer plot displaying use of the default datasets in ggswim and updated with theme_ggswim()."}
 p + theme_ggswim()
 ```
 
 ### `theme_ggswim_dark()`
 
-```{r}
+```{r, fig.alt="A swimmer plot displaying use of the default datasets in ggswim and updated with theme_ggswim_dark()."}
 p + theme_ggswim_dark()
 ```
