@@ -7,10 +7,9 @@
 #' as treatment responses or adverse events.
 #'
 #' @details
-#' If using font families via [fontawesome] or [bootstrap], ggswim enables the
+#' If using font families via [fontawesome], ggswim enables the
 #' following `family` arguments:
 #'
-#' - "Bootstrap"
 #' - "FontAwesome-Brands"
 #' - "FontAwesome-Regular"
 #' - "FontAwesome-Solid"

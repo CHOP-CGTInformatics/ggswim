@@ -15,27 +15,7 @@ search_fontawesome <- function(str = "", type = "solid", approximate = FALSE) {
   # Delegate the search to the utility function
   search_aliases(
     str = str,
-    dataset = "FontAwesome",
     type = type,
-    approximate = approximate
-  )
-}
-
-#' @title Search for Bootstrap aliases to include in ggswim
-#' @description
-#' Check strings against the available aliases for Bootstrap icons.
-#' @inheritParams search_fontawesome
-#' @returns Matching aliases from the available Bootstrap data
-#' @examples
-#' search_bootstrap("bs-car-front")
-#'
-#' @export
-search_bootstrap <- function(str = "", approximate = FALSE) {
-  # Delegate the search to the utility function
-  search_aliases(
-    str = str,
-    dataset = "Bootstrap",
-    type = NULL, # 'type' is irrelevant for Bootstrap
     approximate = approximate
   )
 }
@@ -45,8 +25,6 @@ search_bootstrap <- function(str = "", approximate = FALSE) {
 #' A generic function to search for aliases within specified icon libraries.
 #' @param str A character string alias to search the specified icon library.
 #' If left empty (default ""), it returns all available aliases.
-#' @param dataset A character string specifying the icon library to search.
-#' Supported values are "FontAwesome" and "Bootstrap". Default is "FontAwesome".
 #' @param type For FontAwesome dataset only. Specifies the subset to search within.
 #' One of "solid", "regular", or "brands". Ignored for other datasets. Default is "solid".
 #' @param approximate Logical. If `TRUE`, performs approximate matching using `agrep`.
@@ -54,34 +32,19 @@ search_bootstrap <- function(str = "", approximate = FALSE) {
 #' @returns A sorted character vector of matching aliases.
 #' @keywords internal
 search_aliases <- function(str = "",
-                           dataset = c("FontAwesome", "Bootstrap"),
                            type = "solid",
                            approximate = FALSE) {
-  # Ensure the dataset argument is matched correctly
-  dataset <- match.arg(dataset)
+  # Determine the specific FontAwesome dataframe based on 'type'
+  fa_df <- switch(type,
+    "regular" = "fa-regular-400",
+    "brands" = "fa-brands-400",
+    "solid" = "fa-solid-900",
+    # Fallback to "fa-solid-900" if 'type' is unrecognized
+    "fa-solid-900"
+  )
 
-  # Select the appropriate aliases vector based on dataset and type
-  if (dataset == "FontAwesome") {
-    # Determine the specific FontAwesome dataframe based on 'type'
-    fa_df <- switch(type,
-      "regular" = "fa-regular-400",
-      "brands" = "fa-brands-400",
-      "solid" = "fa-solid-900",
-      # Fallback to "fa-solid-900" if 'type' is unrecognized
-      "fa-solid-900"
-    )
-
-    # Retrieve the aliases vector from the selected FontAwesome dataframe
-    aliases <- FontAwesome[[fa_df]][["aliases"]]
-  } else if (dataset == "Bootstrap") {
-    # For Bootstrap, there's no 'type' differentiation
-    bs_df <- "bootstrap-icons"
-
-    # Retrieve the aliases vector from the Bootstrap dataframe
-    aliases <- Bootstrap[[bs_df]][["aliases"]]
-  } else {
-    stop("Unsupported dataset. Choose either 'FontAwesome' or 'Bootstrap'.")
-  }
+  # Retrieve the aliases vector from the selected FontAwesome dataframe
+  aliases <- FontAwesome[[fa_df]][["aliases"]]
 
   # Perform the search based on the 'approximate' flag
   if (approximate) {
@@ -133,39 +96,7 @@ fontawesome <- function(aliases, type = "solid") {
   # Retrieve Unicode using the utility function
   unicode <- retrieve_unicode(
     aliases = aliases,
-    dataset = "FontAwesome",
     type = type
-  )
-
-  return(unicode)
-}
-
-#' @title Retrieve Bootstrap Unicode
-#' @description
-#' Convert Bootstrap alias strings to their corresponding Unicode format.
-#'
-#' All `aliases` should be prepended with "bs".
-#'
-#' @details
-#' When using [bootstrap] outputs with [geom_swim_marker], the following options
-#' are available for the `family` argument:
-#'
-#' - "Bootstrap"
-#'
-#' @inheritParams fontawesome
-#' @returns A named character vector of Unicode values corresponding to the provided aliases.
-#' If an alias is not found, its value will be `NA`.
-#' @examples
-#' bootstrap(c("bs-car-front", "bs-heart"))
-#' @export
-bootstrap <- function(aliases) {
-  # Ensure aliases is a character vector
-  aliases <- as.character(aliases)
-
-  # Retrieve Unicode using the utility function
-  unicode <- retrieve_unicode(
-    aliases = aliases,
-    dataset = "Bootstrap"
   )
 
   return(unicode)
@@ -176,63 +107,38 @@ bootstrap <- function(aliases) {
 #' A generic function to retrieve Unicode values for given icon aliases from specified icon libraries.
 #' This function reduces code duplication by handling the core retrieval logic.
 #' @param aliases A character vector of aliases to retrieve Unicode values for.
-#' @param dataset A character string specifying the icon library to search.
-#' Supported values are "FontAwesome" and "Bootstrap". Default is "FontAwesome".
 #' @param type For FontAwesome dataset only. Specifies the subset to search within.
 #' One of "solid", "regular", or "brands". Ignored for other datasets. Default is "solid".
 #' @returns A named character vector of Unicode values corresponding to the provided aliases.
 #' If an alias is not found, its value will be `NA`.
 #' @examples
 #' # Retrieve Unicode for FontAwesome solid icons
-#' retrieve_unicode(c("fa-car", "fa-user"), dataset = "FontAwesome", type = "solid")
-#'
-#' # Retrieve Unicode for Bootstrap icons
-#' retrieve_unicode(c("bs-car-front", "bs-heart"), dataset = "Bootstrap")
+#' retrieve_unicode(c("fa-car", "fa-user"), type = "solid")
 #'
 #' @noRd
 retrieve_unicode <- function(aliases,
-                             dataset = c("FontAwesome", "Bootstrap"),
                              type = "solid") {
-  # Ensure the dataset argument is matched correctly
-  dataset <- match.arg(dataset)
+  # Map the 'type' to the corresponding FontAwesome dataframe
+  fa_df <- switch(type,
+    "regular" = "fa-regular-400",
+    "brands"  = "fa-brands-400",
+    "solid"   = "fa-solid-900",
+    "fa-solid-900"
+  ) # Default fallback
 
-  # Determine the dataframe based on dataset and type
-  if (dataset == "FontAwesome") {
-    # Map the 'type' to the corresponding FontAwesome dataframe
-    fa_df <- switch(type,
-      "regular" = "fa-regular-400",
-      "brands"  = "fa-brands-400",
-      "solid"   = "fa-solid-900",
-      "fa-solid-900"
-    ) # Default fallback
-
-    # Check if the dataframe exists within FontAwesome
-    if (!fa_df %in% names(FontAwesome)) {
-      stop(sprintf("FontAwesome dataframe '%s' does not exist.", fa_df))
-    }
-
-    # Access the FontAwesome dataframe
-    df_data <- FontAwesome[[fa_df]]
-  } else if (dataset == "Bootstrap") {
-    # Bootstrap does not have different types
-    bs_df <- "bootstrap-icons"
-
-    # Check if the dataframe exists within Bootstrap
-    if (!bs_df %in% names(Bootstrap)) {
-      stop(sprintf("Bootstrap dataframe '%s' does not exist.", bs_df))
-    }
-
-    # Access the Bootstrap dataframe
-    df_data <- Bootstrap[[bs_df]]
-  } else {
-    stop("Unsupported dataset. Choose either 'FontAwesome' or 'Bootstrap'.")
+  # Check if the dataframe exists within FontAwesome
+  if (!fa_df %in% names(FontAwesome)) {
+    stop(sprintf("FontAwesome dataframe '%s' does not exist.", fa_df))
   }
+
+  # Access the FontAwesome dataframe
+  df_data <- FontAwesome[[fa_df]]
 
   # Ensure the dataframe has the necessary columns
   if (!all(c("aliases", "fa") %in% colnames(df_data))) {
     stop(sprintf(
       "Dataframe '%s' must contain 'aliases' and 'fa' columns.",
-      ifelse(dataset == "FontAwesome", fa_df, bs_df)
+      fa_df
     ))
   }
 
@@ -259,47 +165,95 @@ retrieve_unicode <- function(aliases,
   return(unicode)
 }
 
-#' @noRd
-#' @keywords internal
-.load_fonts <- function(verbose = TRUE) {
+#' @title Load Select Fonts
+#'
+#' @description
+#' Load open source fonts from the web into the environment for use with ggswim
+#' functions.
+#'
+#' @details
+#' Currently the following fonts are supported:
+#'
+#' - FontAwesome
+#'    - Brands
+#'    - Regular
+#'    -Solid
+#'
+#' @param verbose Whether or not to display load output messages. Default `TRUE`.
+#' @export
+
+load_fonts <- function(verbose = TRUE) {
+  # mapping for naming consistency
   custom_names <- c(
-    "bootstrap-icons" = "Bootstrap",
-    "fa-brands-400" = "FontAwesome-Brands",
-    "fa-regular-400" = "FontAwesome-Regular",
-    "fa-solid-900" = "FontAwesome-Solid"
+    "fa-brands-400"   = "FontAwesome-Brands",
+    "fa-regular-400"  = "FontAwesome-Regular",
+    "fa-solid-900"    = "FontAwesome-Solid"
+  )
+
+  # List the font families to load.
+  # For FontAwesome fonts, these will be fetched remotely.
+  pkg_fonts <- c(
+    "fa-brands-400",
+    "fa-regular-400",
+    "fa-solid-900"
   )
 
   .load_pkg_font <- function(family) {
-    font_dir <- system.file("fonts", family, package = "ggswim")
-    font_paths <- dir(font_dir, full.names = TRUE)
-    font_names <- str_remove(dir(font_dir), "\\..*$")
+    # Prepare the font features as before
+    features <- list("kern" = 1, "zero" = 0)
+    feature_spec <- do.call(font_feature, features)
 
-    if (all(font_names %in% names(custom_names))) {
-      font_names <- unname(custom_names[font_names])
-    }
-
-    walk2(
-      font_names, font_paths,
-      function(name, path) {
-        features <- list("kern" = 1, "zero" = 0)
-        feature_spec <- do.call(font_feature, features)
-        register_font(name = name, plain = path, features = feature_spec)
+    if (family %in% c("fa-brands-400", "fa-regular-400", "fa-solid-900")) {
+      # Construct the remote URL using the "raw" GitHub URL
+      font_url <- sprintf("https://github.com/FortAwesome/Font-Awesome/raw/6.x/webfonts/%s.ttf", family)
+      # Download the font to a temporary file
+      temp_file <- tempfile(fileext = ".ttf")
+      tryCatch(
+        {
+          download.file(font_url, destfile = temp_file, mode = "wb", quiet = TRUE)
+        },
+        error = function(e) {
+          warning(sprintf("Failed to download font '%s' from %s", family, font_url))
+          return(invisible(NULL))
+        }
+      )
+      # Use the custom name if provided
+      font_name <- if (family %in% names(custom_names)) custom_names[family] else family
+      register_font(name = font_name, plain = temp_file, features = feature_spec)
+      if (verbose) {
+        cli({
+          cli_h2("{.strong {family}}")
+          cli_alert_success("1 style registered: {.val {font_name}}")
+        })
       }
-    )
-    if (verbose) {
-      cli({
-        cli_h2("{.strong {family}}")
-        cli_alert_success("{.val {length(font_names)}} style{?s} registered:")
-        cli_ul(font_names)
+    } else {
+      # Load from local package directory for non-remote fonts
+      font_dir <- system.file("fonts", family, package = "ggswim")
+      font_paths <- dir(font_dir, full.names = TRUE)
+      font_names <- sub("\\..*$", "", dir(font_dir))
+      if (all(font_names %in% names(custom_names))) {
+        font_names <- unname(custom_names[font_names])
+      }
+      walk2(font_names, font_paths, function(name, path) {
+        register_font(name = name, plain = path, features = feature_spec)
       })
+      if (verbose) {
+        cli({
+          cli_h2("{.strong {family}}")
+          cli_alert_success("{.val {length(font_names)}} style{?s} registered:")
+          cli_ul(font_names)
+        })
+      }
     }
   }
 
-  pkg_fonts <- dir(system.file("fonts", package = "ggswim"))
+  # Iterate over the specified font families
   walk(pkg_fonts, .load_pkg_font)
+
   if (verbose) {
     cli_rule()
     cli_alert_info("Done! Check {.code registry_fonts()} for more details.")
   }
+
   invisible(registry_fonts())
 }

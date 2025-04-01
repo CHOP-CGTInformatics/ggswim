@@ -68,4 +68,3 @@ def create_font_rda(sub_folder, file_name):
 create_font_rda("FontAwesome", "fa-solid-900")
 create_font_rda("FontAwesome", "fa-regular-400")
 create_font_rda("FontAwesome", "fa-brands-400")
-create_font_rda("Bootstrap", "bootstrap-icons")

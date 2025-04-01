@@ -4,19 +4,11 @@
 \alias{search_aliases}
 \title{Utility Function to Search Aliases Across Icon Libraries}
 \usage{
-search_aliases(
-  str = "",
-  dataset = c("FontAwesome", "Bootstrap"),
-  type = "solid",
-  approximate = FALSE
-)
+search_aliases(str = "", type = "solid", approximate = FALSE)
 }
 \arguments{
 \item{str}{A character string alias to search the specified icon library.
 If left empty (default ""), it returns all available aliases.}
-
-\item{dataset}{A character string specifying the icon library to search.
-Supported values are "FontAwesome" and "Bootstrap". Default is "FontAwesome".}
 
 \item{type}{For FontAwesome dataset only. Specifies the subset to search within.
 One of "solid", "regular", or "brands". Ignored for other datasets. Default is "solid".}

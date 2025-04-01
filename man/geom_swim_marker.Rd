@@ -125,10 +125,9 @@ contextual information about significant occurrences during the timeline, such
 as treatment responses or adverse events.
 }
 \details{
-If using font families via \link{fontawesome} or \link{bootstrap}, ggswim enables the
+If using font families via \link{fontawesome}, ggswim enables the
 following \code{family} arguments:
 \itemize{
-\item "Bootstrap"
 \item "FontAwesome-Brands"
 \item "FontAwesome-Regular"
 \item "FontAwesome-Solid"
