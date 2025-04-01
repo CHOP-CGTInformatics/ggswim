@@ -129,7 +129,7 @@ inherit data like other functions.
 \item \code{linewidth}
 }
 
-\code{\link[=geom_swim_arrow]{geom_swim_arrow()}} is a wrapper for \code{\link[=geom_segment]{geom_segment()}} and can support much of the same
+\code{\link[=geom_swim_arrow]{geom_swim_arrow()}} is a wrapper for \code{\link[ggplot2:geom_segment]{ggplot2::geom_segment()}} and can support much of the same
 functionality.
 }
 

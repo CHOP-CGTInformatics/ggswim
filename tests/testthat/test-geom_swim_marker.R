@@ -44,7 +44,7 @@ test_that("geom_swim_marker works when inheriting data and associated params", {
 
   skip_on_ci()
   vdiffr::expect_doppelganger(
-    title = "geom_swim_marker works with inherited data and params",
+    title = "geom_swim_marker inherited data and params",
     fig = p
   )
 })
@@ -60,7 +60,7 @@ test_that("geom_swim_lane works when inheriting data and associated params", {
 
   skip_on_ci()
   vdiffr::expect_doppelganger(
-    title = "geom_swim_lane works with inherited data and params",
+    title = "geom_swim_lane inherited data and params",
     fig = p
   )
 })

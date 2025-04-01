@@ -164,6 +164,6 @@
 <text x='611.56' y='294.64' style='font-size: 8.80px; font-family: sans;' textLength='102.96px' lengthAdjust='spacingAndGlyphs'>CR/CRi + B Cell Recovery</text>
 <text x='611.56' y='311.92' style='font-size: 8.80px; font-family: sans;' textLength='14.67px' lengthAdjust='spacingAndGlyphs'>CRi</text>
 <text x='611.56' y='329.20' style='font-size: 8.80px; font-family: sans;' textLength='12.71px' lengthAdjust='spacingAndGlyphs'>RD</text>
-<text x='32.79' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='325.08px' lengthAdjust='spacingAndGlyphs'>geom_swim_lane works with inherited data and params</text>
+<text x='32.79' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='259.78px' lengthAdjust='spacingAndGlyphs'>geom_swim_lane inherited data and params</text>
 </g>
 </svg>

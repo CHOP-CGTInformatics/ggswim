@@ -20,7 +20,7 @@
 #' - `linetype`
 #' - `linewidth`
 #'
-#' [geom_swim_lane()] is a wrapper for [geom_segment()] and supports much of the same
+#' [geom_swim_lane()] is a wrapper for [ggplot2::geom_segment()] and supports much of the same
 #' functionality.
 #'
 #' @section Arrows:

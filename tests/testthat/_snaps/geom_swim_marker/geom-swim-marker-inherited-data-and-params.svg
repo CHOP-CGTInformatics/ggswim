@@ -96,6 +96,6 @@
 <text x='626.52' y='304.05' text-anchor='middle' style='font-size: 11.04px; fill: #377EB8; font-family: sans;' textLength='6.67px' lengthAdjust='spacingAndGlyphs'>■</text>
 <text x='640.64' y='286.00' style='font-size: 8.80px; font-family: sans;' textLength='61.14px' lengthAdjust='spacingAndGlyphs'>First Reinfusion</text>
 <text x='640.64' y='303.28' style='font-size: 8.80px; font-family: sans;' textLength='73.88px' lengthAdjust='spacingAndGlyphs'>Second Reinfusion</text>
-<text x='32.79' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='341.20px' lengthAdjust='spacingAndGlyphs'>geom_swim_marker works with inherited data and params</text>
+<text x='32.79' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='275.91px' lengthAdjust='spacingAndGlyphs'>geom_swim_marker inherited data and params</text>
 </g>
 </svg>

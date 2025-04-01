@@ -14,7 +14,7 @@
 ^Meta$
 ^cran-comments\.md$
 README.html$
-^svg
+^.svg
 ^\.DS_Store$
 .DS_Store
 

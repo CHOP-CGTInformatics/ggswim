@@ -33,7 +33,7 @@
 #' - `linetype`
 #' - `linewidth`
 #'
-#' [geom_swim_arrow()] is a wrapper for [geom_segment()] and can support much of the same
+#' [geom_swim_arrow()] is a wrapper for [ggplot2::geom_segment()] and can support much of the same
 #' functionality.
 #'
 #' @examples
