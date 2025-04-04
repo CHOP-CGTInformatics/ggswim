@@ -1,5 +1,5 @@
-test_that(".load_fonts works", {
-  expect_no_condition(.load_fonts(verbose = FALSE))
+test_that("load_fonts works", {
+  expect_no_condition(load_fonts(verbose = FALSE))
 })
 
 test_that("search_fontawesome works", {
