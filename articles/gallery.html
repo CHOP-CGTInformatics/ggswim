@@ -138,9 +138,13 @@ marker geom functions:</p>
 <h2 id="using-fontawesome-icons">Using FontAwesome Icons<a class="anchor" aria-label="anchor" href="#using-fontawesome-icons"></a>
 </h2>
 <p>Next, we’ll replace the emojis above with calls to
-<code><a href="../reference/fontawesome.html">fontawesome()</a></code> icons:</p>
+<code><a href="../reference/fontawesome.html">fontawesome()</a></code> icons after first loading fonts with
+<code><a href="../reference/load_fonts.html">load_fonts()</a></code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">marker_data</span> <span class="op">&lt;-</span> <span class="va">marker_data</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="co"># Load fonts from the ggswim GitHub repository</span></span>
+<span><span class="fu"><a href="../reference/load_fonts.html">load_fonts</a></span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">marker_data</span> <span class="op">&lt;-</span> <span class="va">marker_data</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    glyph <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">label</span> <span class="op">==</span> <span class="st">"A"</span> <span class="op">~</span> <span class="fu"><a href="../reference/fontawesome.html">fontawesome</a></span><span class="op">(</span><span class="st">"fa-car"</span><span class="op">)</span>,</span>
