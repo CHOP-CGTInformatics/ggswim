@@ -259,47 +259,87 @@ retrieve_unicode <- function(aliases,
   return(unicode)
 }
 
-#' @noRd
-#' @keywords internal
-.load_fonts <- function(verbose = TRUE) {
+#' @title Load Select Fonts
+#'
+#' @description
+#' Load open source fonts from the web into the environment for use with ggswim
+#' functions.
+#'
+#' @details
+#' Currently the following fonts are supported:
+#'
+#' - FontAwesome
+#'    - Brands
+#'    - Regular
+#'    -Solid
+#'  - Bootstrap
+#'
+#' @param verbose Whether or not to display load output messages. Default `TRUE`.
+#' @export
+load_fonts <- function(verbose = TRUE) {
+  # Mapping for naming consistency
   custom_names <- c(
     "bootstrap-icons" = "Bootstrap",
-    "fa-brands-400" = "FontAwesome-Brands",
-    "fa-regular-400" = "FontAwesome-Regular",
-    "fa-solid-900" = "FontAwesome-Solid"
+    "fa-brands-400"   = "FontAwesome-Brands",
+    "fa-regular-400"  = "FontAwesome-Regular",
+    "fa-solid-900"    = "FontAwesome-Solid"
+  )
+
+  # List the font families to load
+  pkg_fonts <- c(
+    "bootstrap-icons",
+    "fa-brands-400",
+    "fa-regular-400",
+    "fa-solid-900"
   )
 
   .load_pkg_font <- function(family) {
-    font_dir <- system.file("fonts", family, package = "ggswim")
-    font_paths <- dir(font_dir, full.names = TRUE)
-    font_names <- str_remove(dir(font_dir), "\\..*$")
+    features <- list("kern" = 1, "zero" = 0)
+    feature_spec <- do.call(font_feature, features)
 
-    if (all(font_names %in% names(custom_names))) {
-      font_names <- unname(custom_names[font_names])
+    # Build URL based on the font family.
+    font_url <- if (family %in% c("fa-brands-400", "fa-regular-400", "fa-solid-900", "bootstrap-icons")) {
+      sprintf("https://github.com/CHOP-CGTInformatics/ggswim/font/fonts/%s.ttf", family)
+    } else {
+      NA_character_
     }
 
-    walk2(
-      font_names, font_paths,
-      function(name, path) {
-        features <- list("kern" = 1, "zero" = 0)
-        feature_spec <- do.call(font_feature, features)
-        register_font(name = name, plain = path, features = feature_spec)
+    if (is.na(font_url)) {
+      warning(sprintf("No remote URL defined for font family '%s'", family))
+      return(invisible(NULL))
+    }
+
+    # Download the font to a temporary file.
+    temp_file <- tempfile(fileext = ".ttf")
+    tryCatch(
+      {
+        download.file(font_url, destfile = temp_file, mode = "wb", quiet = TRUE)
+      },
+      error = function(e) {
+        warning(sprintf("Failed to download font '%s' from %s", family, font_url))
+        return(invisible(NULL))
       }
     )
+
+    # Use custom naming if available.
+    font_name <- if (family %in% names(custom_names)) custom_names[family] else family
+    register_font(name = font_name, plain = temp_file, features = feature_spec)
+
     if (verbose) {
       cli({
         cli_h2("{.strong {family}}")
-        cli_alert_success("{.val {length(font_names)}} style{?s} registered:")
-        cli_ul(font_names)
+        cli_alert_success("1 style registered: {.val {font_name}}")
       })
     }
   }
 
-  pkg_fonts <- dir(system.file("fonts", package = "ggswim"))
+  # Iterate over the specified font families.
   walk(pkg_fonts, .load_pkg_font)
+
   if (verbose) {
     cli_rule()
     cli_alert_info("Done! Check {.code registry_fonts()} for more details.")
   }
+
   invisible(registry_fonts())
 }

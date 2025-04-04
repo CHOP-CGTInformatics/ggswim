@@ -41,3 +41,5 @@ inst/testdata/create_test_data.R
 ^CONDUCT\.md$
 
 .venv/
+
+^font$
