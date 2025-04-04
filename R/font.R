@@ -273,12 +273,21 @@ retrieve_unicode <- function(aliases,
 #' - FontAwesome
 #'    - Brands
 #'    - Regular
-#'    -Solid
-#'  - Bootstrap
+#'    - Solid
+#' - Bootstrap
 #'
-#' @param verbose Whether or not to display load output messages. Default `TRUE`.
+#' Users can choose which fonts to load by providing a vector of font family names.
+#' The default is to load all supported fonts.
+#'
+#' @param fonts A character vector of font families to load. Valid options are
+#'   `"bootstrap-icons"`, `"fa-brands-400"`, `"fa-regular-400"`, and `"fa-solid-900"`.
+#'   The default is to load all supported fonts.
+#' @param verbose Whether or not to display load output messages. Default is `TRUE`.
+#'
+#' @return Invisibly returns the font registry as a tibble.
+#'
 #' @export
-load_fonts <- function(verbose = TRUE) {
+load_fonts <- function(fonts = c("bootstrap-icons", "fa-brands-400", "fa-regular-400", "fa-solid-900"), verbose = TRUE) {
   # Mapping for naming consistency
   custom_names <- c(
     "bootstrap-icons" = "Bootstrap",
@@ -287,13 +296,12 @@ load_fonts <- function(verbose = TRUE) {
     "fa-solid-900"    = "FontAwesome-Solid"
   )
 
-  # List the font families to load
-  pkg_fonts <- c(
-    "bootstrap-icons",
-    "fa-brands-400",
-    "fa-regular-400",
-    "fa-solid-900"
-  )
+  # Use the provided fonts argument; ensure it's a subset of available options.
+  pkg_fonts <- intersect(fonts, names(custom_names))
+  if (length(pkg_fonts) == 0) {
+    warning("No valid font families specified. Nothing to load.")
+    return(invisible(NULL))
+  }
 
   # Create a persistent cache directory to store downloaded fonts
   cache_dir <- tools::R_user_dir("ggswim", which = "cache")
@@ -306,12 +314,7 @@ load_fonts <- function(verbose = TRUE) {
     feature_spec <- do.call(font_feature, features)
 
     # Build raw URL based on the font family.
-    # Note: we use the raw URL so that the .ttf file is correctly served.
-    font_url <- if (family %in% c("fa-brands-400", "fa-regular-400", "fa-solid-900", "bootstrap-icons")) {
-      sprintf("https://raw.githubusercontent.com/CHOP-CGTInformatics/ggswim/main/font/fonts/%s.ttf", family)
-    } else {
-      NA_character_
-    }
+    font_url <- sprintf("https://raw.githubusercontent.com/CHOP-CGTInformatics/ggswim/main/font/fonts/%s.ttf", family)
 
     if (is.na(font_url)) {
       warning(sprintf("No remote URL defined for font family '%s'", family))
@@ -321,17 +324,18 @@ load_fonts <- function(verbose = TRUE) {
     # Determine a persistent file path in the cache
     cached_file <- file.path(cache_dir, sprintf("%s.ttf", family))
 
-    # Download the font if it isn’t already cached
-    if (!file.exists(cached_file)) {
-      tryCatch(
-        {
-          download.file(font_url, destfile = cached_file, mode = "wb", quiet = TRUE)
-        },
-        error = function(e) {
-          warning(sprintf("Failed to download font '%s' from %s", family, font_url))
-          return(invisible(NULL))
-        }
-      )
+    # Attempt to download the font file; if download fails, mark download_success as FALSE.
+    download_success <- tryCatch({
+      download.file(font_url, destfile = cached_file, mode = "wb", quiet = TRUE)
+      TRUE
+    }, error = function(e) {
+      warning(sprintf("Failed to download font '%s' from %s", family, font_url))
+      FALSE
+    })
+
+    # If download failed or the file doesn't exist, skip registration.
+    if (!download_success || !file.exists(cached_file)) {
+      return(invisible(NULL))
     }
 
     # Use custom naming if available.

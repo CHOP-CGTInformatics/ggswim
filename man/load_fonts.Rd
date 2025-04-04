@@ -4,10 +4,20 @@
 \alias{load_fonts}
 \title{Load Select Fonts}
 \usage{
-load_fonts(verbose = TRUE)
+load_fonts(
+  fonts = c("bootstrap-icons", "fa-brands-400", "fa-regular-400", "fa-solid-900"),
+  verbose = TRUE
+)
 }
 \arguments{
-\item{verbose}{Whether or not to display load output messages. Default \code{TRUE}.}
+\item{fonts}{A character vector of font families to load. Valid options are
+\code{"bootstrap-icons"}, \code{"fa-brands-400"}, \code{"fa-regular-400"}, and \code{"fa-solid-900"}.
+The default is to load all supported fonts.}
+
+\item{verbose}{Whether or not to display load output messages. Default is \code{TRUE}.}
+}
+\value{
+Invisibly returns the font registry as a tibble.
 }
 \description{
 Load open source fonts from ggswim's GitHub repository to the user's cache
@@ -22,8 +32,11 @@ Currently the following fonts are supported:
 \itemize{
 \item Brands
 \item Regular
--Solid
+\item Solid
 }
 \item Bootstrap
 }
+
+Users can choose which fonts to load by providing a vector of font family names.
+The default is to load all supported fonts.
 }
