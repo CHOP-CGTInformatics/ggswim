@@ -299,7 +299,7 @@ load_fonts <- function(verbose = TRUE) {
 
     # Build URL based on the font family.
     font_url <- if (family %in% c("fa-brands-400", "fa-regular-400", "fa-solid-900", "bootstrap-icons")) {
-      sprintf("https://github.com/CHOP-CGTInformatics/ggswim/font/fonts/%s.ttf", family)
+      sprintf("https://github.com/CHOP-CGTInformatics/ggswim/tree/main/font/fonts/%s.ttf", family)
     } else {
       NA_character_
     }
