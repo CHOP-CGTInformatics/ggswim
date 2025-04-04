@@ -79,9 +79,12 @@ ggplot() +
 
 ## Using FontAwesome Icons
 
-Next, we'll replace the emojis above with calls to `fontawesome()` icons:
+Next, we'll replace the emojis above with calls to `fontawesome()` icons after first loading fonts with `load_fonts()`:
 
 ```{r, fig.alt="A swimmer plot displaying use of FontAwesome icons for event markers."}
+# Load fonts from the ggswim GitHub repository
+load_fonts(verbose = FALSE)
+
 marker_data <- marker_data |>
   mutate(
     glyph = dplyr::case_when(

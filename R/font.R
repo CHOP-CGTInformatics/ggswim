@@ -293,13 +293,20 @@ load_fonts <- function(verbose = TRUE) {
     "fa-solid-900"
   )
 
+  # Create a persistent cache directory to store downloaded fonts
+  cache_dir <- tools::R_user_dir("ggswim", which = "cache")
+  if (!dir.exists(cache_dir)) {
+    dir.create(cache_dir, recursive = TRUE)
+  }
+
   .load_pkg_font <- function(family) {
     features <- list("kern" = 1, "zero" = 0)
     feature_spec <- do.call(font_feature, features)
 
-    # Build URL based on the font family.
+    # Build raw URL based on the font family.
+    # Note: we use the raw URL so that the .ttf file is correctly served.
     font_url <- if (family %in% c("fa-brands-400", "fa-regular-400", "fa-solid-900", "bootstrap-icons")) {
-      sprintf("https://github.com/CHOP-CGTInformatics/ggswim/tree/main/font/fonts/%s.ttf", family)
+      sprintf("https://raw.githubusercontent.com/CHOP-CGTInformatics/ggswim/main/font/fonts/%s.ttf", family)
     } else {
       NA_character_
     }
@@ -309,21 +316,25 @@ load_fonts <- function(verbose = TRUE) {
       return(invisible(NULL))
     }
 
-    # Download the font to a temporary file.
-    temp_file <- tempfile(fileext = ".ttf")
-    tryCatch(
-      {
-        download.file(font_url, destfile = temp_file, mode = "wb", quiet = TRUE)
-      },
-      error = function(e) {
-        warning(sprintf("Failed to download font '%s' from %s", family, font_url))
-        return(invisible(NULL))
-      }
-    )
+    # Determine a persistent file path in the cache
+    cached_file <- file.path(cache_dir, sprintf("%s.ttf", family))
+
+    # Download the font if it isn’t already cached
+    if (!file.exists(cached_file)) {
+      tryCatch(
+        {
+          download.file(font_url, destfile = cached_file, mode = "wb", quiet = TRUE)
+        },
+        error = function(e) {
+          warning(sprintf("Failed to download font '%s' from %s", family, font_url))
+          return(invisible(NULL))
+        }
+      )
+    }
 
     # Use custom naming if available.
     font_name <- if (family %in% names(custom_names)) custom_names[family] else family
-    register_font(name = font_name, plain = temp_file, features = feature_spec)
+    register_font(name = font_name, plain = cached_file, features = feature_spec)
 
     if (verbose) {
       cli({
@@ -343,3 +354,4 @@ load_fonts <- function(verbose = TRUE) {
 
   invisible(registry_fonts())
 }
+
