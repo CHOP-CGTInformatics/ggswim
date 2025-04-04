@@ -262,8 +262,10 @@ retrieve_unicode <- function(aliases,
 #' @title Load Select Fonts
 #'
 #' @description
-#' Load open source fonts from the web into the environment for use with ggswim
-#' functions.
+#' Load open source fonts from ggswim's GitHub repository to the user's cache
+#' directory.
+#'
+#' Font files and their associated licenses are available on the main branch.
 #'
 #' @details
 #' Currently the following fonts are supported:

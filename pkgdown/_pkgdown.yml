@@ -56,6 +56,7 @@ reference:
   - fontawesome
   - search_fontawesome
   - bootstrap
+  - load_fonts
   - search_bootstrap
   - theme_ggswim
   - theme_ggswim_dark
