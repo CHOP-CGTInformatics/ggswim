@@ -1,13 +1,14 @@
 #' @noRd
+#' @keywords internal
 pal_arrows <- function(colours = NULL, fills = NULL, types = NULL, n_values = NULL) {
   n_values <- n_values %||% max(length(colours), length(fills), length(types))
-  if (n_values == 0) n_values <- 1
+  if (n_values == 0) n_values <- length(.default_arrow_limits)
 
   arrows <- vctrs::new_rcrd(
     list(
-      colour = rep(colours %||% "black", length.out = n_values),
-      fill   = rep(fills %||% NA_character_, length.out = n_values),
-      type   = rep(types %||% "closed", length.out = n_values)
+      colour = rep(colours %||% .default_arrow_colours, length.out = n_values),
+      fill   = rep(fills %||% .default_arrow_fills, length.out = n_values),
+      type   = rep(types %||% .default_arrow_types, length.out = n_values)
     ),
     class = "swim_arrow"
   )
@@ -41,14 +42,15 @@ draw_key_swim_arrow <- function(data, params, size) {
 
   type <- "closed"
 
-  if ("arrow" %in% names(data) && length(data$arrow) > 0 &&
+  if ("arrow" %in% names(data) &&
+      length(data$arrow) > 0 &&
       !vctrs::vec_detect_missing(data$arrow)[1]) {
     col  <- vctrs::field(data$arrow, "colour")[1]
     fill <- vctrs::field(data$arrow, "fill")[1]
     type <- vctrs::field(data$arrow, "type")[1]
-
-    if (is.na(fill)) fill <- col
   }
+
+  if (is.na(fill)) fill <- col
 
   grid::segmentsGrob(
     x0 = grid::unit(0.15, "npc"),
@@ -168,6 +170,15 @@ geom_swim_arrow <- function(mapping = NULL, data = NULL,
   )
 }
 
+#' @noRd
+extract_arrow_aesthetics <- function(data) {
+  list(
+    colour = vapply(data$arrow, function(x) vctrs::field(x, "colour"), character(1)),
+    fill   = vapply(data$arrow, function(x) vctrs::field(x, "fill"), character(1)),
+    type   = vapply(data$arrow, function(x) vctrs::field(x, "type"), character(1))
+  )
+}
+
 #' @rdname geom_swim_arrow
 #' @format NULL
 #' @usage NULL
@@ -210,39 +221,27 @@ GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
                                                linejoin = "round",
                                                na.rm = FALSE) {
 
-                           if ("arrow" %in% names(data) && !all(is.na(data$arrow))) {
-                             data$colour <- vapply(
-                               data$arrow,
-                               function(x) vctrs::field(x, "colour"),
-                               character(1)
-                             )
+                           if ("arrow" %in% names(data) && !all(vctrs::vec_detect_missing(data$arrow))) {
+                             arrow_aes <- extract_arrow_aesthetics(data)
+                             data$colour <- arrow_aes$colour
+                             data$fill <- arrow_aes$fill
 
-                             data$fill <- vapply(
-                               data$arrow,
-                               function(x) vctrs::field(x, "fill"),
-                               character(1)
-                             )
-
-                             arrow_types <- vapply(
-                               data$arrow,
-                               function(x) vctrs::field(x, "type"),
-                               character(1)
-                             )
-
-                             # one layer can only pass one arrow object to GeomSegment$draw_panel
-                             # so enforce a single type per layer
-                             if (length(unique(arrow_types)) > 1) {
+                             if (length(unique(arrow_aes$type)) > 1) {
                                cli::cli_abort("geom_swim_arrow() currently supports only one arrow type per layer.")
                              }
 
                              arrow <- grid::arrow(
-                               type = unique(arrow_types),
+                               type = unique(arrow_aes$type),
                                length = arrow_head_length
                              )
                              arrow.fill <- data$fill
                            } else {
                              data$colour <- arrow_colour
-                             arrow <- grid::arrow(type = arrow_type, length = arrow_head_length)
+                             data$fill <- arrow.fill %||% arrow_colour
+                             arrow <- grid::arrow(
+                               type = arrow_type,
+                               length = arrow_head_length
+                             )
                            }
 
                            GeomSegment$draw_panel(
@@ -255,44 +254,3 @@ GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
                            )
                          }
 )
-
-#' @export
-scale_arrow_discrete <- function(colours = NULL, fills = NULL, types = NULL, limits = NULL, ...) {
-  n_values <- max(c(length(colours), length(fills), length(types), length(limits)))
-  if (n_values == 0) {
-    arrow_df <- data.frame()
-  } else {
-    arrow_df <- data.frame(
-      colour = colours %||% rep("black", n_values),
-      fill   = fills %||% rep(NA_character_, n_values),
-      type   = types %||% rep("closed", n_values),
-      label  = limits %||% paste0("val", seq_len(n_values))
-    ) |>
-      dplyr::distinct()
-  }
-
-  palette <- pal_arrows(
-    colours = arrow_df$colour,
-    fills   = arrow_df$fill,
-    types   = arrow_df$type,
-    n_values = nrow(arrow_df)
-  )
-
-  discrete_scale(
-    aesthetics = "arrow",
-    scale_name = "swim_arrow",
-    palette = palette,
-    limits = arrow_df$label,
-    ...,
-    na.translate = FALSE
-  )
-}
-
-#' @export
-format.swim_arrow <- function(x, ...) {
-  colours <- vctrs::field(x, "colour")
-  fills   <- vctrs::field(x, "fill")
-  types   <- vctrs::field(x, "type")
-
-  paste0("Arrow: colour=", colours, ", fill=", fills, ", type=", types)
-}
