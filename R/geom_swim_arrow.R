@@ -42,10 +42,12 @@ draw_key_swim_arrow <- function(data, params, size) {
 
   type <- "closed"
 
-  if ("arrow" %in% names(data) &&
+  if (
+    "arrow" %in% names(data) &&
       length(data$arrow) > 0 &&
-      !vctrs::vec_detect_missing(data$arrow)[1]) {
-    col  <- vctrs::field(data$arrow, "colour")[1]
+      !vctrs::vec_detect_missing(data$arrow)[1]
+  ) {
+    col <- vctrs::field(data$arrow, "colour")[1]
     fill <- vctrs::field(data$arrow, "fill")[1]
     type <- vctrs::field(data$arrow, "type")[1]
   }
@@ -83,32 +85,64 @@ draw_key_swim_arrow <- function(data, params, size) {
 #' Please note that [geom_swim_arrow()] requires a `data` argument and does not
 #' inherit data like other functions.
 #'
-#' @param data A dataframe prepared for use with [geom_swim_arrow()]. Required.
+#' [geom_swim_arrow()] supports two approaches for defining arrow appearance:
+#'
+#' - By mapping the `arrow` aesthetic and supplying values with
+#'   [scale_arrow_discrete()].
+#' - By supplying `arrow_colour`, `arrow_fill`, and `arrow_type` directly as
+#'   fixed parameters.
+#'
+#' When the `arrow` aesthetic is mapped, arrow appearance is controlled by
+#' [scale_arrow_discrete()] and takes precedence over fixed arrow parameters.
+#'
+#' @param data A data frame prepared for use with [geom_swim_arrow()]. Required.
 #' @inheritParams ggplot2::geom_segment
-#' @param position Position adjustment. ggswim accepts either "stack", or "identity"
-#' depending on the use case. Default "identity".
-#' @param arrow_colour The colour of the arrow head
-#' @param arrow_fill The fill colour of the arrow head
-#' @param arrow_head_length A unit specifying the length of the arrow head
-#' (from tip to base).
-#' @param arrow_neck_length Value specifying neck length from end of segment
-#' to arrow head base
-#' @param arrow_type One of "open" or "closed" indicating whether the arrow head
-#' should be a closed triangle.
+#' @param position Position adjustment. ggswim accepts either `"stack"` or
+#'   `"identity"` depending on the use case. Default is `"identity"`.
+#' @param arrow_colour The outline colour of the arrow segment and arrow head
+#'   when using fixed arrow parameters.
+#' @param arrow_fill The fill colour of the arrow head when using fixed arrow
+#'   parameters and a closed arrow type.
+#' @param arrow_head_length A grid unit specifying the length of the arrow head
+#'   (from tip to base).
+#' @param arrow_neck_length A numeric value specifying the neck length from the
+#'   end of the segment to the base of the arrow head.
+#' @param arrow_type One of `"open"` or `"closed"` indicating whether the arrow
+#'   head should be drawn as an open or closed triangle when using fixed arrow
+#'   parameters.
 #'
 #' @section Aesthetics:
-#' [geom_swim_arrow()] understands the following aesthetics (required aesthetics are in bold):
+#' [geom_swim_arrow()] understands the following aesthetics (required aesthetics
+#' are in bold):
 #'
 #' - **`y`**
-#' - **xend**
+#' - **`xend`**
 #' - `alpha`
+#' - `arrow`
 #' - `colour`
 #' - `group`
 #' - `linetype`
 #' - `linewidth`
 #'
-#' [geom_swim_arrow()] is a wrapper for [geom_segment()] and can support much of the same
-#' functionality.
+#' The `arrow` aesthetic is used to map discrete arrow styles via
+#' [scale_arrow_discrete()].
+#'
+#' @section Legend behaviour:
+#' To display arrows as their own legend component, map a value to the `arrow`
+#' aesthetic and add [scale_arrow_discrete()]. If a single legend entry is
+#' desired, map a constant such as `arrow = "Continuation"`.
+#'
+#' @section Fixed versus scaled arrow styling:
+#' If the `arrow` aesthetic is not mapped, arrow appearance can be set directly
+#' with `arrow_colour`, `arrow_fill`, and `arrow_type`.
+#'
+#' If the `arrow` aesthetic is mapped, arrow appearance is instead determined by
+#' [scale_arrow_discrete()], and the fixed arrow parameters are used only as a
+#' fallback.
+#'
+#' @section Underlying geom:
+#' [geom_swim_arrow()] is a wrapper for [ggplot2::geom_segment()] and supports
+#' much of the same functionality.
 #'
 #' @examples
 #' # Set up data for arrows
@@ -123,15 +157,39 @@ draw_key_swim_arrow <- function(data, params, size) {
 #'   dplyr::filter(!is.na(label)) |>
 #'   unique()
 #'
+#' # Parameter-driven arrow styling
 #' geom_swim_arrow(
 #'   data = arrow_data,
 #'   mapping = aes(xend = end_time, y = pt_id),
-#'   linewidth = .1,
+#'   linewidth = 0.1,
 #'   arrow_neck_length = 5,
 #'   arrow_head_length = grid::unit(0.25, "inches"),
 #'   arrow_colour = "slateblue",
-#'   arrow_fill = "cyan"
+#'   arrow_fill = "cyan",
+#'   arrow_type = "closed"
 #' )
+#'
+#' # Scale-driven arrow styling with a separate legend entry
+#' ggplot2::ggplot() +
+#'   geom_swim_arrow(
+#'     data = arrow_data,
+#'     mapping = ggplot2::aes(
+#'       xend = end_time,
+#'       y = pt_id,
+#'       arrow = "Continuation"
+#'     ),
+#'     linewidth = 0.1,
+#'     arrow_neck_length = 5,
+#'     arrow_head_length = grid::unit(0.25, "inches"),
+#'     show.legend = c(arrow = TRUE)
+#'   ) +
+#'   scale_arrow_discrete(
+#'     limits = "Continuation",
+#'     colours = "slateblue",
+#'     fills = "cyan",
+#'     types = "closed",
+#'     name = NULL
+#'   )
 #'
 #' @export
 
@@ -184,73 +242,70 @@ extract_arrow_aesthetics <- function(data) {
 #' @usage NULL
 #' @export
 GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
-                         required_aes = c("y", "xend"),
-                         non_missing_aes = c("linetype", "linewidth"),
-                         default_aes = aes(
-                           colour = "black",
-                           fill = NA,
-                           linewidth = 0.5,
-                           linetype = 1,
-                           alpha = NA,
-                           arrow = NA
-                         ),
-                         draw_key = draw_key_swim_arrow,
+  required_aes = c("y", "xend"),
+  non_missing_aes = c("linetype", "linewidth"),
+  default_aes = aes(
+    colour = "black",
+    fill = NA,
+    linewidth = 0.5,
+    linetype = 1,
+    alpha = NA,
+    arrow = NA
+  ),
+  draw_key = draw_key_swim_arrow,
+  setup_data = function(data, params) {
+    arrow_neck_length <- params$arrow_neck_length
 
-                         setup_data = function(data, params) {
-                           arrow_neck_length <- params$arrow_neck_length
+    if (is.null(arrow_neck_length)) {
+      arrow_neck_length <- max(data$xend, na.rm = TRUE) * 0.15
+    }
 
-                           if (is.null(arrow_neck_length)) {
-                             arrow_neck_length <- max(data$xend, na.rm = TRUE) * 0.15
-                           }
+    data |>
+      dplyr::mutate(
+        x = xend,
+        xend = xend + arrow_neck_length
+      )
+  },
+  draw_panel = function(self, data, panel_params, coord,
+                        arrow = NULL,
+                        arrow.fill = NULL,
+                        arrow_head_length = grid::unit(0.25, "inches"),
+                        arrow_neck_length = NULL,
+                        arrow_type = "closed",
+                        arrow_colour = "black",
+                        lineend = "butt",
+                        linejoin = "round",
+                        na.rm = FALSE) {
+    if ("arrow" %in% names(data) && !all(vctrs::vec_detect_missing(data$arrow))) {
+      arrow_aes <- extract_arrow_aesthetics(data)
+      data$colour <- arrow_aes$colour
+      data$fill <- arrow_aes$fill
 
-                           data |>
-                             dplyr::mutate(
-                               x = xend,
-                               xend = xend + arrow_neck_length
-                             )
-                         },
+      if (length(unique(arrow_aes$type)) > 1) {
+        cli::cli_abort("geom_swim_arrow() currently supports only one arrow type per layer.")
+      }
 
-                         draw_panel = function(self, data, panel_params, coord,
-                                               arrow = NULL,
-                                               arrow.fill = NULL,
-                                               arrow_head_length = grid::unit(0.25, "inches"),
-                                               arrow_neck_length = NULL,
-                                               arrow_type = "closed",
-                                               arrow_colour = "black",
-                                               lineend = "butt",
-                                               linejoin = "round",
-                                               na.rm = FALSE) {
+      arrow <- grid::arrow(
+        type = unique(arrow_aes$type),
+        length = arrow_head_length
+      )
+      arrow.fill <- data$fill
+    } else {
+      data$colour <- arrow_colour
+      data$fill <- arrow.fill %||% arrow_colour
+      arrow <- grid::arrow(
+        type = arrow_type,
+        length = arrow_head_length
+      )
+    }
 
-                           if ("arrow" %in% names(data) && !all(vctrs::vec_detect_missing(data$arrow))) {
-                             arrow_aes <- extract_arrow_aesthetics(data)
-                             data$colour <- arrow_aes$colour
-                             data$fill <- arrow_aes$fill
-
-                             if (length(unique(arrow_aes$type)) > 1) {
-                               cli::cli_abort("geom_swim_arrow() currently supports only one arrow type per layer.")
-                             }
-
-                             arrow <- grid::arrow(
-                               type = unique(arrow_aes$type),
-                               length = arrow_head_length
-                             )
-                             arrow.fill <- data$fill
-                           } else {
-                             data$colour <- arrow_colour
-                             data$fill <- arrow.fill %||% arrow_colour
-                             arrow <- grid::arrow(
-                               type = arrow_type,
-                               length = arrow_head_length
-                             )
-                           }
-
-                           GeomSegment$draw_panel(
-                             data, panel_params, coord,
-                             arrow = arrow,
-                             arrow.fill = arrow.fill,
-                             lineend = lineend,
-                             linejoin = linejoin,
-                             na.rm = na.rm
-                           )
-                         }
+    GeomSegment$draw_panel(
+      data, panel_params, coord,
+      arrow = arrow,
+      arrow.fill = arrow.fill,
+      lineend = lineend,
+      linejoin = linejoin,
+      na.rm = na.rm
+    )
+  }
 )

@@ -21,6 +21,66 @@ scale_arrow_discrete(
 \code{"closed"}.}
 
 \item{limits}{Arrow labels passed to the arrow scale.}
+
+\item{...}{
+  Arguments passed on to \code{\link[ggplot2:discrete_scale]{discrete_scale}}
+  \describe{
+    \item{\code{breaks}}{One of:
+\itemize{
+\item \code{NULL} for no breaks
+\item \code{waiver()} for the default breaks (the scale limits)
+\item A character vector of breaks
+\item A function that takes the limits as input and returns breaks
+as output. Also accepts rlang \link[rlang:as_function]{lambda} function
+notation.
+}}
+    \item{\code{limits}}{One of:
+\itemize{
+\item \code{NULL} to use the default scale values
+\item A character vector that defines possible values of the scale and their
+order
+\item A function that accepts the existing (automatic) values and returns
+new ones. Also accepts rlang \link[rlang:as_function]{lambda} function
+notation.
+}}
+    \item{\code{drop}}{Should unused factor levels be omitted from the scale?
+The default, \code{TRUE}, uses the levels that appear in the data;
+\code{FALSE} includes the levels in the factor. Please note that to display
+every level in a legend, the layer should use \code{show.legend = TRUE}.}
+    \item{\code{na.translate}}{Unlike continuous scales, discrete scales can easily show
+missing values, and do so by default. If you want to remove missing values
+from a discrete scale, specify \code{na.translate = FALSE}.}
+    \item{\code{na.value}}{If \code{na.translate = TRUE}, what aesthetic value should the
+missing values be displayed as? Does not apply to position scales
+where \code{NA} is always placed at the far right.}
+    \item{\code{aesthetics}}{The names of the aesthetics that this scale works with.}
+    \item{\code{minor_breaks}}{One of:
+\itemize{
+\item \code{NULL} for no minor breaks
+\item \code{waiver()} for the default breaks (none for discrete, one minor break
+between each major break for continuous)
+\item A numeric vector of positions
+\item A function that given the limits returns a vector of minor breaks. Also
+accepts rlang \link[rlang:as_function]{lambda} function notation. When
+the function has two arguments, it will be given the limits and major
+break positions.
+}}
+    \item{\code{labels}}{One of the options below. Please note that when \code{labels} is a
+vector, it is highly recommended to also set the \code{breaks} argument as a
+vector to protect against unintended mismatches.
+\itemize{
+\item \code{NULL} for no labels
+\item \code{waiver()} for the default labels computed by the
+transformation object
+\item A character vector giving labels (must be same length as \code{breaks})
+\item An expression vector (must be the same length as breaks). See ?plotmath for details.
+\item A function that takes the breaks as input and returns labels
+as output. Also accepts rlang \link[rlang:as_function]{lambda} function
+notation.
+}}
+    \item{\code{call}}{The \code{call} used to construct the scale for reporting messages.}
+    \item{\code{super}}{The super class to use for the constructed scale}
+  }}
 }
 \description{
 \code{\link[=scale_arrow_discrete]{scale_arrow_discrete()}} is used to set discrete arrow aesthetics for swimmer

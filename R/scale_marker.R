@@ -132,5 +132,5 @@ format.marker <- function(x, ...) {
   formatted_markers <- paste0("Glyph: ", glyphs, ", Colour: ", colours)
 
   # Return the formatted markers as a character vector
-  return(formatted_markers)
+  formatted_markers
 }

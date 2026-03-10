@@ -9,6 +9,7 @@
 #' @param types Arrow head types passed to the arrow layer. One of `"open"` or
 #' `"closed"`.
 #' @param limits Arrow labels passed to the arrow scale.
+#' @inheritParams ggplot2::scale_x_discrete
 #' @inheritParams ggplot2::discrete_scale
 #'
 #' @examples
@@ -44,8 +45,8 @@ scale_arrow_discrete <- function(colours = NULL, fills = NULL, types = NULL, lim
 
   palette <- pal_arrows(
     colours = arrows$colours,
-    fills   = arrows$fills,
-    types   = arrows$types,
+    fills = arrows$fills,
+    types = arrows$types,
     n_values = nrow(arrows)
   )
 
@@ -84,8 +85,8 @@ scale_arrow_discrete <- function(colours = NULL, fills = NULL, types = NULL, lim
 #' @export
 format.swim_arrow <- function(x, ...) {
   colours <- vctrs::field(x, "colour")
-  fills   <- vctrs::field(x, "fill")
-  types   <- vctrs::field(x, "type")
+  fills <- vctrs::field(x, "fill")
+  types <- vctrs::field(x, "type")
 
   paste0("Arrow: colour=", colours, ", fill=", fills, ", type=", types)
 }

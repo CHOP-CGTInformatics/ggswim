@@ -137,7 +137,7 @@ fontawesome <- function(aliases, type = "solid") {
     type = type
   )
 
-  return(unicode)
+  unicode
 }
 
 #' @title Retrieve Bootstrap Unicode
@@ -168,7 +168,7 @@ bootstrap <- function(aliases) {
     dataset = "Bootstrap"
   )
 
-  return(unicode)
+  unicode
 }
 
 #' @title Retrieve Unicode for Icon Aliases Across Libraries
@@ -256,7 +256,7 @@ retrieve_unicode <- function(aliases,
     message("Invalid: ", paste(invalid_aliases, collapse = ", "))
   }
 
-  return(unicode)
+  unicode
 }
 
 #' @title Load Select Fonts
@@ -287,7 +287,15 @@ retrieve_unicode <- function(aliases,
 #' @return Invisibly returns the font registry as a tibble.
 #'
 #' @export
-load_fonts <- function(fonts = c("bootstrap-icons", "fa-brands-400", "fa-regular-400", "fa-solid-900"), verbose = TRUE) {
+load_fonts <- function(
+  fonts = c(
+    "bootstrap-icons",
+    "fa-brands-400",
+    "fa-regular-400",
+    "fa-solid-900"
+  ),
+  verbose = TRUE
+) {
   # Mapping for naming consistency
   custom_names <- c(
     "bootstrap-icons" = "Bootstrap",
@@ -325,13 +333,16 @@ load_fonts <- function(fonts = c("bootstrap-icons", "fa-brands-400", "fa-regular
     cached_file <- file.path(cache_dir, sprintf("%s.ttf", family))
 
     # Attempt to download the font file; if download fails, mark download_success as FALSE.
-    download_success <- tryCatch({
-      download.file(font_url, destfile = cached_file, mode = "wb", quiet = TRUE)
-      TRUE
-    }, error = function(e) {
-      warning(sprintf("Failed to download font '%s' from %s", family, font_url))
-      FALSE
-    })
+    download_success <- tryCatch(
+      {
+        download.file(font_url, destfile = cached_file, mode = "wb", quiet = TRUE)
+        TRUE
+      },
+      error = function(e) {
+        warning(sprintf("Failed to download font '%s' from %s", family, font_url))
+        FALSE
+      }
+    )
 
     # If download failed or the file doesn't exist, skip registration.
     if (!download_success || !file.exists(cached_file)) {
@@ -360,4 +371,3 @@ load_fonts <- function(fonts = c("bootstrap-icons", "fa-brands-400", "fa-regular
 
   invisible(registry_fonts())
 }
-

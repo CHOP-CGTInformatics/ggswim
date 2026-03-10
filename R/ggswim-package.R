@@ -11,6 +11,7 @@
 #' @importFrom rlang caller_arg caller_env as_label is_atomic get_expr .data
 #'   is_empty := enquo quo_is_symbolic quo list2 try_fetch eval_tidy %||%
 #' @importFrom purrr map_lgl walk discard walk walk2
+#' @importFrom scales alpha brewer_pal
 #' @importFrom stats setNames
 #' @importFrom stringr str_detect str_remove
 #' @importFrom systemfonts registry_fonts font_feature register_font

@@ -24,6 +24,7 @@ Imports:
     grid,
     purrr,
     rlang,
+    scales,
     stringr,
     systemfonts,
     tibble,

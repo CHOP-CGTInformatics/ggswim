@@ -82,17 +82,23 @@ test_that("bootstrap works", {
 })
 
 test_that("search_aliases works", {
-  expect_setequal(search_aliases("dog", dataset = "FontAwesome"),
-                  c("fa-dog", "fa-hotdog", "fa-shield-dog"))
+  expect_setequal(
+    search_aliases("dog", dataset = "FontAwesome"),
+    c("fa-dog", "fa-hotdog", "fa-shield-dog")
+  )
 
   expect_true(length(search_aliases("dove", dataset = "FontAwesome", approximate = FALSE)) == 1)
   expect_true(length(search_aliases("dove", dataset = "FontAwesome", approximate = TRUE)) > 1)
 
-  expect_equal(search_aliases("cookie", dataset = "Bootstrap"),
-                  c("bs-cookie"))
+  expect_equal(
+    search_aliases("cookie", dataset = "Bootstrap"),
+    c("bs-cookie")
+  )
 
-  expect_equal(search_aliases("dog", dataset = "Bootstrap"),
-               character(0))
+  expect_equal(
+    search_aliases("dog", dataset = "Bootstrap"),
+    character(0)
+  )
 
   expect_error(search_aliases(dataset = "Test"))
 })
