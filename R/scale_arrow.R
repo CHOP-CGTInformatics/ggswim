@@ -112,7 +112,7 @@ pal_arrows <- function(colours = NULL, fills = NULL, types = NULL, n_values = NU
 .default_arrow_limits <- "Continuation"
 
 #' @export
-#' # Define the format method for swim_arrow class
+# Define the format method for swim_arrow class
 format.swim_arrow <- function(x, ...) {
   colours <- vctrs::field(x, "colour")
   fills <- vctrs::field(x, "fill")

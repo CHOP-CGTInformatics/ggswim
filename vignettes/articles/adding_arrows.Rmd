@@ -60,6 +60,7 @@ patient_data |>
     data = arrow_data,
     mapping = aes(xend = end_time, y = pt_id),
     arrow_neck_length = 5,
+    arrow_head_length = grid::unit(0.15, "inches"),
     arrow_colour = "firebrick",
     arrow_fill = "gold"
   )
@@ -91,7 +92,7 @@ patient_data |>
       arrow = "Continuation"
     ),
     arrow_neck_length = 5,
-    arrow_head_length = grid::unit(0.25, "inches")
+    arrow_head_length = grid::unit(0.15, "inches")
   ) +
   scale_arrow_discrete(
     limits = "Continuation",
