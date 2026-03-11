@@ -20,7 +20,7 @@ geom_swim_arrow(
   lineend = "butt",
   linejoin = "round",
   na.rm = FALSE,
-  show.legend = FALSE,
+  show.legend = NA,
   inherit.aes = TRUE
 )
 }
@@ -30,11 +30,11 @@ geom_swim_arrow(
 at the top level of the plot. You must supply \code{mapping} if there is no plot
 mapping.}
 
-\item{data}{A dataframe prepared for use with \code{\link[=geom_swim_arrow]{geom_swim_arrow()}}. Required.}
+\item{data}{A data frame prepared for use with \code{\link[=geom_swim_arrow]{geom_swim_arrow()}}. Required.}
 
 \item{stat}{The statistical transformation to use on the data for this layer.
 When using a \verb{geom_*()} function to construct a layer, the \code{stat}
-argument can be used the override the default coupling between geoms and
+argument can be used to override the default coupling between geoms and
 stats. The \code{stat} argument accepts the following:
 \itemize{
 \item A \code{Stat} ggproto subclass, for example \code{StatCount}.
@@ -45,8 +45,8 @@ give the stat as \code{"count"}.
 \link[ggplot2:layer_stats]{layer stat} documentation.
 }}
 
-\item{position}{Position adjustment. ggswim accepts either "stack", or "identity"
-depending on the use case. Default "identity".}
+\item{position}{Position adjustment. ggswim accepts either \code{"stack"} or
+\code{"identity"} depending on the use case. Default is \code{"identity"}.}
 
 \item{...}{Other arguments passed on to \code{\link[ggplot2:layer]{layer()}}'s \code{params} argument. These
 arguments broadly fall into one of 4 categories below. Notably, further
@@ -76,18 +76,21 @@ lists which parameters it can accept.
 \link[ggplot2:draw_key]{key glyphs}, to change the display of the layer in the legend.
 }}
 
-\item{arrow_colour}{The colour of the arrow head}
+\item{arrow_colour}{The outline colour of the arrow segment and arrow head
+when using fixed arrow parameters.}
 
-\item{arrow_head_length}{A unit specifying the length of the arrow head
+\item{arrow_head_length}{A grid unit specifying the length of the arrow head
 (from tip to base).}
 
-\item{arrow_neck_length}{Value specifying neck length from end of segment
-to arrow head base}
+\item{arrow_neck_length}{A numeric value specifying the neck length from the
+end of the segment to the base of the arrow head.}
 
-\item{arrow_fill}{The fill colour of the arrow head}
+\item{arrow_fill}{The fill colour of the arrow head when using fixed arrow
+parameters and a closed arrow type.}
 
-\item{arrow_type}{One of "open" or "closed" indicating whether the arrow head
-should be a closed triangle.}
+\item{arrow_type}{One of \code{"open"} or \code{"closed"} indicating whether the arrow
+head should be drawn as an open or closed triangle when using fixed arrow
+parameters.}
 
 \item{lineend}{Line end style (round, butt, square).}
 
@@ -100,12 +103,14 @@ a warning. If \code{TRUE}, missing values are silently removed.}
 \code{NA}, the default, includes if any aesthetics are mapped.
 \code{FALSE} never includes, and \code{TRUE} always includes.
 It can also be a named logical vector to finely select the aesthetics to
-display.}
+display. To include legend keys for all levels, even
+when no data exists, use \code{TRUE}.  If \code{NA}, all levels are shown in legend,
+but unobserved levels are omitted.}
 
 \item{inherit.aes}{If \code{FALSE}, overrides the default aesthetics,
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
-the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
+the default plot specification, e.g. \code{\link[ggplot2:annotation_borders]{annotation_borders()}}.}
 }
 \description{
 Arrows attached to the end of swimmer plot lanes can be used to denote the
@@ -115,22 +120,58 @@ or status extends beyond the plotted period.
 \details{
 Please note that \code{\link[=geom_swim_arrow]{geom_swim_arrow()}} requires a \code{data} argument and does not
 inherit data like other functions.
+
+\code{\link[=geom_swim_arrow]{geom_swim_arrow()}} supports two approaches for defining arrow appearance:
+\itemize{
+\item By mapping the \code{arrow} aesthetic and supplying values with
+\code{\link[=scale_arrow_discrete]{scale_arrow_discrete()}}.
+\item By supplying \code{arrow_colour}, \code{arrow_fill}, and \code{arrow_type} directly as
+fixed parameters.
+}
+
+When the \code{arrow} aesthetic is mapped, arrow appearance is controlled by
+\code{\link[=scale_arrow_discrete]{scale_arrow_discrete()}} and takes precedence over fixed arrow parameters.
 }
 \section{Aesthetics}{
 
-\code{\link[=geom_swim_arrow]{geom_swim_arrow()}} understands the following aesthetics (required aesthetics are in bold):
+\code{\link[=geom_swim_arrow]{geom_swim_arrow()}} understands the following aesthetics (required aesthetics
+are in bold):
 \itemize{
 \item \strong{\code{y}}
-\item \strong{xend}
+\item \strong{\code{xend}}
 \item \code{alpha}
+\item \code{arrow}
 \item \code{colour}
 \item \code{group}
 \item \code{linetype}
 \item \code{linewidth}
 }
 
-\code{\link[=geom_swim_arrow]{geom_swim_arrow()}} is a wrapper for \code{\link[=geom_segment]{geom_segment()}} and can support much of the same
-functionality.
+The \code{arrow} aesthetic is used to map discrete arrow styles via
+\code{\link[=scale_arrow_discrete]{scale_arrow_discrete()}}.
+}
+
+\section{Legend behaviour}{
+
+To display arrows as their own legend component, map a value to the \code{arrow}
+aesthetic and add \code{\link[=scale_arrow_discrete]{scale_arrow_discrete()}}. If a single legend entry is
+desired, map a constant such as \code{arrow = "Continuation"}.
+}
+
+\section{Fixed versus scaled arrow styling}{
+
+If the \code{arrow} aesthetic is not mapped, arrow appearance can be set directly
+with \code{arrow_colour}, \code{arrow_fill}, and \code{arrow_type}.
+
+If the \code{arrow} aesthetic is mapped, arrow appearance is instead determined by
+\code{\link[=scale_arrow_discrete]{scale_arrow_discrete()}}, and the fixed arrow parameters are used only as a
+fallback.
+}
+
+\section{Underlying geom}{
+
+\code{\link[=geom_swim_arrow]{geom_swim_arrow()}} is a wrapper for \code{\link[ggplot2:geom_segment]{ggplot2::geom_segment()}} and supports
+much of the same functionality.
 }
 
 \examples{
@@ -146,15 +187,39 @@ arrow_data <- patient_data |>
   dplyr::filter(!is.na(label)) |>
   unique()
 
+# Parameter-driven arrow styling
 geom_swim_arrow(
   data = arrow_data,
   mapping = aes(xend = end_time, y = pt_id),
-  linewidth = .1,
+  linewidth = 0.1,
   arrow_neck_length = 5,
   arrow_head_length = grid::unit(0.25, "inches"),
   arrow_colour = "slateblue",
-  arrow_fill = "cyan"
+  arrow_fill = "cyan",
+  arrow_type = "closed"
 )
+
+# Scale-driven arrow styling with a separate legend entry
+ggplot2::ggplot() +
+  geom_swim_arrow(
+    data = arrow_data,
+    mapping = ggplot2::aes(
+      xend = end_time,
+      y = pt_id,
+      arrow = "Continuation"
+    ),
+    linewidth = 0.1,
+    arrow_neck_length = 5,
+    arrow_head_length = grid::unit(0.25, "inches"),
+    show.legend = c(arrow = TRUE)
+  ) +
+  scale_arrow_discrete(
+    limits = "Continuation",
+    colours = "slateblue",
+    fills = "cyan",
+    types = "closed",
+    name = NULL
+  )
 
 }
 \keyword{datasets}

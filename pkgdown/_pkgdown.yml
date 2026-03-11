@@ -48,6 +48,7 @@ reference:
   descr: >
     Functions that assist with cleaning up the legend and assigning aesthetic connections.
   contents:
+  - scale_arrow_discrete
   - scale_marker_discrete
 - title: "Aesthetic and Theme Functions"
   descr: >
@@ -69,3 +70,4 @@ reference:
   - end_study_events
   - .default_glyphs
   - .default_colours
+  - .default_arrow_colours

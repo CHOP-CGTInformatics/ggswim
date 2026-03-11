@@ -129,8 +129,6 @@ format.marker <- function(x, ...) {
   glyphs <- vctrs::field(x, "glyphs")
 
   # Create a formatted string for each marker
-  formatted_markers <- paste0("Glyph: ", glyphs, ", Colour: ", colours)
-
   # Return the formatted markers as a character vector
-  return(formatted_markers)
+  paste0("Glyph: ", glyphs, ", Colour: ", colours)
 }
