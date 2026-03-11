@@ -1,30 +1,14 @@
 #' @noRd
-#' @keywords internal
-pal_arrows <- function(colours = NULL, fills = NULL, types = NULL, n_values = NULL) {
-  n_values <- n_values %||% max(length(colours), length(fills), length(types))
-  if (n_values == 0) n_values <- length(.default_arrow_limits)
-
-  arrows <- vctrs::new_rcrd(
-    list(
-      colour = rep(colours %||% .default_arrow_colours, length.out = n_values),
-      fill   = rep(fills %||% .default_arrow_fills, length.out = n_values),
-      type   = rep(types %||% .default_arrow_types, length.out = n_values)
-    ),
-    class = "swim_arrow"
-  )
-
-  function(n) {
-    if (n > n_values) {
-      cli::cli_warn(
-        "This palette can handle a maximum of {n_values} values. You have supplied {n}."
-      )
-    }
-    arrows[seq_len(n)]
-  }
-}
-
-#' @noRd
+# Internal helper used to draw the arrow symbol in the legend.
+#
+# This function is called by ggplot/ggswim when an arrow layer contributes a legend
+# key. It does not draw arrows in the plot panel itself; it only draws the
+# small representative arrow shown inside the legend box.
 draw_key_swim_arrow <- function(data, params, size) {
+  # Extract alpha, line width, and line type from the legend key data.
+  # Because legend key data can contain NA values, each is given a safe default.
+  # In particular, alpha must not be passed through as NA, or grid::gpar()
+  # will error.
   alpha <- data$alpha[1]
   if (length(alpha) == 0 || is.na(alpha)) alpha <- 1
 
@@ -34,14 +18,21 @@ draw_key_swim_arrow <- function(data, params, size) {
   linetype <- data$linetype[1]
   if (length(linetype) == 0 || is.na(linetype)) linetype <- 1
 
+  # Start with fallback colour/fill values taken from standard aesthetics.
+  # These are used when the custom `arrow` aesthetic is not present.
   col <- data$colour[1]
   if (length(col) == 0 || is.na(col)) col <- "black"
 
   fill <- data$fill[1]
   if (length(fill) == 0 || is.na(fill)) fill <- col
 
+  # Default to a closed arrowhead unless the mapped arrow aesthetic supplies
+  # something else.
   type <- "closed"
 
+  # If the layer is using the custom `arrow` aesthetic, unpack the arrow record
+  # and use its colour, fill, and type values instead of the fallback settings.
+  # This is what allows scale_arrow_discrete() to control the legend glyph.
   if (
     "arrow" %in% names(data) &&
       length(data$arrow) > 0 &&
@@ -52,8 +43,21 @@ draw_key_swim_arrow <- function(data, params, size) {
     type <- vctrs::field(data$arrow, "type")[1]
   }
 
+  # For closed arrowheads, use the line colour as the fill if no explicit fill
+  # was supplied. This helps the legend key visually match the plotted arrows.
   if (is.na(fill)) fill <- col
 
+  # Draw a short horizontal segment centered in the legend key and attach an
+  # arrowhead to the right end. Coordinates are given in npc units, so the
+  # arrow is drawn relative to the legend box rather than to plot data.
+  #
+  # Graphical parameters are set with grid::gpar():
+  # - col controls the line/outline colour
+  # - fill controls the fill of a closed arrowhead
+  # - lwd and lty match the layer's line width and type
+  #
+  # Transparency is applied by folding alpha into the colour/fill values with
+  # scales::alpha(), rather than passing alpha directly to gpar().
   grid::segmentsGrob(
     x0 = grid::unit(0.15, "npc"),
     y0 = grid::unit(0.5, "npc"),
@@ -73,7 +77,6 @@ draw_key_swim_arrow <- function(data, params, size) {
     )
   )
 }
-
 #' @title Add arrows to swimmer plot lanes
 #'
 #' @description
@@ -253,6 +256,20 @@ GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
     arrow = NA
   ),
   draw_key = draw_key_swim_arrow,
+
+  # setup_data() prepares the input data before anything is drawn.
+  #
+  # geom_swim_arrow() is designed so that the supplied xend value marks the end
+  # of the swimmer lane, and the arrow itself extends to the right from that
+  # point. To make that happen, setup_data() converts each input row into a
+  # short horizontal segment:
+  #
+  # - x is set to the original xend (the start of the arrow neck)
+  # - xend is moved to the right by arrow_neck_length
+  #
+  # This means the geom draws only the arrow "extension" rather than an entire
+  # swimmer lane. If arrow_neck_length is not supplied, a default proportional
+  # value is used based on the maximum observed xend.
   setup_data = function(data, params) {
     arrow_neck_length <- params$arrow_neck_length
 
@@ -266,6 +283,24 @@ GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
         xend = xend + arrow_neck_length
       )
   },
+
+  # draw_panel() is responsible for drawing the arrow segments in the plot
+  # panel after setup_data() has created the neck segment coordinates.
+  #
+  # There are two styling modes:
+  #
+  # 1. Scale-driven mode:
+  #    If the custom `arrow` aesthetic is mapped, arrow colour, fill, and head
+  #    type are unpacked from that aesthetic. This is what allows
+  #    scale_arrow_discrete() to control the plotted arrows and their legend.
+  #
+  # 2. Parameter-driven fallback mode:
+  #    If the `arrow` aesthetic is not mapped, the geom falls back to the fixed
+  #    parameters arrow_colour, arrow_fill, and arrow_type.
+  #
+  # Once styling is determined, draw_panel() delegates the actual drawing to
+  # GeomSegment$draw_panel(), supplying a grid::arrow() object so that the short
+  # segment created in setup_data() is rendered with an arrowhead attached.
   draw_panel = function(self, data, panel_params, coord,
                         arrow = NULL,
                         arrow.fill = NULL,
@@ -276,29 +311,54 @@ GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
                         lineend = "butt",
                         linejoin = "round",
                         na.rm = FALSE) {
+    # If a mapped `arrow` aesthetic is present, use it to define arrow styling.
+    # Each arrow value is a record containing colour, fill, and type.
     if ("arrow" %in% names(data) && !all(vctrs::vec_detect_missing(data$arrow))) {
-      arrow_aes <- extract_arrow_aesthetics(data)
-      data$colour <- arrow_aes$colour
-      data$fill <- arrow_aes$fill
+      data$colour <- vapply(
+        data$arrow,
+        function(x) vctrs::field(x, "colour"),
+        character(1)
+      )
 
-      if (length(unique(arrow_aes$type)) > 1) {
-        cli::cli_abort("geom_swim_arrow() currently supports only one arrow type per layer.")
+      data$fill <- vapply(
+        data$arrow,
+        function(x) vctrs::field(x, "fill"),
+        character(1)
+      )
+
+      arrow_types <- vapply(
+        data$arrow,
+        function(x) vctrs::field(x, "type"),
+        character(1)
+      )
+
+      # grid::arrow() accepts a single arrow type for the draw call, so all
+      # rows in a layer must currently share the same type.
+      if (length(unique(arrow_types)) > 1) {
+        cli::cli_abort(
+          "geom_swim_arrow() currently supports only one arrow type per layer."
+        )
       }
 
       arrow <- grid::arrow(
-        type = unique(arrow_aes$type),
+        type = unique(arrow_types),
         length = arrow_head_length
       )
       arrow.fill <- data$fill
     } else {
+      # If no mapped `arrow` aesthetic is present, use the fixed styling
+      # parameters supplied directly to geom_swim_arrow().
       data$colour <- arrow_colour
-      data$fill <- arrow.fill %||% arrow_colour
       arrow <- grid::arrow(
         type = arrow_type,
         length = arrow_head_length
       )
     }
 
+    # Delegate final drawing to GeomSegment. At this point:
+    # - setup_data() has already turned each row into a short horizontal segment
+    # - this function has determined the arrow style
+    # - GeomSegment draws the segment and attaches the arrowhead
     GeomSegment$draw_panel(
       data, panel_params, coord,
       arrow = arrow,

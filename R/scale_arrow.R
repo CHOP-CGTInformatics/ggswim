@@ -59,6 +59,35 @@ scale_arrow_discrete <- function(colours = NULL, fills = NULL, types = NULL, lim
   )
 }
 
+#' @noRd
+#' @keywords internal
+pal_arrows <- function(colours = NULL, fills = NULL, types = NULL, n_values = NULL) {
+  # Define colour, fill, and types lengths via arrow args supplied or default values
+  n_values <- n_values %||% max(length(colours), length(fills), length(types))
+  if (n_values == 0) n_values <- length(.default_arrow_limits)
+  # Create a vctrs list to store colour, fill, and types values
+  arrows <- vctrs::new_rcrd(
+    list(
+      colour = rep(colours %||% .default_arrow_colours, length.out = n_values),
+      fill   = rep(fills %||% .default_arrow_fills, length.out = n_values),
+      type   = rep(types %||% .default_arrow_types, length.out = n_values)
+    ),
+    class = "swim_arrow"
+  )
+
+  # If the values supplied are of a length greater than the default palette,
+  # throw a warning.
+  function(n) {
+    if (n > n_values) {
+      cli::cli_warn(
+        "This palette can handle a maximum of {n_values} values. \\
+        You have supplied {n}."
+      )
+    }
+    arrows[seq_len(n)]
+  }
+}
+
 #' @title ggswim arrow defaults
 #'
 #' @examples
@@ -83,10 +112,13 @@ scale_arrow_discrete <- function(colours = NULL, fills = NULL, types = NULL, lim
 .default_arrow_limits <- "Continuation"
 
 #' @export
+#' # Define the format method for swim_arrow class
 format.swim_arrow <- function(x, ...) {
   colours <- vctrs::field(x, "colour")
   fills <- vctrs::field(x, "fill")
   types <- vctrs::field(x, "type")
 
+  # Create a formatted string for each arrow
+  # Return the formatted arrows as a character vector
   paste0("Arrow: colour=", colours, ", fill=", fills, ", type=", types)
 }
