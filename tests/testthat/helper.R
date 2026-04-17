@@ -2,13 +2,13 @@
 
 simple_plot <- function() {
   all_events <- bind_rows(
-    infusion_events,
-    end_study_events,
+    infusion_events, # nolint: object_usage_linter
+    end_study_events, # nolint: object_usage_linter
   )
 
   ggplot() +
     geom_swim_lane(
-      data = patient_data,
+      data = patient_data, # nolint: object_usage_linter
       aes(
         x = .data$start_time, xend = .data$end_time, y = .data$pt_id,
         colour = .data$disease_assessment
@@ -28,9 +28,9 @@ simple_plot <- function() {
 }
 
 sample_arrow_data <- function() {
-  patient_data |>
+  patient_data |> # nolint: object_usage_linter
     dplyr::left_join(
-      end_study_events |>
+      end_study_events |> # nolint: object_usage_linter
         dplyr::select(pt_id, label), # nolint: object_usage_linter
       by = "pt_id"
     ) |>
