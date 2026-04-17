@@ -83,7 +83,7 @@ when using fixed arrow parameters.}
 (from tip to base).}
 
 \item{arrow_neck_length}{A numeric value specifying the neck length from the
-end of the segment to the base of the arrow head.}
+end of the segment to the base of the arrow head when \code{x} is not mapped.}
 
 \item{arrow_fill}{The fill colour of the arrow head when using fixed arrow
 parameters and a closed arrow type.}
@@ -131,12 +131,24 @@ fixed parameters.
 
 When the \code{arrow} aesthetic is mapped, arrow appearance is controlled by
 \code{\link[=scale_arrow_discrete]{scale_arrow_discrete()}} and takes precedence over fixed arrow parameters.
+
+\code{\link[=geom_swim_arrow]{geom_swim_arrow()}} also supports two approaches for defining arrow extent:
+\itemize{
+\item By mapping both \code{x} and \code{xend}, in which case the arrow neck is drawn from
+\code{x} to \code{xend}.
+\item By mapping only \code{xend}, in which case \code{xend} is treated as the swimmer lane
+endpoint and the arrow neck is extended to the right using
+\code{arrow_neck_length}.
+}
+
+If \code{x} is mapped, \code{arrow_neck_length} is ignored.
 }
 \section{Aesthetics}{
 
 \code{\link[=geom_swim_arrow]{geom_swim_arrow()}} understands the following aesthetics (required aesthetics
 are in bold):
 \itemize{
+\item \code{x}
 \item \strong{\code{y}}
 \item \strong{\code{xend}}
 \item \code{alpha}
@@ -193,6 +205,17 @@ geom_swim_arrow(
   mapping = aes(xend = end_time, y = pt_id),
   linewidth = 0.1,
   arrow_neck_length = 5,
+  arrow_head_length = grid::unit(0.25, "inches"),
+  arrow_colour = "slateblue",
+  arrow_fill = "cyan",
+  arrow_type = "closed"
+)
+
+# Mapped start and end positions
+geom_swim_arrow(
+  data = arrow_data,
+  mapping = aes(x = start_time, xend = end_time, y = pt_id),
+  linewidth = 0.1,
   arrow_head_length = grid::unit(0.25, "inches"),
   arrow_colour = "slateblue",
   arrow_fill = "cyan",

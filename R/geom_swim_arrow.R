@@ -1,9 +1,10 @@
 #' @noRd
-#' Internal helper used to draw the arrow symbol in the legend.
-#'
-#' This function is called by ggplot/ggswim when an arrow layer contributes a legend
-#' key. It does not draw arrows in the plot panel itself; it only draws the
-#' small representative arrow shown inside the legend box.
+#
+# Internal helper used to draw the arrow symbol in the legend.
+#
+# This function is called by ggplot/ggswim when an arrow layer contributes a legend
+# key. It does not draw arrows in the plot panel itself; it only draws the
+# small representative arrow shown inside the legend box.
 draw_key_swim_arrow <- function(data, params, size) {
   # Extract alpha, line width, and line type from the legend key data.
   # Because legend key data can contain NA values, each is given a safe default.
