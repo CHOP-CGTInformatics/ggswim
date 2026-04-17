@@ -221,3 +221,26 @@ test_that("geom_swim_arrow can participate in legend construction", {
 
   expect_no_error(ggplot2::ggplotGrob(p))
 })
+
+test_that("geom_swim_arrow handles mapped aes", {
+  df <- data.frame(
+    id = factor(c("A", "B")),
+    x = c(5, 0),
+    end_time = c(10, 20)
+  )
+
+  p <- ggplot2::ggplot() +
+    geom_swim_arrow(
+      data = df,
+      ggplot2::aes(y = id, x = x, xend = end_time, arrow = "Continuation"),
+      show.legend = c(arrow = TRUE)
+    ) +
+    scale_arrow_discrete(
+      limits = "Continuation",
+      colours = "black",
+      fills = "black",
+      types = "closed"
+    )
+
+  expect_no_error(ggplot2::ggplotGrob(p))
+})
