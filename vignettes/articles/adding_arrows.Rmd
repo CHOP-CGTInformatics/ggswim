@@ -68,6 +68,8 @@ patient_data |>
 
 Here we've correctly assigned arrows to only the subset of patients that have not met an end of study event. Note that `geom_swim_arrow()` gives plenty of control to the arrow head and neck color, shape, and even length.
 
+`geom_swim_arrow()` also allows for aesthetically mapped x "start" and `xend` values. If you would prefer to have dynamically mapped arrow neck lengths indicative of your data, simply supply the `x` and `xend` values in `aes()` for `geom_swim_arrow()` to use.
+
 ## Using `scale_arrow_discrete()` for arrow styling
 
 In addition to specifying arrow appearance directly through parameters, arrows can also be styled using the arrow aesthetic together with `scale_arrow_discrete()`. This approach allows arrow styles to be controlled through the ggplot2 scaling system, making it easier to add arrows as their own legend component or to manage multiple arrow styles.

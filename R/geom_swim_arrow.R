@@ -1,4 +1,5 @@
 #' @noRd
+#
 # Internal helper used to draw the arrow symbol in the legend.
 #
 # This function is called by ggplot/ggswim when an arrow layer contributes a legend
@@ -77,6 +78,7 @@ draw_key_swim_arrow <- function(data, params, size) {
     )
   )
 }
+
 #' @title Add arrows to swimmer plot lanes
 #'
 #' @description
@@ -98,6 +100,16 @@ draw_key_swim_arrow <- function(data, params, size) {
 #' When the `arrow` aesthetic is mapped, arrow appearance is controlled by
 #' [scale_arrow_discrete()] and takes precedence over fixed arrow parameters.
 #'
+#' [geom_swim_arrow()] also supports two approaches for defining arrow extent:
+#'
+#' - By mapping both `x` and `xend`, in which case the arrow neck is drawn from
+#'   `x` to `xend`.
+#' - By mapping only `xend`, in which case `xend` is treated as the swimmer lane
+#'   endpoint and the arrow neck is extended to the right using
+#'   `arrow_neck_length`.
+#'
+#' If `x` is mapped, `arrow_neck_length` is ignored.
+#'
 #' @param data A data frame prepared for use with [geom_swim_arrow()]. Required.
 #' @inheritParams ggplot2::geom_segment
 #' @param position Position adjustment. ggswim accepts either `"stack"` or
@@ -109,7 +121,7 @@ draw_key_swim_arrow <- function(data, params, size) {
 #' @param arrow_head_length A grid unit specifying the length of the arrow head
 #'   (from tip to base).
 #' @param arrow_neck_length A numeric value specifying the neck length from the
-#'   end of the segment to the base of the arrow head.
+#'   end of the segment to the base of the arrow head when `x` is not mapped.
 #' @param arrow_type One of `"open"` or `"closed"` indicating whether the arrow
 #'   head should be drawn as an open or closed triangle when using fixed arrow
 #'   parameters.
@@ -118,6 +130,7 @@ draw_key_swim_arrow <- function(data, params, size) {
 #' [geom_swim_arrow()] understands the following aesthetics (required aesthetics
 #' are in bold):
 #'
+#' - `x`
 #' - **`y`**
 #' - **`xend`**
 #' - `alpha`
@@ -172,6 +185,17 @@ draw_key_swim_arrow <- function(data, params, size) {
 #'   arrow_type = "closed"
 #' )
 #'
+#' # Mapped start and end positions
+#' geom_swim_arrow(
+#'   data = arrow_data,
+#'   mapping = aes(x = start_time, xend = end_time, y = pt_id),
+#'   linewidth = 0.1,
+#'   arrow_head_length = grid::unit(0.25, "inches"),
+#'   arrow_colour = "slateblue",
+#'   arrow_fill = "cyan",
+#'   arrow_type = "closed"
+#' )
+#'
 #' # Scale-driven arrow styling with a separate legend entry
 #' ggplot2::ggplot() +
 #'   geom_swim_arrow(
@@ -195,7 +219,6 @@ draw_key_swim_arrow <- function(data, params, size) {
 #'   )
 #'
 #' @export
-
 geom_swim_arrow <- function(mapping = NULL, data = NULL,
                             stat = "identity", position = "identity",
                             ...,
@@ -248,6 +271,7 @@ GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
   required_aes = c("y", "xend"),
   non_missing_aes = c("linetype", "linewidth"),
   default_aes = aes(
+    x = NA,
     colour = "black",
     fill = NA,
     linewidth = 0.5,
@@ -259,29 +283,43 @@ GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
 
   # setup_data() prepares the input data before anything is drawn.
   #
-  # geom_swim_arrow() is designed so that the supplied xend value marks the end
-  # of the swimmer lane, and the arrow itself extends to the right from that
-  # point. To make that happen, setup_data() converts each input row into a
-  # short horizontal segment:
+  # geom_swim_arrow() supports two coordinate modes:
   #
-  # - x is set to the original xend (the start of the arrow neck)
-  # - xend is moved to the right by arrow_neck_length
+  # 1. Derived-neck mode:
+  #    If x is not mapped, the supplied xend value marks the end of the swimmer
+  #    lane, and the arrow itself extends to the right from that point.
+  #    To make that happen, setup_data() converts each input row into a short
+  #    horizontal segment:
   #
-  # This means the geom draws only the arrow "extension" rather than an entire
-  # swimmer lane. If arrow_neck_length is not supplied, a default proportional
-  # value is used based on the maximum observed xend.
+  #    - x is set to the original xend (the start of the arrow neck)
+  #    - xend is moved to the right by arrow_neck_length
+  #
+  # 2. Mapped-neck mode:
+  #    If x is mapped, the supplied x and xend values are used directly as the
+  #    start and end of the arrow neck segment.
+  #
+  # This means the geom can either draw only the arrow "extension" beyond a
+  # swimmer lane or draw an explicitly positioned arrow segment.
+  # If arrow_neck_length is not supplied in derived-neck mode, a default
+  # proportional value is used based on the maximum observed xend.
   setup_data = function(data, params) {
-    arrow_neck_length <- params$arrow_neck_length
+    has_mapped_x <- "x" %in% names(data) && any(!is.na(data$x))
 
-    if (is.null(arrow_neck_length)) {
-      arrow_neck_length <- max(data$xend, na.rm = TRUE) * 0.15
+    if (has_mapped_x) {
+      data
+    } else {
+      arrow_neck_length <- params$arrow_neck_length
+
+      if (is.null(arrow_neck_length)) {
+        arrow_neck_length <- max(data$xend, na.rm = TRUE) * 0.15
+      }
+
+      data |>
+        dplyr::mutate(
+          x = .data$xend,
+          xend = .data$xend + arrow_neck_length
+        )
     }
-
-    data |>
-      dplyr::mutate(
-        x = xend,
-        xend = xend + arrow_neck_length
-      )
   },
 
   # draw_panel() is responsible for drawing the arrow segments in the plot
@@ -357,6 +395,7 @@ GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
 
     # Delegate final drawing to GeomSegment. At this point:
     # - setup_data() has already turned each row into a short horizontal segment
+    #   or preserved mapped x/xend values
     # - this function has determined the arrow style
     # - GeomSegment draws the segment and attaches the arrowhead
     GeomSegment$draw_panel(
