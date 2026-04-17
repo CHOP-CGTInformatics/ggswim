@@ -109,6 +109,14 @@ have not met an end of study event. Note that
 gives plenty of control to the arrow head and neck color, shape, and
 even length.
 
+[`geom_swim_arrow()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_arrow.md)
+also allows for aesthetically mapped x “start” and `xend` values. If you
+would prefer to have dynamically mapped arrow neck lengths indicative of
+your data, simply supply the `x` and `xend` values in
+[`aes()`](https://ggplot2.tidyverse.org/reference/aes.html) for
+[`geom_swim_arrow()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_arrow.md)
+to use.
+
 ## Using `scale_arrow_discrete()` for arrow styling
 
 In addition to specifying arrow appearance directly through parameters,

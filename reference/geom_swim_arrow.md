@@ -115,7 +115,7 @@ geom_swim_arrow(
 - arrow_neck_length:
 
   A numeric value specifying the neck length from the end of the segment
-  to the base of the arrow head.
+  to the base of the arrow head when `x` is not mapped.
 
 - arrow_fill:
 
@@ -176,10 +176,24 @@ When the `arrow` aesthetic is mapped, arrow appearance is controlled by
 [`scale_arrow_discrete()`](https://chop-cgtinformatics.github.io/ggswim/reference/scale_arrow_discrete.md)
 and takes precedence over fixed arrow parameters.
 
+`geom_swim_arrow()` also supports two approaches for defining arrow
+extent:
+
+- By mapping both `x` and `xend`, in which case the arrow neck is drawn
+  from `x` to `xend`.
+
+- By mapping only `xend`, in which case `xend` is treated as the swimmer
+  lane endpoint and the arrow neck is extended to the right using
+  `arrow_neck_length`.
+
+If `x` is mapped, `arrow_neck_length` is ignored.
+
 ## Aesthetics
 
 `geom_swim_arrow()` understands the following aesthetics (required
 aesthetics are in bold):
+
+- `x`
 
 - **`y`**
 
@@ -252,6 +266,21 @@ geom_swim_arrow(
 )
 #> mapping: y = ~pt_id, xend = ~end_time 
 #> geom_swim_arrow: arrow.fill = cyan, arrow_colour = slateblue, arrow_head_length = 0.25, arrow_neck_length = 5, arrow_type = closed, lineend = butt, linejoin = round, na.rm = FALSE
+#> stat_identity: na.rm = FALSE
+#> position_identity 
+
+# Mapped start and end positions
+geom_swim_arrow(
+  data = arrow_data,
+  mapping = aes(x = start_time, xend = end_time, y = pt_id),
+  linewidth = 0.1,
+  arrow_head_length = grid::unit(0.25, "inches"),
+  arrow_colour = "slateblue",
+  arrow_fill = "cyan",
+  arrow_type = "closed"
+)
+#> mapping: x = ~start_time, y = ~pt_id, xend = ~end_time 
+#> geom_swim_arrow: arrow.fill = cyan, arrow_colour = slateblue, arrow_head_length = 0.25, arrow_neck_length = NULL, arrow_type = closed, lineend = butt, linejoin = round, na.rm = FALSE
 #> stat_identity: na.rm = FALSE
 #> position_identity 
 

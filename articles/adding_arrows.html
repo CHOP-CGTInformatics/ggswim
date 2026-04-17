@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggswim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -165,6 +165,11 @@ subjects with no end study status. Now let’s use
 that have not met an end of study event. Note that
 <code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> gives plenty of control to the arrow head
 and neck color, shape, and even length.</p>
+<p><code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> also allows for aesthetically mapped x
+“start” and <code>xend</code> values. If you would prefer to have
+dynamically mapped arrow neck lengths indicative of your data, simply
+supply the <code>x</code> and <code>xend</code> values in
+<code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> for <code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> to use.</p>
 </div>
 <div class="section level2">
 <h2 id="using-scale_arrow_discrete-for-arrow-styling">Using <code>scale_arrow_discrete()</code> for arrow styling<a class="anchor" aria-label="anchor" href="#using-scale_arrow_discrete-for-arrow-styling"></a>
