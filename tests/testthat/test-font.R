@@ -54,6 +54,13 @@ test_that("search_fontawesome works", {
   expect_true(all(stringr::str_detect(specific_vals, "car")))
 })
 
+test_that("search_fontawesome validates type", {
+  expect_error(
+    search_fontawesome(type = "invalid"),
+    "must be one of"
+  )
+})
+
 test_that("fontawesome works", {
   out <- fontawesome("fa-dog")
   expect_equal(class(out), "character")
@@ -61,6 +68,13 @@ test_that("fontawesome works", {
 
   expect_message(fontawesome("notarealicon"), "Invalid: notarealicon")
   expect_true(is.na(fontawesome("notarealicon")) |> suppressMessages())
+})
+
+test_that("fontawesome validates type", {
+  expect_error(
+    fontawesome("fa-car", type = "invalid"),
+    "must be one of"
+  )
 })
 
 
