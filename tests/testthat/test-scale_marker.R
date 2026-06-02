@@ -3,7 +3,11 @@ test_that("scale_marker_discrete works with provided glyphs and colours", {
   colours <- c("red", "green", "blue")
   limits <- c("Event1", "Event2", "Event3")
 
-  scale <- scale_marker_discrete(glyphs = glyphs, colours = colours, limits = limits)
+  scale <- scale_marker_discrete(
+    glyphs = glyphs,
+    colours = colours,
+    limits = limits
+  )
 
   expect_equal(scale$aesthetics, "marker")
   expect_true(is.function(scale$palette))
@@ -31,7 +35,11 @@ test_that("scale_marker_discrete applies limits correctly", {
   colours <- c("red", "green", "blue")
   limits <- c("A", "B", "C")
 
-  scale <- scale_marker_discrete(glyphs = glyphs, colours = colours, limits = limits)
+  scale <- scale_marker_discrete(
+    glyphs = glyphs,
+    colours = colours,
+    limits = limits
+  )
 
   expect_equal(scale$limits, limits)
 })
@@ -41,7 +49,11 @@ test_that("scale_marker_discrete handles missing values in markers", {
   colours <- c("red", "green", NA)
   limits <- c("A", "B", "C")
 
-  scale <- scale_marker_discrete(glyphs = glyphs, colours = colours, limits = limits)
+  scale <- scale_marker_discrete(
+    glyphs = glyphs,
+    colours = colours,
+    limits = limits
+  )
 
   expect_true(is.function(scale$palette))
   # Ensure that the palette still generates values for the valid markers
@@ -78,7 +90,11 @@ test_that("scale_marker_discrete uses default glyphs when missing", {
   colours <- c("red", "green", "blue")
   limits <- c("A", "B", "C")
 
-  scale <- scale_marker_discrete(glyphs = NULL, colours = colours, limits = limits)
+  scale <- scale_marker_discrete(
+    glyphs = NULL,
+    colours = colours,
+    limits = limits
+  )
 
   expect_equal(length(scale$palette(3)), 3)
   expect_equal(vctrs::field(scale$palette(3), "glyphs"), .default_glyphs[1:3]) # First 3 default glyphs
@@ -88,16 +104,20 @@ test_that("scale_marker_discrete uses default colours when missing", {
   glyphs <- c("●", "■", "▲")
   limits <- c("A", "B", "C")
 
-  scale <- scale_marker_discrete(glyphs = glyphs, colours = NULL, limits = limits)
+  scale <- scale_marker_discrete(
+    glyphs = glyphs,
+    colours = NULL,
+    limits = limits
+  )
 
   expect_equal(length(scale$palette(3)), 3)
   expect_equal(vctrs::field(scale$palette(3), "colour"), .default_colours[1:3]) # First 3 default glyphs
 })
 
 test_that("format.marker works", {
-  out <- format.marker(x = vctrs::new_rcrd(list(colour = "red", glyphs = "test"),
-    class = "marker"
-  ))
+  out <- format.marker(
+    x = vctrs::new_rcrd(list(colour = "red", glyphs = "test"), class = "marker")
+  )
 
   expect_equal(out, "Glyph: test, Colour: red")
   expect_equal(class(out), "character")

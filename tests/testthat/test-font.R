@@ -12,7 +12,10 @@ test_that("invalid fonts produce warning and return invisible NULL", {
 
 test_that("valid fonts load and registry contains expected fonts", {
   # Use a subset of valid fonts
-  res <- load_fonts(fonts = c("bootstrap-icons", "fa-solid-900"), verbose = FALSE)
+  res <- load_fonts(
+    fonts = c("bootstrap-icons", "fa-solid-900"),
+    verbose = FALSE
+  )
   # Retrieve the registry of loaded fonts
   reg <- registry_fonts()
 
@@ -101,8 +104,22 @@ test_that("search_aliases works", {
     c("fa-dog", "fa-hotdog", "fa-shield-dog")
   )
 
-  expect_true(length(search_aliases("dove", dataset = "FontAwesome", approximate = FALSE)) == 1)
-  expect_true(length(search_aliases("dove", dataset = "FontAwesome", approximate = TRUE)) > 1)
+  expect_true(
+    length(search_aliases(
+      "dove",
+      dataset = "FontAwesome",
+      approximate = FALSE
+    )) ==
+      1
+  )
+  expect_true(
+    length(search_aliases(
+      "dove",
+      dataset = "FontAwesome",
+      approximate = TRUE
+    )) >
+      1
+  )
 
   expect_equal(
     search_aliases("cookie", dataset = "Bootstrap"),

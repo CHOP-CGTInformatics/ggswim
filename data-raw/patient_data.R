@@ -17,9 +17,7 @@ db_list_select <- function(db, tbls) {
 }
 
 
-join_data <- function(db_tbl_list,
-                      join_type = left_join,
-                      ...) {
+join_data <- function(db_tbl_list, join_type = left_join, ...) {
   # First: compile all names related to tables
   # Second: Identify names that exist in multiple tables (not infseq_id)
   # Third: Append identified names with name of the table they belong to
@@ -75,15 +73,35 @@ db <- db |>
   extract_tibbles()
 
 db_tbls <- db |>
-  db_list_select(tbls = c(infusion_sequence, infusion, disease_assessment, end_of_study)) |>
+  db_list_select(
+    tbls = c(infusion_sequence, infusion, disease_assessment, end_of_study)
+  ) |>
   join_data()
 
 infseq_ids <- c(
-  "22CT011-01.0", "22CT011-01.1", "22CT011-02.0", "22CT011-02.1", "22CT011-03.0",
-  "22CT011-03.1", "22CT011-04.0", "22CT011-05.0", "22CT011-06.0", "22CT011-07.0",
-  "22CT011-08.0", "22CT011-09.0", "22CT011-10.0", "22CT011-11.0", "22CT011-12.0",
-  "22CT011-13.0", "22CT011-14.0", "22CT011-15.0", "22CT011-16.0", "22CT011-17.0",
-  "22CT011-18.0", "22CT011-19.0", "22CT011-20.0"
+  "22CT011-01.0",
+  "22CT011-01.1",
+  "22CT011-02.0",
+  "22CT011-02.1",
+  "22CT011-03.0",
+  "22CT011-03.1",
+  "22CT011-04.0",
+  "22CT011-05.0",
+  "22CT011-06.0",
+  "22CT011-07.0",
+  "22CT011-08.0",
+  "22CT011-09.0",
+  "22CT011-10.0",
+  "22CT011-11.0",
+  "22CT011-12.0",
+  "22CT011-13.0",
+  "22CT011-14.0",
+  "22CT011-15.0",
+  "22CT011-16.0",
+  "22CT011-17.0",
+  "22CT011-18.0",
+  "22CT011-19.0",
+  "22CT011-20.0"
 )
 
 prodigy <- db_tbls |>
@@ -160,7 +178,11 @@ patient_data <- prodigy |>
     # Group by pt_id
     .by = pt_id,
     # Initial infusion date used for some downstream logic
-    initial_infusion_date = if_else(infseq_number == 0, infusion_date, first(infusion_date, na_rm = TRUE)),
+    initial_infusion_date = if_else(
+      infseq_number == 0,
+      infusion_date,
+      first(infusion_date, na_rm = TRUE)
+    ),
     # For cases where there has been a reinfusion and no disease assessment yet
     # Use reinfusion date as placeholder with previous disease assessment
     dasmt_date = case_when(
@@ -168,13 +190,16 @@ patient_data <- prodigy |>
       TRUE ~ dasmt_date
     ),
     disease_assessment = case_when(
-      is.na(disease_assessment) & dasmt_date == infusion_date ~ lag(disease_assessment),
+      is.na(disease_assessment) & dasmt_date == infusion_date ~ lag(
+        disease_assessment
+      ),
       TRUE ~ disease_assessment
     )
   ) |>
   mutate(
     .by = infseq_id,
-    time_from_initial_infusion = interval(initial_infusion_date, dasmt_date) %/% days(1),
+    time_from_initial_infusion = interval(initial_infusion_date, dasmt_date) %/%
+      days(1),
     today = interval(infusion_date, Sys.Date()) %/% days(1),
     start_time = time_from_initial_infusion,
     end_time = case_when(
@@ -187,11 +212,20 @@ patient_data <- prodigy |>
   # Debatable: removing rows that have no timespan because there is no end date
   # to the status. Only status changes or end study markers can give a range end
   dplyr::filter(!is.na(end_time)) |>
-  select(-c(
-    infseq_id, infseq_number, dasmt_bcell_status, dasmt_overall, infusion_admin,
-    contains("end_study"), today,
-    initial_infusion_date, time_from_initial_infusion, contains("date")
-  )) |>
+  select(
+    -c(
+      infseq_id,
+      infseq_number,
+      dasmt_bcell_status,
+      dasmt_overall,
+      infusion_admin,
+      contains("end_study"),
+      today,
+      initial_infusion_date,
+      time_from_initial_infusion,
+      contains("date")
+    )
+  ) |>
   dplyr::relocate(pt_id, .before = everything()) |>
   # Convert to months
   mutate(
@@ -214,19 +248,33 @@ infusion_events <- prodigy |>
   mutate(
     .by = pt_id,
     pt_id,
-    initial_infusion_date = if_else(infseq_number == 0, infusion_date, first(infusion_date, na_rm = TRUE)),
+    initial_infusion_date = if_else(
+      infseq_number == 0,
+      infusion_date,
+      first(infusion_date, na_rm = TRUE)
+    ),
     time_from_initial_infusion = case_when(
       infseq_number == 0 ~ 0,
       TRUE ~ interval(initial_infusion_date, infusion_date) %/% days(1)
     ),
     # Convert to months
-    time_from_initial_infusion = round(time_from_initial_infusion / 30.417, digit = 1) # average days in a month
+    time_from_initial_infusion = round(
+      time_from_initial_infusion / 30.417,
+      digit = 1
+    ) # average days in a month
   ) |>
-  dplyr::filter(pt_id %in% patient_data$pt_id &
-    !is.na(initial_infusion_date)) |>
+  dplyr::filter(
+    pt_id %in% patient_data$pt_id & !is.na(initial_infusion_date)
+  ) |>
   select(pt_id, time_from_initial_infusion) |>
   unique() |>
-  mutate(label = dplyr::if_else(time_from_initial_infusion == 0, "Initial Infusion", "Reinfusion")) |>
+  mutate(
+    label = dplyr::if_else(
+      time_from_initial_infusion == 0,
+      "Initial Infusion",
+      "Reinfusion"
+    )
+  ) |>
   mutate(
     glyph = "⬤",
     colour = case_when(
@@ -244,10 +292,21 @@ end_study_events <- prodigy |>
     infseq_id = str_extract(infseq_id, "(?<=-).*$"),
     # Add patient ID to consolidate infusion/reinfusion
     pt_id = str_extract(infseq_id, "^\\d+"),
-    initial_infusion_date = if_else(infseq_number == 0, infusion_date, first(infusion_date, na_rm = TRUE)),
-    time_from_initial_infusion = interval(initial_infusion_date, end_study_date) %/% days(1),
+    initial_infusion_date = if_else(
+      infseq_number == 0,
+      infusion_date,
+      first(infusion_date, na_rm = TRUE)
+    ),
+    time_from_initial_infusion = interval(
+      initial_infusion_date,
+      end_study_date
+    ) %/%
+      days(1),
     # Convert to months
-    time_from_initial_infusion = round(time_from_initial_infusion / 30.417, digit = 1), # average days in a month
+    time_from_initial_infusion = round(
+      time_from_initial_infusion / 30.417,
+      digit = 1
+    ), # average days in a month
     glyph = case_when(
       end_study_reason == "Completed study follow-up" ~ "✅",
       end_study_reason == "Death" ~ "❌",
@@ -255,14 +314,17 @@ end_study_events <- prodigy |>
       TRUE ~ "⚠️"
     ),
     label = case_when(
-      end_study_reason == "Completed study follow-up" ~ "Completed Study Follow-Up",
+      end_study_reason ==
+        "Completed study follow-up" ~ "Completed Study Follow-Up",
       end_study_reason == "Death" ~ "Deceased",
       is.na(end_study_reason) ~ NA,
       TRUE ~ "Other End Study Reason"
     )
   ) |>
-  filter(!is.na(label) &
-    !is.na(initial_infusion_date)) |> # Remove Screen Fail
+  filter(
+    !is.na(label) &
+      !is.na(initial_infusion_date)
+  ) |> # Remove Screen Fail
   unique() |>
   dplyr::filter(pt_id %in% patient_data$pt_id) |>
   select(pt_id, time_from_initial_infusion, label, glyph)

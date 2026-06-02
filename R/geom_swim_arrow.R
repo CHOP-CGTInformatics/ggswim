@@ -11,21 +11,31 @@ draw_key_swim_arrow <- function(data, params, size) {
   # In particular, alpha must not be passed through as NA, or grid::gpar()
   # will error.
   alpha <- data$alpha[1]
-  if (length(alpha) == 0 || is.na(alpha)) alpha <- 1
+  if (length(alpha) == 0 || is.na(alpha)) {
+    alpha <- 1
+  }
 
   linewidth <- data$linewidth[1]
-  if (length(linewidth) == 0 || is.na(linewidth)) linewidth <- 0.5
+  if (length(linewidth) == 0 || is.na(linewidth)) {
+    linewidth <- 0.5
+  }
 
   linetype <- data$linetype[1]
-  if (length(linetype) == 0 || is.na(linetype)) linetype <- 1
+  if (length(linetype) == 0 || is.na(linetype)) {
+    linetype <- 1
+  }
 
   # Start with fallback colour/fill values taken from standard aesthetics.
   # These are used when the custom `arrow` aesthetic is not present.
   col <- data$colour[1]
-  if (length(col) == 0 || is.na(col)) col <- "black"
+  if (length(col) == 0 || is.na(col)) {
+    col <- "black"
+  }
 
   fill <- data$fill[1]
-  if (length(fill) == 0 || is.na(fill)) fill <- col
+  if (length(fill) == 0 || is.na(fill)) {
+    fill <- col
+  }
 
   # Default to a closed arrowhead unless the mapped arrow aesthetic supplies
   # something else.
@@ -35,7 +45,8 @@ draw_key_swim_arrow <- function(data, params, size) {
   # and use its colour, fill, and type values instead of the fallback settings.
   # This is what allows scale_arrow_discrete() to control the legend glyph.
   if (
-    "arrow" %in% names(data) &&
+    "arrow" %in%
+      names(data) &&
       length(data$arrow) > 0 &&
       !vctrs::vec_detect_missing(data$arrow)[1]
   ) {
@@ -46,7 +57,9 @@ draw_key_swim_arrow <- function(data, params, size) {
 
   # For closed arrowheads, use the line colour as the fill if no explicit fill
   # was supplied. This helps the legend key visually match the plotted arrows.
-  if (is.na(fill)) fill <- col
+  if (is.na(fill)) {
+    fill <- col
+  }
 
   # Draw a short horizontal segment centered in the legend key and attach an
   # arrowhead to the right end. Coordinates are given in npc units, so the
@@ -219,19 +232,23 @@ draw_key_swim_arrow <- function(data, params, size) {
 #'   )
 #'
 #' @export
-geom_swim_arrow <- function(mapping = NULL, data = NULL,
-                            stat = "identity", position = "identity",
-                            ...,
-                            arrow_colour = "black",
-                            arrow_head_length = unit(0.25, "inches"),
-                            arrow_neck_length = NULL,
-                            arrow_fill = NULL,
-                            arrow_type = "closed",
-                            lineend = "butt",
-                            linejoin = "round",
-                            na.rm = FALSE,
-                            show.legend = NA,
-                            inherit.aes = TRUE) {
+geom_swim_arrow <- function(
+  mapping = NULL,
+  data = NULL,
+  stat = "identity",
+  position = "identity",
+  ...,
+  arrow_colour = "black",
+  arrow_head_length = unit(0.25, "inches"),
+  arrow_neck_length = NULL,
+  arrow_fill = NULL,
+  arrow_type = "closed",
+  lineend = "butt",
+  linejoin = "round",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE
+) {
   layer(
     data = data,
     mapping = mapping,
@@ -257,9 +274,17 @@ geom_swim_arrow <- function(mapping = NULL, data = NULL,
 #' @noRd
 extract_arrow_aesthetics <- function(data) {
   list(
-    colour = vapply(data$arrow, function(x) vctrs::field(x, "colour"), character(1)),
-    fill   = vapply(data$arrow, function(x) vctrs::field(x, "fill"), character(1)),
-    type   = vapply(data$arrow, function(x) vctrs::field(x, "type"), character(1))
+    colour = vapply(
+      data$arrow,
+      function(x) vctrs::field(x, "colour"),
+      character(1)
+    ),
+    fill = vapply(
+      data$arrow,
+      function(x) vctrs::field(x, "fill"),
+      character(1)
+    ),
+    type = vapply(data$arrow, function(x) vctrs::field(x, "type"), character(1))
   )
 }
 
@@ -267,7 +292,9 @@ extract_arrow_aesthetics <- function(data) {
 #' @format NULL
 #' @usage NULL
 #' @export
-GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
+GeomSwimArrow <- ggproto(
+  "GeomSwimArrow",
+  GeomSegment,
   required_aes = c("y", "xend"),
   non_missing_aes = c("linetype", "linewidth"),
   default_aes = aes(
@@ -339,19 +366,26 @@ GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
   # Once styling is determined, draw_panel() delegates the actual drawing to
   # GeomSegment$draw_panel(), supplying a grid::arrow() object so that the short
   # segment created in setup_data() is rendered with an arrowhead attached.
-  draw_panel = function(self, data, panel_params, coord,
-                        arrow = NULL,
-                        arrow.fill = NULL,
-                        arrow_head_length = grid::unit(0.25, "inches"),
-                        arrow_neck_length = NULL,
-                        arrow_type = "closed",
-                        arrow_colour = "black",
-                        lineend = "butt",
-                        linejoin = "round",
-                        na.rm = FALSE) {
+  draw_panel = function(
+    self,
+    data,
+    panel_params,
+    coord,
+    arrow = NULL,
+    arrow.fill = NULL,
+    arrow_head_length = grid::unit(0.25, "inches"),
+    arrow_neck_length = NULL,
+    arrow_type = "closed",
+    arrow_colour = "black",
+    lineend = "butt",
+    linejoin = "round",
+    na.rm = FALSE
+  ) {
     # A mapped arrow aesthetic is converted by scale_arrow_discrete() into a
     # swim_arrow record. Plain unmapped default values remain ordinary NA values.
-    has_scaled_arrow <- "arrow" %in% names(data) && inherits(data$arrow, "swim_arrow")
+    has_scaled_arrow <- "arrow" %in%
+      names(data) &&
+      inherits(data$arrow, "swim_arrow")
 
     if (has_scaled_arrow) {
       # Missing mapped arrow values mean this row should not draw an arrow.
@@ -402,7 +436,9 @@ GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
     # - this function has determined the arrow style
     # - GeomSegment draws the segment and attaches the arrowhead
     GeomSegment$draw_panel(
-      data, panel_params, coord,
+      data,
+      panel_params,
+      coord,
       arrow = arrow,
       arrow.fill = arrow.fill,
       lineend = lineend,

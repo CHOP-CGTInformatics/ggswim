@@ -28,17 +28,28 @@
 #' }
 #'
 #' @export
-scale_arrow_discrete <- function(colours = NULL, fills = NULL, types = NULL, limits = NULL, ...) {
-  n_values <- max(c(length(colours), length(fills), length(types), length(limits)))
+scale_arrow_discrete <- function(
+  colours = NULL,
+  fills = NULL,
+  types = NULL,
+  limits = NULL,
+  ...
+) {
+  n_values <- max(c(
+    length(colours),
+    length(fills),
+    length(types),
+    length(limits)
+  ))
 
   if (n_values == 0) {
     arrows <- data.frame()
   } else {
     arrows <- data.frame(
       colours = colours %||% rep(.default_arrow_colours, length.out = n_values),
-      fills   = fills %||% rep(.default_arrow_fills, length.out = n_values),
-      types   = types %||% rep(.default_arrow_types, length.out = n_values),
-      labels  = limits %||% rep(.default_arrow_limits, length.out = n_values)
+      fills = fills %||% rep(.default_arrow_fills, length.out = n_values),
+      types = types %||% rep(.default_arrow_types, length.out = n_values),
+      labels = limits %||% rep(.default_arrow_limits, length.out = n_values)
     ) |>
       dplyr::distinct()
   }
@@ -61,16 +72,23 @@ scale_arrow_discrete <- function(colours = NULL, fills = NULL, types = NULL, lim
 
 #' @noRd
 #' @keywords internal
-pal_arrows <- function(colours = NULL, fills = NULL, types = NULL, n_values = NULL) {
+pal_arrows <- function(
+  colours = NULL,
+  fills = NULL,
+  types = NULL,
+  n_values = NULL
+) {
   # Define colour, fill, and types lengths via arrow args supplied or default values
   n_values <- n_values %||% max(length(colours), length(fills), length(types))
-  if (n_values == 0) n_values <- length(.default_arrow_limits)
+  if (n_values == 0) {
+    n_values <- length(.default_arrow_limits)
+  }
   # Create a vctrs list to store colour, fill, and types values
   arrows <- vctrs::new_rcrd(
     list(
       colour = rep(colours %||% .default_arrow_colours, length.out = n_values),
-      fill   = rep(fills %||% .default_arrow_fills, length.out = n_values),
-      type   = rep(types %||% .default_arrow_types, length.out = n_values)
+      fill = rep(fills %||% .default_arrow_fills, length.out = n_values),
+      type = rep(types %||% .default_arrow_types, length.out = n_values)
     ),
     class = "swim_arrow"
   )

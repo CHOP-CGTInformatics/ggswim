@@ -2,13 +2,17 @@ test_that("geom_swim_marker is the right class", {
   layer <- geom_swim_marker(
     data = infusion_events,
     mapping = aes(
-      x = time_from_initial_infusion, y = pt_id,
+      x = time_from_initial_infusion,
+      y = pt_id,
       marker = label
     )
   )
 
   expected_classes <- c(
-    "LayerInstance", "Layer", "ggproto", "gg"
+    "LayerInstance",
+    "Layer",
+    "ggproto",
+    "gg"
   )
 
   expect_setequal(attr(layer, "class"), expected_classes)
@@ -18,7 +22,8 @@ test_that("all expected attributes exist in geom_swim_lane", {
   layer <- geom_swim_marker(
     data = infusion_events,
     mapping = aes(
-      x = time_from_initial_infusion, y = pt_id,
+      x = time_from_initial_infusion,
+      y = pt_id,
       marker = label
     )
   )
@@ -36,7 +41,8 @@ test_that("geom_swim_marker works when inheriting data and associated params", {
   p <- ggplot(
     data = infusion_events,
     mapping = aes(
-      x = time_from_initial_infusion, y = pt_id,
+      x = time_from_initial_infusion,
+      y = pt_id,
       marker = label
     )
   ) +
@@ -53,7 +59,10 @@ test_that("geom_swim_lane works when inheriting data and associated params", {
   p <- ggplot(
     data = patient_data,
     mapping = aes(
-      x = start_time, xend = end_time, y = pt_id, colour = disease_assessment
+      x = start_time,
+      xend = end_time,
+      y = pt_id,
+      colour = disease_assessment
     )
   ) +
     geom_swim_lane()

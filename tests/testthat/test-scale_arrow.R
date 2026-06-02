@@ -9,9 +9,9 @@ test_that("scale_arrow_discrete creates a discrete scale for the arrow aesthetic
 test_that("scale_arrow_discrete palette returns swim_arrow records", {
   sc <- scale_arrow_discrete(
     colours = c("black", "red"),
-    fills   = c("black", "pink"),
-    types   = c("closed", "open"),
-    limits  = c("Continuation", "Ongoing")
+    fills = c("black", "pink"),
+    types = c("closed", "open"),
+    limits = c("Continuation", "Ongoing")
   )
 
   vals <- sc$palette(2)
@@ -26,9 +26,9 @@ test_that("scale_arrow_discrete palette returns swim_arrow records", {
 test_that("scale_arrow_discrete respects limits", {
   sc <- scale_arrow_discrete(
     colours = c("black", "red"),
-    fills   = c("black", "red"),
-    types   = c("closed", "open"),
-    limits  = c("Continuation", "Withdrawn")
+    fills = c("black", "red"),
+    types = c("closed", "open"),
+    limits = c("Continuation", "Withdrawn")
   )
 
   expect_equal(sc$limits, c("Continuation", "Withdrawn"))
@@ -46,8 +46,8 @@ test_that("scale_arrow_discrete uses defaults when values are not supplied", {
 test_that("pal_arrows warns when more values are requested than available", {
   pal <- pal_arrows(
     colours = c("black", "red"),
-    fills   = c("black", "red"),
-    types   = c("closed", "open"),
+    fills = c("black", "red"),
+    types = c("closed", "open"),
     n_values = 2
   )
 

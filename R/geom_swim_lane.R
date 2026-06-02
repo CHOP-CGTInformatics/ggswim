@@ -36,16 +36,20 @@
 #'     x = start_time, y = pt_id, xend = end_time,
 #'     colour = disease_assessment
 #'   ))
-geom_swim_lane <- function(mapping = NULL, data = NULL,
-                           stat = "identity", position = "identity",
-                           ...,
-                           arrow = NULL,
-                           arrow.fill = NULL,
-                           lineend = "butt",
-                           linejoin = "round",
-                           na.rm = FALSE,
-                           show.legend = NA,
-                           inherit.aes = TRUE) {
+geom_swim_lane <- function(
+  mapping = NULL,
+  data = NULL,
+  stat = "identity",
+  position = "identity",
+  ...,
+  arrow = NULL,
+  arrow.fill = NULL,
+  lineend = "butt",
+  linejoin = "round",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE
+) {
   layer(
     data = data,
     mapping = mapping,
@@ -69,7 +73,9 @@ geom_swim_lane <- function(mapping = NULL, data = NULL,
 #' @format NULL
 #' @usage NULL
 #' @export
-GeomSwimLane <- ggproto("GeomSwimLane", GeomSegment,
+GeomSwimLane <- ggproto(
+  "GeomSwimLane",
+  GeomSegment,
   required_aes = c("x", "y", "xend"),
   non_missing_aes = c("linetype", "linewidth"),
   default_aes = aes(
@@ -79,11 +85,26 @@ GeomSwimLane <- ggproto("GeomSwimLane", GeomSegment,
     linetype = 1,
     alpha = NA,
   ),
-  draw_panel = function(self, data, panel_params, coord, arrow, arrow.fill,
-                        lineend = "butt", linejoin = "round", na.rm = FALSE) {
-    GeomSegment$draw_panel(data, panel_params, coord,
-      arrow = arrow, arrow.fill = arrow.fill,
-      lineend = lineend, linejoin = linejoin, na.rm = FALSE
+  draw_panel = function(
+    self,
+    data,
+    panel_params,
+    coord,
+    arrow,
+    arrow.fill,
+    lineend = "butt",
+    linejoin = "round",
+    na.rm = FALSE
+  ) {
+    GeomSegment$draw_panel(
+      data,
+      panel_params,
+      coord,
+      arrow = arrow,
+      arrow.fill = arrow.fill,
+      lineend = lineend,
+      linejoin = linejoin,
+      na.rm = FALSE
     )
   }
 )

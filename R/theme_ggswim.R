@@ -39,8 +39,20 @@ theme_ggswim <- function(base_size = 12, base_family = "") {
   theme_minimal(base_size = base_size, base_family = base_family) +
     theme(
       # Title and subtitle
-      plot.title = element_text(size = 18, face = "bold", hjust = 0, margin = margin(b = 10), colour = "#000000"),
-      plot.subtitle = element_text(size = 14, face = "bold", hjust = 0, margin = margin(b = 10), colour = "#000000"),
+      plot.title = element_text(
+        size = 18,
+        face = "bold",
+        hjust = 0,
+        margin = margin(b = 10),
+        colour = "#000000"
+      ),
+      plot.subtitle = element_text(
+        size = 14,
+        face = "bold",
+        hjust = 0,
+        margin = margin(b = 10),
+        colour = "#000000"
+      ),
 
       # Caption
       plot.caption = element_text(size = 10, hjust = 1),
@@ -85,8 +97,20 @@ theme_ggswim_dark <- function(base_size = 12, base_family = "") {
       panel.background = element_rect(fill = "#232234", color = NA),
 
       # Title and subtitle
-      plot.title = element_text(size = 18, face = "bold", hjust = 0, margin = margin(b = 10), colour = "#F0F0F0"),
-      plot.subtitle = element_text(size = 14, face = "bold", hjust = 0, margin = margin(b = 10), colour = "#F0F0F0"),
+      plot.title = element_text(
+        size = 18,
+        face = "bold",
+        hjust = 0,
+        margin = margin(b = 10),
+        colour = "#F0F0F0"
+      ),
+      plot.subtitle = element_text(
+        size = 14,
+        face = "bold",
+        hjust = 0,
+        margin = margin(b = 10),
+        colour = "#F0F0F0"
+      ),
 
       # Caption
       plot.caption = element_text(size = 10, hjust = 1, colour = "#F0F0F0"),
@@ -98,8 +122,16 @@ theme_ggswim_dark <- function(base_size = 12, base_family = "") {
 
       # Axis titles
       axis.title = element_text(size = 12, face = "bold", colour = "#F0F0F0"),
-      axis.title.x = element_text(size = 14, margin = margin(t = 10), colour = "#F0F0F0"),
-      axis.title.y = element_text(size = 14, margin = margin(r = 10), colour = "#F0F0F0"),
+      axis.title.x = element_text(
+        size = 14,
+        margin = margin(t = 10),
+        colour = "#F0F0F0"
+      ),
+      axis.title.y = element_text(
+        size = 14,
+        margin = margin(r = 10),
+        colour = "#F0F0F0"
+      ),
 
       # Axis tick marks
       axis.ticks = element_line(linewidth = 0.75, colour = "#F0F0F0"),
