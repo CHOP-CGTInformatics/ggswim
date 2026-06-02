@@ -51,9 +51,12 @@ test_that("pal_arrows warns when more values are requested than available", {
     n_values = 2
   )
 
-  expect_error(
-    pal(3),
-    "Can't subset elements past the end."
+  expect_warning(
+    expect_error(
+      pal(3),
+      "Can't subset elements past the end."
+    ),
+    "This palette can handle a maximum of 2 values."
   )
 })
 

@@ -349,43 +349,46 @@ GeomSwimArrow <- ggproto("GeomSwimArrow", GeomSegment,
                         lineend = "butt",
                         linejoin = "round",
                         na.rm = FALSE) {
-    # If a mapped `arrow` aesthetic is present, use it to define arrow styling.
-    # Each arrow value is a record containing colour, fill, and type.
-    if ("arrow" %in% names(data) && !all(vctrs::vec_detect_missing(data$arrow))) {
-      data$colour <- vapply(
-        data$arrow,
-        function(x) vctrs::field(x, "colour"),
-        character(1)
-      )
+    # A mapped arrow aesthetic is converted by scale_arrow_discrete() into a
+    # swim_arrow record. Plain unmapped default values remain ordinary NA values.
+    has_scaled_arrow <- "arrow" %in% names(data) && inherits(data$arrow, "swim_arrow")
 
-      data$fill <- vapply(
-        data$arrow,
-        function(x) vctrs::field(x, "fill"),
-        character(1)
-      )
+    if (has_scaled_arrow) {
+      # Missing mapped arrow values mean this row should not draw an arrow.
+      # Dropping them prevents NA arrow types from being treated as a second type.
+      missing_arrow <- vctrs::vec_detect_missing(data$arrow)
+      data <- data[!missing_arrow, , drop = FALSE]
 
-      arrow_types <- vapply(
-        data$arrow,
-        function(x) vctrs::field(x, "type"),
-        character(1)
-      )
+      # If every mapped arrow value was missing, there is nothing to draw for
+      # this panel, so return an empty grob instead of continuing into grid.
+      if (nrow(data) == 0) {
+        return(grid::nullGrob())
+      }
 
-      # grid::arrow() accepts a single arrow type for the draw call, so all
-      # rows in a layer must currently share the same type.
+      # Pull colour, fill, and type out of the swim_arrow records after missing
+      # values have been removed.
+      arrow_aes <- extract_arrow_aesthetics(data)
+
+      data$colour <- arrow_aes$colour
+      data$fill <- arrow_aes$fill
+      arrow_types <- arrow_aes$type
+
+      # grid::arrow() accepts one arrow type per draw call, so multiple
+      # non-missing arrow types in one layer remain unsupported.
       if (length(unique(arrow_types)) > 1) {
         cli::cli_abort(
           "geom_swim_arrow() currently supports only one arrow type per layer."
         )
       }
 
+      # Build the grid arrow using the single remaining mapped arrow type.
       arrow <- grid::arrow(
         type = unique(arrow_types),
         length = arrow_head_length
       )
       arrow.fill <- data$fill
     } else {
-      # If no mapped `arrow` aesthetic is present, use the fixed styling
-      # parameters supplied directly to geom_swim_arrow().
+      # No scaled arrow aesthetic was mapped, so use the fixed geom parameters.
       data$colour <- arrow_colour
       arrow <- grid::arrow(
         type = arrow_type,

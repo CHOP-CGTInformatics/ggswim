@@ -145,6 +145,48 @@ test_that("geom_swim_arrow errors when multiple arrow types occur in one layer",
   )
 })
 
+test_that("geom_swim_arrow skips missing mapped arrow values", {
+  df <- data.frame(
+    id = factor(c("A", "B")),
+    end_time = c(10, 20),
+    label = c("Continuation", NA)
+  )
+
+  p <- ggplot2::ggplot() +
+    geom_swim_arrow(
+      data = df,
+      ggplot2::aes(y = id, xend = end_time, arrow = label),
+      arrow_neck_length = 2,
+      show.legend = c(arrow = TRUE)
+    ) +
+    scale_arrow_discrete(
+      limits = "Continuation",
+      colours = "black",
+      fills = "black",
+      types = "closed"
+    )
+
+  expect_no_error(ggplot2::ggplotGrob(p))
+})
+
+test_that("geom_swim_arrow handles all mapped arrow values missing", {
+  df <- data.frame(
+    id = factor(c("A", "B")),
+    end_time = c(10, 20),
+    label = c(NA_character_, NA_character_)
+  )
+
+  p <- ggplot2::ggplot() +
+    geom_swim_arrow(
+      data = df,
+      ggplot2::aes(y = id, xend = end_time, arrow = label),
+      arrow_neck_length = 2
+    ) +
+    scale_arrow_discrete(limits = "Continuation")
+
+  expect_no_error(ggplot2::ggplotGrob(p))
+})
+
 test_that("draw_key_swim_arrow returns a grob", {
   key_data <- data.frame(
     colour = "black",
