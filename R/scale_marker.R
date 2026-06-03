@@ -1,7 +1,7 @@
 #' @title Position scales for discrete marker data
 #'
 #' @description
-#' [scale_marker_discrete()] is used to set discrete x aesthetics for swimmer plot
+#' [scale_marker_discrete()] is used to set the discrete `marker` x aesthetic for swimmer plot
 #' markers.
 #'
 #' @param glyphs Marker glyphs passed to the marker layer, taking on the form of

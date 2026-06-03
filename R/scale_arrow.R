@@ -1,7 +1,7 @@
 #' @title Position scales for discrete arrow data
 #'
 #' @description
-#' [scale_arrow_discrete()] is used to set discrete arrow aesthetics for swimmer
+#' [scale_arrow_discrete()] is used to set the discrete `arrow` aesthetic for swimmer
 #' plot arrows.
 #'
 #' @param colours Arrow outline colours passed to the arrow layer.
