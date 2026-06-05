@@ -12,10 +12,9 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 coverage](https://codecov.io/gh/CHOP-CGTInformatics/ggswim/branch/main/graph/badge.svg)](https://app.codecov.io/gh/CHOP-CGTInformatics/ggswim?branch=main)
 <!-- badges: end -->
 
-The ggswim package provides a convenient set of commands to easily
-create swimmer plots. As an extension of ggplot2, it streamlines the
-process of generating legends that effectively communicate events of
-interest along subject response paths.
+ggswim helps you build swimmer plots with ggplot2-style layers. It
+streamlines the process of adding lanes, markers, arrows, and legends
+that communicate events of interest along subject response paths.
 
 ggswim solves some of the headaches associated with layer management in
 ggplot2 by organizing and classifying data into “markers” and “lanes.”
@@ -38,9 +37,9 @@ To help you get started, ggswim includes three sample datasets:
 de-identified datasets simulate real world data related to infusions,
 disease assessments, and study statuses for a clinical trial.
 
-ggswim offers several geom-functions, and by using `geom_swim_lane()` we
-can set up the horizontal response paths of our swimmer plot, i.e. the
-“lanes”. We’ll also set up corresponding arrows to indicate subjects
+ggswim offers several ggplot2-style layers. Using `geom_swim_lane()`, we
+can set up the horizontal response paths of our swimmer plot, or
+“lanes.” We’ll also set up corresponding arrows to indicate subjects
 that are still on the trial:
 
 ``` r
@@ -79,7 +78,7 @@ p <- patient_data |>
 p
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" alt="Initial swimmer plot with lanes and arows." width="100%" />
+<img src="man/figures/README-unnamed-chunk-2-1.png" alt="Initial swimmer plot with lanes and arrows." width="100%" />
 
 Next we’ll add on events of interest: end of study updates and
 infusions. We’ll refer to these as “markers” and call them with the next
@@ -105,10 +104,9 @@ p
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" alt="Updated swimmer plot with event markers." width="100%" />
 
-This looks OK as a default, but it’s not quite as nice as we’d like it
-to be. Let’s specify that we have particular `glyph`s and `colour`s we’d
-like to use in a certain order for the markers with ggswim’s
-`scale_marker_discrete()`.
+The default markers work, but explicit `glyph`s and `colour`s make the
+legend easier to read. We can set those marker values, and their display
+order, with `scale_marker_discrete()`.
 
 ``` r
 p <- p +
@@ -137,7 +135,18 @@ p +
   theme_ggswim()
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" alt="Final swimmer plot with themeing." width="100%" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" alt="Final swimmer plot with theming." width="100%" />
+
+## Where to go next
+
+Start with [Getting Started with
+ggswim](https://chop-cgtinformatics.github.io/ggswim/articles/ggswim.html)
+for a step-by-step introduction to lanes, markers, and marker scales.
+Read [Adding arrows to
+ggswim](https://chop-cgtinformatics.github.io/ggswim/articles/adding_arrows.html)
+when you need continuation indicators, and browse the
+[Gallery](https://chop-cgtinformatics.github.io/ggswim/articles/gallery.html)
+for glyph, icon, and theme examples.
 
 ## Collaboration
 

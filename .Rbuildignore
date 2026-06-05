@@ -43,3 +43,5 @@ inst/testdata/create_test_data.R
 .venv/
 
 ^font$
+
+^AGENTS

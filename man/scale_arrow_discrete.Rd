@@ -83,7 +83,7 @@ notation.
   }}
 }
 \description{
-\code{\link[=scale_arrow_discrete]{scale_arrow_discrete()}} is used to set discrete arrow aesthetics for swimmer
+\code{\link[=scale_arrow_discrete]{scale_arrow_discrete()}} is used to set the discrete \code{arrow} aesthetic for swimmer
 plot arrows.
 }
 \examples{

@@ -2,13 +2,18 @@ test_that("geom_swim_lane is the right class", {
   layer <- geom_swim_lane(
     data = patient_data,
     mapping = aes(
-      x = start_time, y = pt_id,
-      xend = end_time, color = disease_assessment
+      x = start_time,
+      y = pt_id,
+      xend = end_time,
+      color = disease_assessment
     )
   )
 
   expected_classes <- c(
-    "LayerInstance", "Layer", "ggproto", "gg"
+    "LayerInstance",
+    "Layer",
+    "ggproto",
+    "gg"
   )
 
   expect_setequal(attr(layer, "class"), expected_classes)
@@ -18,8 +23,10 @@ test_that("all expected attributes exist in geom_swim_lane", {
   layer <- geom_swim_lane(
     data = patient_data,
     mapping = aes(
-      x = start_time, y = pt_id,
-      xend = end_time, color = disease_assessment
+      x = start_time,
+      y = pt_id,
+      xend = end_time,
+      color = disease_assessment
     )
   )
 
@@ -34,10 +41,14 @@ test_that("all expected attributes exist in geom_swim_lane", {
 
 test_that("geom_swim_lane works when inheriting data and associated params", {
   p <- patient_data |>
-    ggplot(mapping = aes(
-      x = start_time, y = pt_id, xend = end_time,
-      colour = disease_assessment
-    )) +
+    ggplot(
+      mapping = aes(
+        x = start_time,
+        y = pt_id,
+        xend = end_time,
+        colour = disease_assessment
+      )
+    ) +
     geom_swim_lane()
 
   skip_on_ci()

@@ -1,7 +1,7 @@
 #' @title Position scales for discrete marker data
 #'
 #' @description
-#' [scale_marker_discrete()] is used to set discrete x aesthetics for swimmer plot
+#' [scale_marker_discrete()] is used to set the discrete `marker` x aesthetic for swimmer plot
 #' markers.
 #'
 #' @param glyphs Marker glyphs passed to the marker layer, taking on the form of
@@ -34,7 +34,12 @@
 #'
 #' @export
 
-scale_marker_discrete <- function(glyphs = NULL, colours = NULL, limits = NULL, ...) {
+scale_marker_discrete <- function(
+  glyphs = NULL,
+  colours = NULL,
+  limits = NULL,
+  ...
+) {
   # Define max value lengths for core params
   n_values <- max(c(length(glyphs), length(colours), length(limits)))
 
@@ -57,9 +62,13 @@ scale_marker_discrete <- function(glyphs = NULL, colours = NULL, limits = NULL, 
     n_values = nrow(markers)
   )
 
-  discrete_scale("marker", rlang::missing_arg(),
+  discrete_scale(
+    "marker",
+    rlang::missing_arg(),
     palette = palette,
-    limits = markers$labels, ..., na.translate = FALSE
+    limits = markers$labels,
+    ...,
+    na.translate = FALSE
   )
 }
 
@@ -68,7 +77,9 @@ scale_marker_discrete <- function(glyphs = NULL, colours = NULL, limits = NULL, 
 pal_markers <- function(glyphs = NULL, colours = NULL, n_values = NULL) {
   # Define colour and glyph lengths via markers supplied or default values
   n_values <- n_values %||% max(length(glyphs), length(colours))
-  if (n_values == 0) n_values <- length(.default_glyphs)
+  if (n_values == 0) {
+    n_values <- length(.default_glyphs)
+  }
   # Create a vctrs list to store colour and glyph values
   markers <- vctrs::new_rcrd(
     list(
@@ -118,7 +129,17 @@ pal_markers <- function(glyphs = NULL, colours = NULL, n_values = NULL) {
 
 #' @rdname dot-default_glyphs
 #' @export
-.default_limits <- c("val1", "val2", "val3", "val4", "val5", "val6", "val7", "val8", "val9")
+.default_limits <- c(
+  "val1",
+  "val2",
+  "val3",
+  "val4",
+  "val5",
+  "val6",
+  "val7",
+  "val8",
+  "val9"
+)
 
 #' @noRd
 #' @export

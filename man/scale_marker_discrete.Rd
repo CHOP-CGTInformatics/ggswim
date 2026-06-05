@@ -85,7 +85,7 @@ notation.
   }}
 }
 \description{
-\code{\link[=scale_marker_discrete]{scale_marker_discrete()}} is used to set discrete x aesthetics for swimmer plot
+\code{\link[=scale_marker_discrete]{scale_marker_discrete()}} is used to set the discrete \code{marker} x aesthetic for swimmer plot
 markers.
 }
 \examples{

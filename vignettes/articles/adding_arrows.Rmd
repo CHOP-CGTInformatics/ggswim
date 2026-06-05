@@ -11,16 +11,16 @@ knitr::opts_chunk$set(
 )
 ```
 
-It can be useful to visually indicate the continuation of specific records in a swimmer plot. Optionally adding arrows to the tail ends of swimmer plot lanes in ggswim can help communicate subject survival status, such as whether or not a subject is still on a given study.
+It can be useful to visually indicate the continuation of specific records in a swimmer plot. Adding arrows to the tail ends of swimmer plot lanes in ggswim can help communicate subject survival status, such as whether or not a subject is still on a given study. Use this article when the README example is not enough and you need more control over arrow placement, styling, or legends.
 
-To facilitate the addition of arrows, we provide the geom_swim_arrow() function as a way to tack on these continuation indicators to your swimmer plot lanes. Behind the scenes, the inclusion of arrows is facilitated by a call to `ggplot2::geom_segment()`, setting zero-length segments so that assigned arrows are always placed on the right side of indicated lanes. `geom_swim_arrow()` gives users control over arrow neck and head length, along with options for color, fill, and type (refer to `?geom_swim_arrow` for detailed information).
+To facilitate the addition of arrows, we provide `geom_swim_arrow()` as a way to attach continuation indicators to swimmer plot lanes. Behind the scenes, arrows are drawn with `ggplot2::geom_segment()`. When only `xend` is mapped, `geom_swim_arrow()` treats `xend` as the lane endpoint and extends a fixed-length arrow neck to the right. When both `x` and `xend` are mapped, the arrow extent is data-driven. `geom_swim_arrow()` gives users control over arrow neck and head length, along with options for colour/color, fill, and type; refer to `?geom_swim_arrow` for detailed information.
 
 Arrow appearance can be specified in two ways:
 
 - directly via parameters such as `arrow_colour`, `arrow_fill`, and `arrow_type`
 - by mapping the arrow aesthetic and supplying styles through `scale_arrow_discrete()`
 
-`geom_swim_arrow()` does not replace the ability to separately call arrows using the arrow parameter in `geom_swim_lane()`. As mentioned, `geom_swim_lane()` comes with nearly all of the same capabilities as `geom_segment()`, but it may be more challenging to apply arrows as expected depending on how your data is structured.
+`geom_swim_arrow()` does not replace the ability to use the `arrow` parameter in `geom_swim_lane()`. As mentioned, `geom_swim_lane()` comes with nearly all of the same capabilities as `geom_segment()`, but it may be more challenging to apply arrows as expected depending on how your data is structured.
 
 ## Adding arrows using `geom_swim_arrow()`
 
@@ -44,7 +44,7 @@ arrow_data <- patient_data |>
 arrow_data
 ```
 
-This should look familiar as a pared-down subset of `end_study_events` without an indicated `label`. Since filled out label statuses from `end_study_events` dataset mean a subject went off study, arrows are only applicable for subjects with no end study status. Now let's use `geom_swim_arrow()` in combination with `geom_swim_lane()` to make a swimmer plot:
+This dataset is derived from `patient_data` joined to end-study labels. Since populated labels in `end_study_events` mean a subject went off study, arrows are only applicable for subjects with no end-study status. Now let's use `geom_swim_arrow()` in combination with `geom_swim_lane()` to make a swimmer plot:
 
 ```{r, fig.alt="Swimmer plot display with arrow specification."}
 patient_data |>
@@ -66,9 +66,9 @@ patient_data |>
   )
 ```
 
-Here we've correctly assigned arrows to only the subset of patients that have not met an end of study event. Note that `geom_swim_arrow()` gives plenty of control to the arrow head and neck color, shape, and even length.
+Here we've assigned arrows to only the subset of patients that have not met an end-of-study event. Note that `geom_swim_arrow()` gives control over the arrow head, neck, colour/color, shape, and length.
 
-`geom_swim_arrow()` also allows for aesthetically mapped x "start" and `xend` values. If you would prefer to have dynamically mapped arrow neck lengths indicative of your data, simply supply the `x` and `xend` values in `aes()` for `geom_swim_arrow()` to use.
+`geom_swim_arrow()` also allows aesthetically mapped `x` start and `xend` values. If you would prefer arrow neck lengths to come from your data, supply both `x` and `xend` in `aes()`.
 
 ## Using `scale_arrow_discrete()` for arrow styling
 

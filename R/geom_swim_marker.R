@@ -50,14 +50,18 @@
 #'
 #' @export
 
-geom_swim_marker <- function(mapping = NULL, data = NULL,
-                             stat = "identity", position = "identity",
-                             ...,
-                             check_overlap = FALSE,
-                             size.unit = "mm",
-                             na.rm = FALSE,
-                             show.legend = NA,
-                             inherit.aes = TRUE) {
+geom_swim_marker <- function(
+  mapping = NULL,
+  data = NULL,
+  stat = "identity",
+  position = "identity",
+  ...,
+  check_overlap = FALSE,
+  size.unit = "mm",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE
+) {
   layer(
     data = data,
     mapping = mapping,
@@ -80,19 +84,30 @@ geom_swim_marker <- function(mapping = NULL, data = NULL,
 #' @usage NULL
 #' @export
 GeomSwimMarker <- ggproto(
-  "GeomSwimMarker", GeomText,
+  "GeomSwimMarker",
+  GeomText,
   default_aes = GeomText$default_aes[names(GeomText$default_aes) != "colour"],
   required_aes = c("x", "y", "marker"),
-  draw_panel = function(self, data, panel_params, coord, size.unit = "mm",
-                        check_overlap = FALSE, na.rm = FALSE) {
+  draw_panel = function(
+    self,
+    data,
+    panel_params,
+    coord,
+    size.unit = "mm",
+    check_overlap = FALSE,
+    na.rm = FALSE
+  ) {
     data$colour <- vctrs::field(data$marker, "colour")
     data$label <- vctrs::field(data$marker, "glyphs")
     data$marker <- NULL
 
     GeomText$draw_panel(
-      data, panel_params, coord,
+      data,
+      panel_params,
+      coord,
       check_overlap = check_overlap,
-      size.unit = size.unit, na.rm = na.rm
+      size.unit = size.unit,
+      na.rm = na.rm
     )
   },
   draw_key = function(data, params, size) {
