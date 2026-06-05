@@ -1,22 +1,27 @@
 # Adding arrows to ggswim
 
 It can be useful to visually indicate the continuation of specific
-records in a swimmer plot. Optionally adding arrows to the tail ends of
-swimmer plot lanes in ggswim can help communicate subject survival
-status, such as whether or not a subject is still on a given study.
+records in a swimmer plot. Adding arrows to the tail ends of swimmer
+plot lanes in ggswim can help communicate subject survival status, such
+as whether or not a subject is still on a given study. Use this article
+when the README example is not enough and you need more control over
+arrow placement, styling, or legends.
 
-To facilitate the addition of arrows, we provide the geom_swim_arrow()
-function as a way to tack on these continuation indicators to your
-swimmer plot lanes. Behind the scenes, the inclusion of arrows is
-facilitated by a call to
-[`ggplot2::geom_segment()`](https://ggplot2.tidyverse.org/reference/geom_segment.html),
-setting zero-length segments so that assigned arrows are always placed
-on the right side of indicated lanes.
+To facilitate the addition of arrows, we provide
+[`geom_swim_arrow()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_arrow.md)
+as a way to attach continuation indicators to swimmer plot lanes. Behind
+the scenes, arrows are drawn with
+[`ggplot2::geom_segment()`](https://ggplot2.tidyverse.org/reference/geom_segment.html).
+When only `xend` is mapped,
+[`geom_swim_arrow()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_arrow.md)
+treats `xend` as the lane endpoint and extends a fixed-length arrow neck
+to the right. When both `x` and `xend` are mapped, the arrow extent is
+data-driven.
 [`geom_swim_arrow()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_arrow.md)
 gives users control over arrow neck and head length, along with options
-for color, fill, and type (refer to
+for colour/color, fill, and type; refer to
 [`?geom_swim_arrow`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_arrow.md)
-for detailed information).
+for detailed information.
 
 Arrow appearance can be specified in two ways:
 
@@ -26,8 +31,7 @@ Arrow appearance can be specified in two ways:
   [`scale_arrow_discrete()`](https://chop-cgtinformatics.github.io/ggswim/reference/scale_arrow_discrete.md)
 
 [`geom_swim_arrow()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_arrow.md)
-does not replace the ability to separately call arrows using the arrow
-parameter in
+does not replace the ability to use the `arrow` parameter in
 [`geom_swim_lane()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_lane.md).
 As mentioned,
 [`geom_swim_lane()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_lane.md)
@@ -43,6 +47,7 @@ let’s take a subset of `patient_data` that would help us make use of
 [`geom_swim_arrow()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_arrow.md):
 
 ``` r
+
 library(ggswim)
 library(ggplot2)
 
@@ -71,16 +76,17 @@ arrow_data
 #> 8 19         6   NA
 ```
 
-This should look familiar as a pared-down subset of `end_study_events`
-without an indicated `label`. Since filled out label statuses from
-`end_study_events` dataset mean a subject went off study, arrows are
-only applicable for subjects with no end study status. Now let’s use
+This dataset is derived from `patient_data` joined to end-study labels.
+Since populated labels in `end_study_events` mean a subject went off
+study, arrows are only applicable for subjects with no end-study status.
+Now let’s use
 [`geom_swim_arrow()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_arrow.md)
 in combination with
 [`geom_swim_lane()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_lane.md)
 to make a swimmer plot:
 
 ``` r
+
 patient_data |>
   ggplot() +
   geom_swim_lane(
@@ -103,19 +109,17 @@ patient_data |>
 ![Swimmer plot display with arrow
 specification.](adding_arrows_files/figure-html/unnamed-chunk-3-1.png)
 
-Here we’ve correctly assigned arrows to only the subset of patients that
-have not met an end of study event. Note that
+Here we’ve assigned arrows to only the subset of patients that have not
+met an end-of-study event. Note that
 [`geom_swim_arrow()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_arrow.md)
-gives plenty of control to the arrow head and neck color, shape, and
-even length.
+gives control over the arrow head, neck, colour/color, shape, and
+length.
 
 [`geom_swim_arrow()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_arrow.md)
-also allows for aesthetically mapped x “start” and `xend` values. If you
-would prefer to have dynamically mapped arrow neck lengths indicative of
-your data, simply supply the `x` and `xend` values in
-[`aes()`](https://ggplot2.tidyverse.org/reference/aes.html) for
-[`geom_swim_arrow()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_arrow.md)
-to use.
+also allows aesthetically mapped `x` start and `xend` values. If you
+would prefer arrow neck lengths to come from your data, supply both `x`
+and `xend` in
+[`aes()`](https://ggplot2.tidyverse.org/reference/aes.html).
 
 ## Using `scale_arrow_discrete()` for arrow styling
 
@@ -131,6 +135,7 @@ and then define its appearance using
 [`scale_arrow_discrete()`](https://chop-cgtinformatics.github.io/ggswim/reference/scale_arrow_discrete.md):
 
 ``` r
+
 patient_data |>
   ggplot() +
   geom_swim_lane(

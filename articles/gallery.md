@@ -1,17 +1,23 @@
 # Gallery
 
 ``` r
+
 library(ggswim)
 library(ggplot2)
 library(dplyr)
 ```
 
-## Random Data Sets
+This gallery collects small variations on ggswim plots. It assumes you
+already understand the lane and marker workflow from Getting Started,
+and focuses instead on glyph choices, icon fonts, and themes.
 
-In this example, we’ll set up some random data for reproducibility by
-defining dataframes for our lanes and our markers.
+## Emoji Markers with Simulated Data
+
+In this example, we’ll set up simulated data for reproducibility by
+defining dataframes for our lanes and markers.
 
 ``` r
+
 set.seed(123)
 lane_data <- tibble(
   x = 0,
@@ -39,10 +45,11 @@ marker_data <- tibble(
   )
 ```
 
-And then we’ll call those dataframes into their appropriate swim and
-marker geom functions:
+Now we can call those dataframes with their appropriate lane and marker
+layers:
 
 ``` r
+
 ggplot() +
   geom_swim_lane(
     data = lane_data,
@@ -71,12 +78,17 @@ markers.](gallery_files/figure-html/unnamed-chunk-3-1.png)
 
 ## Using FontAwesome Icons
 
-Next, we’ll replace the emojis above with calls to
+This example replaces the marker glyphs above with calls to
 [`fontawesome()`](https://chop-cgtinformatics.github.io/ggswim/reference/fontawesome.md)
 icons after first loading fonts with
-[`load_fonts()`](https://chop-cgtinformatics.github.io/ggswim/reference/load_fonts.md):
+[`load_fonts()`](https://chop-cgtinformatics.github.io/ggswim/reference/load_fonts.md).
+The first call to
+[`load_fonts()`](https://chop-cgtinformatics.github.io/ggswim/reference/load_fonts.md)
+may require internet access because ggswim retrieves the font files from
+the GitHub repository.
 
 ``` r
+
 # Load fonts from the ggswim GitHub repository
 load_fonts(verbose = FALSE)
 
@@ -139,6 +151,7 @@ We can similarly use Bootstrap icons with
 [`bootstrap()`](https://chop-cgtinformatics.github.io/ggswim/reference/bootstrap.md):
 
 ``` r
+
 marker_data <- marker_data |>
   mutate(
     glyph = dplyr::case_when(
@@ -188,13 +201,13 @@ to check what icons are available to use.
 > ggswim supports Bootstrap free icons through the open source
 > [license](https://github.com/twbs/bootstrap/blob/main/LICENSE).
 
-## Themeing with ggswim
+## Theming with ggswim
 
-Here we’ll demonstrate some of the theme functions available with
-ggswim. These examples will use the same plot setup from the README,
-starting with the original output:
+These examples show the theme functions available with ggswim. They use
+the same plot setup from the README, starting with the original output:
 
 ``` r
+
 p
 ```
 
@@ -204,6 +217,7 @@ ggswim.](gallery_files/figure-html/unnamed-chunk-7-1.png)
 ### `theme_ggswim()`
 
 ``` r
+
 p + theme_ggswim()
 ```
 
@@ -214,6 +228,7 @@ theme_ggswim().](gallery_files/figure-html/unnamed-chunk-8-1.png)
 ### `theme_ggswim_dark()`
 
 ``` r
+
 p + theme_ggswim_dark()
 ```
 

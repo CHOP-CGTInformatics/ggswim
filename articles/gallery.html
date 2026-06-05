@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Fira_Code-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Fira_Code-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Gallery">
@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggswim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,11 +76,15 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://chop-cgtinformatics.github.io/ggswim/">ggswim</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
+<p>This gallery collects small variations on ggswim plots. It assumes
+you already understand the lane and marker workflow from Getting
+Started, and focuses instead on glyph choices, icon fonts, and
+themes.</p>
 <div class="section level2">
-<h2 id="random-data-sets">Random Data Sets<a class="anchor" aria-label="anchor" href="#random-data-sets"></a>
+<h2 id="emoji-markers-with-simulated-data">Emoji Markers with Simulated Data<a class="anchor" aria-label="anchor" href="#emoji-markers-with-simulated-data"></a>
 </h2>
-<p>In this example, we’ll set up some random data for reproducibility by
-defining dataframes for our lanes and our markers.</p>
+<p>In this example, we’ll set up simulated data for reproducibility by
+defining dataframes for our lanes and markers.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="va">lane_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
@@ -107,8 +111,8 @@ defining dataframes for our lanes and our markers.</p>
 <span>      .default <span class="op">=</span> <span class="cn">NA</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p>And then we’ll call those dataframes into their appropriate swim and
-marker geom functions:</p>
+<p>Now we can call those dataframes with their appropriate lane and
+marker layers:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/geom_swim_lane.html">geom_swim_lane</a></span><span class="op">(</span></span>
@@ -136,9 +140,11 @@ marker geom functions:</p>
 <div class="section level2">
 <h2 id="using-fontawesome-icons">Using FontAwesome Icons<a class="anchor" aria-label="anchor" href="#using-fontawesome-icons"></a>
 </h2>
-<p>Next, we’ll replace the emojis above with calls to
+<p>This example replaces the marker glyphs above with calls to
 <code><a href="../reference/fontawesome.html">fontawesome()</a></code> icons after first loading fonts with
-<code><a href="../reference/load_fonts.html">load_fonts()</a></code>:</p>
+<code><a href="../reference/load_fonts.html">load_fonts()</a></code>. The first call to <code><a href="../reference/load_fonts.html">load_fonts()</a></code>
+may require internet access because ggswim retrieves the font files from
+the GitHub repository.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load fonts from the ggswim GitHub repository</span></span>
 <span><span class="fu"><a href="../reference/load_fonts.html">load_fonts</a></span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
@@ -241,11 +247,11 @@ available to use.</p>
 </blockquote>
 </div>
 <div class="section level2">
-<h2 id="themeing-with-ggswim">Themeing with ggswim<a class="anchor" aria-label="anchor" href="#themeing-with-ggswim"></a>
+<h2 id="theming-with-ggswim">Theming with ggswim<a class="anchor" aria-label="anchor" href="#theming-with-ggswim"></a>
 </h2>
-<p>Here we’ll demonstrate some of the theme functions available with
-ggswim. These examples will use the same plot setup from the README,
-starting with the original output:</p>
+<p>These examples show the theme functions available with ggswim. They
+use the same plot setup from the README, starting with the original
+output:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span></span></code></pre></div>
 <p><img src="gallery_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="A swimmer plot displaying use of the default datasets in ggswim." width="100%"></p>

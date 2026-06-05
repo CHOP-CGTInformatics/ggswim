@@ -1,7 +1,7 @@
 # Position scales for discrete arrow data
 
-`scale_arrow_discrete()` is used to set discrete arrow aesthetics for
-swimmer plot arrows.
+`scale_arrow_discrete()` is used to set the discrete `arrow` aesthetic
+for swimmer plot arrows.
 
 ## Usage
 

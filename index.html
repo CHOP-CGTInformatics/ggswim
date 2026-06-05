@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="favicon.ico">
 <link rel="manifest" href="site.webmanifest">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/Fira_Code-0.4.10/font.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/Fira_Code-0.4.10/font.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Create swimmer plots with ggswim">
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ggswim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,7 +69,7 @@
 </div>
 <!-- badges: start -->
 
-<p>The ggswim package provides a convenient set of commands to easily create swimmer plots. As an extension of ggplot2, it streamlines the process of generating legends that effectively communicate events of interest along subject response paths.</p>
+<p>ggswim helps you build swimmer plots with ggplot2-style layers. It streamlines the process of adding lanes, markers, arrows, and legends that communicate events of interest along subject response paths.</p>
 <p>ggswim solves some of the headaches associated with layer management in ggplot2 by organizing and classifying data into “markers” and “lanes.” While nothing changes about the data itself, the way it’s presented winds up being much closer to what’s expected to communicate a swimmer plot’s contents.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -82,7 +82,7 @@
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
 <p>To help you get started, ggswim includes three sample datasets: <code>patient_data</code>, <code>infusion_events</code>, and <code>end_study_events</code>. These de-identified datasets simulate real world data related to infusions, disease assessments, and study statuses for a clinical trial.</p>
-<p>ggswim offers several geom-functions, and by using <code><a href="reference/geom_swim_lane.html">geom_swim_lane()</a></code> we can set up the horizontal response paths of our swimmer plot, i.e. the “lanes”. We’ll also set up corresponding arrows to indicate subjects that are still on the trial:</p>
+<p>ggswim offers several ggplot2-style layers. Using <code><a href="reference/geom_swim_lane.html">geom_swim_lane()</a></code>, we can set up the horizontal response paths of our swimmer plot, or “lanes.” We’ll also set up corresponding arrows to indicate subjects that are still on the trial:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://chop-cgtinformatics.github.io/ggswim/">ggswim</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
@@ -117,7 +117,7 @@
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-2-1.png" alt="Initial swimmer plot with lanes and arows." width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-2-1.png" alt="Initial swimmer plot with lanes and arrows." width="100%"></p>
 <p>Next we’ll add on events of interest: end of study updates and infusions. We’ll refer to these as “markers” and call them with the next main “geom” function: <code><a href="reference/geom_swim_marker.html">geom_swim_marker()</a></code>. While it is often common to see these datasets as separate components in the wild, we’ll make our lives a little easier during plotting by combining them first.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">all_events</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
@@ -134,7 +134,7 @@
 <span></span>
 <span><span class="va">p</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-3-1.png" alt="Updated swimmer plot with event markers." width="100%"></p>
-<p>This looks OK as a default, but it’s not quite as nice as we’d like it to be. Let’s specify that we have particular <code>glyph</code>s and <code>colour</code>s we’d like to use in a certain order for the markers with ggswim’s <code><a href="reference/scale_marker_discrete.html">scale_marker_discrete()</a></code>.</p>
+<p>The default markers work, but explicit <code>glyph</code>s and <code>colour</code>s make the legend easier to read. We can set those marker values, and their display order, with <code><a href="reference/scale_marker_discrete.html">scale_marker_discrete()</a></code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">p</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/scale_marker_discrete.html">scale_marker_discrete</a></span><span class="op">(</span></span>
@@ -153,7 +153,12 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"My Swimmer Plot"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Time Since Initial Infusion (Months)"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Patient ID"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/theme_ggswim.html">theme_ggswim</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-5-1.png" alt="Final swimmer plot with themeing." width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-5-1.png" alt="Final swimmer plot with theming." width="100%"></p>
+</div>
+<div class="section level2">
+<h2 id="where-to-go-next">Where to go next<a class="anchor" aria-label="anchor" href="#where-to-go-next"></a>
+</h2>
+<p>Start with <a href="https://chop-cgtinformatics.github.io/ggswim/articles/ggswim.html">Getting Started with ggswim</a> for a step-by-step introduction to lanes, markers, and marker scales. Read <a href="https://chop-cgtinformatics.github.io/ggswim/articles/adding_arrows.html">Adding arrows to ggswim</a> when you need continuation indicators, and browse the <a href="https://chop-cgtinformatics.github.io/ggswim/articles/gallery.html">Gallery</a> for glyph, icon, and theme examples.</p>
 </div>
 <div class="section level2">
 <h2 id="collaboration">Collaboration<a class="anchor" aria-label="anchor" href="#collaboration"></a>

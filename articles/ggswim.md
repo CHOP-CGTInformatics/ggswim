@@ -1,32 +1,35 @@
 # Getting Started with ggswim
 
-The ggswim package eases the development of swimmer plots in R through
-extension of ggplot2. In this vignette, we’ll walk through how users can
-create visually striking swimmer plots.
+The ggswim package helps you build swimmer plots in R with ggplot2-style
+layers. This vignette walks through the main workflow: adding patient
+timelines, placing events on those timelines, styling marker legends,
+and applying final plot polish.
 
-ggswim offers several layering functions that mimic other “geom”
-functions from ggplot2:
+ggswim offers several functions that fit into familiar ggplot2
+workflows:
 
 - [`geom_swim_lane()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_lane.md)
 - [`geom_swim_marker()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_marker.md)
 - [`scale_marker_discrete()`](https://chop-cgtinformatics.github.io/ggswim/reference/scale_marker_discrete.md)
+- [`geom_swim_arrow()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_arrow.md)
+- [`scale_arrow_discrete()`](https://chop-cgtinformatics.github.io/ggswim/reference/scale_arrow_discrete.md)
+- [`theme_ggswim()`](https://chop-cgtinformatics.github.io/ggswim/reference/theme_ggswim.md)
 
-The former, an extension of
+[`geom_swim_lane()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_lane.md),
+an extension of
 [`geom_segment()`](https://ggplot2.tidyverse.org/reference/geom_segment.html),
-allows users to construct the horizontal bars, what we’ll sometimes
-refer to as “lanes.” Meanwhile,
+constructs the horizontal timelines, which we’ll refer to as “lanes.”
 [`geom_swim_marker()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_marker.md)
 wraps
 [`geom_text()`](https://ggplot2.tidyverse.org/reference/geom_text.html)
-to effortlessly embed key events of interest, or “markers,” onto the
-lanes. These can take the form of shapes, symbols, or even emojis.
+to place key events of interest, or “markers,” on those lanes. These
+markers can take the form of shapes, symbols, or emojis. Arrows and
+themes are covered briefly here, with more examples in the focused
+articles.
 
-Drawing from the well-established principles of ggplot2, ggswim allows
-users to apply familiar layer-building techniques, including the
-application of styles and themes. You’ll also see that common behaviors
-are still accessible with ggswim such as auto-completing
-[`aes()`](https://ggplot2.tidyverse.org/reference/aes.html) parameters
-with piping.
+Drawing from the well-established principles of ggplot2, ggswim lets
+users apply familiar layer-building techniques, including scales,
+labels, and themes.
 
 ### Adding a Lane Layer
 
@@ -51,10 +54,10 @@ Let’s start with observing `patient_data`’s structure:
     #> 10 03    CR/CRi + B Cell Aplasia         0.9      2.8
     #> # ℹ 65 more rows
 
-`patient_data` contains a long dataset where patient ID’s (`pt_id`) can
-be repeated. These rows are differentiated by `disease_assessments`s
-combined with corresponding start and end times, representing months.
-Together, these rows detail clinical trial timelines for a given
+`patient_data` contains a long dataset where patient IDs (`pt_id`) can
+be repeated. These rows are differentiated by `disease_assessment`
+values combined with corresponding start and end times, measured in
+months. Together, these rows detail clinical trial timelines for each
 patient.
 
 - `disease_assessment` is broken down into a few categories where:
@@ -68,6 +71,7 @@ our first layer with
 [`geom_swim_lane()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_lane.md):
 
 ``` r
+
 library(ggplot2)
 
 p <- ggplot() +
@@ -88,15 +92,14 @@ p
 ![Initial swimmer plot with
 lanes.](ggswim_files/figure-html/ggswim%20plot-1.png)
 
-Here we have a simple bar graph showing infusions grouped by patients
-with a given disease assessment status.
+Here we have patient timelines split into disease assessment intervals.
 [`geom_swim_lane()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_lane.md)
 does the work of setting up
 [`geom_segment()`](https://ggplot2.tidyverse.org/reference/geom_segment.html)
 and readying our plot layers for additional ggswim-specific features
 such as the “markers” mentioned earlier. It’s worth noting that
 [`geom_swim_lane()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_lane.md)
-is a very thin wrapper around
+is a thin wrapper around
 [`geom_segment()`](https://ggplot2.tidyverse.org/reference/geom_segment.html)
 and supports the same functionality apart from a `yend` since swimmer
 plots tend to be horizontal.
@@ -107,6 +110,7 @@ Now, let’s add a marker layer by first inspecting the `infusion_events`
 and `end_study_events` datasets:
 
 ``` r
+
 infusion_events
 #> # A tibble: 18 × 5
 #>    pt_id time_from_initial_infusion label             glyph colour 
@@ -143,6 +147,7 @@ Next, let’s look at our end of study events, i.e. events that indicate a
 patient has left the study for various reasons.
 
 ``` r
+
 end_study_events
 #> # A tibble: 7 × 4
 #>   pt_id time_from_initial_infusion label                     glyph
@@ -156,11 +161,10 @@ end_study_events
 #> 7 12                           9.7 Other End Study Reason    ⚠️
 ```
 
-You’ll notice that this dataset includes use of emojis under `glyph`. In
-addition to shapes and symbols, ggswim supports the use of emojis when
-rendering swimmer plots. If issues arise in rendering, you may need to
-check your options settings and ensure a proper graphics device like
-“AGG”.
+You’ll notice that this dataset includes emojis under `glyph`. In
+addition to shapes and symbols, ggswim supports emojis when rendering
+swimmer plots. If emojis or custom shapes do not render as expected,
+check your graphics device settings; AGG devices usually work well.
 
 While it’s common to encounter these as separate datasets in the wild,
 it will make our lives much easier to combine `end_study_events` and
@@ -168,6 +172,7 @@ it will make our lives much easier to combine `end_study_events` and
 structure and the markers exist on the same timeline.
 
 ``` r
+
 all_events <- dplyr::bind_rows(
   infusion_events,
   end_study_events
@@ -198,6 +203,7 @@ custom `marker`
 [`aes()`](https://ggplot2.tidyverse.org/reference/aes.html) parameter:
 
 ``` r
+
 p <- p +
   geom_swim_marker(
     data = all_events,
@@ -215,11 +221,10 @@ p
 ![Updated swimmer plot with
 markers.](ggswim_files/figure-html/second%20marker%20plot-1.png)
 
-We’ve successfully made a swimmer plot with lanes and two different
-kinds of marker layers! Notice how even though both the lanes and
-markers use the color scale, they are separated in the legend output.
-Let’s take it one step further and make use of the `glyph` and `colour`
-columns we specified.
+We’ve made a swimmer plot with lanes and two kinds of events. Notice how
+even though both the lanes and markers use colour internally, they are
+separated in the legend output. Let’s take it one step further and make
+use of the `glyph` and `colour` columns we specified.
 
 ## A Sense of Scale
 
@@ -231,13 +236,14 @@ responsible for connecting data with aesthetics and communicating those
 connections through elements like the plot legend.
 
 [`scale_marker_discrete()`](https://chop-cgtinformatics.github.io/ggswim/reference/scale_marker_discrete.md)
-makes it easy to specify and take finer control over your markers and
-their appearance in the legend. Typically, it can be difficult to have
-emojis and labels appear in the place of legend glyphs. Let’s take a
-look at a typical output using base ggplot2 with
-[`geom_text()`](https://ggplot2.tidyverse.org/reference/geom_text.html):
+makes it easy to control marker appearance in the plot and legend. This
+is helpful because plain
+[`geom_text()`](https://ggplot2.tidyverse.org/reference/geom_text.html)
+can show event labels, but it does not give ggswim’s separate marker
+legend behavior:
 
 ``` r
+
 ggplot() +
   geom_text(
     data = all_events,
@@ -250,17 +256,10 @@ ggplot() +
 incorrect output.](ggswim_files/figure-html/unnamed-chunk-2-1.png)
 
 [`geom_text()`](https://ggplot2.tidyverse.org/reference/geom_text.html)
-does a decent job, and is actually what
+is useful, and it is what
 [`geom_swim_marker()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_marker.md)
-wraps. However, at it’s base level it doesn’t quite set up the use of
-glyphs the way we would like to see them in the legend display.
-Additionally, those glyphs don’t appear in the plot. You could try to
-rework this with
-[`geom_point()`](https://ggplot2.tidyverse.org/reference/geom_point.html)
-or
-[`geom_label()`](https://ggplot2.tidyverse.org/reference/geom_text.html),
-but would still run into issues with scale assignment. This pain point
-is one of the foundational reasons we made ggswim in the first place!
+wraps, but it does not connect event labels, display glyphs, and legend
+entries the way swimmer plots often need.
 
 Thanks to ggswim we can specify what belongs in the glyph versus text
 elements of our legend. Additionally, we are able to use the “colour”
@@ -269,6 +268,7 @@ scale under the hood, but keep the identity of “markers” and “lanes”
 separate in the output:
 
 ``` r
+
 p <- p +
   scale_marker_discrete(
     name = "Study Events",
@@ -290,6 +290,7 @@ apply to your usual plots apply here. Below, we update the lanes to
 match a nicer palette with a new name and add on some plot labels:
 
 ``` r
+
 library(ggplot2)
 
 p <- p +
@@ -307,17 +308,18 @@ p
 ![Updated swimmer plot with updated color
 scales.](ggswim_files/figure-html/mapping%20finalizing-1.png)
 
-We can also apply the
+We can also apply
 [`theme_ggswim()`](https://chop-cgtinformatics.github.io/ggswim/reference/theme_ggswim.md)
-function to give it some additional beautification:
+for a swimmer-plot-oriented theme:
 
 ``` r
+
 p +
   theme_ggswim()
 ```
 
 ![Updated swimmer plot with
-themeing.](ggswim_files/figure-html/mapping%20with%20theme_ggswim-1.png)
+theming.](ggswim_files/figure-html/mapping%20with%20theme_ggswim-1.png)
 
 ### Additional notes
 
@@ -331,3 +333,8 @@ Some additional considerations to keep in mind when working with ggswim:
 - ggswim supports use of FontAwesome and Bootstrap icons for glyph
   definition in addition to shapes and emojis. Check out the Gallery for
   examples on how to add them to your plots!
+- See the Adding arrows article for a focused guide to continuation
+  indicators with
+  [`geom_swim_arrow()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_arrow.md)
+  and
+  [`scale_arrow_discrete()`](https://chop-cgtinformatics.github.io/ggswim/reference/scale_arrow_discrete.md).

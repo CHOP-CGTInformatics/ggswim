@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Fira_Code-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Fira_Code-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Adding arrows to ggswim">
@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggswim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,18 +73,22 @@
     
     
 <p>It can be useful to visually indicate the continuation of specific
-records in a swimmer plot. Optionally adding arrows to the tail ends of
-swimmer plot lanes in ggswim can help communicate subject survival
-status, such as whether or not a subject is still on a given study.</p>
-<p>To facilitate the addition of arrows, we provide the
-geom_swim_arrow() function as a way to tack on these continuation
-indicators to your swimmer plot lanes. Behind the scenes, the inclusion
-of arrows is facilitated by a call to
-<code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">ggplot2::geom_segment()</a></code>, setting zero-length segments so
-that assigned arrows are always placed on the right side of indicated
-lanes. <code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> gives users control over arrow
-neck and head length, along with options for color, fill, and type
-(refer to <code><a href="../reference/geom_swim_arrow.html">?geom_swim_arrow</a></code> for detailed information).</p>
+records in a swimmer plot. Adding arrows to the tail ends of swimmer
+plot lanes in ggswim can help communicate subject survival status, such
+as whether or not a subject is still on a given study. Use this article
+when the README example is not enough and you need more control over
+arrow placement, styling, or legends.</p>
+<p>To facilitate the addition of arrows, we provide
+<code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> as a way to attach continuation
+indicators to swimmer plot lanes. Behind the scenes, arrows are drawn
+with <code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">ggplot2::geom_segment()</a></code>. When only <code>xend</code>
+is mapped, <code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> treats <code>xend</code> as
+the lane endpoint and extends a fixed-length arrow neck to the right.
+When both <code>x</code> and <code>xend</code> are mapped, the arrow
+extent is data-driven. <code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> gives users
+control over arrow neck and head length, along with options for
+colour/color, fill, and type; refer to <code><a href="../reference/geom_swim_arrow.html">?geom_swim_arrow</a></code> for
+detailed information.</p>
 <p>Arrow appearance can be specified in two ways:</p>
 <ul>
 <li>directly via parameters such as <code>arrow_colour</code>,
@@ -94,11 +98,10 @@ neck and head length, along with options for color, fill, and type
 <code><a href="../reference/scale_arrow_discrete.html">scale_arrow_discrete()</a></code>
 </li>
 </ul>
-<p><code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> does not replace the ability to
-separately call arrows using the arrow parameter in
-<code><a href="../reference/geom_swim_lane.html">geom_swim_lane()</a></code>. As mentioned,
-<code><a href="../reference/geom_swim_lane.html">geom_swim_lane()</a></code> comes with nearly all of the same
-capabilities as <code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">geom_segment()</a></code>, but it may be more
+<p><code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> does not replace the ability to use
+the <code>arrow</code> parameter in <code><a href="../reference/geom_swim_lane.html">geom_swim_lane()</a></code>. As
+mentioned, <code><a href="../reference/geom_swim_lane.html">geom_swim_lane()</a></code> comes with nearly all of the
+same capabilities as <code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">geom_segment()</a></code>, but it may be more
 challenging to apply arrows as expected depending on how your data is
 structured.</p>
 <div class="section level2">
@@ -135,11 +138,10 @@ structured.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 17         2.8 <span style="color: #BB0000;">NA</span>   </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> 18         3.3 <span style="color: #BB0000;">NA</span>   </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> 19         6   <span style="color: #BB0000;">NA</span></span></span></code></pre></div>
-<p>This should look familiar as a pared-down subset of
-<code>end_study_events</code> without an indicated <code>label</code>.
-Since filled out label statuses from <code>end_study_events</code>
-dataset mean a subject went off study, arrows are only applicable for
-subjects with no end study status. Now let’s use
+<p>This dataset is derived from <code>patient_data</code> joined to
+end-study labels. Since populated labels in
+<code>end_study_events</code> mean a subject went off study, arrows are
+only applicable for subjects with no end-study status. Now let’s use
 <code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> in combination with
 <code><a href="../reference/geom_swim_lane.html">geom_swim_lane()</a></code> to make a swimmer plot:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -161,15 +163,14 @@ subjects with no end study status. Now let’s use
 <span>    arrow_fill <span class="op">=</span> <span class="st">"gold"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="adding_arrows_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="Swimmer plot display with arrow specification." width="1152"></p>
-<p>Here we’ve correctly assigned arrows to only the subset of patients
-that have not met an end of study event. Note that
-<code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> gives plenty of control to the arrow head
-and neck color, shape, and even length.</p>
-<p><code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> also allows for aesthetically mapped x
-“start” and <code>xend</code> values. If you would prefer to have
-dynamically mapped arrow neck lengths indicative of your data, simply
-supply the <code>x</code> and <code>xend</code> values in
-<code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> for <code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> to use.</p>
+<p>Here we’ve assigned arrows to only the subset of patients that have
+not met an end-of-study event. Note that <code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code>
+gives control over the arrow head, neck, colour/color, shape, and
+length.</p>
+<p><code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> also allows aesthetically mapped
+<code>x</code> start and <code>xend</code> values. If you would prefer
+arrow neck lengths to come from your data, supply both <code>x</code>
+and <code>xend</code> in <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code>.</p>
 </div>
 <div class="section level2">
 <h2 id="using-scale_arrow_discrete-for-arrow-styling">Using <code>scale_arrow_discrete()</code> for arrow styling<a class="anchor" aria-label="anchor" href="#using-scale_arrow_discrete-for-arrow-styling"></a>
