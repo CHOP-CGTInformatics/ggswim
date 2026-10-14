@@ -13,3 +13,5 @@ vignettes/*.html
 vignettes/*.pdf
 README.html
 AGENTS.md
+/.quarto/
+**/*.quarto_ipynb
