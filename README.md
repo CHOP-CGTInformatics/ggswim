@@ -47,11 +47,7 @@ in a single ggplot. Each layer can use its own data while sharing the
 same axes.
 
 <details>
-
-<summary>
-
-Load packages and prepare the example data
-</summary>
+<summary><strong>Click to expand: load packages and prepare the example data</strong></summary>
 
 ``` r
 library(ggswim)

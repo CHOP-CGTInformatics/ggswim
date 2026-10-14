@@ -58,8 +58,10 @@ devtools::install_github("CHOP-CGTInformatics/ggswim")
 Prepare the included datasets, then combine lanes, arrows, and markers in a
 single ggplot. Each layer can use its own data while sharing the same axes.
 
+```{=html}
 <details>
-<summary>Load packages and prepare the example data</summary>
+<summary><strong>Click to expand: load packages and prepare the example data</strong></summary>
+```
 
 ```{r prepare-data, eval=FALSE}
 library(ggswim)
@@ -79,7 +81,9 @@ arrow_data <- patient_data |>
   dplyr::distinct()
 ```
 
+```{=html}
 </details>
+```
 
 ```{r plot-code, eval=FALSE}
 ggplot() +
