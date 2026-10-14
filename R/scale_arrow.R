@@ -1,4 +1,4 @@
-#' @title Position scales for discrete arrow data
+#' @title Appearance scales for discrete arrow data
 #'
 #' @description
 #' [scale_arrow_discrete()] is used to set the discrete `arrow` aesthetic for swimmer
@@ -11,6 +11,17 @@
 #' @param limits Arrow labels passed to the arrow scale.
 #' @inheritParams ggplot2::scale_x_discrete
 #' @inheritParams ggplot2::discrete_scale
+#'
+#' @details
+#' When supplying custom styles, also supply `limits` containing the event
+#' categories in the same order. Styles are matched positionally; names on style
+#' vectors are not used for matching. `limits` defines the available categories
+#' and their order, while `labels` (passed through `...`) changes legend text.
+#' Missing values and categories outside `limits` are not displayed.
+#'
+#' With no arguments, the scale supplies one default arrow style. For multiple
+#' categories, supply explicit styles and limits. All arrow types within a panel
+#' must currently be the same; use separate layers for open and closed arrows.
 #'
 #' @examples
 #' \dontrun{
@@ -93,14 +104,13 @@ pal_arrows <- function(
     class = "swim_arrow"
   )
 
-  # If the values supplied are of a length greater than the default palette,
-  # throw a warning.
   function(n) {
     if (n > n_values) {
-      cli::cli_warn(
-        "This palette can handle a maximum of {n_values} values. \\
-        You have supplied {n}."
-      )
+      cli::cli_abort(c(
+        "Insufficient styles in {.fn scale_arrow_discrete}.",
+        "x" = "{n} categories requested, but only {n_values} styles are available.",
+        "i" = "Supply a style for each category and matching explicit {.arg limits}."
+      ))
     }
     arrows[seq_len(n)]
   }

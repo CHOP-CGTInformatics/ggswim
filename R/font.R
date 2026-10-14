@@ -284,7 +284,10 @@ retrieve_unicode <- function(
 #' - Bootstrap
 #'
 #' Users can choose which fonts to load by providing a vector of font family names.
-#' The default is to load all supported fonts.
+#' The default is to load all supported fonts. Valid cached files are reused,
+#' so subsequent calls can work offline. Missing or unreadable fonts are
+#' downloaded to a temporary file and validated before entering the cache.
+#' Download or registration failures produce a warning and skip that font.
 #'
 #' @param fonts A character vector of font families to load. Valid options are
 #'   `"bootstrap-icons"`, `"fa-brands-400"`, `"fa-regular-400"`, and `"fa-solid-900"`.
@@ -334,51 +337,52 @@ load_fonts <- function(
       family
     )
 
-    if (is.na(font_url)) {
-      warning(sprintf("No remote URL defined for font family '%s'", family))
-      return(invisible(NULL))
-    }
-
-    # Determine a persistent file path in the cache
     cached_file <- file.path(cache_dir, sprintf("%s.ttf", family))
 
-    # Attempt to download the font file; if download fails, mark download_success as FALSE.
-    download_success <- tryCatch(
-      {
-        download.file(
-          font_url,
-          destfile = cached_file,
-          mode = "wb",
-          quiet = TRUE
+    if (!valid_font_file(cached_file)) {
+      temporary_file <- tempfile(pattern = "ggswim-font-", tmpdir = cache_dir)
+      on.exit(unlink(temporary_file), add = TRUE)
+      downloaded <- tryCatch({
+        status <- download.file(
+          font_url, destfile = temporary_file, mode = "wb", quiet = TRUE
         )
+        if (!identical(status, 0L) && !identical(status, 0)) {
+          stop("Download returned a nonzero status.")
+        }
+        if (!valid_font_file(temporary_file)) {
+          stop("Downloaded file is not a readable font.")
+        }
+        if (!file.rename(temporary_file, cached_file)) {
+          stop("Could not move the downloaded font into the cache.")
+        }
         TRUE
-      },
-      error = function(e) {
+      }, error = function(e) {
         warning(sprintf(
-          "Failed to download font '%s' from %s",
-          family,
-          font_url
-        ))
+          "Failed to download font '%s' from %s: %s",
+          family, font_url, conditionMessage(e)
+        ), call. = FALSE)
         FALSE
+      })
+      if (!downloaded) {
+        return(invisible(NULL))
       }
-    )
+    }
 
-    # If download failed or the file doesn't exist, skip registration.
-    if (!download_success || !file.exists(cached_file)) {
+    font_name <- custom_names[[family]]
+    registered <- tryCatch({
+      register_font(
+        name = font_name, plain = cached_file, features = feature_spec
+      )
+      TRUE
+    }, error = function(e) {
+      warning(sprintf(
+        "Failed to register font '%s': %s", family, conditionMessage(e)
+      ), call. = FALSE)
+      FALSE
+    })
+    if (!registered) {
       return(invisible(NULL))
     }
-
-    # Use custom naming if available.
-    font_name <- if (family %in% names(custom_names)) {
-      custom_names[family]
-    } else {
-      family
-    }
-    register_font(
-      name = font_name,
-      plain = cached_file,
-      features = feature_spec
-    )
 
     if (verbose) {
       cli({
@@ -397,4 +401,15 @@ load_fonts <- function(
   }
 
   invisible(registry_fonts())
+}
+
+#' @noRd
+valid_font_file <- function(path) {
+  if (!file.exists(path) || is.na(file.size(path)) || file.size(path) == 0) {
+    return(FALSE)
+  }
+  tryCatch({
+    info <- systemfonts::font_info(path = path)
+    nrow(info) == 1L && isTRUE(info$n_glyphs[[1]] > 0)
+  }, error = function(e) FALSE, warning = function(w) FALSE)
 }

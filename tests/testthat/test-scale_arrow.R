@@ -43,7 +43,7 @@ test_that("scale_arrow_discrete uses defaults when values are not supplied", {
   expect_equal(vctrs::field(vals, "type"), .default_arrow_types)
 })
 
-test_that("pal_arrows warns when more values are requested than available", {
+test_that("pal_arrows errors clearly when more values are requested than available", {
   pal <- pal_arrows(
     colours = c("black", "red"),
     fills = c("black", "red"),
@@ -51,13 +51,7 @@ test_that("pal_arrows warns when more values are requested than available", {
     n_values = 2
   )
 
-  expect_warning(
-    expect_error(
-      pal(3),
-      "Can't subset elements past the end."
-    ),
-    "This palette can handle a maximum of 2 values."
-  )
+  expect_error(pal(3), "3 categories requested, but only 2 styles")
 })
 
 test_that("scale_arrow_discrete works in a ggplot build", {

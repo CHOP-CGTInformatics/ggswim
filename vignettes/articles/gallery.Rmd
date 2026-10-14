@@ -81,7 +81,7 @@ ggplot() +
 
 ## Using FontAwesome Icons
 
-This example replaces the marker glyphs above with calls to `fontawesome()` icons after first loading fonts with `load_fonts()`. The first call to `load_fonts()` may require internet access because ggswim retrieves the font files from the GitHub repository.
+This example replaces the marker glyphs above with calls to `fontawesome()` icons after first loading fonts with `load_fonts()`. The first call to `load_fonts()` may require internet access because ggswim retrieves the font files from the GitHub repository. Subsequent calls reuse readable cached files and can work offline; missing or unreadable files are downloaded again.
 
 ```{r, fig.alt="A swimmer plot displaying use of FontAwesome icons for event markers."}
 # Load fonts from the ggswim GitHub repository

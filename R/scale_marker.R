@@ -1,7 +1,7 @@
-#' @title Position scales for discrete marker data
+#' @title Appearance scales for discrete marker data
 #'
 #' @description
-#' [scale_marker_discrete()] is used to set the discrete `marker` x aesthetic for swimmer plot
+#' [scale_marker_discrete()] is used to set the discrete `marker` aesthetic for swimmer plot
 #' markers.
 #'
 #' @param glyphs Marker glyphs passed to the marker layer, taking on the form of
@@ -11,6 +11,16 @@
 #' Default colours are provided in the absence of defined ones.
 #' @inheritParams ggplot2::scale_x_discrete
 #' @inheritParams ggplot2::discrete_scale
+#'
+#' @details
+#' When supplying custom styles, also supply `limits` containing the event
+#' categories in the same order. Styles are matched positionally; names on style
+#' vectors are not used for matching. `limits` defines the available categories
+#' and their order, while `labels` (passed through `...`) changes legend text.
+#' Missing values and categories outside `limits` are not displayed.
+#'
+#' With no arguments, the scale supplies up to nine default marker styles.
+#' For more categories, provide enough explicit glyphs, colours, and limits.
 #'
 #' @examples
 #' \dontrun{
@@ -89,14 +99,13 @@ pal_markers <- function(glyphs = NULL, colours = NULL, n_values = NULL) {
     class = "marker"
   )
 
-  # If the values supplied are of a length greater than the default palette,
-  # throw a warning.
   function(n) {
     if (n > n_values) {
-      cli::cli_warn(
-        "This palette can handle a maximum of {n_values} values. \\
-         You have supplied {n}."
-      )
+      cli::cli_abort(c(
+        "Insufficient styles in {.fn scale_marker_discrete}.",
+        "x" = "{n} categories requested, but only {n_values} styles are available.",
+        "i" = "Supply a style for each category and matching explicit {.arg limits}."
+      ))
     }
     markers[seq_len(n)]
   }

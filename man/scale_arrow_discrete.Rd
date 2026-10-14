@@ -2,7 +2,7 @@
 % Please edit documentation in R/scale_arrow.R
 \name{scale_arrow_discrete}
 \alias{scale_arrow_discrete}
-\title{Position scales for discrete arrow data}
+\title{Appearance scales for discrete arrow data}
 \usage{
 scale_arrow_discrete(
   colours = NULL,
@@ -85,6 +85,17 @@ notation.
 \description{
 \code{\link[=scale_arrow_discrete]{scale_arrow_discrete()}} is used to set the discrete \code{arrow} aesthetic for swimmer
 plot arrows.
+}
+\details{
+When supplying custom styles, also supply \code{limits} containing the event
+categories in the same order. Styles are matched positionally; names on style
+vectors are not used for matching. \code{limits} defines the available categories
+and their order, while \code{labels} (passed through \code{...}) changes legend text.
+Missing values and categories outside \code{limits} are not displayed.
+
+With no arguments, the scale supplies one default arrow style. For multiple
+categories, supply explicit styles and limits. All arrow types within a panel
+must currently be the same; use separate layers for open and closed arrows.
 }
 \examples{
 \dontrun{

@@ -130,7 +130,7 @@ We've made a swimmer plot with lanes and two kinds of events. Notice how even th
 
 Scales are a unique component of the ggplot2 framework. For more information on them and understanding how they work, you are encouraged to read the "Scales" chapter from [ggplot2: Elegant Graphics for Data Analysis](https://ggplot2-book.org/scales). In short, scales are responsible for connecting data with aesthetics and communicating those connections through elements like the plot legend.
 
-`scale_marker_discrete()` makes it easy to control marker appearance in the plot and legend. This is helpful because plain `geom_text()` can show event labels, but it does not give ggswim's separate marker legend behavior:
+`scale_marker_discrete()` makes it easy to control marker appearance in the plot and legend. Supply `limits` alongside custom glyphs or colours: styles match event categories by position, not by vector names. Use `labels` to change legend text without changing event categories. This is helpful because plain `geom_text()` can show event labels, but it does not give ggswim's separate marker legend behavior:
 
 ```{r, fig.alt="Example display of markers without scale_marker_discrete, leading to incorrect output."}
 ggplot() +

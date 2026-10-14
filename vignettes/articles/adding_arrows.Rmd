@@ -114,3 +114,18 @@ Using `scale_arrow_discrete()` is particularly helpful when:
 - arrow styling should be managed consistently across plots
 
 For simple cases, specifying arrow parameters directly in `geom_swim_arrow()` may still be sufficient. However, using `scale_arrow_discrete()` provides a more flexible and scalable approach when working with more complex swimmer plots.
+
+## Inheritance and current styling limits
+
+Arrow layers inherit plot data and aesthetics just like other ggplot2 layers.
+When supplying a separate arrow dataset, use `inherit.aes = FALSE` if it lacks
+variables used in global mappings, then map `y` and `xend` explicitly (and `x`
+when specifying both endpoints).
+
+For custom arrow styles, supply event categories in `limits` in the same order
+as `colours`, `fills`, and `types`. Vector names do not control matching. The
+default arrow palette supplies one style; multiple categories need explicit
+styles and limits. Use separate layers when combining open and closed arrows
+in one panel. Standard `colour` settings are overridden by arrow styling; use
+`arrow_colour` for fixed styling or the `arrow` aesthetic and its scale for a
+matching legend.

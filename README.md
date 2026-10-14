@@ -105,7 +105,9 @@ p
 <img src="man/figures/README-unnamed-chunk-3-1.png" alt="Updated swimmer plot with event markers." width="100%" />
 
 The default markers work, but explicit `glyph`s and `colour`s make the
-legend easier to read. We can set those marker values, and their display
+legend easier to read. When supplying custom styles, provide matching event
+names in `limits`, in the same order; names on glyph and colour vectors are
+not used for matching. We can set those marker values, and their display
 order, with `scale_marker_discrete()`.
 
 ``` r

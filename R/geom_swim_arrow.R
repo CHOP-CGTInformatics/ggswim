@@ -100,8 +100,10 @@ draw_key_swim_arrow <- function(data, params, size) {
 #' or status extends beyond the plotted period.
 #'
 #' @details
-#' Please note that [geom_swim_arrow()] requires a `data` argument and does not
-#' inherit data like other functions.
+#' Like other ggplot2 layers, [geom_swim_arrow()] inherits plot data when
+#' `data = NULL`. Supply layer-specific data to draw arrows for a subset of lanes.
+#' Set `inherit.aes = FALSE` when that data does not contain variables used in
+#' the plot's global aesthetic mappings.
 #'
 #' [geom_swim_arrow()] supports two approaches for defining arrow appearance:
 #'
@@ -123,10 +125,9 @@ draw_key_swim_arrow <- function(data, params, size) {
 #'
 #' If `x` is mapped, `arrow_neck_length` is ignored.
 #'
-#' @param data A data frame prepared for use with [geom_swim_arrow()]. Required.
+#' @param data Layer data. If `NULL`, inherits the data supplied to `ggplot()`.
 #' @inheritParams ggplot2::geom_segment
-#' @param position Position adjustment. ggswim accepts either `"stack"` or
-#'   `"identity"` depending on the use case. Default is `"identity"`.
+#' @param position Position adjustment passed to ggplot2. Default is `"identity"`.
 #' @param arrow_colour The outline colour of the arrow segment and arrow head
 #'   when using fixed arrow parameters.
 #' @param arrow_fill The fill colour of the arrow head when using fixed arrow
@@ -165,29 +166,33 @@ draw_key_swim_arrow <- function(data, params, size) {
 #' If the `arrow` aesthetic is not mapped, arrow appearance can be set directly
 #' with `arrow_colour`, `arrow_fill`, and `arrow_type`.
 #'
-#' If the `arrow` aesthetic is mapped, arrow appearance is instead determined by
-#' [scale_arrow_discrete()], and the fixed arrow parameters are used only as a
-#' fallback.
+#' If the `arrow` aesthetic is mapped, arrow appearance is determined by
+#' [scale_arrow_discrete()]; missing mapped styles are omitted. Otherwise use
+#' `arrow_colour`, `arrow_fill`, and `arrow_type`. Standard `colour` mappings
+#' and settings are currently overridden by arrow styling. Use the `arrow`
+#' aesthetic and its scale for a legend matching the arrow styles. Within each
+#' panel, a layer currently supports only one arrow type; use separate layers
+#' to combine open and closed arrows.
 #'
 #' @section Underlying geom:
 #' [geom_swim_arrow()] is a wrapper for [ggplot2::geom_segment()] and supports
 #' much of the same functionality.
 #'
 #' @examples
-#' # Set up data for arrows
+#' # Subjects without an end-study event receive continuation arrows.
 #' arrow_data <- patient_data |>
 #'   dplyr::left_join(
 #'     end_study_events |>
 #'       dplyr::select(pt_id, label),
 #'     by = "pt_id"
 #'   ) |>
-#'   dplyr::select(pt_id, end_time, label) |>
+#'   dplyr::select(pt_id, start_time, end_time, label) |>
 #'   dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
-#'   dplyr::filter(!is.na(label)) |>
+#'   dplyr::filter(is.na(label)) |>
 #'   unique()
 #'
 #' # Parameter-driven arrow styling
-#' geom_swim_arrow(
+#' ggplot2::ggplot() + geom_swim_arrow(
 #'   data = arrow_data,
 #'   mapping = aes(xend = end_time, y = pt_id),
 #'   linewidth = 0.1,
@@ -199,7 +204,7 @@ draw_key_swim_arrow <- function(data, params, size) {
 #' )
 #'
 #' # Mapped start and end positions
-#' geom_swim_arrow(
+#' ggplot2::ggplot() + geom_swim_arrow(
 #'   data = arrow_data,
 #'   mapping = aes(x = start_time, xend = end_time, y = pt_id),
 #'   linewidth = 0.1,

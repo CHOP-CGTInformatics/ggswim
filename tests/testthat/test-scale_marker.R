@@ -71,7 +71,7 @@ test_that("scale_marker_discrete throws warning for continuous data types", {
   )
 })
 
-test_that("scale_marker_discrete warns when more markers are requested than available", {
+test_that("scale_marker_discrete errors clearly when more markers are requested than available", {
   glyphs <- c("●", "■", "▲")
   colours <- c("red", "green", "blue")
   limits <- c("1", "2", "3")
@@ -82,8 +82,7 @@ test_that("scale_marker_discrete warns when more markers are requested than avai
     limits = limits
   )
 
-  expect_error(scale$palette(5), "Can't subset elements past the end.") |>
-    suppressWarnings()
+  expect_error(scale$palette(5), "5 categories requested, but only 3 styles")
 })
 
 test_that("scale_marker_discrete uses default glyphs when missing", {

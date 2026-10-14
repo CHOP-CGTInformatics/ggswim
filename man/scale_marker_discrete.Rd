@@ -2,7 +2,7 @@
 % Please edit documentation in R/scale_marker.R
 \name{scale_marker_discrete}
 \alias{scale_marker_discrete}
-\title{Position scales for discrete marker data}
+\title{Appearance scales for discrete marker data}
 \usage{
 scale_marker_discrete(glyphs = NULL, colours = NULL, limits = NULL, ...)
 }
@@ -85,8 +85,18 @@ notation.
   }}
 }
 \description{
-\code{\link[=scale_marker_discrete]{scale_marker_discrete()}} is used to set the discrete \code{marker} x aesthetic for swimmer plot
+\code{\link[=scale_marker_discrete]{scale_marker_discrete()}} is used to set the discrete \code{marker} aesthetic for swimmer plot
 markers.
+}
+\details{
+When supplying custom styles, also supply \code{limits} containing the event
+categories in the same order. Styles are matched positionally; names on style
+vectors are not used for matching. \code{limits} defines the available categories
+and their order, while \code{labels} (passed through \code{...}) changes legend text.
+Missing values and categories outside \code{limits} are not displayed.
+
+With no arguments, the scale supplies up to nine default marker styles.
+For more categories, provide enough explicit glyphs, colours, and limits.
 }
 \examples{
 \dontrun{

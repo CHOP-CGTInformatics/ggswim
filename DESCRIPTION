@@ -31,7 +31,6 @@ Imports:
     tidyr,
     tidyselect,
     vctrs
-RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 Suggests: 
     knitr,
@@ -39,10 +38,12 @@ Suggests:
     ragg,
     rmarkdown,
     testthat (>= 3.0.0),
-    vdiffr
+    vdiffr,
+    withr
 Config/testthat/edition: 3
 Config/Needs/website: rmarkdown
 Language: en-US
 VignetteBuilder: knitr
 Depends: 
     R (>= 3.5)
+Config/roxygen2/version: 8.1.0
