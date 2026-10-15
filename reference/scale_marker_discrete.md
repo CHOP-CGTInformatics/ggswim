@@ -1,7 +1,7 @@
-# Position scales for discrete marker data
+# Appearance scales for discrete marker data
 
-`scale_marker_discrete()` is used to set the discrete `marker` x
-aesthetic for swimmer plot markers.
+`scale_marker_discrete()` is used to set the discrete `marker` aesthetic
+for swimmer plot markers.
 
 ## Usage
 
@@ -142,6 +142,19 @@ scale_marker_discrete(glyphs = NULL, colours = NULL, limits = NULL, ...)
   `super`
 
   :   The super class to use for the constructed scale
+
+## Details
+
+When supplying custom styles, also supply `limits` containing the event
+categories in the same order. Styles are matched positionally; names on
+style vectors are not used for matching. `limits` defines the available
+categories and their order, while `labels` (passed through `...`)
+changes legend text. Missing values and categories outside `limits` are
+not displayed.
+
+With no arguments, the scale supplies up to nine default marker styles.
+When the scale needs more styles than a default vector provides, supply
+explicit values for that style; otherwise the scale reports an error.
 
 ## Examples
 

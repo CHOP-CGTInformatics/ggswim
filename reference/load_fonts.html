@@ -11,7 +11,7 @@ Font files and their associated licenses are available on the main branch."><met
 
     <a class="navbar-brand me-2" href="../index.html">ggswim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,7 +82,10 @@ The default is to load all supported fonts.</p></dd>
 </ul></li>
 <li><p>Bootstrap</p></li>
 </ul><p>Users can choose which fonts to load by providing a vector of font family names.
-The default is to load all supported fonts.</p>
+The default is to load all supported fonts. Valid cached files are reused,
+so subsequent calls can work offline. Missing or unreadable fonts are
+downloaded to a temporary file and validated before entering the cache.
+Download or registration failures produce a warning and skip that font.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -94,7 +97,7 @@ The default is to load all supported fonts.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

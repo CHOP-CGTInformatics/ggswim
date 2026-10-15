@@ -12,16 +12,17 @@ To facilitate the addition of arrows, we provide
 as a way to attach continuation indicators to swimmer plot lanes. Behind
 the scenes, arrows are drawn with
 [`ggplot2::geom_segment()`](https://ggplot2.tidyverse.org/reference/geom_segment.html).
-When only `xend` is mapped,
-[`geom_swim_arrow()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_arrow.md)
-treats `xend` as the lane endpoint and extends a fixed-length arrow neck
-to the right. When both `x` and `xend` are mapped, the arrow extent is
-data-driven.
-[`geom_swim_arrow()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_arrow.md)
-gives users control over arrow neck and head length, along with options
-for colour/color, fill, and type; refer to
+When only `xend` is mapped, it marks the lane endpoint and
+`arrow_neck_length` sets the extension in position-scale coordinates
+(ordinary numeric units on a linear axis). If omitted, the current
+default is 15% of the largest `xend` in the arrow layer. On transformed
+axes that calculation uses transformed coordinates. For `Date` axes or
+transformed scales, set both `x` and `xend` explicitly to control arrow
+placement. When both `x` and `xend` are mapped, those coordinates define
+the arrow neck and `arrow_neck_length` is ignored. `arrow_head_length`
+is a grid unit. See
 [`?geom_swim_arrow`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_arrow.md)
-for detailed information.
+for details.
 
 Arrow appearance can be specified in two ways:
 
@@ -187,3 +188,35 @@ may still be sufficient. However, using
 [`scale_arrow_discrete()`](https://chop-cgtinformatics.github.io/ggswim/reference/scale_arrow_discrete.md)
 provides a more flexible and scalable approach when working with more
 complex swimmer plots.
+
+## Inheritance and current styling limits
+
+Arrow layers inherit plot data and aesthetics just like other ggplot2
+layers. When supplying a separate arrow dataset, use
+`inherit.aes = FALSE` if it lacks variables used in global mappings,
+then map `y` and `xend` explicitly (and `x` when specifying both
+endpoints).
+
+For example, if the plot has a global colour mapping that is not present
+in `arrow_data`, turn inheritance off for the arrow layer:
+
+``` r
+
+ggplot2::ggplot(patient_data, ggplot2::aes(colour = disease_assessment)) +
+  geom_swim_lane(ggplot2::aes(x = start_time, xend = end_time, y = pt_id)) +
+  geom_swim_arrow(
+    data = arrow_data,
+    mapping = ggplot2::aes(xend = end_time, y = pt_id),
+    inherit.aes = FALSE
+  )
+```
+
+![](adding_arrows_files/figure-html/inherit-aes-example-1.png)
+
+For custom arrow styles, supply event categories in `limits` in the same
+order as `colours`, `fills`, and `types`. Vector names do not control
+matching. The default arrow palette supplies one style; multiple
+categories need explicit styles and limits. Use separate layers when
+combining open and closed arrows in one panel. Standard `colour`
+settings are overridden by arrow styling; use `arrow_colour` for fixed
+styling or the `arrow` aesthetic and its scale for a matching legend.

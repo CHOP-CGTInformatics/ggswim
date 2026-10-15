@@ -43,6 +43,10 @@ marker_data <- tibble(
       .default = NA
     )
   )
+
+# The marker scale takes one style per category, not one style per event row.
+emoji_styles <- marker_data |>
+  distinct(label, glyph)
 ```
 
 Now we can call those dataframes with their appropriate lane and marker
@@ -63,7 +67,7 @@ ggplot() +
   ) +
   scale_colour_brewer(name = "Lanes", palette = "Set1") +
   with(
-    marker_data,
+    emoji_styles,
     scale_marker_discrete(glyphs = glyph, limits = label, name = "Markers")
   ) +
   labs(
@@ -85,7 +89,16 @@ icons after first loading fonts with
 The first call to
 [`load_fonts()`](https://chop-cgtinformatics.github.io/ggswim/reference/load_fonts.md)
 may require internet access because ggswim retrieves the font files from
-the GitHub repository.
+the GitHub repository. Subsequent calls reuse readable cached files and
+can work offline; missing or unreadable files are downloaded again.
+
+The glyph value is the Unicode text returned by
+[`fontawesome()`](https://chop-cgtinformatics.github.io/ggswim/reference/fontawesome.md),
+and `family` must match the font collection that supplies that glyph.
+[`load_fonts()`](https://chop-cgtinformatics.github.io/ggswim/reference/load_fonts.md)
+registers those font families before plotting; check the exported image
+or PDF as well as the on-screen preview because font availability can
+differ by graphics device.
 
 ``` r
 
@@ -104,6 +117,9 @@ marker_data <- marker_data |>
     )
   )
 
+fontawesome_styles <- marker_data |>
+  distinct(label, glyph)
+
 ggplot() +
   geom_swim_lane(
     data = lane_data,
@@ -117,7 +133,7 @@ ggplot() +
   ) +
   scale_colour_brewer(name = "Lanes", palette = "Set1") +
   with(
-    marker_data,
+    fontawesome_styles,
     scale_marker_discrete(glyphs = glyph, limits = label, name = "Markers")
   ) +
   labs(
@@ -164,6 +180,9 @@ marker_data <- marker_data |>
     )
   )
 
+bootstrap_styles <- marker_data |>
+  distinct(label, glyph)
+
 ggplot() +
   geom_swim_lane(
     data = lane_data,
@@ -177,7 +196,7 @@ ggplot() +
   ) +
   scale_colour_brewer(name = "Lanes", palette = "Set1") +
   with(
-    marker_data,
+    bootstrap_styles,
     scale_marker_discrete(glyphs = glyph, limits = label, name = "Markers")
   ) +
   labs(

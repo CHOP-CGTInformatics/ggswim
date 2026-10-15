@@ -31,6 +31,64 @@ Drawing from the well-established principles of ggplot2, ggswim lets
 users apply familiar layer-building techniques, including scales,
 labels, and themes.
 
+## Start with two small tables
+
+Keep lane intervals and point events in separate tables. A lane row has
+a start, an end, and an ID; an event row has a time, the same ID, and an
+event category. Map the category to `marker` and use
+[`scale_marker_discrete()`](https://chop-cgtinformatics.github.io/ggswim/reference/scale_marker_discrete.md)
+to choose its glyph and colour:
+
+``` r
+
+library(ggswim)
+library(ggplot2)
+
+small_lanes <- data.frame(
+  id = factor(c("A", "B"), levels = c("B", "A")),
+  cohort = c("Control", "Treatment"),
+  start = c(0, 0), end = c(6, 5)
+)
+small_events <- data.frame(
+  id = factor(c("A", "B"), levels = c("B", "A")),
+  cohort = c("Control", "Treatment"),
+  time = c(3, 2), event = c("Response", "Response")
+)
+
+small_plot <- ggplot2::ggplot() +
+  geom_swim_lane(
+    data = small_lanes,
+    mapping = ggplot2::aes(x = start, xend = end, y = id)
+  ) +
+  geom_swim_marker(
+    data = small_events,
+    mapping = ggplot2::aes(x = time, y = id, marker = event),
+    size = 5
+  ) +
+  scale_marker_discrete(
+    glyphs = "+", colours = "steelblue", limits = "Response"
+  )
+
+small_plot
+```
+
+![Two short lanes with a response marker on
+each.](ggswim_files/figure-html/small-example-1.png)
+
+The factor levels set lane order. Add facets or other ggplot2 layout
+tools as needed:
+
+``` r
+
+small_plot + ggplot2::facet_wrap(~cohort)
+```
+
+![](ggswim_files/figure-html/small-example-facets-1.png)
+
+If a layer uses separate data that lacks a variable in the plot’s global
+mappings, set `inherit.aes = FALSE` and map that layer’s required
+aesthetics explicitly.
+
 ### Adding a Lane Layer
 
 Let’s get started building our swimmer plot! As with the README, we will
@@ -235,53 +293,55 @@ Analysis](https://ggplot2-book.org/scales). In short, scales are
 responsible for connecting data with aesthetics and communicating those
 connections through elements like the plot legend.
 
-[`scale_marker_discrete()`](https://chop-cgtinformatics.github.io/ggswim/reference/scale_marker_discrete.md)
-makes it easy to control marker appearance in the plot and legend. This
-is helpful because plain
-[`geom_text()`](https://ggplot2.tidyverse.org/reference/geom_text.html)
-can show event labels, but it does not give ggswim’s separate marker
-legend behavior:
+With no marker scale, ggswim uses its default glyphs and colours. Add an
+explicit scale when you need event-specific styles or a chosen legend
+order. Styles match categories by position in `limits`; names on style
+vectors are not used for matching. First, choose the category order and
+corresponding glyphs and colours:
 
 ``` r
 
-ggplot() +
-  geom_text(
-    data = all_events,
-    aes(x = time_from_initial_infusion, y = pt_id, label = label, colour = glyph),
-    size = 4
-  )
-```
-
-![Example display of markers without scale_marker_discrete, leading to
-incorrect output.](ggswim_files/figure-html/unnamed-chunk-2-1.png)
-
-[`geom_text()`](https://ggplot2.tidyverse.org/reference/geom_text.html)
-is useful, and it is what
-[`geom_swim_marker()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_marker.md)
-wraps, but it does not connect event labels, display glyphs, and legend
-entries the way swimmer plots often need.
-
-Thanks to ggswim we can specify what belongs in the glyph versus text
-elements of our legend. Additionally, we are able to use the “colour”
-scales under the `marker` definition so ggswim can use the same colour
-scale under the hood, but keep the identity of “markers” and “lanes”
-separate in the output:
-
-``` r
-
-p <- p +
+p_base <- p
+p <- p_base +
   scale_marker_discrete(
     name = "Study Events",
-    glyphs = all_events$glyph,
-    colours = all_events$colour,
-    limits = all_events$label
+    glyphs = c("⬤", "⬤", "⚠️", "❌", "✅"),
+    colours = c("#ffde00", "#ed207f", NA, NA, NA),
+    limits = c(
+      "First Reinfusion", "Second Reinfusion", "Other End Study Reason",
+      "Deceased", "Completed Study Follow-Up"
+    )
   )
 
 p
 ```
 
 ![Updated swimmer plot with correctly used scale_marker_discrete for
-marker output.](ggswim_files/figure-html/unnamed-chunk-3-1.png)
+marker output.](ggswim_files/figure-html/unnamed-chunk-2-1.png)
+
+The marker colour comes from `scale_marker_discrete(colours = ...)`,
+separately from the lane colour scale. This scale assigns marker colours
+after ggplot2 has applied aesthetic scales, so a `colour` mapping or
+[`after_scale()`](https://ggplot2.tidyverse.org/reference/aes_eval.html)
+colour transformation does not recolour markers. Use the marker scale’s
+`colours` argument instead. You can change legend wording with `labels`
+while keeping the underlying category values and order in `limits`:
+
+``` r
+
+p_base + scale_marker_discrete(
+  glyphs = c("⬤", "⬤", "⚠️", "❌", "✅"),
+  colours = c("#ffde00", "#ed207f", NA, NA, NA),
+  limits = c(
+    "First Reinfusion", "Second Reinfusion", "Other End Study Reason",
+    "Deceased", "Completed Study Follow-Up"
+  ),
+  labels = c("Reinfusion 1", "Reinfusion 2", "Other reason", "Deceased", "Follow-up complete"),
+  name = "Study Events"
+)
+```
+
+![](ggswim_files/figure-html/marker-legend-labels-1.png)
 
 ## A Full Swimmer Plot
 
@@ -338,3 +398,23 @@ Some additional considerations to keep in mind when working with ggswim:
   [`geom_swim_arrow()`](https://chop-cgtinformatics.github.io/ggswim/reference/geom_swim_arrow.md)
   and
   [`scale_arrow_discrete()`](https://chop-cgtinformatics.github.io/ggswim/reference/scale_arrow_discrete.md).
+
+### Exporting and dense events
+
+For crisp raster output, use the suggested `ragg` device, for example
+`ggplot2::ggsave("swimmer.png", plot = p, device = ragg::agg_png, dpi = 300)`.
+For PDF, `ggplot2::ggsave("swimmer.pdf", plot = p)` uses the platform’s
+PDF device by default. Icon fonts and emoji support vary by device and
+system; check the saved file itself, since an interactive preview may
+use different fonts.
+
+Markers use text glyphs. Even when a marker and lane share the same
+y-coordinate, the visible symbol may sit slightly above or below the
+lane depending on the font and graphics device, including emoji
+fallback. You can adjust `vjust` for a particular plot, but inspect the
+exported figure because one value may not suit every glyph or font.
+
+When events overlap, reduce marker size, separate events vertically in
+the input data, or use `check_overlap = TRUE` with data ordered in the
+priority you want to keep. `check_overlap` drops later overlapping
+labels in row order.

@@ -168,11 +168,23 @@ geom_swim_marker(
 
 ## Details
 
-If using font families via
+Map the event category to `marker`; the category selects a glyph and
+colour through
+[`scale_marker_discrete()`](https://chop-cgtinformatics.github.io/ggswim/reference/scale_marker_discrete.md).
+The marker scale controls both the plot glyph and its legend key. It
+sets the marker colour after ggplot2 applies aesthetic scales, so
+`colour` mappings, fixed `colour` settings, and
+[`after_scale()`](https://ggplot2.tidyverse.org/reference/aes_eval.html)
+colour transformations do not override marker colours. Set marker
+colours with the scale's `colours` argument instead.
+
+If using icon glyphs from
 [fontawesome](https://chop-cgtinformatics.github.io/ggswim/reference/fontawesome.md)
 or
 [bootstrap](https://chop-cgtinformatics.github.io/ggswim/reference/bootstrap.md),
-ggswim enables the following `family` arguments:
+first call
+[`load_fonts()`](https://chop-cgtinformatics.github.io/ggswim/reference/load_fonts.md)
+to register the matching fonts. The supported `family` values are:
 
 - "Bootstrap"
 
@@ -182,35 +194,56 @@ ggswim enables the following `family` arguments:
 
 - "FontAwesome-Solid"
 
+## Aesthetics
+
+Required aesthetics are **`x`**, **`y`**, and **`marker`**. `marker`
+should identify the event category; use
+[`scale_marker_discrete()`](https://chop-cgtinformatics.github.io/ggswim/reference/scale_marker_discrete.md)
+to assign glyphs, colours, and legend labels. Other text aesthetics are
+inherited from
+[`ggplot2::geom_text()`](https://ggplot2.tidyverse.org/reference/geom_text.html).
+
+## Marker alignment
+
+Markers are rendered as text glyphs. Even when a marker and lane share
+the same y-coordinate, the visible symbol can appear slightly above or
+below the lane because glyphs occupy different positions within the text
+reference box. This placement can vary with the font and graphics
+device, including when emoji or fallback fonts are used. You can adjust
+`vjust` for a particular plot, though one value may not suit every glyph
+or font; inspect the exported figure. ggswim retains ggplot2's
+text-rendering behavior because a correction based on one glyph or font
+may misalign others.
+
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
-all_events <- dplyr::bind_rows(
-  infusion_events,
-  end_study_events
+events <- data.frame(
+  time = c(2, 4),
+  id = c("A", "B"),
+  event = c("Response", "Relapse")
 )
-
-ggplot2::ggplot() +
-  geom_swim_lane(
-    data = patient_data,
-    aes(x = start_time, xend = end_time, y = pt_id, colour = disease_assessment)
-  ) +
-  geom_swim_marker(
-    data = all_events,
-    aes(x = time_from_initial_infusion, y = pt_id, marker = label),
-    size = 10
+ggplot2::ggplot(events, ggplot2::aes(x = time, y = id, marker = event)) +
+  geom_swim_marker(size = 5) +
+  scale_marker_discrete(
+    glyphs = c("+", "x"),
+    colours = c("steelblue", "firebrick"),
+    limits = c("Response", "Relapse")
   )
 
+
+if (FALSE) { # \dontrun{
+# The first call downloads fonts into the user cache and needs internet.
+load_fonts()
+icon_events <- data.frame(time = 2, id = "A", event = "Review")
 ggplot2::ggplot() +
-  geom_swim_lane(
-    data = patient_data,
-    aes(x = start_time, xend = end_time, y = pt_id, colour = disease_assessment)
-  ) +
   geom_swim_marker(
-    data = all_events,
-    aes(x = time_from_initial_infusion, y = pt_id, marker = label),
-    size = 10, family = "FontAwesome-Solid"
+    data = icon_events,
+    mapping = ggplot2::aes(x = time, y = id, marker = event),
+    family = "FontAwesome-Solid", size = 5
+  ) +
+  scale_marker_discrete(
+    glyphs = fontawesome("fa-check"), limits = "Review"
   )
 } # }
 ```

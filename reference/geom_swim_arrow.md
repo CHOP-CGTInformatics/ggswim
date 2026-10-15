@@ -38,7 +38,8 @@ geom_swim_arrow(
 
 - data:
 
-  A data frame prepared for use with `geom_swim_arrow()`. Required.
+  Layer data. If `NULL`, inherits the data supplied to
+  [`ggplot()`](https://ggplot2.tidyverse.org/reference/ggplot.html).
 
 - stat:
 
@@ -61,8 +62,7 @@ geom_swim_arrow(
 
 - position:
 
-  Position adjustment. ggswim accepts either `"stack"` or `"identity"`
-  depending on the use case. Default is `"identity"`.
+  Position adjustment passed to ggplot2. Default is `"identity"`.
 
 - ...:
 
@@ -114,8 +114,9 @@ geom_swim_arrow(
 
 - arrow_neck_length:
 
-  A numeric value specifying the neck length from the end of the segment
-  to the base of the arrow head when `x` is not mapped.
+  A numeric value in position-scale coordinates, specifying the neck
+  length when `x` is not mapped. On an untransformed numeric axis, this
+  uses the ordinary `x` units.
 
 - arrow_fill:
 
@@ -160,8 +161,10 @@ geom_swim_arrow(
 
 ## Details
 
-Please note that `geom_swim_arrow()` requires a `data` argument and does
-not inherit data like other functions.
+Like other ggplot2 layers, `geom_swim_arrow()` inherits plot data when
+`data = NULL`. Supply layer-specific data to draw arrows for a subset of
+lanes. Set `inherit.aes = FALSE` when that data does not contain
+variables used in the plot's global aesthetic mappings.
 
 `geom_swim_arrow()` supports two approaches for defining arrow
 appearance:
@@ -183,10 +186,16 @@ extent:
   from `x` to `xend`.
 
 - By mapping only `xend`, in which case `xend` is treated as the swimmer
-  lane endpoint and the arrow neck is extended to the right using
-  `arrow_neck_length`.
+  lane endpoint and `arrow_neck_length` determines the neck from that
+  endpoint.
 
-If `x` is mapped, `arrow_neck_length` is ignored.
+If `x` is mapped, `arrow_neck_length` is ignored. If omitted in
+`xend`-only mode, the current default is 15% of the largest observed
+`xend` across the entire arrow layer. The calculation uses
+position-scale coordinates: these are ordinary `x` units on an
+untransformed numeric axis. This default can be unsuitable for zero or
+negative timelines, `Date` values, or transformed scales. For
+predictable endpoints on those axes, map both `x` and `xend` explicitly.
 
 ## Aesthetics
 
@@ -227,10 +236,14 @@ If a single legend entry is desired, map a constant such as
 If the `arrow` aesthetic is not mapped, arrow appearance can be set
 directly with `arrow_colour`, `arrow_fill`, and `arrow_type`.
 
-If the `arrow` aesthetic is mapped, arrow appearance is instead
-determined by
-[`scale_arrow_discrete()`](https://chop-cgtinformatics.github.io/ggswim/reference/scale_arrow_discrete.md),
-and the fixed arrow parameters are used only as a fallback.
+If the `arrow` aesthetic is mapped, arrow appearance is determined by
+[`scale_arrow_discrete()`](https://chop-cgtinformatics.github.io/ggswim/reference/scale_arrow_discrete.md);
+missing mapped styles are omitted. Otherwise use `arrow_colour`,
+`arrow_fill`, and `arrow_type`. Standard `colour` mappings and settings
+are currently overridden by arrow styling. Use the `arrow` aesthetic and
+its scale for a legend matching the arrow styles. Within each panel, a
+layer currently supports only one arrow type; use separate layers to
+combine open and closed arrows.
 
 ## Underlying geom
 
@@ -241,20 +254,20 @@ and supports much of the same functionality.
 ## Examples
 
 ``` r
-# Set up data for arrows
+# Subjects without an end-study event receive continuation arrows.
 arrow_data <- patient_data |>
   dplyr::left_join(
     end_study_events |>
       dplyr::select(pt_id, label),
     by = "pt_id"
   ) |>
-  dplyr::select(pt_id, end_time, label) |>
+  dplyr::select(pt_id, start_time, end_time, label) |>
   dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
-  dplyr::filter(!is.na(label)) |>
+  dplyr::filter(is.na(label)) |>
   unique()
 
 # Parameter-driven arrow styling
-geom_swim_arrow(
+ggplot2::ggplot() + geom_swim_arrow(
   data = arrow_data,
   mapping = aes(xend = end_time, y = pt_id),
   linewidth = 0.1,
@@ -264,13 +277,10 @@ geom_swim_arrow(
   arrow_fill = "cyan",
   arrow_type = "closed"
 )
-#> mapping: y = ~pt_id, xend = ~end_time 
-#> geom_swim_arrow: arrow.fill = cyan, arrow_colour = slateblue, arrow_head_length = 0.25, arrow_neck_length = 5, arrow_type = closed, lineend = butt, linejoin = round, na.rm = FALSE
-#> stat_identity: na.rm = FALSE
-#> position_identity 
+
 
 # Mapped start and end positions
-geom_swim_arrow(
+ggplot2::ggplot() + geom_swim_arrow(
   data = arrow_data,
   mapping = aes(x = start_time, xend = end_time, y = pt_id),
   linewidth = 0.1,
@@ -279,10 +289,7 @@ geom_swim_arrow(
   arrow_fill = "cyan",
   arrow_type = "closed"
 )
-#> mapping: x = ~start_time, y = ~pt_id, xend = ~end_time 
-#> geom_swim_arrow: arrow.fill = cyan, arrow_colour = slateblue, arrow_head_length = 0.25, arrow_neck_length = NULL, arrow_type = closed, lineend = butt, linejoin = round, na.rm = FALSE
-#> stat_identity: na.rm = FALSE
-#> position_identity 
+
 
 # Scale-driven arrow styling with a separate legend entry
 ggplot2::ggplot() +

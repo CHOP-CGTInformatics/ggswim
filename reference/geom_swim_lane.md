@@ -165,7 +165,7 @@ aesthetics are in bold):
 
 - **`y`**
 
-- **xend**
+- **`xend`**
 
 - `alpha`
 
@@ -178,7 +178,7 @@ aesthetics are in bold):
 - `linewidth`
 
 `geom_swim_lane()` is a wrapper for
-[`ggplot2::geom_segment()`](https://ggplot2.tidyverse.org/reference/geom_segment.html)
+[`geom_segment()`](https://ggplot2.tidyverse.org/reference/geom_segment.html)
 and supports much of the same functionality.
 
 ## Arrows

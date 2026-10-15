@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggswim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,13 +82,17 @@ arrow placement, styling, or legends.</p>
 <code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> as a way to attach continuation
 indicators to swimmer plot lanes. Behind the scenes, arrows are drawn
 with <code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">ggplot2::geom_segment()</a></code>. When only <code>xend</code>
-is mapped, <code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> treats <code>xend</code> as
-the lane endpoint and extends a fixed-length arrow neck to the right.
-When both <code>x</code> and <code>xend</code> are mapped, the arrow
-extent is data-driven. <code><a href="../reference/geom_swim_arrow.html">geom_swim_arrow()</a></code> gives users
-control over arrow neck and head length, along with options for
-colour/color, fill, and type; refer to <code><a href="../reference/geom_swim_arrow.html">?geom_swim_arrow</a></code> for
-detailed information.</p>
+is mapped, it marks the lane endpoint and <code>arrow_neck_length</code>
+sets the extension in position-scale coordinates (ordinary numeric units
+on a linear axis). If omitted, the current default is 15% of the largest
+<code>xend</code> in the arrow layer. On transformed axes that
+calculation uses transformed coordinates. For <code>Date</code> axes or
+transformed scales, set both <code>x</code> and <code>xend</code>
+explicitly to control arrow placement. When both <code>x</code> and
+<code>xend</code> are mapped, those coordinates define the arrow neck
+and <code>arrow_neck_length</code> is ignored.
+<code>arrow_head_length</code> is a grid unit. See
+<code><a href="../reference/geom_swim_arrow.html">?geom_swim_arrow</a></code> for details.</p>
 <p>Arrow appearance can be specified in two ways:</p>
 <ul>
 <li>directly via parameters such as <code>arrow_colour</code>,
@@ -229,6 +233,36 @@ when:</p>
 <code><a href="../reference/scale_arrow_discrete.html">scale_arrow_discrete()</a></code> provides a more flexible and
 scalable approach when working with more complex swimmer plots.</p>
 </div>
+<div class="section level2">
+<h2 id="inheritance-and-current-styling-limits">Inheritance and current styling limits<a class="anchor" aria-label="anchor" href="#inheritance-and-current-styling-limits"></a>
+</h2>
+<p>Arrow layers inherit plot data and aesthetics just like other ggplot2
+layers. When supplying a separate arrow dataset, use
+<code>inherit.aes = FALSE</code> if it lacks variables used in global
+mappings, then map <code>y</code> and <code>xend</code> explicitly (and
+<code>x</code> when specifying both endpoints).</p>
+<p>For example, if the plot has a global colour mapping that is not
+present in <code>arrow_data</code>, turn inheritance off for the arrow
+layer:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">patient_data</span>, <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="va">disease_assessment</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_swim_lane.html">geom_swim_lane</a></span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">start_time</span>, xend <span class="op">=</span> <span class="va">end_time</span>, y <span class="op">=</span> <span class="va">pt_id</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_swim_arrow.html">geom_swim_arrow</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">arrow_data</span>,</span>
+<span>    mapping <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>xend <span class="op">=</span> <span class="va">end_time</span>, y <span class="op">=</span> <span class="va">pt_id</span><span class="op">)</span>,</span>
+<span>    inherit.aes <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="adding_arrows_files/figure-html/inherit-aes-example-1.png" class="r-plt" alt="" width="1152"></p>
+<p>For custom arrow styles, supply event categories in
+<code>limits</code> in the same order as <code>colours</code>,
+<code>fills</code>, and <code>types</code>. Vector names do not control
+matching. The default arrow palette supplies one style; multiple
+categories need explicit styles and limits. Use separate layers when
+combining open and closed arrows in one panel. Standard
+<code>colour</code> settings are overridden by arrow styling; use
+<code>arrow_colour</code> for fixed styling or the <code>arrow</code>
+aesthetic and its scale for a matching legend.</p>
+</div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
@@ -240,7 +274,7 @@ scalable approach when working with more complex swimmer plots.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

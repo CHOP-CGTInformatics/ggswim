@@ -18,9 +18,9 @@ Functions that assist with cleaning up the legend and assigning
 aesthetic connections.
 
 - [`scale_arrow_discrete()`](https://chop-cgtinformatics.github.io/ggswim/reference/scale_arrow_discrete.md)
-  : Position scales for discrete arrow data
+  : Appearance scales for discrete arrow data
 - [`scale_marker_discrete()`](https://chop-cgtinformatics.github.io/ggswim/reference/scale_marker_discrete.md)
-  : Position scales for discrete marker data
+  : Appearance scales for discrete marker data
 
 ## Aesthetic and Theme Functions
 

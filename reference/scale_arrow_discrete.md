@@ -1,4 +1,4 @@
-# Position scales for discrete arrow data
+# Appearance scales for discrete arrow data
 
 `scale_arrow_discrete()` is used to set the discrete `arrow` aesthetic
 for swimmer plot arrows.
@@ -140,6 +140,20 @@ scale_arrow_discrete(
   `super`
 
   :   The super class to use for the constructed scale
+
+## Details
+
+When supplying custom styles, also supply `limits` containing the event
+categories in the same order. Styles are matched positionally; names on
+style vectors are not used for matching. `limits` defines the available
+categories and their order, while `labels` (passed through `...`)
+changes legend text. Missing values and categories outside `limits` are
+not displayed.
+
+With no arguments, the scale supplies one default arrow style. For
+multiple categories, supply explicit styles and limits. All arrow types
+within a panel must currently be the same; use separate layers for open
+and closed arrows.
 
 ## Examples
 
