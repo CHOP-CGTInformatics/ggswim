@@ -263,6 +263,13 @@ For crisp raster output, use the suggested `ragg` device, for example
 For PDF, `ggplot2::ggsave("swimmer.pdf", plot = p)` uses the platform's PDF
 device by default. Icon fonts and emoji support vary by device and system; check
 the saved file itself, since an interactive preview may use different fonts.
+
+Markers use text glyphs. Even when a marker and lane share the same y-coordinate,
+the visible symbol may sit slightly above or below the lane depending on the
+font and graphics device, including emoji fallback. You can adjust `vjust` for
+a particular plot, but inspect the exported figure because one value may not
+suit every glyph or font.
+
 When events overlap, reduce marker size, separate events vertically in the
 input data, or use `check_overlap = TRUE` with data ordered in the priority you
 want to keep. `check_overlap` drops later overlapping labels in row order.

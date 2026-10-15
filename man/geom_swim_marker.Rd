@@ -151,6 +151,18 @@ colours, and legend labels. Other text aesthetics are inherited from
 \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.
 }
 
+\section{Marker alignment}{
+
+Markers are rendered as text glyphs. Even when a marker and lane share the
+same y-coordinate, the visible symbol can appear slightly above or below the
+lane because glyphs occupy different positions within the text reference
+box. This placement can vary with the font and graphics device, including
+when emoji or fallback fonts are used. You can adjust \code{vjust} for a
+particular plot, though one value may not suit every glyph or font; inspect
+the exported figure. ggswim retains ggplot2's text-rendering behavior because
+a correction based on one glyph or font may misalign others.
+}
+
 \examples{
 events <- data.frame(
   time = c(2, 4),
