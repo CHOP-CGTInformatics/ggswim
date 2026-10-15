@@ -80,8 +80,9 @@ when using fixed arrow parameters.}
 \item{arrow_head_length}{A grid unit specifying the length of the arrow head
 (from tip to base).}
 
-\item{arrow_neck_length}{A numeric value specifying the neck length from the
-end of the segment to the base of the arrow head when \code{x} is not mapped.}
+\item{arrow_neck_length}{A numeric value in position-scale coordinates,
+specifying the neck length when \code{x} is not mapped. On an untransformed
+numeric axis, this uses the ordinary \code{x} units.}
 
 \item{arrow_fill}{The fill colour of the arrow head when using fixed arrow
 parameters and a closed arrow type.}
@@ -137,11 +138,16 @@ When the \code{arrow} aesthetic is mapped, arrow appearance is controlled by
 \item By mapping both \code{x} and \code{xend}, in which case the arrow neck is drawn from
 \code{x} to \code{xend}.
 \item By mapping only \code{xend}, in which case \code{xend} is treated as the swimmer lane
-endpoint and the arrow neck is extended to the right using
-\code{arrow_neck_length}.
+endpoint and \code{arrow_neck_length} determines the neck from that endpoint.
 }
 
 If \code{x} is mapped, \code{arrow_neck_length} is ignored.
+If omitted in \code{xend}-only mode, the current default is 15\% of the largest
+observed \code{xend} across the entire arrow layer. The calculation uses
+position-scale coordinates: these are ordinary \code{x} units on an untransformed
+numeric axis. This default can be unsuitable for zero or negative timelines,
+\code{Date} values, or transformed scales. For predictable endpoints on those
+axes, map both \code{x} and \code{xend} explicitly.
 }
 \section{Aesthetics}{
 

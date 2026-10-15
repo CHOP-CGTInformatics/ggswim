@@ -19,8 +19,8 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     cli,
-    dplyr,
-    ggplot2,
+    dplyr (>= 1.1.0),
+    ggplot2 (>= 3.5.0),
     grid,
     purrr,
     rlang,
@@ -45,5 +45,5 @@ Config/Needs/website: rmarkdown
 Language: en-US
 VignetteBuilder: knitr
 Depends: 
-    R (>= 3.5)
+    R (>= 4.1)
 Config/roxygen2/version: 8.1.0

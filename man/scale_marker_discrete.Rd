@@ -96,7 +96,8 @@ and their order, while \code{labels} (passed through \code{...}) changes legend 
 Missing values and categories outside \code{limits} are not displayed.
 
 With no arguments, the scale supplies up to nine default marker styles.
-For more categories, provide enough explicit glyphs, colours, and limits.
+When the scale needs more styles than a default vector provides, supply
+explicit values for that style; otherwise the scale reports an error.
 }
 \examples{
 \dontrun{

@@ -39,8 +39,11 @@ draw_key_swim_arrow <- function(data, params, size) {
 
   # Default to a closed arrowhead unless the mapped arrow aesthetic supplies
   # something else.
-  type <- "closed"
+  type <- params$arrow_type %||% "closed"
 
+  # Fixed styling parameters are also used by the panel geom, so keep a legend
+  # key consistent when the layer gets its guide from another mapped aesthetic.
+  # The mapped arrow record below still takes precedence when present.
   # If the layer is using the custom `arrow` aesthetic, unpack the arrow record
   # and use its colour, fill, and type values instead of the fallback settings.
   # This is what allows scale_arrow_discrete() to control the legend glyph.
@@ -53,12 +56,9 @@ draw_key_swim_arrow <- function(data, params, size) {
     col <- vctrs::field(data$arrow, "colour")[1]
     fill <- vctrs::field(data$arrow, "fill")[1]
     type <- vctrs::field(data$arrow, "type")[1]
-  }
-
-  # For closed arrowheads, use the line colour as the fill if no explicit fill
-  # was supplied. This helps the legend key visually match the plotted arrows.
-  if (is.na(fill)) {
-    fill <- col
+  } else {
+    col <- params$arrow_colour %||% col
+    fill <- params$arrow.fill %||% col
   }
 
   # Draw a short horizontal segment centered in the legend key and attach an
@@ -120,10 +120,15 @@ draw_key_swim_arrow <- function(data, params, size) {
 #' - By mapping both `x` and `xend`, in which case the arrow neck is drawn from
 #'   `x` to `xend`.
 #' - By mapping only `xend`, in which case `xend` is treated as the swimmer lane
-#'   endpoint and the arrow neck is extended to the right using
-#'   `arrow_neck_length`.
+#'   endpoint and `arrow_neck_length` determines the neck from that endpoint.
 #'
 #' If `x` is mapped, `arrow_neck_length` is ignored.
+#' If omitted in `xend`-only mode, the current default is 15% of the largest
+#' observed `xend` across the entire arrow layer. The calculation uses
+#' position-scale coordinates: these are ordinary `x` units on an untransformed
+#' numeric axis. This default can be unsuitable for zero or negative timelines,
+#' `Date` values, or transformed scales. For predictable endpoints on those
+#' axes, map both `x` and `xend` explicitly.
 #'
 #' @param data Layer data. If `NULL`, inherits the data supplied to `ggplot()`.
 #' @inheritParams ggplot2::geom_segment
@@ -134,8 +139,9 @@ draw_key_swim_arrow <- function(data, params, size) {
 #'   parameters and a closed arrow type.
 #' @param arrow_head_length A grid unit specifying the length of the arrow head
 #'   (from tip to base).
-#' @param arrow_neck_length A numeric value specifying the neck length from the
-#'   end of the segment to the base of the arrow head when `x` is not mapped.
+#' @param arrow_neck_length A numeric value in position-scale coordinates,
+#'   specifying the neck length when `x` is not mapped. On an untransformed
+#'   numeric axis, this uses the ordinary `x` units.
 #' @param arrow_type One of `"open"` or `"closed"` indicating whether the arrow
 #'   head should be drawn as an open or closed triangle when using fixed arrow
 #'   parameters.
@@ -281,15 +287,19 @@ extract_arrow_aesthetics <- function(data) {
   list(
     colour = vapply(
       data$arrow,
-      function(x) vctrs::field(x, "colour"),
+      function(x) as.character(vctrs::field(x, "colour")),
       character(1)
     ),
     fill = vapply(
       data$arrow,
-      function(x) vctrs::field(x, "fill"),
+      function(x) as.character(vctrs::field(x, "fill")),
       character(1)
     ),
-    type = vapply(data$arrow, function(x) vctrs::field(x, "type"), character(1))
+    type = vapply(
+      data$arrow,
+      function(x) as.character(vctrs::field(x, "type")),
+      character(1)
+    )
   )
 }
 
@@ -335,7 +345,7 @@ GeomSwimArrow <- ggproto(
   # If arrow_neck_length is not supplied in derived-neck mode, a default
   # proportional value is used based on the maximum observed xend.
   setup_data = function(data, params) {
-    has_mapped_x <- "x" %in% names(data) && any(!is.na(data$x))
+    has_mapped_x <- "x" %in% names(data)
 
     if (has_mapped_x) {
       data
@@ -343,7 +353,12 @@ GeomSwimArrow <- ggproto(
       arrow_neck_length <- params$arrow_neck_length
 
       if (is.null(arrow_neck_length)) {
-        arrow_neck_length <- max(data$xend, na.rm = TRUE) * 0.15
+        observed_xend <- data$xend[!is.na(data$xend)]
+        arrow_neck_length <- if (length(observed_xend) > 0) {
+          max(observed_xend) * 0.15
+        } else {
+          0
+        }
       }
 
       data |>

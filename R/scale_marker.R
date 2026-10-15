@@ -20,7 +20,8 @@
 #' Missing values and categories outside `limits` are not displayed.
 #'
 #' With no arguments, the scale supplies up to nine default marker styles.
-#' For more categories, provide enough explicit glyphs, colours, and limits.
+#' When the scale needs more styles than a default vector provides, supply
+#' explicit values for that style; otherwise the scale reports an error.
 #'
 #' @examples
 #' \dontrun{
@@ -58,6 +59,21 @@ scale_marker_discrete <- function(
   if (n_values == 0) {
     markers <- data.frame()
   } else {
+    if (is.null(glyphs) && n_values > length(.default_glyphs)) {
+      cli::cli_abort(c(
+        "Insufficient default marker glyphs in {.fn scale_marker_discrete}.",
+        "x" = "{n_values} categories requested, but only {length(.default_glyphs)} default glyphs are available.",
+        "i" = "Supply a glyph for each category."
+      ))
+    }
+    if (is.null(colours) && n_values > length(.default_colours)) {
+      cli::cli_abort(c(
+        "Insufficient default marker colours in {.fn scale_marker_discrete}.",
+        "x" = "{n_values} categories requested, but only {length(.default_colours)} default colours are available.",
+        "i" = "Supply a colour for each category."
+      ))
+    }
+
     markers <- data.frame(
       glyphs = glyphs %||% .default_glyphs[0:n_values],
       colours = colours %||% .default_colours[0:n_values],

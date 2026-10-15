@@ -44,7 +44,8 @@ devtools::install_github("CHOP-CGTInformatics/ggswim")
 
 Prepare the included datasets, then combine lanes, arrows, and markers
 in a single ggplot. Each layer can use its own data while sharing the
-same axes.
+same axes. Expand the setup block and run it before the plot code; it
+creates `all_events` and `arrow_data`, which the plot needs.
 
 <details>
 <summary><strong>Click to expand: load packages and prepare the example data</strong></summary>
