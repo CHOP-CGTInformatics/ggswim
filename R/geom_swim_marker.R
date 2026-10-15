@@ -7,44 +7,66 @@
 #' as treatment responses or adverse events.
 #'
 #' @details
-#' If using font families via [fontawesome] or [bootstrap], ggswim enables the
-#' following `family` arguments:
+#' Map the event category to `marker`; the category selects a glyph and colour
+#' through [scale_marker_discrete()]. The marker scale controls both the plot
+#' glyph and its legend key. It sets the marker colour after ggplot2 applies
+#' aesthetic scales, so `colour` mappings, fixed `colour` settings, and
+#' `after_scale()` colour transformations do not override marker colours. Set
+#' marker colours with the scale's `colours` argument instead.
+#'
+#' If using icon glyphs from [fontawesome] or [bootstrap], first call
+#' [load_fonts()] to register the matching fonts. The supported `family` values
+#' are:
 #'
 #' - "Bootstrap"
 #' - "FontAwesome-Brands"
 #' - "FontAwesome-Regular"
 #' - "FontAwesome-Solid"
 #'
-#'
 #' @inheritParams ggplot2::geom_text
 #'
-#' @examples
-#' \dontrun{
-#' all_events <- dplyr::bind_rows(
-#'   infusion_events,
-#'   end_study_events
-#' )
+#' @section Aesthetics:
+#' Required aesthetics are **`x`**, **`y`**, and **`marker`**. `marker` should
+#' identify the event category; use [scale_marker_discrete()] to assign glyphs,
+#' colours, and legend labels. Other text aesthetics are inherited from
+#' [ggplot2::geom_text()].
 #'
-#' ggplot2::ggplot() +
-#'   geom_swim_lane(
-#'     data = patient_data,
-#'     aes(x = start_time, xend = end_time, y = pt_id, colour = disease_assessment)
-#'   ) +
-#'   geom_swim_marker(
-#'     data = all_events,
-#'     aes(x = time_from_initial_infusion, y = pt_id, marker = label),
-#'     size = 10
+#' @section Marker alignment:
+#' Markers are rendered as text glyphs. Even when a marker and lane share the
+#' same y-coordinate, the visible symbol can appear slightly above or below the
+#' lane because glyphs occupy different positions within the text reference
+#' box. This placement can vary with the font and graphics device, including
+#' when emoji or fallback fonts are used. You can adjust `vjust` for a
+#' particular plot, though one value may not suit every glyph or font; inspect
+#' the exported figure. ggswim retains ggplot2's text-rendering behavior because
+#' a correction based on one glyph or font may misalign others.
+#'
+#' @examples
+#' events <- data.frame(
+#'   time = c(2, 4),
+#'   id = c("A", "B"),
+#'   event = c("Response", "Relapse")
+#' )
+#' ggplot2::ggplot(events, ggplot2::aes(x = time, y = id, marker = event)) +
+#'   geom_swim_marker(size = 5) +
+#'   scale_marker_discrete(
+#'     glyphs = c("+", "x"),
+#'     colours = c("steelblue", "firebrick"),
+#'     limits = c("Response", "Relapse")
 #'   )
 #'
+#' \dontrun{
+#' # The first call downloads fonts into the user cache and needs internet.
+#' load_fonts()
+#' icon_events <- data.frame(time = 2, id = "A", event = "Review")
 #' ggplot2::ggplot() +
-#'   geom_swim_lane(
-#'     data = patient_data,
-#'     aes(x = start_time, xend = end_time, y = pt_id, colour = disease_assessment)
-#'   ) +
 #'   geom_swim_marker(
-#'     data = all_events,
-#'     aes(x = time_from_initial_infusion, y = pt_id, marker = label),
-#'     size = 10, family = "FontAwesome-Solid"
+#'     data = icon_events,
+#'     mapping = ggplot2::aes(x = time, y = id, marker = event),
+#'     family = "FontAwesome-Solid", size = 5
+#'   ) +
+#'   scale_marker_discrete(
+#'     glyphs = fontawesome("fa-check"), limits = "Review"
 #'   )
 #' }
 #'
@@ -97,6 +119,16 @@ GeomSwimMarker <- ggproto(
     check_overlap = FALSE,
     na.rm = FALSE
   ) {
+    has_marker_record <- inherits(data$marker, "vctrs_rcrd") &&
+      all(c("colour", "glyphs") %in% vctrs::fields(data$marker))
+
+    if (!has_marker_record) {
+      cli::cli_abort(c(
+        "{.fn geom_swim_marker} requires marker styles from a discrete scale.",
+        "i" = "Map a category with {.code aes(marker = category)} and add {.fn scale_marker_discrete}."
+      ))
+    }
+
     data$colour <- vctrs::field(data$marker, "colour")
     data$label <- vctrs::field(data$marker, "glyphs")
     data$marker <- NULL

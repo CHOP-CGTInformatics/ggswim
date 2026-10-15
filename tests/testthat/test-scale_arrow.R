@@ -1,96 +1,123 @@
-test_that("scale_arrow_discrete creates a discrete scale for the arrow aesthetic", {
-  sc <- scale_arrow_discrete()
+arrow_plot <- function(data, scale = scale_arrow_discrete(), ...) {
+  ggplot2::ggplot(data, ggplot2::aes(
+    xend = .data$end_time, y = .data$id, arrow = .data$event
+  )) +
+    geom_swim_arrow(arrow_neck_length = 2, show.legend = TRUE, ...) +
+    scale
+}
 
-  expect_s3_class(sc, "ScaleDiscrete")
-  expect_equal(sc$aesthetics, "arrow")
-  expect_false(sc$na.translate)
+test_that("arrow scale supplies its default style for one category", {
+  data <- data.frame(id = "A", end_time = 10, event = "Continuation")
+
+  built <- ggplot2::ggplot_build(arrow_plot(data))
+  arrow <- built$data[[1]]$arrow
+
+  expect_s3_class(arrow, "swim_arrow")
+  expect_equal(vctrs::field(arrow, "colour"), "black")
+  expect_equal(vctrs::field(arrow, "fill"), "black")
+  expect_equal(vctrs::field(arrow, "type"), "closed")
 })
 
-test_that("scale_arrow_discrete palette returns swim_arrow records", {
-  sc <- scale_arrow_discrete(
+test_that("arrow scale errors when categories request more styles than configured", {
+  scale <- scale_arrow_discrete(
     colours = c("black", "red"),
-    fills = c("black", "pink"),
-    types = c("closed", "open"),
+    fills = c("gray20", "pink"),
+    types = c("closed", "closed"),
+    limits = c("A", "B")
+  )
+
+  expect_error(scale$palette(3), "3 categories requested, but only 2 styles")
+})
+
+test_that("arrow scale maps multiple categories when they share one head type", {
+  data <- data.frame(
+    id = c("A", "B"),
+    end_time = c(10, 20),
+    event = c("Continuation", "Ongoing")
+  )
+  scale <- scale_arrow_discrete(
+    colours = c("black", "red"),
+    fills = c("gray20", "pink"),
+    types = c("closed", "closed"),
     limits = c("Continuation", "Ongoing")
   )
 
-  vals <- sc$palette(2)
+  built <- ggplot2::ggplot_build(arrow_plot(data, scale))
+  arrow <- built$data[[1]]$arrow
 
-  expect_s3_class(vals, "vctrs_rcrd")
-  expect_equal(class(vals)[1], "swim_arrow")
-  expect_equal(vctrs::field(vals, "colour"), c("black", "red"))
-  expect_equal(vctrs::field(vals, "fill"), c("black", "pink"))
-  expect_equal(vctrs::field(vals, "type"), c("closed", "open"))
+  expect_equal(vctrs::field(arrow, "colour"), c("black", "red"))
+  expect_equal(vctrs::field(arrow, "fill"), c("gray20", "pink"))
+  expect_equal(vctrs::field(arrow, "type"), c("closed", "closed"))
 })
 
-test_that("scale_arrow_discrete respects limits", {
-  sc <- scale_arrow_discrete(
-    colours = c("black", "red"),
-    fills = c("black", "red"),
-    types = c("closed", "open"),
-    limits = c("Continuation", "Withdrawn")
-  )
-
-  expect_equal(sc$limits, c("Continuation", "Withdrawn"))
-})
-
-test_that("scale_arrow_discrete uses defaults when values are not supplied", {
-  sc <- scale_arrow_discrete(limits = "Continuation")
-  vals <- sc$palette(1)
-
-  expect_equal(vctrs::field(vals, "colour"), .default_arrow_colours)
-  expect_equal(vctrs::field(vals, "fill"), .default_arrow_fills)
-  expect_equal(vctrs::field(vals, "type"), .default_arrow_types)
-})
-
-test_that("pal_arrows warns when more values are requested than available", {
-  pal <- pal_arrows(
-    colours = c("black", "red"),
-    fills = c("black", "red"),
-    types = c("closed", "open"),
-    n_values = 2
-  )
-
-  expect_warning(
-    expect_error(
-      pal(3),
-      "Can't subset elements past the end."
-    ),
-    "This palette can handle a maximum of 2 values."
-  )
-})
-
-test_that("scale_arrow_discrete works in a ggplot build", {
-  df <- data.frame(
-    id = factor(c("A", "B")),
+test_that("arrow scales honor category limits and custom legend labels", {
+  data <- data.frame(
+    id = c("A", "B"),
     end_time = c(10, 20),
-    label = c("Continuation", "Continuation")
+    event = c("A", "B")
+  )
+  scale <- scale_arrow_discrete(
+    colours = c("red", "blue"),
+    fills = c("pink", "lightblue"),
+    types = c("closed", "closed"),
+    limits = c("B", "A"),
+    labels = c(A = "Alpha", B = "Beta")
   )
 
-  p <- ggplot2::ggplot() +
-    geom_swim_arrow(
-      data = df,
-      ggplot2::aes(
-        xend = end_time,
-        y = id,
-        arrow = "Continuation"
-      ),
-      arrow_neck_length = 2,
-      show.legend = c(arrow = TRUE)
-    ) +
-    scale_arrow_discrete(
-      limits = "Continuation",
-      colours = "black",
-      fills = "black",
-      types = "closed"
-    )
+  built <- ggplot2::ggplot_build(arrow_plot(data, scale))
+  arrow <- built$data[[1]]$arrow
+  trained <- built$plot$scales$get_scales("arrow")
 
-  built <- ggplot2::ggplot_build(p)
-  layer_data <- built$data[[1]]
+  expect_equal(vctrs::field(arrow, "colour"), c("blue", "red"))
+  expect_equal(as.character(trained$get_labels()), c("Beta", "Alpha"))
+})
 
-  expect_true("arrow" %in% names(layer_data))
-  expect_s3_class(layer_data$arrow, "vctrs_rcrd")
-  expect_equal(unique(vctrs::field(layer_data$arrow, "colour")), "black")
-  expect_equal(unique(vctrs::field(layer_data$arrow, "fill")), "black")
-  expect_equal(unique(vctrs::field(layer_data$arrow, "type")), "closed")
+test_that("missing and out-of-limit arrow values are not drawn", {
+  data <- data.frame(
+    id = letters[1:3],
+    end_time = 10:12,
+    event = c("Continuation", NA, "outside")
+  )
+  scale <- scale_arrow_discrete(
+    colours = "black", fills = "black", types = "closed",
+    limits = "Continuation"
+  )
+
+  built <- ggplot2::ggplot_build(arrow_plot(data, scale))
+
+  expect_equal(
+    vctrs::vec_detect_missing(built$data[[1]]$arrow),
+    c(FALSE, TRUE, TRUE)
+  )
+})
+
+test_that("faceted arrow panels receive the styles for their mapped categories", {
+  data <- data.frame(
+    id = c("A", "B"),
+    end_time = c(10, 20),
+    event = c("Continuation", "Ongoing"),
+    panel = c("first", "second")
+  )
+  scale <- scale_arrow_discrete(
+    colours = c("black", "red"),
+    fills = c("gray20", "pink"),
+    types = c("closed", "closed"),
+    limits = c("Continuation", "Ongoing")
+  )
+
+  built <- ggplot2::ggplot_build(
+    arrow_plot(data, scale) + ggplot2::facet_wrap(~panel)
+  )
+  layer <- built$data[[1]]
+  first_panel <- layer[layer$PANEL == 1, , drop = FALSE]
+  second_panel <- layer[layer$PANEL == 2, , drop = FALSE]
+
+  expect_equal(vctrs::field(first_panel$arrow, "colour"), "black")
+  expect_equal(vctrs::field(second_panel$arrow, "colour"), "red")
+  expect_equal(vctrs::field(first_panel$arrow, "fill"), "gray20")
+  expect_equal(vctrs::field(second_panel$arrow, "fill"), "pink")
+})
+
+test_that("scale_arrow_discrete does not translate missing values", {
+  expect_false(scale_arrow_discrete()$na.translate)
 })

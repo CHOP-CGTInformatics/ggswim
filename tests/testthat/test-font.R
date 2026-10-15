@@ -1,52 +1,130 @@
-test_that("load_fonts works", {
+# Keep font-loading tests independent of the network and user registry/cache.
+local_font_cache <- function(.local_envir = parent.frame()) {
+  fonts <- systemfonts::system_fonts()
+  skip_if(nrow(fonts) == 0, "No system font available for cache validation")
+  source <- fonts$path[[1]]
+  skip_if_not(valid_font_file(source), "No readable test font")
+  cache_root <- tempfile("ggswim-test-fonts-")
+  withr::local_envvar(c(R_USER_CACHE_DIR = cache_root), .local_envir = .local_envir)
+  cache <- tools::R_user_dir("ggswim", which = "cache")
+  dir.create(cache, recursive = TRUE)
+  withr::defer(unlink(cache_root, recursive = TRUE), envir = .local_envir)
+  state <- new.env(parent = emptyenv())
+  state$cache <- cache
+  state$source <- source
+  state$downloads <- 0L
+  state$registered <- character()
+  local_mocked_bindings(
+    download.file = function(url, destfile, mode, quiet) {
+      state$downloads <- state$downloads + 1L
+      file.copy(source, destfile, overwrite = TRUE)
+      0L
+    },
+    register_font = function(name, plain, features) {
+      stopifnot(valid_font_file(plain))
+      state$registered <- c(state$registered, name)
+    },
+    registry_fonts = function() tibble::tibble(family = state$registered),
+    .package = "ggswim",
+    .env = .local_envir
+  )
+  state
+}
+
+test_that("fonts are downloaded once and reused offline", {
+  state <- local_font_cache()
+  result <- withVisible(load_fonts(fonts = "fa-solid-900", verbose = FALSE))
+  expect_false(result$visible)
+  expect_equal(result$value$family, "FontAwesome-Solid")
+  expect_equal(state$downloads, 1L)
+  local_mocked_bindings(download.file = function(...) stop("Offline"))
+  expect_no_condition(load_fonts(fonts = "fa-solid-900", verbose = FALSE))
+  expect_equal(state$registered, rep("FontAwesome-Solid", 2))
+  expect_equal(list.files(state$cache), "fa-solid-900.ttf")
+})
+
+test_that("default font selection preserves family names", {
+  state <- local_font_cache()
   expect_no_condition(load_fonts(verbose = FALSE))
+  expect_equal(state$downloads, 4L)
+  expect_equal(state$registered, c(
+    "Bootstrap", "FontAwesome-Brands", "FontAwesome-Regular", "FontAwesome-Solid"
+  ))
 })
 
 test_that("invalid fonts produce warning and return invisible NULL", {
   expect_warning(
-    res <- load_fonts(fonts = "invalid-font", verbose = FALSE),
+    result <- withVisible(load_fonts(fonts = "invalid-font", verbose = FALSE)),
     "No valid font families specified. Nothing to load."
   )
-  expect_null(res)
+  expect_null(result$value)
+  expect_false(result$visible)
 })
 
-test_that("valid fonts load and registry contains expected fonts", {
-  # Use a subset of valid fonts
-  res <- load_fonts(
-    fonts = c("bootstrap-icons", "fa-solid-900"),
-    verbose = FALSE
-  )
-  # Retrieve the registry of loaded fonts
-  reg <- registry_fonts()
-
-  # Check that the registry is a tibble (data frame) and contains the expected font families.
-  expect_s3_class(reg, "tbl_df")
-  expect_true(any(grepl("Bootstrap", reg$family)))
-  expect_true(any(grepl("FontAwesome-Solid", reg$family)))
-})
-
-test_that("download error produces warning", {
-  # Determine the cache directory and the expected cached file path.
-  cache_dir <- tools::R_user_dir("ggswim", which = "cache")
-  cached_file <- file.path(cache_dir, "fa-brands-400.ttf")
-
-  # Remove the cached file if it exists so that the download is forced.
-  if (file.exists(cached_file)) {
-    unlink(cached_file)
-  }
-
-  # Use local_mocked_bindings to override download.file within the scope of this test.
-  local_mocked_bindings(
-    download.file = function(url, destfile, mode, quiet) {
-      stop("Simulated download failure")
-    },
-    .env = baseenv()
-  )
-
+test_that("failed partial downloads do not enter the cache", {
+  state <- local_font_cache()
+  local_mocked_bindings(download.file = function(url, destfile, ...) {
+    writeLines("partial download", destfile)
+    stop("Offline")
+  })
   expect_warning(
     load_fonts(fonts = "fa-brands-400", verbose = FALSE),
-    regexp = "Failed to download font 'fa-brands-400' from"
+    "Failed to download font 'fa-brands-400'.*Offline"
   )
+  expect_length(state$registered, 0)
+  expect_length(list.files(state$cache), 0)
+})
+
+test_that("nonzero download status and unreadable fonts are rejected", {
+  state <- local_font_cache()
+  local_mocked_bindings(download.file = function(...) 1L)
+  expect_warning(
+    load_fonts(fonts = "fa-solid-900", verbose = FALSE), "nonzero status"
+  )
+  local_mocked_bindings(download.file = function(url, destfile, ...) {
+    writeLines("not a font", destfile)
+    0L
+  })
+  expect_warning(
+    load_fonts(fonts = "fa-solid-900", verbose = FALSE), "not a readable font"
+  )
+  expect_length(state$registered, 0)
+  expect_length(list.files(state$cache), 0)
+})
+
+test_that("invalid font files do not poison later font lookups", {
+  state <- local_font_cache()
+  invalid <- tempfile(fileext = ".ttf")
+  on.exit(unlink(invalid))
+  writeLines("not a font", invalid)
+
+  expect_identical(
+    c(
+      valid_font_file(state$source),
+      valid_font_file(invalid),
+      valid_font_file(state$source)
+    ),
+    c(TRUE, FALSE, TRUE)
+  )
+})
+
+test_that("corrupt cached fonts are replaced only after a valid download", {
+  state <- local_font_cache()
+  cached <- file.path(state$cache, "fa-solid-900.ttf")
+  writeLines("corrupt", cached)
+  expect_no_condition(load_fonts(fonts = "fa-solid-900", verbose = FALSE))
+  expect_true(valid_font_file(cached))
+  expect_equal(state$downloads, 1L)
+})
+
+test_that("registration failures warn and preserve the cached font", {
+  state <- local_font_cache()
+  local_mocked_bindings(register_font = function(...) stop("Registry failure"))
+  expect_warning(
+    load_fonts(fonts = "fa-solid-900", verbose = FALSE),
+    "Failed to register font 'fa-solid-900': Registry failure"
+  )
+  expect_true(valid_font_file(file.path(state$cache, "fa-solid-900.ttf")))
 })
 
 test_that("search_fontawesome works", {

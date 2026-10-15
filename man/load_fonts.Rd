@@ -38,5 +38,8 @@ Currently the following fonts are supported:
 }
 
 Users can choose which fonts to load by providing a vector of font family names.
-The default is to load all supported fonts.
+The default is to load all supported fonts. Valid cached files are reused,
+so subsequent calls can work offline. Missing or unreadable fonts are
+downloaded to a temporary file and validated before entering the cache.
+Download or registration failures produce a warning and skip that font.
 }

@@ -1,7 +1,7 @@
 Package: ggswim
 Type: Package
 Title: Create Swimmer Plots with ggplot2
-Version: 0.1.0.9002
+Version: 0.1.0.9003
 Authors@R: c(
     person("Richard", "Hanna", , "richardshanna91@gmail.com", role = c("aut", "cre"),
     comment = c(ORCID = "0009-0005-6496-8154")),
@@ -18,9 +18,10 @@ BugReports: https://github.com/CHOP-CGTInformatics/ggswim/issues
 Encoding: UTF-8
 LazyData: true
 Imports: 
+    callr,
     cli,
-    dplyr,
-    ggplot2,
+    dplyr (>= 1.1.0),
+    ggplot2 (>= 3.5.0),
     grid,
     purrr,
     rlang,
@@ -31,7 +32,6 @@ Imports:
     tidyr,
     tidyselect,
     vctrs
-RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 Suggests: 
     knitr,
@@ -39,10 +39,12 @@ Suggests:
     ragg,
     rmarkdown,
     testthat (>= 3.0.0),
-    vdiffr
+    vdiffr,
+    withr
 Config/testthat/edition: 3
 Config/Needs/website: rmarkdown
 Language: en-US
 VignetteBuilder: knitr
 Depends: 
-    R (>= 3.5)
+    R (>= 4.1)
+Config/roxygen2/version: 8.1.0

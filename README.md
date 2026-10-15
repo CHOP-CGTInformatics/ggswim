@@ -12,150 +12,112 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 coverage](https://codecov.io/gh/CHOP-CGTInformatics/ggswim/branch/main/graph/badge.svg)](https://app.codecov.io/gh/CHOP-CGTInformatics/ggswim?branch=main)
 <!-- badges: end -->
 
-ggswim helps you build swimmer plots with ggplot2-style layers. It
-streamlines the process of adding lanes, markers, arrows, and legends
-that communicate events of interest along subject response paths.
+**Swimmer plots with ggplot2.**
 
-ggswim solves some of the headaches associated with layer management in
-ggplot2 by organizing and classifying data into “markers” and “lanes.”
-While nothing changes about the data itself, the way it’s presented
-winds up being much closer to what’s expected to communicate a swimmer
-plot’s contents.
+ggswim extends ggplot2 with lanes, event markers, and continuation
+arrows for visualizing timelines. Build and customize your plot with
+familiar layers, scales, and themes.
+
+- Show changes over time along each lane.
+- Give events their own symbols, colours, and legend.
+- Add arrows to indicate ongoing activity or follow-up.
+
+## Example: following patients through a clinical trial
+
+Clinical trials are one application of swimmer plots. This example uses
+the package’s demonstration data to show disease assessments,
+reinfusions, and study outcomes. Each lane represents a patient; arrows
+indicate ongoing follow-up.
+
+<img src="man/figures/README-clinical-example-1.png" alt="Swimmer plot of individual patient timelines. Coloured lane segments show disease assessments, markers identify reinfusions and end-of-study events, and arrows indicate ongoing follow-up." width="100%" />
 
 ## Installation
 
-You can install the development version of ggswim like so:
+Install the development version from GitHub:
 
 ``` r
+# install.packages("devtools")
 devtools::install_github("CHOP-CGTInformatics/ggswim")
 ```
 
-## Usage
+## Make this plot
 
-To help you get started, ggswim includes three sample datasets:
-`patient_data`, `infusion_events`, and `end_study_events`. These
-de-identified datasets simulate real world data related to infusions,
-disease assessments, and study statuses for a clinical trial.
+Prepare the included datasets, then combine lanes, arrows, and markers
+in a single ggplot. Each layer can use its own data while sharing the
+same axes. Expand the setup block and run it before the plot code; it
+creates `all_events` and `arrow_data`, which the plot needs.
 
-ggswim offers several ggplot2-style layers. Using `geom_swim_lane()`, we
-can set up the horizontal response paths of our swimmer plot, or
-“lanes.” We’ll also set up corresponding arrows to indicate subjects
-that are still on the trial:
+<details>
+<summary><strong>Click to expand: load packages and prepare the example data</strong></summary>
 
 ``` r
 library(ggswim)
 library(ggplot2)
 
-# Construct arrow_data for arrow display later
+all_events <- dplyr::bind_rows(infusion_events, end_study_events)
+
+# Add arrows only for patients without an end-of-study event.
 arrow_data <- patient_data |>
   dplyr::left_join(
-    end_study_events |>
-      dplyr::select(pt_id, label),
+    dplyr::select(end_study_events, pt_id, label),
     by = "pt_id"
   ) |>
   dplyr::select(pt_id, end_time, label) |>
   dplyr::filter(.by = pt_id, end_time == max(end_time)) |>
   dplyr::filter(is.na(label)) |>
-  unique()
+  dplyr::distinct()
+```
 
-p <- patient_data |>
-  ggplot() +
+</details>
+
+``` r
+ggplot() +
   geom_swim_lane(
-    mapping = aes(
-      x = start_time, y = pt_id, xend = end_time,
-      colour = disease_assessment
-    )
+    data = patient_data,
+    aes(x = start_time, xend = end_time, y = pt_id,
+        colour = disease_assessment)
   ) +
   geom_swim_arrow(
     data = arrow_data,
-    mapping = aes(xend = end_time, y = pt_id)
+    aes(xend = end_time, y = pt_id),
+    arrow_head_length = grid::unit(0.15, "inches")
   ) +
-  scale_colour_brewer(
-    name = "Disease Assessments",
-    palette = "Set1"
-  )
-
-p
-```
-
-<img src="man/figures/README-unnamed-chunk-2-1.png" alt="Initial swimmer plot with lanes and arrows." width="100%" />
-
-Next we’ll add on events of interest: end of study updates and
-infusions. We’ll refer to these as “markers” and call them with the next
-main “geom” function: `geom_swim_marker()`. While it is often common to
-see these datasets as separate components in the wild, we’ll make our
-lives a little easier during plotting by combining them first.
-
-``` r
-all_events <- dplyr::bind_rows(
-  infusion_events,
-  end_study_events
-)
-
-p <- p +
   geom_swim_marker(
     data = all_events,
     aes(x = time_from_initial_infusion, y = pt_id, marker = label),
-    size = 5
-  )
-
-p
-```
-
-<img src="man/figures/README-unnamed-chunk-3-1.png" alt="Updated swimmer plot with event markers." width="100%" />
-
-The default markers work, but explicit `glyph`s and `colour`s make the
-legend easier to read. We can set those marker values, and their display
-order, with `scale_marker_discrete()`.
-
-``` r
-p <- p +
+    size = 4
+  ) +
+  scale_colour_brewer(name = "Disease assessment", palette = "Set1") +
   scale_marker_discrete(
+    # Match styles to event categories in the order given by limits.
     glyphs = c("⬤", "⬤", "⚠️", "❌", "✅"),
     colours = c("#ffde00", "#ed207f", NA, NA, NA),
-    limits = c("First Reinfusion", "Second Reinfusion", "Other End Study Reason", "Deceased", "Completed Study Follow-Up"),
-    name = "Study Events"
-  )
-
-p
-```
-
-<img src="man/figures/README-unnamed-chunk-4-1.png" alt="Updated swimmer plot with event markers applied using scale_marker_discrete." width="100%" />
-
-Using the custom `marker` `aes()` in `geom_swim_marker()` in combination
-with specific scale definitions helps us keep the markers and lanes
-separate in the legend. Finally, we’ll beautify the plot with familiar
-ggplot2 techniques and a last finishing touch with `theme_ggswim()`:
-
-``` r
-p +
-  scale_colour_brewer(name = "Lanes", palette = "Set1") +
-  labs(title = "My Swimmer Plot") +
-  xlab("Time Since Initial Infusion (Months)") + ylab("Patient ID") +
+    limits = c("First Reinfusion", "Second Reinfusion",
+               "Other End Study Reason", "Deceased",
+               "Completed Study Follow-Up"),
+    name = "Study events"
+  ) +
+  labs(
+    title = "Disease assessments and reinfusions over time",
+    x = "Time since initial infusion (months)", y = "Patient ID"
+  ) +
   theme_ggswim()
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" alt="Final swimmer plot with theming." width="100%" />
+## Explore more
 
-## Where to go next
+- [Getting
+  started](https://chop-cgtinformatics.github.io/ggswim/articles/ggswim.html):
+  build a swimmer plot step by step.
+- [Adding
+  arrows](https://chop-cgtinformatics.github.io/ggswim/articles/adding_arrows.html):
+  control continuation indicators and arrow legends.
+- [Gallery](https://chop-cgtinformatics.github.io/ggswim/articles/gallery.html):
+  explore custom glyphs, icons, and themes.
 
-Start with [Getting Started with
-ggswim](https://chop-cgtinformatics.github.io/ggswim/articles/ggswim.html)
-for a step-by-step introduction to lanes, markers, and marker scales.
-Read [Adding arrows to
-ggswim](https://chop-cgtinformatics.github.io/ggswim/articles/adding_arrows.html)
-when you need continuation indicators, and browse the
-[Gallery](https://chop-cgtinformatics.github.io/ggswim/articles/gallery.html)
-for glyph, icon, and theme examples.
+## Contributing
 
-## Collaboration
-
-We invite you to give feedback and collaborate with us! If you are
-familiar with GitHub and R packages, please feel free to submit a [pull
-request](https://github.com/CHOP-CGTInformatics/ggswim/pulls). Please do
-let us know if ggswim fails for whatever reason with your use case and
-submit a bug report by creating a GitHub
-[issue](https://github.com/CHOP-CGTInformatics/ggswim/issues).
-
-Please note that this project is released with a Contributor Code of
-Conduct. By participating you agree to abide by its terms.
+[Issues](https://github.com/CHOP-CGTInformatics/ggswim/issues) and [pull
+requests](https://github.com/CHOP-CGTInformatics/ggswim/pulls) are
+welcome. By participating, you agree to follow our [Code of
+Conduct](CONDUCT.md).

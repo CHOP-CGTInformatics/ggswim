@@ -53,6 +53,54 @@ test_that("GeomSwimArrow setup_data uses proportional default arrow_neck_length"
   expect_equal(out$xend, c(13, 23))
 })
 
+test_that("GeomSwimArrow keeps explicitly mapped x even when values are missing", {
+  data <- data.frame(y = c(1, 2, 3), x = c(NA, 5, NA), xend = c(10, 20, 30))
+
+  out <- GeomSwimArrow$setup_data(
+    data,
+    params = list(arrow_neck_length = 5)
+  )
+
+  expect_equal(out$x, data$x)
+  expect_equal(out$xend, data$xend)
+})
+
+test_that("an all-missing mapped x is preserved through plot building", {
+  data <- data.frame(y = 1:2, x = c(NA_real_, NA_real_), xend = c(10, 20))
+  plot <- ggplot2::ggplot(data, ggplot2::aes(x = x, xend = xend, y = y)) +
+    geom_swim_arrow(arrow_neck_length = 5)
+
+  built <- ggplot2::ggplot_build(plot)$data[[1]]
+  expect_equal(built$x, c(NA_real_, NA_real_))
+  expect_equal(built$xend, c(10, 20))
+})
+
+test_that("GeomSwimArrow handles empty and all-missing endpoints", {
+  empty <- data.frame(y = numeric(), xend = numeric())
+  all_missing <- data.frame(y = 1:2, xend = c(NA_real_, NA_real_))
+
+  expect_no_warning(empty_out <- GeomSwimArrow$setup_data(
+    empty,
+    params = list(arrow_neck_length = NULL)
+  ))
+  expect_no_warning(missing_out <- GeomSwimArrow$setup_data(
+    all_missing,
+    params = list(arrow_neck_length = NULL)
+  ))
+
+  expect_equal(nrow(empty_out), 0L)
+  expect_equal(missing_out$x, c(NA_real_, NA_real_))
+  expect_equal(missing_out$xend, c(NA_real_, NA_real_))
+})
+
+test_that("default arrow extent preserves nonmissing infinite endpoints", {
+  data <- data.frame(y = 1:2, xend = c(10, Inf))
+  out <- GeomSwimArrow$setup_data(data, params = list(arrow_neck_length = NULL))
+
+  expect_equal(out$x, data$xend)
+  expect_equal(out$xend, c(Inf, Inf))
+})
+
 test_that("GeomSwimArrow setup_data handles missing xend values", {
   data <- data.frame(y = c(1, 2, 3), xend = c(10, NA, 20))
 

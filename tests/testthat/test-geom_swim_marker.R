@@ -1,40 +1,33 @@
-test_that("geom_swim_marker is the right class", {
-  layer <- geom_swim_marker(
-    data = infusion_events,
-    mapping = aes(
-      x = time_from_initial_infusion,
-      y = pt_id,
-      marker = label
-    )
-  )
+test_that("fixed marker strings give a mapping and scale hint", {
+  withr::local_pdf(NULL)
+  plot <- ggplot2::ggplot(data.frame(time = 1, id = "A"), aes(time, id)) +
+    geom_swim_marker(marker = "+")
 
-  expected_classes <- c(
-    "LayerInstance",
-    "Layer",
-    "ggproto",
-    "gg"
+  expect_error(
+    ggplot2::ggplotGrob(plot),
+    "requires marker styles from a discrete scale"
   )
-
-  expect_setequal(attr(layer, "class"), expected_classes)
 })
 
-test_that("all expected attributes exist in geom_swim_lane", {
-  layer <- geom_swim_marker(
-    data = infusion_events,
-    mapping = aes(
-      x = time_from_initial_infusion,
-      y = pt_id,
-      marker = label
-    )
+test_that("custom marker record classes with the required fields still draw", {
+  withr::local_pdf(NULL)
+  marker <- vctrs::new_rcrd(
+    list(colour = "red", glyphs = "+"),
+    class = "custom_marker"
   )
-
-  attrs <- names(attributes(layer))
-
-  expected_attrs <- c(
-    "class"
+  scale <- ggplot2::discrete_scale(
+    aesthetics = "marker",
+    name = NULL,
+    palette = function(n) marker[seq_len(n)],
+    limits = "A",
+    na.translate = FALSE
   )
+  plot <- ggplot2::ggplot(
+    data.frame(time = 1, id = "A", category = "A"),
+    aes(time, id, marker = category)
+  ) + geom_swim_marker() + scale
 
-  expect_true(all(expected_attrs %in% attrs))
+  expect_no_error(ggplot2::ggplotGrob(plot))
 })
 
 test_that("geom_swim_marker works when inheriting data and associated params", {
