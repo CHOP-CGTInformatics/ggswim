@@ -18,6 +18,7 @@ BugReports: https://github.com/CHOP-CGTInformatics/ggswim/issues
 Encoding: UTF-8
 LazyData: true
 Imports: 
+    callr,
     cli,
     dplyr (>= 1.1.0),
     ggplot2 (>= 3.5.0),

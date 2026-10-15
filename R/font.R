@@ -409,7 +409,15 @@ valid_font_file <- function(path) {
     return(FALSE)
   }
   tryCatch({
-    info <- systemfonts::font_info(path = path)
-    nrow(info) == 1L && isTRUE(info$n_glyphs[[1]] > 0)
+    # FreeType can leave systemfonts' native face cache unusable after a failed
+    # FT_New_Face call. Validate in a child process so malformed downloads
+    # cannot crash later font lookups in this R session.
+    callr::r(function(font_path) {
+      info <- withCallingHandlers(
+        systemfonts::font_info(path = font_path),
+        warning = function(w) stop(w)
+      )
+      nrow(info) == 1L && isTRUE(info$n_glyphs[[1]] > 0)
+    }, args = list(path), show = FALSE)
   }, error = function(e) FALSE, warning = function(w) FALSE)
 }

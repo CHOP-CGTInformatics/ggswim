@@ -51,6 +51,10 @@ marker_data <- tibble(
       .default = NA
     )
   )
+
+# The marker scale takes one style per category, not one style per event row.
+emoji_styles <- marker_data |>
+  distinct(label, glyph)
 ```
 
 Now we can call those dataframes with their appropriate lane and marker layers:
@@ -69,7 +73,7 @@ ggplot() +
   ) +
   scale_colour_brewer(name = "Lanes", palette = "Set1") +
   with(
-    marker_data,
+    emoji_styles,
     scale_marker_discrete(glyphs = glyph, limits = label, name = "Markers")
   ) +
   labs(
@@ -104,6 +108,9 @@ marker_data <- marker_data |>
     )
   )
 
+fontawesome_styles <- marker_data |>
+  distinct(label, glyph)
+
 ggplot() +
   geom_swim_lane(
     data = lane_data,
@@ -117,7 +124,7 @@ ggplot() +
   ) +
   scale_colour_brewer(name = "Lanes", palette = "Set1") +
   with(
-    marker_data,
+    fontawesome_styles,
     scale_marker_discrete(glyphs = glyph, limits = label, name = "Markers")
   ) +
   labs(
@@ -154,6 +161,9 @@ marker_data <- marker_data |>
     )
   )
 
+bootstrap_styles <- marker_data |>
+  distinct(label, glyph)
+
 ggplot() +
   geom_swim_lane(
     data = lane_data,
@@ -167,7 +177,7 @@ ggplot() +
   ) +
   scale_colour_brewer(name = "Lanes", palette = "Set1") +
   with(
-    marker_data,
+    bootstrap_styles,
     scale_marker_discrete(glyphs = glyph, limits = label, name = "Markers")
   ) +
   labs(

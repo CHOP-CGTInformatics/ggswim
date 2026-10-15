@@ -92,6 +92,22 @@ test_that("nonzero download status and unreadable fonts are rejected", {
   expect_length(list.files(state$cache), 0)
 })
 
+test_that("invalid font files do not poison later font lookups", {
+  state <- local_font_cache()
+  invalid <- tempfile(fileext = ".ttf")
+  on.exit(unlink(invalid))
+  writeLines("not a font", invalid)
+
+  expect_identical(
+    c(
+      valid_font_file(state$source),
+      valid_font_file(invalid),
+      valid_font_file(state$source)
+    ),
+    c(TRUE, FALSE, TRUE)
+  )
+})
+
 test_that("corrupt cached fonts are replaced only after a valid download", {
   state <- local_font_cache()
   cached <- file.path(state$cache, "fa-solid-900.ttf")
