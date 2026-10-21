@@ -15,13 +15,12 @@ Running under: macOS Golden Gate 27.0.1
 ```
 
 2. [win-builder](https://win-builder.r-project.org/f4oMm2EJm35c/)
-3. [R-hub](https://github.com/CHOP-CGTInformatics/ggswim/actions/workflows/rhub.yaml)
-   - There is a known failure for macos (R-devel) which is an upstream environmental/configuration related failure and not one related to the package or workflow.
+3. [R-hub](https://github.com/CHOP-CGTInformatics/ggswim/actions/runs/39638087700)
 4. [GitHub Actions](https://github.com/CHOP-CGTInformatics/ggswim/actions)
 
 ## R CMD check results:
 
-- There were 0 ERRORs or warnings on any builds outside of the mentioned macOS (R-devel) configuration failure.
+- There were 0 ERRORs or warnings on any builds,.
 - `win-builder` showed no evidence of any errors or warnings.
 
 ## Downstream Dependencies:
