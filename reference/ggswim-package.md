@@ -1,6 +1,6 @@
-# ggswim: Create Swimmer Plots with ggplot2
+# ggswim: Create Swimmer Plots with 'ggplot2'
 
-Create swimmer plots using the ggplot2 framework.
+Create swimmer plots using the 'ggplot2' framework.
 
 ## See also
 
@@ -18,6 +18,9 @@ Useful links:
 ([ORCID](https://orcid.org/0009-0005-6496-8154))
 
 Authors:
+
+- Richard Hanna <richardshanna91@gmail.com>
+  ([ORCID](https://orcid.org/0009-0005-6496-8154))
 
 - Stephan Kadauke <kadaukes@chop.edu>
   ([ORCID](https://orcid.org/0000-0003-2996-8034))

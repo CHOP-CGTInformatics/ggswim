@@ -14,16 +14,6 @@ ggswim arrow defaults
 .default_arrow_limits
 ```
 
-## Format
-
-An object of class `character` of length 1.
-
-An object of class `character` of length 1.
-
-An object of class `character` of length 1.
-
-An object of class `character` of length 1.
-
 ## Examples
 
 ``` r

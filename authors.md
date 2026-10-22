@@ -15,11 +15,11 @@ Source:
 [`DESCRIPTION`](https://github.com/CHOP-CGTInformatics/ggswim/blob/main/DESCRIPTION)
 
 Hanna R, Kadauke S, Porter E (2026). *ggswim: Create Swimmer Plots with
-ggplot2*. R package version 0.1.0,
+'ggplot2'*. R package version 0.1.0,
 <https://chop-cgtinformatics.github.io/ggswim/>.
 
     @Manual{,
-      title = {ggswim: Create Swimmer Plots with ggplot2},
+      title = {ggswim: Create Swimmer Plots with 'ggplot2'},
       author = {Richard Hanna and Stephan Kadauke and Ezra Porter},
       year = {2026},
       note = {R package version 0.1.0},

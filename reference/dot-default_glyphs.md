@@ -12,14 +12,6 @@ ggswim marker defaults
 .default_limits
 ```
 
-## Format
-
-An object of class `character` of length 9.
-
-An object of class `character` of length 9.
-
-An object of class `character` of length 9.
-
 ## Examples
 
 ``` r

@@ -5,9 +5,10 @@ to see their documentation.
 
 - ggplot2:
 
-  `%+%`, [`aes`](https://ggplot2.tidyverse.org/reference/aes.html),
-  [`ggsave`](https://ggplot2.tidyverse.org/reference/ggsave.html)
+  [`%+%`](https://ggplot2.tidyverse.org/reference/gg-add.html),
+  [`aes()`](https://ggplot2.tidyverse.org/reference/aes.html),
+  [`ggsave()`](https://ggplot2.tidyverse.org/reference/ggsave.html)
 
 - grid:
 
-  [`grid.draw`](https://rdrr.io/r/grid/grid.draw.html)
+  [`grid.draw()`](https://rdrr.io/r/grid/grid.draw.html)

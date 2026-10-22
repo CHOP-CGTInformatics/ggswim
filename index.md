@@ -110,5 +110,4 @@ ggplot() +
 
 [Issues](https://github.com/CHOP-CGTInformatics/ggswim/issues) and [pull
 requests](https://github.com/CHOP-CGTInformatics/ggswim/pulls) are
-welcome. By participating, you agree to follow our [Code of
-Conduct](https://chop-cgtinformatics.github.io/ggswim/CONDUCT.md).
+welcome. By participating, you agree to follow our **Code of Conduct**.
