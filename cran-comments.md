@@ -2,6 +2,8 @@
 
 This is the first submission for the package.
 
+Initial feedback has been addressed and associated links below have been updated.
+
 Thank you for taking the time to review this submission and please reach out to either Stephan Kadauke or Richard Hanna for any questions, comments, or concerns.
 
 ## Test environments
@@ -14,8 +16,8 @@ Platform: aarch64-apple-darwin23
 Running under: macOS Golden Gate 27.0.1
 ```
 
-2. [win-builder](https://win-builder.r-project.org/f4oMm2EJm35c/)
-3. [R-hub](https://github.com/CHOP-CGTInformatics/ggswim/actions/runs/39638087700)
+2. [win-builder](https://win-builder.r-project.org/YTsg9dPiwu0F/)
+3. [R-hub](https://github.com/CHOP-CGTInformatics/ggswim/actions/runs/39795124923)
 4. [GitHub Actions](https://github.com/CHOP-CGTInformatics/ggswim/actions)
 
 ## R CMD check results:
