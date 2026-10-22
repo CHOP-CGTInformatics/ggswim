@@ -1,7 +1,12 @@
 arrow_plot <- function(data, scale = scale_arrow_discrete(), ...) {
-  ggplot2::ggplot(data, ggplot2::aes(
-    xend = .data$end_time, y = .data$id, arrow = .data$event
-  )) +
+  ggplot2::ggplot(
+    data,
+    ggplot2::aes(
+      xend = .data$end_time,
+      y = .data$id,
+      arrow = .data$event
+    )
+  ) +
     geom_swim_arrow(arrow_neck_length = 2, show.legend = TRUE, ...) +
     scale
 }
@@ -79,7 +84,9 @@ test_that("missing and out-of-limit arrow values are not drawn", {
     event = c("Continuation", NA, "outside")
   )
   scale <- scale_arrow_discrete(
-    colours = "black", fills = "black", types = "closed",
+    colours = "black",
+    fills = "black",
+    types = "closed",
     limits = "Continuation"
   )
 

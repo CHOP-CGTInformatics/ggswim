@@ -5,7 +5,10 @@ local_font_cache <- function(.local_envir = parent.frame()) {
   source <- fonts$path[[1]]
   skip_if_not(valid_font_file(source), "No readable test font")
   cache_root <- tempfile("ggswim-test-fonts-")
-  withr::local_envvar(c(R_USER_CACHE_DIR = cache_root), .local_envir = .local_envir)
+  withr::local_envvar(
+    c(R_USER_CACHE_DIR = cache_root),
+    .local_envir = .local_envir
+  )
   cache <- tools::R_user_dir("ggswim", which = "cache")
   dir.create(cache, recursive = TRUE)
   withr::defer(unlink(cache_root, recursive = TRUE), envir = .local_envir)
@@ -47,9 +50,15 @@ test_that("default font selection preserves family names", {
   state <- local_font_cache()
   expect_no_condition(load_fonts(verbose = FALSE))
   expect_equal(state$downloads, 4L)
-  expect_equal(state$registered, c(
-    "Bootstrap", "FontAwesome-Brands", "FontAwesome-Regular", "FontAwesome-Solid"
-  ))
+  expect_equal(
+    state$registered,
+    c(
+      "Bootstrap",
+      "FontAwesome-Brands",
+      "FontAwesome-Regular",
+      "FontAwesome-Solid"
+    )
+  )
 })
 
 test_that("invalid fonts produce warning and return invisible NULL", {
@@ -79,14 +88,16 @@ test_that("nonzero download status and unreadable fonts are rejected", {
   state <- local_font_cache()
   local_mocked_bindings(download.file = function(...) 1L)
   expect_warning(
-    load_fonts(fonts = "fa-solid-900", verbose = FALSE), "nonzero status"
+    load_fonts(fonts = "fa-solid-900", verbose = FALSE),
+    "nonzero status"
   )
   local_mocked_bindings(download.file = function(url, destfile, ...) {
     writeLines("not a font", destfile)
     0L
   })
   expect_warning(
-    load_fonts(fonts = "fa-solid-900", verbose = FALSE), "not a readable font"
+    load_fonts(fonts = "fa-solid-900", verbose = FALSE),
+    "not a readable font"
   )
   expect_length(state$registered, 0)
   expect_length(list.files(state$cache), 0)

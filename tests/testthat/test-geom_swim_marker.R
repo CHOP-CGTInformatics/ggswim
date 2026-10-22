@@ -25,7 +25,9 @@ test_that("custom marker record classes with the required fields still draw", {
   plot <- ggplot2::ggplot(
     data.frame(time = 1, id = "A", category = "A"),
     aes(time, id, marker = category)
-  ) + geom_swim_marker() + scale
+  ) +
+    geom_swim_marker() +
+    scale
 
   expect_no_error(ggplot2::ggplotGrob(plot))
 })

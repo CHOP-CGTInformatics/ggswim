@@ -1,5 +1,8 @@
 marker_plot <- function(data, scale = scale_marker_discrete(), ...) {
-  ggplot2::ggplot(data, ggplot2::aes(x = .data$x, y = .data$id, marker = .data$event)) +
+  ggplot2::ggplot(
+    data,
+    ggplot2::aes(x = .data$x, y = .data$id, marker = .data$event)
+  ) +
     geom_swim_marker(...) +
     scale
 }
@@ -27,7 +30,8 @@ test_that("bare marker geom discovers the automatic default scale", {
   plot <- ggplot2::ggplot(
     data,
     ggplot2::aes(x = .data$x, y = .data$id, marker = .data$event)
-  ) + geom_swim_marker()
+  ) +
+    geom_swim_marker()
 
   marker <- ggplot2::ggplot_build(plot)$data[[1]]$marker
 
@@ -37,10 +41,12 @@ test_that("bare marker geom discovers the automatic default scale", {
 
 test_that("marker palette fills in glyphs or colours when one style is omitted", {
   colour_only <- scale_marker_discrete(
-    colours = c("red", "blue"), limits = c("A", "B")
+    colours = c("red", "blue"),
+    limits = c("A", "B")
   )$palette(2)
   glyph_only <- scale_marker_discrete(
-    glyphs = c("+", "x"), limits = c("A", "B")
+    glyphs = c("+", "x"),
+    limits = c("A", "B")
   )$palette(2)
 
   expect_equal(vctrs::field(colour_only, "glyphs"), .default_glyphs[1:2])
@@ -72,7 +78,10 @@ test_that("marker scale errors when categories exhaust missing defaults", {
     "10 categories requested, but only 9 default colours are available"
   )
   expect_error(
-    scale_marker_discrete(colours = grDevices::gray.colors(10), limits = limits),
+    scale_marker_discrete(
+      colours = grDevices::gray.colors(10),
+      limits = limits
+    ),
     "10 categories requested, but only 9 default glyphs are available"
   )
 })
@@ -92,7 +101,8 @@ test_that("marker scale accepts ten categories with explicit glyphs and colours"
 
 test_that("marker scale errors when more categories request styles than configured", {
   scale <- scale_marker_discrete(
-    glyphs = c("●", "■"), colours = c("red", "blue"),
+    glyphs = c("●", "■"),
+    colours = c("red", "blue"),
     limits = c("A", "B")
   )
 
@@ -146,7 +156,9 @@ test_that("missing and out-of-limit marker values are not drawn", {
     event = c("A", NA, "outside")
   )
   scale <- scale_marker_discrete(
-    glyphs = "+", colours = "red", limits = "A"
+    glyphs = "+",
+    colours = "red",
+    limits = "A"
   )
 
   built <- ggplot2::ggplot_build(marker_plot(data, scale))

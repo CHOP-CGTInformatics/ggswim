@@ -79,14 +79,18 @@ test_that("GeomSwimArrow handles empty and all-missing endpoints", {
   empty <- data.frame(y = numeric(), xend = numeric())
   all_missing <- data.frame(y = 1:2, xend = c(NA_real_, NA_real_))
 
-  expect_no_warning(empty_out <- GeomSwimArrow$setup_data(
-    empty,
-    params = list(arrow_neck_length = NULL)
-  ))
-  expect_no_warning(missing_out <- GeomSwimArrow$setup_data(
-    all_missing,
-    params = list(arrow_neck_length = NULL)
-  ))
+  expect_no_warning(
+    empty_out <- GeomSwimArrow$setup_data(
+      empty,
+      params = list(arrow_neck_length = NULL)
+    )
+  )
+  expect_no_warning(
+    missing_out <- GeomSwimArrow$setup_data(
+      all_missing,
+      params = list(arrow_neck_length = NULL)
+    )
+  )
 
   expect_equal(nrow(empty_out), 0L)
   expect_equal(missing_out$x, c(NA_real_, NA_real_))

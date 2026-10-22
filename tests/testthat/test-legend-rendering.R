@@ -5,8 +5,10 @@ test_that("marker and arrow legends render with swimmer lanes", {
     time = c(3, 5),
     id = c("A", "B"),
     event = c("Response", "Review"),
-    arrow_width = factor(c("Standard", "Emphasized"),
-                         levels = c("Standard", "Emphasized"))
+    arrow_width = factor(
+      c("Standard", "Emphasized"),
+      levels = c("Standard", "Emphasized")
+    )
   )
   plot <- ggplot2::ggplot() +
     geom_swim_lane(
@@ -16,7 +18,11 @@ test_that("marker and arrow legends render with swimmer lanes", {
     ) +
     geom_swim_marker(
       data = data,
-      mapping = ggplot2::aes(x = .data$time, y = .data$id, marker = .data$event),
+      mapping = ggplot2::aes(
+        x = .data$time,
+        y = .data$id,
+        marker = .data$event
+      ),
       size = 5
     ) +
     scale_marker_discrete(
@@ -28,7 +34,9 @@ test_that("marker and arrow legends render with swimmer lanes", {
     geom_swim_arrow(
       data = data,
       mapping = ggplot2::aes(
-        xend = .data$end, y = .data$id, linewidth = .data$arrow_width
+        xend = .data$end,
+        y = .data$id,
+        linewidth = .data$arrow_width
       ),
       arrow_neck_length = 1,
       arrow_colour = "grey20",

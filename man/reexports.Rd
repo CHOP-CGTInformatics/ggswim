@@ -14,8 +14,8 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{ggplot2}{\code{\link[ggplot2:gg-add]{\%+\%}}, \code{\link[ggplot2]{aes}}, \code{\link[ggplot2]{ggsave}}}
+  \item{ggplot2}{\code{\link[ggplot2:\%+\%]{\%+\%}}, \code{\link[ggplot2:aes]{aes()}}, \code{\link[ggplot2:ggsave]{ggsave()}}}
 
-  \item{grid}{\code{\link[grid]{grid.draw}}}
+  \item{grid}{\code{\link[grid:grid.draw]{grid.draw()}}}
 }}
 

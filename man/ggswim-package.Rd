@@ -4,11 +4,11 @@
 \name{ggswim-package}
 \alias{ggswim}
 \alias{ggswim-package}
-\title{ggswim: Create Swimmer Plots with ggplot2}
+\title{ggswim: Create Swimmer Plots with 'ggplot2'}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Create swimmer plots using the ggplot2 framework.
+Create swimmer plots using the 'ggplot2' framework.
 }
 \seealso{
 Useful links:
@@ -24,6 +24,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Richard Hanna \email{richardshanna91@gmail.com} (\href{https://orcid.org/0009-0005-6496-8154}{ORCID})
   \item Stephan Kadauke \email{kadaukes@chop.edu} (\href{https://orcid.org/0000-0003-2996-8034}{ORCID})
   \item Ezra Porter \email{ezrajporter@gmail.com} (\href{https://orcid.org/0000-0002-4690-8343}{ORCID})
 }

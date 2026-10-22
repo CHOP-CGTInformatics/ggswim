@@ -342,44 +342,65 @@ load_fonts <- function(
     if (!valid_font_file(cached_file)) {
       temporary_file <- tempfile(pattern = "ggswim-font-", tmpdir = cache_dir)
       on.exit(unlink(temporary_file), add = TRUE)
-      downloaded <- tryCatch({
-        status <- download.file(
-          font_url, destfile = temporary_file, mode = "wb", quiet = TRUE
-        )
-        if (!identical(status, 0L) && !identical(status, 0)) {
-          stop("Download returned a nonzero status.")
+      downloaded <- tryCatch(
+        {
+          status <- download.file(
+            font_url,
+            destfile = temporary_file,
+            mode = "wb",
+            quiet = TRUE
+          )
+          if (!identical(status, 0L) && !identical(status, 0)) {
+            stop("Download returned a nonzero status.")
+          }
+          if (!valid_font_file(temporary_file)) {
+            stop("Downloaded file is not a readable font.")
+          }
+          if (!file.rename(temporary_file, cached_file)) {
+            stop("Could not move the downloaded font into the cache.")
+          }
+          TRUE
+        },
+        error = function(e) {
+          warning(
+            sprintf(
+              "Failed to download font '%s' from %s: %s",
+              family,
+              font_url,
+              conditionMessage(e)
+            ),
+            call. = FALSE
+          )
+          FALSE
         }
-        if (!valid_font_file(temporary_file)) {
-          stop("Downloaded file is not a readable font.")
-        }
-        if (!file.rename(temporary_file, cached_file)) {
-          stop("Could not move the downloaded font into the cache.")
-        }
-        TRUE
-      }, error = function(e) {
-        warning(sprintf(
-          "Failed to download font '%s' from %s: %s",
-          family, font_url, conditionMessage(e)
-        ), call. = FALSE)
-        FALSE
-      })
+      )
       if (!downloaded) {
         return(invisible(NULL))
       }
     }
 
     font_name <- custom_names[[family]]
-    registered <- tryCatch({
-      register_font(
-        name = font_name, plain = cached_file, features = feature_spec
-      )
-      TRUE
-    }, error = function(e) {
-      warning(sprintf(
-        "Failed to register font '%s': %s", family, conditionMessage(e)
-      ), call. = FALSE)
-      FALSE
-    })
+    registered <- tryCatch(
+      {
+        register_font(
+          name = font_name,
+          plain = cached_file,
+          features = feature_spec
+        )
+        TRUE
+      },
+      error = function(e) {
+        warning(
+          sprintf(
+            "Failed to register font '%s': %s",
+            family,
+            conditionMessage(e)
+          ),
+          call. = FALSE
+        )
+        FALSE
+      }
+    )
     if (!registered) {
       return(invisible(NULL))
     }
@@ -408,16 +429,24 @@ valid_font_file <- function(path) {
   if (!file.exists(path) || is.na(file.size(path)) || file.size(path) == 0) {
     return(FALSE)
   }
-  tryCatch({
-    # FreeType can leave systemfonts' native face cache unusable after a failed
-    # FT_New_Face call. Validate in a child process so malformed downloads
-    # cannot crash later font lookups in this R session.
-    callr::r(function(font_path) {
-      info <- withCallingHandlers(
-        systemfonts::font_info(path = font_path),
-        warning = function(w) stop(w)
+  tryCatch(
+    {
+      # FreeType can leave systemfonts' native face cache unusable after a failed
+      # FT_New_Face call. Validate in a child process so malformed downloads
+      # cannot crash later font lookups in this R session.
+      callr::r(
+        function(font_path) {
+          info <- withCallingHandlers(
+            systemfonts::font_info(path = font_path),
+            warning = function(w) stop(w)
+          )
+          nrow(info) == 1L && isTRUE(info$n_glyphs[[1]] > 0)
+        },
+        args = list(path),
+        show = FALSE
       )
-      nrow(info) == 1L && isTRUE(info$n_glyphs[[1]] > 0)
-    }, args = list(path), show = FALSE)
-  }, error = function(e) FALSE, warning = function(w) FALSE)
+    },
+    error = function(e) FALSE,
+    warning = function(w) FALSE
+  )
 }

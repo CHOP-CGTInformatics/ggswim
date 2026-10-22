@@ -28,82 +28,100 @@ export(search_bootstrap)
 export(search_fontawesome)
 export(theme_ggswim)
 export(theme_ggswim_dark)
-importFrom(cli,cli)
-importFrom(cli,cli_abort)
-importFrom(cli,cli_alert_info)
-importFrom(cli,cli_alert_success)
-importFrom(cli,cli_h2)
-importFrom(cli,cli_rule)
-importFrom(cli,cli_ul)
-importFrom(cli,cli_vec)
-importFrom(cli,cli_warn)
-importFrom(dplyr,any_of)
-importFrom(dplyr,arrange)
-importFrom(dplyr,bind_rows)
-importFrom(dplyr,case_when)
-importFrom(dplyr,distinct)
-importFrom(dplyr,filter)
-importFrom(dplyr,if_else)
-importFrom(dplyr,left_join)
-importFrom(dplyr,mutate)
-importFrom(dplyr,pull)
-importFrom(dplyr,select)
-importFrom(ggplot2,"%+%")
-importFrom(ggplot2,"%+replace%")
-importFrom(ggplot2,Geom)
-importFrom(ggplot2,GeomSegment)
-importFrom(ggplot2,GeomText)
-importFrom(ggplot2,aes)
-importFrom(ggplot2,arrow)
-importFrom(ggplot2,discrete_scale)
-importFrom(ggplot2,draw_key_text)
-importFrom(ggplot2,element_blank)
-importFrom(ggplot2,element_line)
-importFrom(ggplot2,element_rect)
-importFrom(ggplot2,element_text)
-importFrom(ggplot2,geom_segment)
-importFrom(ggplot2,ggplot)
-importFrom(ggplot2,ggproto)
-importFrom(ggplot2,ggsave)
-importFrom(ggplot2,layer)
-importFrom(ggplot2,layer_data)
-importFrom(ggplot2,margin)
-importFrom(ggplot2,scale_color_manual)
-importFrom(ggplot2,scale_colour_manual)
-importFrom(ggplot2,theme)
-importFrom(ggplot2,theme_minimal)
-importFrom(ggplot2,unit)
+importFrom(cli,
+  cli,
+  cli_abort,
+  cli_alert_info,
+  cli_alert_success,
+  cli_h2,
+  cli_rule,
+  cli_ul,
+  cli_vec,
+  cli_warn
+)
+importFrom(dplyr,
+  any_of,
+  arrange,
+  bind_rows,
+  case_when,
+  distinct,
+  filter,
+  if_else,
+  left_join,
+  mutate,
+  pull,
+  select
+)
+importFrom(ggplot2,
+  "%+%",
+  "%+replace%",
+  Geom,
+  GeomSegment,
+  GeomText,
+  aes,
+  arrow,
+  discrete_scale,
+  draw_key_text,
+  element_blank,
+  element_line,
+  element_rect,
+  element_text,
+  geom_segment,
+  ggplot,
+  ggproto,
+  ggsave,
+  layer,
+  layer_data,
+  margin,
+  scale_color_manual,
+  scale_colour_manual,
+  theme,
+  theme_minimal,
+  unit
+)
 importFrom(grid,grid.draw)
-importFrom(purrr,discard)
-importFrom(purrr,map_lgl)
-importFrom(purrr,walk)
-importFrom(purrr,walk2)
-importFrom(rlang,"%||%")
-importFrom(rlang,":=")
-importFrom(rlang,.data)
-importFrom(rlang,as_label)
-importFrom(rlang,caller_arg)
-importFrom(rlang,caller_env)
-importFrom(rlang,enquo)
-importFrom(rlang,eval_tidy)
-importFrom(rlang,get_expr)
-importFrom(rlang,is_atomic)
-importFrom(rlang,is_empty)
-importFrom(rlang,list2)
-importFrom(rlang,quo)
-importFrom(rlang,quo_is_symbolic)
-importFrom(rlang,try_fetch)
-importFrom(scales,alpha)
-importFrom(scales,brewer_pal)
+importFrom(purrr,
+  discard,
+  map_lgl,
+  walk,
+  walk2
+)
+importFrom(rlang,
+  "%||%",
+  ":=",
+  .data,
+  as_label,
+  caller_arg,
+  caller_env,
+  enquo,
+  eval_tidy,
+  get_expr,
+  is_atomic,
+  is_empty,
+  list2,
+  quo,
+  quo_is_symbolic,
+  try_fetch
+)
+importFrom(scales,
+  alpha,
+  brewer_pal
+)
 importFrom(stats,setNames)
-importFrom(stringr,str_detect)
-importFrom(stringr,str_remove)
-importFrom(systemfonts,font_feature)
-importFrom(systemfonts,register_font)
-importFrom(systemfonts,registry_fonts)
-importFrom(tibble,enframe)
-importFrom(tibble,tibble)
-importFrom(tibble,tribble)
+importFrom(stringr,
+  str_detect,
+  str_remove
+)
+importFrom(systemfonts,
+  font_feature,
+  register_font,
+  registry_fonts
+)
+importFrom(tibble,
+  enframe,
+  tibble,
+  tribble
+)
 importFrom(tidyr,pivot_longer)
 importFrom(tidyselect,all_of)
 importFrom(utils,download.file)
