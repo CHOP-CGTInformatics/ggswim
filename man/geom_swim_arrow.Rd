@@ -111,6 +111,11 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:annotation_borders]{annotation_borders()}}.}
 }
+\value{
+A ggplot2 layer object (\code{LayerInstance}) that draws continuation
+arrows when added to a plot. The exported \code{GeomSwimArrow} ggproto object
+defines how those arrows are drawn.
+}
 \description{
 Arrows attached to the end of swimmer plot lanes can be used to denote the
 continuation of events such as ongoing treatment, implying that the activity

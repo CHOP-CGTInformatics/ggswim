@@ -41,6 +41,10 @@
 #' the exported figure. ggswim retains ggplot2's text-rendering behavior because
 #' a correction based on one glyph or font may misalign others.
 #'
+#' @return A ggplot2 layer object (`LayerInstance`) that draws event glyphs
+#'   when added to a plot. The exported `GeomSwimMarker` ggproto object defines
+#'   how those markers are drawn.
+#'
 #' @examples
 #' events <- data.frame(
 #'   time = c(2, 4),

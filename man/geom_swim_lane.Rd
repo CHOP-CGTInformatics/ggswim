@@ -107,6 +107,11 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:annotation_borders]{annotation_borders()}}.}
 }
+\value{
+A ggplot2 layer object (\code{LayerInstance}) that draws subject lanes
+when added to a plot. The exported \code{GeomSwimLane} ggproto object defines
+how those lanes are drawn.
+}
 \description{
 Lanes in swimmer plots represent individual subjects or entities being tracked
 over time. Each lane is a horizontal track that displays the duration and

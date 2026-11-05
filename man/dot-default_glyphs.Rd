@@ -12,6 +12,11 @@
 
 .default_limits
 }
+\value{
+Character vectors giving nine default marker glyphs, nine colours,
+and nine category limits (\code{"val1"} through \code{"val9"}). The vectors are
+matched by position.
+}
 \description{
 ggswim marker defaults
 }

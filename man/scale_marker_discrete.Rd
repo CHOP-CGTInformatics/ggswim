@@ -84,6 +84,11 @@ notation.
     \item{\code{super}}{The super class to use for the constructed scale}
   }}
 }
+\value{
+A ggplot2 discrete scale object (\code{ScaleDiscrete}) that maps marker
+categories to glyphs and colours. Add it to a ggplot object to apply those
+styles.
+}
 \description{
 \code{\link[=scale_marker_discrete]{scale_marker_discrete()}} is used to set the discrete \code{marker} aesthetic for swimmer plot
 markers.

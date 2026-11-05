@@ -23,6 +23,10 @@
 #' [geom_swim_lane()] is a wrapper for [geom_segment()] and supports much of the same
 #' functionality.
 #'
+#' @return A ggplot2 layer object (`LayerInstance`) that draws subject lanes
+#'   when added to a plot. The exported `GeomSwimLane` ggproto object defines
+#'   how those lanes are drawn.
+#'
 #' @section Arrows:
 #' Arrows can be added to the ends of swimmer plot lanes as specified in
 #' [geom_swim_arrow()].

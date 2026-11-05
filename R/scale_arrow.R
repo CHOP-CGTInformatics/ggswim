@@ -23,6 +23,10 @@
 #' categories, supply explicit styles and limits. All arrow types within a panel
 #' must currently be the same; use separate layers for open and closed arrows.
 #'
+#' @return A ggplot2 discrete scale object (`ScaleDiscrete`) that maps arrow
+#'   categories to outline colours, fills, and head types. Add it to a ggplot
+#'   object to apply those styles.
+#'
 #' @examples
 #' \dontrun{
 #' ggplot2::ggplot() +
@@ -123,6 +127,10 @@ pal_arrows <- function(
 #' ggswim::.default_arrow_fills
 #' ggswim::.default_arrow_types
 #' ggswim::.default_arrow_limits
+#'
+#' @return Character vectors giving the default arrow outline colour (`"black"`),
+#'   fill (`"black"`), head type (`"closed"`), and category limit
+#'   (`"Continuation"`). Each vector contains one value.
 #'
 #' @export
 .default_arrow_colours <- "black"

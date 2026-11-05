@@ -10,7 +10,10 @@ Authors@R: c(
     person("Ezra", "Porter", , "ezrajporter@gmail.com", role = "aut",
     comment = c(ORCID = "0000-0002-4690-8343"))
   )
-Description: Create swimmer plots using the 'ggplot2' framework.
+Description: Create swimmer plots with 'ggplot2' to compare durations, events,
+    and outcomes across subjects or other entities. The package provides layers
+    for timelines, event markers, and arrows that indicate ongoing activity or
+    follow-up, along with scales and themes for styling and labeling plots.
 License: MIT + file LICENSE
 URL: https://chop-cgtinformatics.github.io/ggswim/,
     https://github.com/CHOP-CGTInformatics/ggswim

@@ -82,6 +82,11 @@ notation.
     \item{\code{super}}{The super class to use for the constructed scale}
   }}
 }
+\value{
+A ggplot2 discrete scale object (\code{ScaleDiscrete}) that maps arrow
+categories to outline colours, fills, and head types. Add it to a ggplot
+object to apply those styles.
+}
 \description{
 \code{\link[=scale_arrow_discrete]{scale_arrow_discrete()}} is used to set the discrete \code{arrow} aesthetic for swimmer
 plot arrows.

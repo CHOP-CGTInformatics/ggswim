@@ -23,6 +23,10 @@
 #' When the scale needs more styles than a default vector provides, supply
 #' explicit values for that style; otherwise the scale reports an error.
 #'
+#' @return A ggplot2 discrete scale object (`ScaleDiscrete`) that maps marker
+#'   categories to glyphs and colours. Add it to a ggplot object to apply those
+#'   styles.
+#'
 #' @examples
 #' \dontrun{
 #' all_events <- dplyr::bind_rows(
@@ -133,6 +137,10 @@ pal_markers <- function(glyphs = NULL, colours = NULL, n_values = NULL) {
 #' ggswim::.default_glyphs
 #' ggswim::.default_colours
 #' ggswim::.default_limits
+#'
+#' @return Character vectors giving nine default marker glyphs, nine colours,
+#'   and nine category limits (`"val1"` through `"val9"`). The vectors are
+#'   matched by position.
 #'
 #' @export
 # Set default glyphs and colours

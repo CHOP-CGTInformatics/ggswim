@@ -2,7 +2,12 @@
 
 This is the first submission for the package.
 
-Initial feedback has been addressed and associated links below have been updated.
+Additional feedback has been addressed in this resubmission:
+
+- Expanded the Description field to explain the package's functionality and use.
+- Added return-value documentation describing the classes and purpose of the
+  objects in all seven help topics identified in the review, and regenerated the
+  corresponding Rd files from the roxygen source.
 
 Thank you for taking the time to review this submission and please reach out to either Stephan Kadauke or Richard Hanna for any questions, comments, or concerns.
 

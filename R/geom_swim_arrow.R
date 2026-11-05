@@ -184,6 +184,10 @@ draw_key_swim_arrow <- function(data, params, size) {
 #' [geom_swim_arrow()] is a wrapper for [ggplot2::geom_segment()] and supports
 #' much of the same functionality.
 #'
+#' @return A ggplot2 layer object (`LayerInstance`) that draws continuation
+#'   arrows when added to a plot. The exported `GeomSwimArrow` ggproto object
+#'   defines how those arrows are drawn.
+#'
 #' @examples
 #' # Subjects without an end-study event receive continuation arrows.
 #' arrow_data <- patient_data |>
