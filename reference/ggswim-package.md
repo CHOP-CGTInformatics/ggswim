@@ -1,6 +1,11 @@
 # ggswim: Create Swimmer Plots with 'ggplot2'
 
-Create swimmer plots using the 'ggplot2' framework.
+Create swimmer plots with 'ggplot2' to compare durations, events, and
+outcomes across subjects or other entities. The package provides layers
+for timelines, event markers, and arrows that indicate ongoing activity
+or follow-up, along with scales and themes for styling and labeling
+plots. These components can be combined with standard 'ggplot2' mappings
+and other layers.
 
 ## See also
 

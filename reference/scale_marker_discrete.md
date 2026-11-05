@@ -143,6 +143,12 @@ scale_marker_discrete(glyphs = NULL, colours = NULL, limits = NULL, ...)
 
   :   The super class to use for the constructed scale
 
+## Value
+
+A ggplot2 discrete scale object (`ScaleDiscrete`) that maps marker
+categories to glyphs and colours. Add it to a ggplot object to apply
+those styles.
+
 ## Details
 
 When supplying custom styles, also supply `limits` containing the event

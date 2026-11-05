@@ -12,6 +12,12 @@ ggswim marker defaults
 .default_limits
 ```
 
+## Value
+
+Character vectors giving nine default marker glyphs, nine colours, and
+nine category limits (`"val1"` through `"val9"`). The vectors are
+matched by position.
+
 ## Examples
 
 ``` r

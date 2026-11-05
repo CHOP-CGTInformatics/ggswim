@@ -156,6 +156,12 @@ geom_swim_lane(
   plot specification, e.g.
   [`annotation_borders()`](https://ggplot2.tidyverse.org/reference/annotation_borders.html).
 
+## Value
+
+A ggplot2 layer object (`LayerInstance`) that draws subject lanes when
+added to a plot. The exported `GeomSwimLane` ggproto object defines how
+those lanes are drawn.
+
 ## Aesthetics
 
 `geom_swim_lane()` understands the following aesthetics (required

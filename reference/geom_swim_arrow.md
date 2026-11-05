@@ -159,6 +159,12 @@ geom_swim_arrow(
   plot specification, e.g.
   [`annotation_borders()`](https://ggplot2.tidyverse.org/reference/annotation_borders.html).
 
+## Value
+
+A ggplot2 layer object (`LayerInstance`) that draws continuation arrows
+when added to a plot. The exported `GeomSwimArrow` ggproto object
+defines how those arrows are drawn.
+
 ## Details
 
 Like other ggplot2 layers, `geom_swim_arrow()` inherits plot data when

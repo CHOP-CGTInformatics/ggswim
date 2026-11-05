@@ -141,6 +141,12 @@ scale_arrow_discrete(
 
   :   The super class to use for the constructed scale
 
+## Value
+
+A ggplot2 discrete scale object (`ScaleDiscrete`) that maps arrow
+categories to outline colours, fills, and head types. Add it to a ggplot
+object to apply those styles.
+
 ## Details
 
 When supplying custom styles, also supply `limits` containing the event

@@ -14,6 +14,12 @@ ggswim arrow defaults
 .default_arrow_limits
 ```
 
+## Value
+
+Character vectors giving the default arrow outline colour (`"black"`),
+fill (`"black"`), head type (`"closed"`), and category limit
+(`"Continuation"`). Each vector contains one value.
+
 ## Examples
 
 ``` r

@@ -166,6 +166,12 @@ geom_swim_marker(
   plot specification, e.g.
   [`annotation_borders()`](https://ggplot2.tidyverse.org/reference/annotation_borders.html).
 
+## Value
+
+A ggplot2 layer object (`LayerInstance`) that draws event glyphs when
+added to a plot. The exported `GeomSwimMarker` ggproto object defines
+how those markers are drawn.
+
 ## Details
 
 Map the event category to `marker`; the category selects a glyph and
