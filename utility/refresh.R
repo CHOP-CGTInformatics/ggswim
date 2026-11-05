@@ -66,7 +66,4 @@ devtools::check(
 # devtools::check_win_devel(email = "richardshanna91@gmail.com") # CRAN submission policies encourage the development version
 # Careful, the last question ultimately uploads it to CRAN, where you can't delete/reverse your decision.
 # Run as not CRAN to build full vignettes
-# withr::with_envvar(
-#   new = c("NOT_CRAN" = "true"),
-#   devtools::release(check=FALSE)
-# )
+# devtools::submit_cran()
